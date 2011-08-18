@@ -24,7 +24,7 @@
             <select name="module_category_srl">
                 <option value="0">{$lang->notuse}</option>
                 <!--@foreach($module_category as $key => $val)-->
-                <option value="{$key}" <!--@if($module_info->module_category_srl==$key)-->selected="selected"<!--@end-->>{htmlspecialchars($val->title)}</option>
+                <option value="{$key}" <!--@if($module_info->module_category_srl==$key)-->selected="selected"<!--@end-->>{$val->title}</option>
                 <!--@end-->
             </select>
             <p>{$lang->about_module_category}</p>
@@ -46,7 +46,7 @@
         <td>
             <input type="text" name="browser_title" value="{htmlspecialchars($module_info->browser_title)}"  class="inputTypeText w400" id="browser_title"/>
             <a href="{getUrl('','module','module','act','dispModuleAdminLangcode','target','browser_title')}" onclick="popopen(this.href);return false;" class="buttonSet buttonSetting"><span>{$lang->cmd_find_langcode}</span></a>
-            <p>{htmlspecialchars($lang->about_browser_title)}</p>
+            <p>{$lang->about_browser_title}</p>
         </td>
     </tr>
 
@@ -56,7 +56,7 @@
             <select name="layout_srl">
             <option value="0">{$lang->notuse}</option>
             <!--@foreach($layout_list as $key => $val)-->
-            <option value="{$val->layout_srl}" <!--@if($module_info->layout_srl==$val->layout_srl)-->selected="selected"<!--@end-->>{htmlspecialchars($val->title)} ({htmlspecialchars($val->layout)})</option>
+            <option value="{$val->layout_srl}" <!--@if($module_info->layout_srl==$val->layout_srl)-->selected="selected"<!--@end-->>{$val->title} ({$val->layout})</option>
             <!--@end-->
             </select>
             <p>{$lang->about_layout}</p>
@@ -67,7 +67,7 @@
         <td>
             <select name="skin">
                 <!--@foreach($skin_list as $key=>$val)-->
-                <option value="{$key}" <!--@if($module_info->skin==$key ||(!$module_info->skin && $key=='xe_wiki'))-->selected="selected"<!--@end-->>{htmlspecialchars($val->title)}</option>
+                <option value="{$key}" <!--@if($module_info->skin==$key ||(!$module_info->skin && $key=='xe_wiki'))-->selected="selected"<!--@end-->>{$val->title}</option>
                 <!--@end-->
             </select>
             <p>{$lang->about_skin}</p>
