@@ -14,7 +14,7 @@
 				Context::set('module_srl', $module_srl);
 			}
 
-			// module model 객체 생성 
+			// module moxdel 객체 생성 
 			$oModuleModel = &getModel('module');
 
 			// module_srl이 넘어오면 해당 모듈의 정보를 미리 구해 놓음
@@ -32,6 +32,10 @@
 
 			$module_category = $oModuleModel->getModuleCategories();
 			Context::set('module_category', $module_category);
+			
+			//Security
+			$security = new Security();	
+			$security->encodeHTML('module_category..title');					
 
 			// 템플릿 경로 지정 (board의 경우 tpl에 관리자용 템플릿 모아놓음)
 			$template_path = sprintf("%stpl/",$this->module_path);
@@ -57,6 +61,10 @@
 			Context::set('page', $output->page);
 			Context::set('wiki_list', $output->data);
 			Context::set('page_navigation', $output->page_navigation);
+			
+			//Security
+			$security = new Security(); 
+			$security->encodeHTML('wiki_list..browser_title','wiki_list..mid','wiki_list..domain');
 
 			// 템플릿 파일 지정
 			$this->setTemplateFile('index');
@@ -79,8 +87,14 @@
 			// 레이아웃 목록을 구해옴
 			$oLayoutMode = &getModel('layout');
 			$layout_list = $oLayoutMode->getLayoutList();
-			Context::set('layout_list', $layout_list);
+			Context::set('layout_list', $layout_list);			
 
+			//Security
+			$security = new Security(); 
+			$security->encodeHTML('module_info.');
+			$security->encodeHTML('layout_list..layout','layout_list..title');
+			$security->encodeHTML('skin_list..title');
+			
 			// 템플릿 파일 지정
 			$this->setTemplateFile('wiki_insert');
 		}
@@ -99,8 +113,13 @@
 			$oDocumentModel = &getModel('document');
 			$document_count = $oDocumentModel->getDocumentCount($module_info->module_srl);
 			$module_info->document_count = $document_count;
-
+			
 			Context::set('module_info',$module_info);
+			
+			//Security
+			$security = new Security(); 
+			$security->encodeHTML('module_info.mid','module_info.module','module_info.document_count');
+			
 			$this->setTemplateFile('wiki_delete');
 		}
 
