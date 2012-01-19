@@ -1,44 +1,31 @@
 <?php
+
+/**
+ * @class  wikiView
+ * @author haneul (haneul0318@gmail.com)
+ * @brief  wiki module View class
+ **/
+class wikiView extends wiki 
+{
+
+	var $search_option = array('title', 'content', 'title_content', 'comment', 'user_name', 'nick_name', 'user_id', 'tag');
+	var $document_exists = array();
+
 	/**
-	 * @class  wikiView
-	 * @author haneul (haneul0318@gmail.com)
-	 * @brief  wiki 모듈의 View class
-	 **/
-
-	class wikiView extends wiki {
-		var $search_option = array('title','content','title_content','comment','user_name','nick_name','user_id','tag');
-		var $document_exists = array();
-
+	* @brief Class initialization
+	**/
+	function init() 
+	{
 		/**
-		 * @brief 초기화
-		 * wiki 모듈은 일반 사용과 관리자용으로 나누어진다.\n
-		 **/
-		function init() {
-			$site_module_info = Context::get('site_module_info');
-//			if($site_module_info->site_srl==0) die('not allowed');
-
-		
-			// 한국어 인코딩에 대한 체크 - #18764757 - taggon
-			$entry = Context::get('entry');
-			// #18707314 로 인해 주석 처리 - yarra
-			/*
-			if ($entry == iconv('cp949', 'cp949', $entry)) {
-				$entry = iconv('cp949', 'utf-8', $entry);
-				Context::set('entry', $entry);
-			}*/
-
-			
-
-			/**
-			 * 스킨 경로를 미리 template_path 라는 변수로 설정함
-			 * 스킨이 존재하지 않는다면 xe_wiki로 변경
-			 **/
-			$template_path = sprintf("%sskins/%s/",$this->module_path, $this->module_info->skin);
-			if(!is_dir($template_path) || !$this->module_info->skin) {
-				$this->module_info->skin = 'xe_wiki';
-				$template_path = sprintf("%sskins/%s/",$this->module_path, $this->module_info->skin);
-			}
-			$this->setTemplatePath($template_path);
+		 * Set the path to skins folder
+		 * If current selected skin does not exist, fallback to default skin: xe_wiki
+		 * */
+		$template_path = sprintf("%sskins/%s/", $this->module_path, $this->module_info->skin);
+		if (!is_dir($template_path) || !$this->module_info->skin) {
+			$this->module_info->skin = 'xe_wiki';
+			$template_path = sprintf("%sskins/%s/", $this->module_path, $this->module_info->skin);
+		}
+		$this->setTemplatePath($template_path);
 
 			$oModuleModel = &getModel('module');
 
@@ -58,9 +45,9 @@
 		 **/
 		function dispWikiContent() {
 			// 이동시 혹은 entry 값을 넣어서 문서를 요청할 때에도 처리된 alias를 사용하도록 수정
-			$entry = Context::get('entry');
-			$beautifulEntry = $this->beautifyEntryName($entry);
-			Context::set('entry', $beautifulEntry);
+		//$entry = Context::get('entry');
+		//$beautifulEntry = $this->beautifyEntryName($entry);
+		//Context::set('entry', $beautifulEntry);
 
 			$output = $this->dispWikiContentView();
 			if(!$output->toBool()) return;
@@ -102,9 +89,22 @@
 
 			$oDocumentModel = &getModel('document');
 			$document_srl = Context::get('document_srl');
+		$entry = Context::get('entry');
+		if (!$document_srl) {
+			$mid = Context::get('mid');
+			$document_srl = $oDocumentModel->getDocumentSrlByAlias($mid, $entry);
+		}
 			$oDocument = $oDocumentModel->getDocument(0, $this->grant->manager);
 			$oDocument->setDocument($document_srl);
 			$oDocument->add('module_srl', $this->module_srl);
+		if($oDocument->isExists()){
+			$oDocument->add('alias', $oDocumentModel->getAlias($document_srl));
+		}
+		else {
+			$oDocument->add('title', $entry);
+			$alias = $this->beautifyEntryName($entry);
+			$oDocument->add('alias', $alias);
+		}
 			Context::set('document_srl',$document_srl);
 			Context::set('oDocument', $oDocument);
 			$history_srl = Context::get('history_srl');
@@ -147,6 +147,12 @@
 			$obj->search_keyword = Context::get('search_keyword');
 			$obj->search_target = Context::get('search_target');
 			$output = $oDocumentModel->getDocumentList($obj);
+		$title_count = count($output->data);
+		for($i = 1; $i <= $title_count; $i++)
+		{
+			$alias = $oDocumentModel->getAlias($output->data[$i]->document_srl);
+			$output->data[$i]->add('alias', $alias);
+		}
 
 			Context::set('document_list', $output->data);
 			Context::set('total_count', $output->total_count);
@@ -216,6 +222,9 @@
 
 		/**
 		 * @brief 위키 문서 출력
+	 * Input: entry or document_srl
+	 * Output: oDocument and alias
+	 *	oDocument must have title set
 		 */
 		function dispWikiContentView() {
 			$oWikiModel = &getModel('wiki');
@@ -225,13 +234,14 @@
 			$document_srl = Context::get('document_srl');
 			$entry = Context::get('entry');
 
-			if(!$document_srl) {
-				if (!$entry) {
-					$entry = "Front Page";
-					Context::set('entry', $entry);
-				}
-				$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+		if (!$document_srl) {
+			if (!$entry) {
+				$entry = "Front page";
+				Context::set('entry', $entry);
 			}
+			$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+			if(!$document_srl) $document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
+		}
 
 			/**
 			 * 요청된 문서 번호가 있다면 문서를 구함
@@ -278,17 +288,39 @@
 
 				// 댓글 허용일 경우 문서에 강제 지정
 				if($this->module_info->use_comment != 'N') $oDocument->add('allow_comment','Y');
+			// Set up alias
+			$alias = $oDocumentModel->getAlias($oDocument->document_srl);
+			$oDocument->add('alias', $alias);			
 			}
 			else
 			{
-				$this->setTemplateFile('create_document');
-			}
-			Context::set('visit_log', $_SESSION['wiki_visit_log'][$this->module_info->module_srl]);
-			// 스킨에서 사용할 oDocument 변수 세팅
-			Context::set('oDocument', $oDocument);
+			$oDocument->add('title', $entry);
+			$alias = $this->beautifyEntryName($entry);
+			$oDocument->add('alias', $alias);
+			$this->setTemplateFile('create_document');		
+		}
+		Context::set('visit_log', $_SESSION['wiki_visit_log'][$this->module_info->module_srl]);
+		// 스킨에서 사용할 oDocument 변수 세팅
+		Context::set('oDocument', $oDocument);
+		Context::set('entry', $oDocument->get('alias'));
 
 			// 사용되는 javascript 필터 추가
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
+		// Redirect to user friendly URL if request comes from Search
+		$error_return_url = Context::get('error_return_url');
+		if(isset($error_return_url)) {
+			$site_module_info = Context::get('site_module_info');
+			if($document_srl)
+				$url = getSiteUrl($site_module_info->document,''
+									,'mid',$this->module_info->mid
+									,'entry',$oDocument->get('alias'));
+			else
+				$url = getSiteUrl($site_module_info->document,''
+						,'mid',$this->module_info->mid
+						,'entry',$entry);
+
+			$this->setRedirectUrl($url);			
+		}
 		
 			return new Object();
 		}

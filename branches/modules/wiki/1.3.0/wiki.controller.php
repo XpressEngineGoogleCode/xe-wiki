@@ -56,7 +56,9 @@
 				// 성공적으로 수정되었을 경우 계층구조/ alias 변경
 				if($output->toBool()) {
 					$oDocumentController->deleteDocumentAliasByDocument($obj->document_srl);
-					$oDocumentController->insertAlias($obj->module_srl, $obj->document_srl, $obj->title);
+					$aliasName = Context::get('alias');
+					if(!$aliasName) $aliasName = $this->beautifyEntryName($obj->title);
+					$oDocumentController->insertAlias($obj->module_srl, $obj->document_srl, $aliasName);
 				}
 				$msg_code = 'success_updated';
 
@@ -65,7 +67,9 @@
 				$output = $oDocumentController->insertDocument($obj);
 				$msg_code = 'success_registed';
 				$obj->document_srl = $output->get('document_srl');
-				$oDocumentController->insertAlias($obj->module_srl, $obj->document_srl, $obj->title);
+				$aliasName = Context::get('alias');
+				if(!$aliasName) $aliasName = $this->beautifyEntryName($obj->title);				
+				$oDocumentController->insertAlias($obj->module_srl, $obj->document_srl, $aliasName);
 			}
 
 			// 오류 발생시 멈춤

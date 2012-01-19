@@ -27,9 +27,10 @@
             <span class="buttonOfficial"><a href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a></span>
         </div>
 
-        <form action="{getUrl()}" method="get" class="wikiSearchForm">
+        <form action="{getUrl()}" method="post" class="wikiSearchForm">
             <input type="hidden" name="mid" value="{$mid}" />
             <input type="hidden" name="vid" value="{$vid}" />
+			<input type="hidden" name="act" value="dispWikiContent" />
             <input type="text" class="inputText" name="entry" />
             <span class="buttonOfficial"><input type="submit" value="{$lang->cmd_move}" /></span>
             <!--@if($grant->manager)-->
@@ -106,14 +107,16 @@
             </div>
         </div>
     </div>
-    <!--@elseif($entry)-->
+    <!--@elseif($oDocument) -->
     <div class="wikiRead">
         <div class="wikiReadHeader">
             <div class="titleArea">
-                <h3 class="title">{$entry}</h3>
+				<!-- Needs to acces title with get('title') instead of getTitle() because oDocument is seen as invalid when doc_srl is 0 -->
+                <h3 class="title">{$oDocument->get('title')}</h3>
             </div>
         </div>
     </div>
+
     <!--@if($visit_log)-->
     <div class="visitLog">
         {@ $bFirst = true; }
