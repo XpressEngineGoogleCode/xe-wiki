@@ -1,5 +1,4 @@
 <!--#include("header.html")-->
-
 <form action="./" method="post" onsubmit="return procFilter(this, insert)" id="fo_write">
 <input type="hidden" name="mid" value="{$mid}" />
 <!--@if($history)-->
@@ -13,12 +12,18 @@
 <!--@end-->
 
 <div class="wikiWriteHeader">
-
-    <!--@if($oDocument->get('title')!='Front Page')-->
-	<div class="title"><input type="text" name="title" value="{$entry}" class="inputTypeText" /></div>
-    <!--@end-->
-
-
+<!--@if($oDocument->get('title')!='Front Page')-->
+	<div class="title">
+		<em>Title:</em>
+		<input type="text" name="title" value="{$oDocument->get('title')}" class="inputTypeText" />
+	</div>
+<!--@end-->
+	<div class="alias">
+		<em>Alias:</em>
+		{getFullUrl()}
+		<input type="text" name="alias" value="{$oDocument->get('alias')}" class="inputTypeText" />
+	</div>
+	
     <div class="editor">{$oDocument->getEditor()}</div>
 	
     <div class="tag">

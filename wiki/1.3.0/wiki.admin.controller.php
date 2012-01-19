@@ -81,6 +81,7 @@
 
 			foreach($output->data as $key => $val) {
 				if($val->alias_srl) continue;
+				$val->alias_title = $this->beautifyEntryName($val->alias_title);
 				$result = $oDocumentController->insertAlias($module_srl, $val->document_srl, $val->alias_title);
 				if(!$result->toBool()) $oDocumentController->insertAlias($module_srl, $val->document_srl, $val->alias_title.'_'.$val->document_srl);
 			}

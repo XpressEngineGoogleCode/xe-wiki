@@ -51,7 +51,8 @@
 			$entry_name = html_entity_decode($entry_name);
 			$entry_name = preg_replace($this->omitting_characters, $this->replacing_characters, $entry_name);
 			$entry_name = preg_replace('/[_]+/', '_', $entry_name);
-
+			$entry_name = strtolower($entry_name);
+			
 			return $entry_name;			
 		}
 
