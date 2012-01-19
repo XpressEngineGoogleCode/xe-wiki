@@ -532,7 +532,13 @@ class wikiView extends wiki
 			if($matches[1]{0} == "!") return "[".substr($matches[1], 1)."]";
 
 			$entry_name = $this->makeEntryName($matches);
-			$answer = "<a href=\"".getFullUrl('', 'mid', $this->mid, 'entry', $entry_name->link_entry, 'document_srl', '')."\" class=\"".$this->getCSSClass($entry_name->link_entry)."\" >".$entry_name->printing_name."</a>";
+			
+			// If document exists, create link with alias -> the title will be correctly retireved from the database
+			// Otherwise, use title as entry, so that doc title can be retrieved form URL
+			if($this->document_exists[$entry_name->link_entry]) $alias = $entry_name->link_entry;
+			else $alias = $entry_name->printing_name;
+			
+			$answer = "<a href=\"".getFullUrl('', 'mid', $this->mid, 'entry', $alias, 'document_srl', '')."\" class=\"".$this->getCSSClass($entry_name->link_entry)."\" >".$entry_name->printing_name."</a>";
 
 			return $answer;
 		}
