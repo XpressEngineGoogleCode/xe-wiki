@@ -1,0 +1,89 @@
+<div id="leftSideTreeList">
+    <div class="leftSearchForm">
+	<form action="{getUrl()}" method="get" class="wikiSearchForm">
+	    <input type="hidden" name="mid" value="{$mid}" />
+	    <input type="hidden" name="vid" value="{$vid}" />
+	    <input type="text" class="inputText" name="entry" />
+	    <br />
+	    <span class="buttonOfficial"><input type="submit" value="{$lang->cmd_move}" /></span>
+	    <!--@if($grant->manager)-->
+	    <span class="buttonOfficial"><input type="button" onclick="location.href='{getUrl('act','dispWikiAdminInsertWiki')}';return false;" value="{$lang->cmd_setup}" /></span>
+	    <!--@end-->
+	</form>
+	<span id="wdth"></span>
+    </div>
+    
+    <div class="clearAll"></div>
+    
+    <!--@if($module_info->menu_style == 'classic')-->
+    <div class="tree">
+		{@ $_pDepth = 0;}
+		<ul id="navigation">
+		<!--@foreach($list as $key => $val)-->
+		<!--@if($_pDepth > $val->depth)-->
+		<!--@for($i=$val->depth; $i<$_pDepth; $i++)-->
+		</ul>
+		    </li>
+		<!--@end-->
+		{@ $_pDepth = $val->depth}
+		<!--@end-->
+		<!--@if(!$val->childs)-->
+		    <li>
+		<!--@else-->
+		    <li>
+		<!--@end-->
+		<!--@if($val->childs)-->
+		<!--@end-->
+		<!--@if(isset($oDocument) && $val->title == $oDocument->getTitle())-->
+		    <a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'document_srl',$val->document_srl)}"><b>{$val->title}</b></a>
+		<!--@else-->
+		    <a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'document_srl',$val->document_srl)}">{$val->title}</a>
+		<!--@end-->
+		<!--@if($val->childs)-->
+		{@$_pDepth++}
+		<ul>
+		<!--@else-->
+		</li>
+		<!--@end-->
+		<!--@end-->
+		<!--@for($i=0;$i<$_pDepth;$i++)-->
+		</ul>
+		<!--@end-->
+		</li>
+		</ul>
+    </div>
+    <!--@else-->
+	<!--@if(count($list))-->
+	<div class="tree">
+	    <ul>
+		<!--@foreach($list as $node)-->
+		<li class="xedocsTreeNode" style="
+			<!--@if($node->type == 'root' || $node->type == 'active_root')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_root.png');
+			<!--@elseif($node->type == 'parent')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_up_one_level.png');
+			<!--@elseif($node->type == 'sibling')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_current_directory.png'); margin-left: 15px;
+			<!--@elseif($node->type == 'child')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_current_directory.png'); margin-left: 30px;
+			<!--@elseif($node->type == 'current')-->
+				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_current_directory.png'); margin-left: 15px; font-weight: bold;
+			<!--@elseif($node->type == 'active_root')-->
+				font-weight: bold;
+			<!--@end-->
+		">
+			<a href="{$node->href}">
+				{$node->title}
+			</a>
+		</li>
+		<!--@end-->
+	    </ul>
+	</div>
+	<!--@end-->
+    <!--@end-->
+    
+    <div class="clearAll"></div>
+</div>
+<div id="showHideTree" class="showHideTree" title="{$lang->hide_tree}/{$lang->show_tree}"></div>
+
+

@@ -19,4 +19,8 @@
     $lang->restore = 'Restore';
     $lang->arrange_list = 'Refresh Alias';
     $lang->about_arrange_list = "It creates aliases for documents which do not have aliases for title due to data migration or unexpected errors.";
+    $lang->hide_tree = "Hide tree";
+    $lang->show_tree = "Show tree";
+    $lang->content = "Document content";
+    $lang->diff = "Diff";
 ?>

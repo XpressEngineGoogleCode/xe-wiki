@@ -10,6 +10,7 @@
 		 * @brief 초기화
 		 **/
 		function init() {
+		    
 		}
 
 		/**
@@ -41,6 +42,7 @@
 		 * @brief 캐시로부터 계층 구조 읽기
 		 */
 		function readWikiTreeCache($module_srl) {
+		    	
 			$oWikiController = &getController('wiki');
 			if(!$module_srl) return new Object(-1,'msg_invalid_request');
 
@@ -48,6 +50,7 @@
 			if(!file_exists($dat_file)) $oWikiController->recompileTree($module_srl);
 			$buff = explode("\n", trim(FileHandler::readFile($dat_file)));
 			if(!count($buff)) return array();
+			$module_info = Context::get('module_info');
 			foreach($buff as $val) {
 				if(!preg_match('/^([0-9]+),([0-9]+),([0-9]+),([0-9]+),(.+)$/i', $val, $m)) continue;
 				unset($obj);
@@ -56,7 +59,11 @@
 				$obj->depth = $m[3];
 				$obj->childs = $m[4];
 				$obj->title = $m[5];
-				$list[] = $obj;
+				
+				if ($module_info->menu_style == "classic")
+				    $list[] = $obj;
+				else
+				    $list[$obj->document_srl] = $obj;
 			}
 			return $list;
 		}
@@ -160,5 +167,50 @@
 			}
 			return $contributors;
 		}
+		
+		/**
+		* Prepares the documents tree for display
+		* by describing the relationship of each node
+		* with the page being viewed: parent, sibling, child etc.
+		*
+		* Used for displaying the sidebar tree menu of the wiki
+		*/
+		function getMenuTree($module_srl, $document_srl, $mid)
+		{
+			/** Create menu tree */
+			$documents_tree = $this->readWikiTreeCache($module_srl);
+			$current_node = &$documents_tree[$document_srl];
+
+			/* Mark current node as type 'active' */
+			if($current_node->parent_srl != 0)
+			    $current_node->type = 'current';
+
+			/* Find and mark parents */
+			$node_srl_iterator = $current_node->parent_srl;
+
+			while($node_srl_iterator > 0){
+			    if($documents_tree[$node_srl_iterator]->parent_srl != 0)
+				$documents_tree[$node_srl_iterator]->type = 'parent';
+			    else
+				$documents_tree[$node_srl_iterator]->type = 'active_root';
+			    $node_srl_iterator = $documents_tree[$node_srl_iterator]->parent_srl;
+			}
+
+			foreach($documents_tree as $node){
+			    $node->href = getSiteUrl('','mid',$mid,'entry',$node->alias, 'document_srl', $node->document_srl);
+			    if(!isset($documents_tree[$node->document_srl]->type)){
+				if($node->parent_srl == 0)
+					$documents_tree[$node->document_srl]->type = 'root';
+				else if($node->parent_srl == $current_node->parent_srl)
+					$documents_tree[$node->document_srl]->type = 'sibling';
+				else if($node->parent_srl == $current_node->document_srl)
+					$documents_tree[$node->document_srl]->type = 'child';
+				else unset($documents_tree[$node->document_srl]);
+			    }
+			}
+
+			return $documents_tree;
+		}
+		
 	}
 ?>
