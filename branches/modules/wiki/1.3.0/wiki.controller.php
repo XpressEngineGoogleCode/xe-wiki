@@ -338,6 +338,21 @@
 				$oComment->setGrant();
 			}
 		}
-
+		
+		/*
+		 * @brief function, used by Ajax call, that return curent version and one of history version of the document for making diff
+		 */
+		function procWikiContentDiff()
+		{
+		    $document_srl = Context::get("document_srl");
+		    $history_srl = Context::get("history_srl");
+		    $oDocumentModel = &getModel('document');
+		    $oDocument = $oDocumentModel->getDocument($document_srl);
+		    $current_content = $oDocument->get('content');
+		    $history_content = $oDocumentModel->getHistory($history_srl)->content;
+		    $this->add('old', $history_content);
+		    $this->add('current', $current_content);
+		}
+		
 	}
 ?>

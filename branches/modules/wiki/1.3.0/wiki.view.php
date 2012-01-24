@@ -7,7 +7,7 @@
  **/
 class wikiView extends wiki 
 {
-
+	var $list;
 	var $search_option = array('title', 'content', 'title_content', 'comment', 'user_name', 'nick_name', 'user_id', 'tag');
 	var $document_exists = array();
 
@@ -48,7 +48,7 @@ class wikiView extends wiki
 		//$entry = Context::get('entry');
 		//$beautifulEntry = $this->beautifyEntryName($entry);
 		//Context::set('entry', $beautifulEntry);
-
+						
 			$output = $this->dispWikiContentView();
 			if(!$output->toBool()) return;
 		}
@@ -77,6 +77,18 @@ class wikiView extends wiki
 			}
 			
 			Context::set('oDocument', $oDocument);
+			
+			if ($this->module_info->menu_style == "msdn")
+			{
+			    $module_srl=$oDocument->get('module_srl');
+			    $this->_loadSidebarTreeMenu($module_srl, $document_srl);
+			}
+			else
+			{
+			    $oWikiModel = &getModel("wiki");
+			    $this->list = $oWikiModel->loadWikiTreeList($this->module_info->module_srl);
+			    Context::set('list',$this->list);
+			}
 			$this->setTemplateFile('histories');
 		}
 
@@ -89,22 +101,22 @@ class wikiView extends wiki
 
 			$oDocumentModel = &getModel('document');
 			$document_srl = Context::get('document_srl');
-		$entry = Context::get('entry');
-		if (!$document_srl) {
-			$mid = Context::get('mid');
-			$document_srl = $oDocumentModel->getDocumentSrlByAlias($mid, $entry);
-		}
+			$entry = Context::get('entry');
+			if (!$document_srl) {
+				$mid = Context::get('mid');
+				$document_srl = $oDocumentModel->getDocumentSrlByAlias($mid, $entry);
+			}
 			$oDocument = $oDocumentModel->getDocument(0, $this->grant->manager);
 			$oDocument->setDocument($document_srl);
 			$oDocument->add('module_srl', $this->module_srl);
-		if($oDocument->isExists()){
-			$oDocument->add('alias', $oDocumentModel->getAlias($document_srl));
-		}
-		else {
-			$oDocument->add('title', $entry);
-			$alias = $this->beautifyEntryName($entry);
-			$oDocument->add('alias', $alias);
-		}
+			if($oDocument->isExists()){
+				$oDocument->add('alias', $oDocumentModel->getAlias($document_srl));
+			}
+			else {
+				$oDocument->add('title', $entry);
+				$alias = $this->beautifyEntryName($entry);
+				$oDocument->add('alias', $alias);
+			}
 			Context::set('document_srl',$document_srl);
 			Context::set('oDocument', $oDocument);
 			$history_srl = Context::get('history_srl');
@@ -117,7 +129,28 @@ class wikiView extends wiki
 				}
 			} 
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert.xml');
+			
+			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			{
+			    $oWikiModel = &getModel("wiki");
+			    $this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
+			    Context::set('list',$this->list);
+			}
+			else
+			{
+			    $entry = Context::get('entry');
 
+			    if(!$document_srl) {
+				    if (!$entry) {
+					    $entry = "Front Page";
+					    Context::set('entry', $entry);
+				    }
+				    $document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+			    }
+			    $module_srl=$this->module_info->module_srl;
+			    $this->_loadSidebarTreeMenu($module_srl, $document_srl);
+			}
+			
 			$this->setTemplateFile('write_form');
 		}
 
@@ -147,12 +180,12 @@ class wikiView extends wiki
 			$obj->search_keyword = Context::get('search_keyword');
 			$obj->search_target = Context::get('search_target');
 			$output = $oDocumentModel->getDocumentList($obj);
-		$title_count = count($output->data);
-		for($i = 1; $i <= $title_count; $i++)
-		{
-			$alias = $oDocumentModel->getAlias($output->data[$i]->document_srl);
-			$output->data[$i]->add('alias', $alias);
-		}
+			$title_count = count($output->data);
+			for($i = 1; $i <= $title_count; $i++)
+			{
+				$alias = $oDocumentModel->getAlias($output->data[$i]->document_srl);
+				$output->data[$i]->add('alias', $alias);
+			}
 
 			Context::set('document_list', $output->data);
 			Context::set('total_count', $output->total_count);
@@ -163,7 +196,29 @@ class wikiView extends wiki
 			// 검색 옵션 세팅
 			foreach($this->search_option as $opt) $search_option[$opt] = Context::getLang($opt);
 			Context::set('search_option', $search_option);
+			
+			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			{
+			    $oWikiModel = &getModel("wiki");
+			    $this->list = $oWikiModel->loadWikiTreeList($this->module_info->module_srl);
+			    Context::set('list',$this->list);
+			}
+			else
+			{
+			    $document_srl = Context::get('document_srl');
+			    $entry = Context::get('entry');
 
+			    if(!$document_srl) {
+				    if (!$entry) {
+					    $entry = "Front Page";
+					    Context::set('entry', $entry);
+				    }
+				    $document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+			    }
+			    $module_srl=$this->module_info->module_srl;
+			    $this->_loadSidebarTreeMenu($module_srl, $document_srl);
+			}
+			
 			$this->setTemplateFile('title_index');
 		}
 
@@ -173,7 +228,31 @@ class wikiView extends wiki
 		 */
 		function dispWikiTreeIndex() {
 			$oWikiModel = &getModel('wiki');
-			Context::set('list', $oWikiModel->readWikiTreeCache($this->module_srl));
+			Context::set('document_tree', $oWikiModel->readWikiTreeCache($this->module_srl));
+			
+			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			{
+			    $oWikiModel = &getModel("wiki");
+			    $this->list = $oWikiModel->loadWikiTreeList($this->module_info->module_srl);
+			    Context::set('list',$this->list);
+			}
+			else
+			{
+			    $oDocumentModel = &getModel('document');
+			    $document_srl = Context::get('document_srl');
+			    $entry = Context::get('entry');
+
+			    if(!$document_srl) {
+				    if (!$entry) {
+					    $entry = "Front Page";
+					    Context::set('entry', $entry);
+				    }
+				    $document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+			    }
+			    $module_srl=$this->module_info->module_srl;
+			    $this->_loadSidebarTreeMenu($module_srl, $document_srl);
+			}
+			
 			$this->setTemplateFile('tree_list');
 		}
 
@@ -184,6 +263,30 @@ class wikiView extends wiki
 		function dispWikiModifyTree() {
 			if(!$this->grant->write_document) return new Object(-1,'msg_not_permitted');
 			Context::set('isManageGranted', $this->grant->write_document?'true':'false');
+			
+			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			{
+			    $oWikiModel = &getModel("wiki");
+			    $this->list = $oWikiModel->loadWikiTreeList($this->module_info->module_srl);
+			    Context::set('list',$this->list);
+			}
+			else
+			{
+			    $oDocumentModel = &getModel('document');
+			    $document_srl = Context::get('document_srl');
+			    $entry = Context::get('entry');
+
+			    if(!$document_srl) {
+				    if (!$entry) {
+					    $entry = "Front Page";
+					    Context::set('entry', $entry);
+				    }
+				    $document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+			    }
+			    $module_srl=$this->module_info->module_srl;
+			    $this->_loadSidebarTreeMenu($module_srl, $document_srl);
+			}
+			
 			$this->setTemplateFile('modify_tree');
 		}
 
@@ -222,107 +325,122 @@ class wikiView extends wiki
 
 		/**
 		 * @brief 위키 문서 출력
-	 * Input: entry or document_srl
-	 * Output: oDocument and alias
-	 *	oDocument must have title set
+		 * Input: entry or document_srl
+		 * Output: oDocument and alias
+		 *	oDocument must have title set
 		 */
 		function dispWikiContentView() {
-			$oWikiModel = &getModel('wiki');
-			$oDocumentModel = &getModel('document');
+		    $oWikiModel = &getModel('wiki');
+		    $oDocumentModel = &getModel('document');
 
-			// 요청된 변수 값들을 정리
-			$document_srl = Context::get('document_srl');
-			$entry = Context::get('entry');
+		    // 요청된 변수 값들을 정리
+		    $document_srl = Context::get('document_srl');
+		    $entry = Context::get('entry');
 
-		if (!$document_srl) {
-			if (!$entry) {
-				$entry = "Front page";
-				Context::set('entry', $entry);
-			}
-			$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
-			if(!$document_srl) $document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
-		}
+		    if (!$document_srl) {
+			    if (!$entry) {
+				    $entry = "Front page";
+				    Context::set('entry', $entry);
+			    }
+			    $document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+			    if(!$document_srl) $document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
+		    }
 
-			/**
-			 * 요청된 문서 번호가 있다면 문서를 구함
-			 **/
-			if($document_srl) {
-				$oDocument = $oDocumentModel->getDocument($document_srl);
+		    /**
+			* 요청된 문서 번호가 있다면 문서를 구함
+			**/
+		    if($document_srl) {
+			    $oDocument = $oDocumentModel->getDocument($document_srl);
 
-				if($oDocument->isExists()) {
-					$this->_handleWithExistingDocument($oDocument);
+			    if($oDocument->isExists()) {
+				    $this->_handleWithExistingDocument($oDocument);
 
-					list($prev_document_srl, $next_document_srl) = $oWikiModel->getPrevNextDocument($this->module_srl, $document_srl);
-					if($prev_document_srl) Context::set('oDocumentPrev', $oDocumentModel->getDocument($prev_document_srl));
-					if($next_document_srl) Context::set('oDocumentNext', $oDocumentModel->getDocument($next_document_srl));
-					$this->addToVisitLog($entry);
+				    list($prev_document_srl, $next_document_srl) = $oWikiModel->getPrevNextDocument($this->module_srl, $document_srl);
+				    if($prev_document_srl) Context::set('oDocumentPrev', $oDocumentModel->getDocument($prev_document_srl));
+				    if($next_document_srl) Context::set('oDocumentNext', $oDocumentModel->getDocument($next_document_srl));
+				    $this->addToVisitLog($entry);
 
-				} else {
-					Context::set('document_srl','',true);
-					return new Object(-1, 'msg_not_founded');
-				}
-			// 요청된 문서 번호가 아예 없다면 빈 문서 객체 생성
-			} else {
-				$oDocument = $oDocumentModel->getDocument(0);
-			}
+			    } else {
+				    Context::set('document_srl','',true);
+				    return new Object(-1, 'msg_not_founded');
+			    }
+		    // 요청된 문서 번호가 아예 없다면 빈 문서 객체 생성
+		    } else {
+			    $oDocument = $oDocumentModel->getDocument(0);
+		    }
 
-			// 글 보기 권한을 체크해서 권한이 없으면 오류 메세지 출력하도록 처리
-			if($oDocument->isExists()) {
-				// 브라우저 타이틀에 글의 제목을 추가
-				Context::addBrowserTitle($oDocument->getTitleText());
+		    // 글 보기 권한을 체크해서 권한이 없으면 오류 메세지 출력하도록 처리
+		    if($oDocument->isExists()) {
+			    // 브라우저 타이틀에 글의 제목을 추가
+			    Context::addBrowserTitle($oDocument->getTitleText());
 
-				// 조회수 증가 (비밀글일 경우 권한 체크)
-				if(!$oDocument->isSecret() || $oDocument->isGranted()) $oDocument->updateReadedCount();
+			    // 조회수 증가 (비밀글일 경우 권한 체크)
+			    if(!$oDocument->isSecret() || $oDocument->isGranted()) $oDocument->updateReadedCount();
 
-				// 비밀글일때 컨텐츠를 보여주지 말자.
-				if($oDocument->isSecret() && !$oDocument->isGranted()) $oDocument->add('content',Context::getLang('thisissecret'));
-				$this->setTemplateFile('view_document');
+			    // 비밀글일때 컨텐츠를 보여주지 말자.
+			    if($oDocument->isSecret() && !$oDocument->isGranted()) $oDocument->add('content',Context::getLang('thisissecret'));
+			    $this->setTemplateFile('view_document');
 
-				// set contributors
-				if($this->use_history)
-				{
-					$oModel = &getModel('wiki');
-					$contributors = $oModel->getContributors($oDocument->document_srl);
-					Context::set('contributors', $contributors);
-				}
+			    // set contributors
+			    if($this->use_history)
+			    {
+				    $oModel = &getModel('wiki');
+				    $contributors = $oModel->getContributors($oDocument->document_srl);
+				    Context::set('contributors', $contributors);
+			    }
 
-				// 댓글 허용일 경우 문서에 강제 지정
-				if($this->module_info->use_comment != 'N') $oDocument->add('allow_comment','Y');
-			// Set up alias
-			$alias = $oDocumentModel->getAlias($oDocument->document_srl);
-			$oDocument->add('alias', $alias);			
-			}
-			else
-			{
-			$oDocument->add('title', $entry);
-			$alias = $this->beautifyEntryName($entry);
-			$oDocument->add('alias', $alias);
-			$this->setTemplateFile('create_document');		
-		}
-		Context::set('visit_log', $_SESSION['wiki_visit_log'][$this->module_info->module_srl]);
-		// 스킨에서 사용할 oDocument 변수 세팅
-		Context::set('oDocument', $oDocument);
-		Context::set('entry', $oDocument->get('alias'));
+			    // 댓글 허용일 경우 문서에 강제 지정
+			    if($this->module_info->use_comment != 'N') $oDocument->add('allow_comment','Y');
+			    // Set up alias
+			    $alias = $oDocumentModel->getAlias($oDocument->document_srl);
+			    $oDocument->add('alias', $alias);			
+		    }
+		    else
+		    {
+			    $oDocument->add('title', $entry);
+			    $alias = $this->beautifyEntryName($entry);
+			    $oDocument->add('alias', $alias);
+			    $this->setTemplateFile('create_document');		
+		    }
+		    Context::set('visit_log', $_SESSION['wiki_visit_log'][$this->module_info->module_srl]);
+		    // 스킨에서 사용할 oDocument 변수 세팅
+		    Context::set('oDocument', $oDocument);
+		    Context::set('entry', $oDocument->get('alias'));
 
-			// 사용되는 javascript 필터 추가
-			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
-		// Redirect to user friendly URL if request comes from Search
-		$error_return_url = Context::get('error_return_url');
-		if(isset($error_return_url)) {
-			$site_module_info = Context::get('site_module_info');
-			if($document_srl)
-				$url = getSiteUrl($site_module_info->document,''
-									,'mid',$this->module_info->mid
-									,'entry',$oDocument->get('alias'));
-			else
-				$url = getSiteUrl($site_module_info->document,''
-						,'mid',$this->module_info->mid
-						,'entry',$entry);
+		    // 사용되는 javascript 필터 추가
+		    Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
 
-			$this->setRedirectUrl($url);			
-		}
-		
-			return new Object();
+		    if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+		    {
+			$oWikiModel = &getModel("wiki");
+			$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
+			Context::set('list',$this->list);
+		    }
+		    else
+		    {
+			//$document_srl = $oDocument->document_srl;
+			$module_srl=$this->module_info->module_srl;
+			$this->_loadSidebarTreeMenu($module_srl, $document_srl);
+		    }
+
+		    // Redirect to user friendly URL if request comes from Search
+		    /*
+		    $error_return_url = Context::get('error_return_url');
+		    if(isset($error_return_url)) {
+			    $site_module_info = Context::get('site_module_info');
+			    if($document_srl)
+				    $url = getSiteUrl($site_module_info->document,''
+									    ,'mid',$this->module_info->mid
+									    ,'entry',$oDocument->get('alias'));
+			    else
+				    $url = getSiteUrl($site_module_info->document,''
+						    ,'mid',$this->module_info->mid
+						    ,'entry',$entry);
+
+			    $this->setRedirectUrl($url);			
+		    }
+		    */
+		    return new Object();
 		}
 
 
@@ -541,6 +659,18 @@ class wikiView extends wiki
 			$answer = "<a href=\"".getFullUrl('', 'mid', $this->mid, 'entry', $alias, 'document_srl', '')."\" class=\"".$this->getCSSClass($entry_name->link_entry)."\" >".$entry_name->printing_name."</a>";
 
 			return $answer;
+		}
+		
+		/*
+		 * @brief Set list for Tree menu on left side of pages
+		 */
+		function _loadSidebarTreeMenu($module_srl, $document_srl)
+		{
+		    if($document_srl){
+			$oWikiModel = &getModel('wiki');
+			$this->list = $oWikiModel->getMenuTree($module_srl, $document_srl, $this->module_info->mid);
+		    }
+		    Context::set("list", $this->list);
 		}
 	}
 ?>
