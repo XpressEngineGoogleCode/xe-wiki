@@ -1,7 +1,6 @@
 <!--#include("header.html")-->
 
 <div class="wikiRead">
-	<h3><u>{$lang->content}</u></h3>
 	<div class="wikiReadBody">
 		<!--@if($oDocument->isSecret() && !$oDocument->isGranted())-->
 			<form action="./" method="get" onsubmit="return procFilter(this, input_password)" class="secretMessage">
