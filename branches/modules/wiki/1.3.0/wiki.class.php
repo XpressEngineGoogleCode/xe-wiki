@@ -2,18 +2,18 @@
 	/**
 	 * @class wiki
 	 * @author NHN (developers@xpressengine.com)
-	 * @brief  wiki 모듈의 high class
+	 * @brief  wiki module high class
 	 **/
 
 	class wiki extends ModuleObject {
 
-		var $omitting_characters = array('/&/', '/\//', '/,/', '/ /');
-		var $replacing_characters = array('', '', '', '_');
+		static $omitting_characters = array('/&/', '/\//', '/,/', '/ /');
+		static $replacing_characters = array('', '', '', '_');
 
 		/**
 		 * @brief entry 이름으로 사용할 문자열을 생성
 		 */
-		function makeEntryName($matches)
+		static function makeEntryName($matches)
 		{
 			$answer->is_alias_link = false;
 
@@ -27,7 +27,7 @@
 			$processed_names = array();
 			foreach ($names as $key => $entry_name)
 			{
-				$entry_name = $this->beautifyEntryName($entry_name);
+				$entry_name = wiki::beautifyEntryName($entry_name);
 				$processed_names[] = $entry_name;
 			}
 
@@ -45,11 +45,11 @@
 			return $answer;
 		}
 
-		function beautifyEntryName($entry_name)
+		static function beautifyEntryName($entry_name)
 		{
 			$entry_name = strip_tags($entry_name);
 			$entry_name = html_entity_decode($entry_name);
-			$entry_name = preg_replace($this->omitting_characters, $this->replacing_characters, $entry_name);
+			$entry_name = preg_replace(wiki::$omitting_characters, wiki::$replacing_characters, $entry_name);
 			$entry_name = preg_replace('/[_]+/', '_', $entry_name);
 			$entry_name = strtolower($entry_name);
 			
@@ -88,7 +88,10 @@
 		 * @brief 캐시 파일 재생성
 		 **/
 		function recompileCache() {
-			FileHandler::removeFilesInDir(_XE_PATH_."files/cache/wiki");
+			$oCacheHandler = &CacheHandler::getInstance('object', null, true);
+			if($oCacheHandler->isSupport()){
+				$oCacheHandler->invalidateGroupKey("wikiContent");				
+			}							
 		}
 
 		/**
@@ -156,7 +159,7 @@
 						{	   
 							unset($args);
 							$args->alias_srl = $doc_alias->alias_srl;
-							$args->alias_title = $this->beautifyEntryName($doc_alias->alias_title);
+							$args->alias_title = wiki::beautifyEntryName($doc_alias->alias_title);
 							$output = executeQuery('wiki.updateDocumentAlias', $args); 
 						}	   
 					}	   

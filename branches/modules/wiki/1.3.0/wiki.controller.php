@@ -61,8 +61,17 @@
 					$oDocumentController->insertAlias($obj->module_srl, $obj->document_srl, $aliasName);
 				}
 				$msg_code = 'success_updated';
+				
+				// remove document from cache
+				$oCacheHandler = &CacheHandler::getInstance('object', null, true);
+				if($oCacheHandler->isSupport()){
+					$object_key = sprintf('%s.%s.php', $obj->document_srl, Context::getLangType());
+					$cache_key = $oCacheHandler->getGroupKey('wikiContent', $object_key);
+					$oCacheHandler->delete($cache_key);				
+				}				
 
-			// 그렇지 않으면 신규 등록
+			
+			// if this is a new document
 			} else {
 				$output = $oDocumentController->insertDocument($obj);
 				$msg_code = 'success_registed';
@@ -76,7 +85,7 @@
 			if(!$output->toBool()) return $output;
 
 			$this->recompileTree($this->module_srl);
-
+		
 			// 결과를 리턴
 			$entry = $oDocumentModel->getAlias($output->get('document_srl'));
 			if($entry) {
@@ -195,6 +204,14 @@
 			$tree_args->module_srl = $this->module_srl;
 			$tree_args->document_srl = $oDocument->document_srl;
 			$output = executeQuery('wiki.deleteTreeNode', $tree_args);
+        
+			// remove document from cache
+			$oCacheHandler = &CacheHandler::getInstance('object', null, true);
+			if($oCacheHandler->isSupport()){
+				$object_key = sprintf('%s.%s.php', $document_srl, Context::getLangType());
+				$cache_key = $oCacheHandler->getGroupKey('wikiContent', $object_key);
+				$oCacheHandler->delete($cache_key);				
+			}			
 
 			$site_module_info = Context::get('site_module_info');
 			$this->setRedirectUrl(getSiteUrl($site_module_info->domain,'','mid',$this->module_info->mid));
@@ -353,6 +370,54 @@
 		    $this->add('old', $history_content);
 		    $this->add('current', $current_content);
 		}
+		
+
+    private function writeDocToCache($document_srl, $content)
+    {
+        // generate the file path
+        $phpFileFullPath = sprintf(wiki::CACHE_DIR . "/%s.%s.php", $document_srl, Context::getLangType());
+        // Remove previous cache
+        FileHandler::removeFile($phpFileFullPath);
+        // render the content to convert wiki links to HTML links.
+        $wikiView = &getView('wiki');
+        $wikiView->mid = $this->module_info->mid;
+        $wikiView->module_info = $this->module_info;
+        $content = $wikiView->_renderWikiContent($document_srl, $content);
+        // Write contents to a file.
+        FileHandler::writeFile($phpFileFullPath, $content);
+    }		
+    
+    public function recreateCache()
+    {
+        $document_srl = Context::get('document_srl');
+
+        if (!$document_srl)
+        {
+            return new Object(-1, 'msg_invalid_request');
+        }
+
+        $oDocumentModel = &getModel('document');
+        $oDocument = $oDocumentModel->getDocument($document_srl);
+
+        if (!$oDocument->isExists())
+        {
+            return new Object(-1, 'msg_invalid_request');
+        }
+
+        $oModuleModel = &getModel('module');
+        $this->module_info = $oModuleModel->getModuleInfoByModuleSrl($oDocument->get('module_srl'));
+
+        if (!$this->module_info->module_srl || !$this->module_info->mid)
+        {
+            return new Object(-1, 'msg_invalid_request');
+        }
+
+        $this->writeDocToCache($document_srl, $oDocument->get('content'));
+
+        $oDocument->alias_title = $oDocumentModel->getAlias($oDocument->document_srl);
+        $this->add('redirect_url', getUrl('', 'mid', $this->module_info->mid, 'entry', $oDocument->alias_title));
+        return new Object(0, 'successfully_cached');
+    }    
 		
 	}
 ?>

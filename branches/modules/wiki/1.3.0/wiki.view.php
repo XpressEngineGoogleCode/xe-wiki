@@ -55,7 +55,7 @@ class wikiView extends wiki
 
 		
 		/**
-		 * @brief 특정 위키 문서의 변경 이력 출력
+		 * @brief Display the history of the particular wiki page
 		 */
 		function dispWikiHistory() {
 			$oDocumentModel = &getModel('document');
@@ -343,7 +343,7 @@ class wikiView extends wiki
 				    Context::set('entry', $entry);
 			    }
 			    $document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
-			    if(!$document_srl) $document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
+			    if(!$document_srl) 	$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
 		    }
 
 		    /**
@@ -424,7 +424,6 @@ class wikiView extends wiki
 		    }
 
 		    // Redirect to user friendly URL if request comes from Search
-		    /*
 		    $error_return_url = Context::get('error_return_url');
 		    if(isset($error_return_url)) {
 			    $site_module_info = Context::get('site_module_info');
@@ -439,7 +438,6 @@ class wikiView extends wiki
 
 			    $this->setRedirectUrl($url);			
 		    }
-		    */
 		    return new Object();
 		}
 
@@ -576,6 +574,7 @@ class wikiView extends wiki
 			$history_srl = Context::get('history_srl');
 			if($history_srl)
 			{
+                $oDocumentModel = &getModel('document');
 				$output = $oDocumentModel->getHistory($history_srl);
 				if($output && $output->content != null)
 				{
@@ -583,38 +582,46 @@ class wikiView extends wiki
 				}
 			} 
 			$content = $oDocument->getContent(false);
-			$content = $this->_renderWikiContent($content);
-
+			$content = $this->_renderWikiContent($oDocument->document_srl, $content);
 			$oDocument->add('content', $content);
 		}
 
 		/**
 		 * @brief 위키 문법에 따라 쓰여진 컨텐츠의 링크를 렌더링 (private)
 		 */
-		function _renderWikiContent($org_content)
-		{	
-			$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_check_exists' ), $org_content );
-			$entries = array_keys($this->document_exists);
-			$oDB = &DB::getInstance();
-
-
-			if(count($entries))
-			{ 
-				$args->entries = $entries;
-				$args->module_srl = $this->module_info->module_srl;
-				$output = executeQueryArray("wiki.getDocumentsWithEntries", $args);
-
-				if($output->data)
-				{ 
-					foreach($output->data as $alias)
-					{ 
-						$this->document_exists[$alias->alias_title] = 1;
-					} 
-				}
+		function _renderWikiContent($document_srl, $org_content)
+		{
+			$oCacheHandler = &CacheHandler::getInstance('object', null, true);
+			if($oCacheHandler->isSupport()){
+				$object_key = sprintf('%s.%s.php', $document_srl, Context::getLangType());
+                $cache_key = $oCacheHandler->getGroupKey('wikiContent', $object_key);
+				$content = $oCacheHandler->get($cache_key);				
 			}
-			$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $content );
-			$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
+            if (!$content)
+            {
+                $content = preg_replace_callback("!\[([^\]]+)\]!is", array( $this, 'callback_check_exists' ), $org_content );
+                $entries = array_keys($this->document_exists);
+			
+				if(count($entries))
+				{ 
+						$args->entries = "'" . implode("','", $entries) . "'";;
+					$args->module_srl = $this->module_info->module_srl;
+					$output = executeQueryArray("wiki.getDocumentsWithEntries", $args);
 
+					if($output->data)
+					{ 
+						foreach($output->data as $alias)
+						{ 
+							$this->document_exists[$alias->alias_title] = 1;
+						} 
+					}
+				}
+				$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $content );
+				$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
+				
+				if($oCacheHandler->isSupport()) $oCacheHandler->put($cache_key, $content);
+			}
+			
 			return $content;
 		}
 
@@ -624,7 +631,7 @@ class wikiView extends wiki
 		 */
 		function callback_check_exists($matches)
 		{
-			$entry_name = $this->makeEntryName($matches);
+			$entry_name = wiki::makeEntryName($matches);
 			$this->document_exists[$entry_name->link_entry] = 0;
 
 			return $matches[0];
@@ -649,7 +656,7 @@ class wikiView extends wiki
 		{
 			if($matches[1]{0} == "!") return "[".substr($matches[1], 1)."]";
 
-			$entry_name = $this->makeEntryName($matches);
+			$entry_name = wiki::makeEntryName($matches);
 			
 			// If document exists, create link with alias -> the title will be correctly retireved from the database
 			// Otherwise, use title as entry, so that doc title can be retrieved form URL
@@ -672,5 +679,5 @@ class wikiView extends wiki
 		    }
 		    Context::set("list", $this->list);
 		}
-	}
+}
 ?>
