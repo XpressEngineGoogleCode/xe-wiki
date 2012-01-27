@@ -108,6 +108,7 @@ class wikiView extends wiki
 			}
 			$oDocument = $oDocumentModel->getDocument(0, $this->grant->manager);
 			$oDocument->setDocument($document_srl);
+			if (!Mobile::isFromMobilePhone()) $oDocument->variables['content'] = nl2br($oDocument->getContentText());
 			$oDocument->add('module_srl', $this->module_srl);
 			if($oDocument->isExists()){
 				$oDocument->add('alias', $oDocumentModel->getAlias($document_srl));
@@ -404,6 +405,7 @@ class wikiView extends wiki
 		    }
 		    Context::set('visit_log', $_SESSION['wiki_visit_log'][$this->module_info->module_srl]);
 		    // 스킨에서 사용할 oDocument 변수 세팅
+		    $oDocument->variables['content'] = nl2br($oDocument->get('content'));
 		    Context::set('oDocument', $oDocument);
 		    Context::set('entry', $oDocument->get('alias'));
 
@@ -418,12 +420,12 @@ class wikiView extends wiki
 		    }
 		    else
 		    {
-			//$document_srl = $oDocument->document_srl;
 			$module_srl=$this->module_info->module_srl;
 			$this->_loadSidebarTreeMenu($module_srl, $document_srl);
 		    }
 
 		    // Redirect to user friendly URL if request comes from Search
+
 		    $error_return_url = Context::get('error_return_url');
 		    if(isset($error_return_url)) {
 			    $site_module_info = Context::get('site_module_info');
@@ -438,6 +440,7 @@ class wikiView extends wiki
 
 			    $this->setRedirectUrl($url);			
 		    }
+
 		    return new Object();
 		}
 

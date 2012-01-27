@@ -1,0 +1,38 @@
+<!--#include("header.html")-->
+
+<form action="./" method="post" onsubmit="return procFilter(this, insert)" id="fo_write">
+<input type="hidden" name="mid" value="{$mid}" />
+<input type="hidden" name="document_srl" value="{$document_srl}" />
+<!--@if($oDocument->isExists()&&$oDocument->get('title')=='Front Page')-->
+<input type="hidden" name="title" value="{$oDocument->get('title')}" />
+<!--@end-->
+
+<div class="wikiWriteHeader">
+    <!--@if($oDocument->get('title')!='Front Page')-->
+    <div class="title">
+	    <em>Title:</em>
+	    <input type="text" name="title" value="{$oDocument->get('title')}" class="inputTypeText" />
+    </div>
+    <!--@end-->
+    <div class="alias">
+	    <em>Alias:</em>
+	    {getFullUrl()}
+	    <input type="text" name="alias" value="{$oDocument->get('alias')}" class="inputTypeText" />
+    </div>
+    <!--@if($history)-->
+    <textarea class="tag" rows="5" name="content">{htmlspecialchars($history->content)}</textarea>
+    <!--@else-->
+    <textarea class="tag" rows="5" name="content">{$oDocument->getContentText()}</textarea>
+    <!--@end-->
+    <div class="tag">
+        {$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
+        <p />
+    </div>
+
+	<div class="wikiNavigation">
+        <span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
+    </div>
+</div>
+
+</form>
+<!--#include("footer.html")-->
