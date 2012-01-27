@@ -23,4 +23,8 @@
     $lang->show_tree = "Show tree";
     $lang->content = "Document content";
     $lang->diff = "Diff";
+    
+    // lang for mobile
+    //$lang->mobile_view
+    //$lang->about_mobile_view
 ?>

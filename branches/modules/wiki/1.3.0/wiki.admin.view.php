@@ -75,12 +75,24 @@
 			$oModuleModel = &getModel('module');
 			$skin_list = $oModuleModel->getSkins($this->module_path);
 			Context::set('skin_list',$skin_list);
-
+			    
+			$mskin_list = $oModuleModel->getSkins($this->module_path, "m.skins");
+			Context::set('mskin_list', $mskin_list);
+			
 			// 레이아웃 목록을 구해옴
-			$oLayoutMode = &getModel('layout');
-			$layout_list = $oLayoutMode->getLayoutList();
+			$oLayoutModel = &getModel('layout');
+			$layout_list = $oLayoutModel->getLayoutList();
 			Context::set('layout_list', $layout_list);
-
+			
+			$mobile_layout_list = $oLayoutModel->getLayoutList(0,"M");
+			Context::set('mlayout_list', $mobile_layout_list);
+			
+			$security = new Security();
+			$security->encodeHTML('wiki_list..browser_title','wiki_list..mid');
+			$security->encodeHTML('skin_list..title','mskin_list..title');
+			$security->encodeHTML('layout_list..title','layout_list..layout');
+			$security->encodeHTML('mlayout_list..title','mlayout_list..layout');
+			
 			// 템플릿 파일 지정
 			$this->setTemplateFile('wiki_insert');
 		}
