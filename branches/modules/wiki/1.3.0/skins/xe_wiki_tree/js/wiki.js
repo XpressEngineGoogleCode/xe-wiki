@@ -103,14 +103,14 @@ jQuery.fn.decHTML = function() {
   return this.each(function(){
     var me   = jQuery(this);
     var html = me.html();
-    me.html(html.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>'));
+    me.html("<div style='text-align:left'>"+html.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')+"</div>");
   });
 };
 
 function getDiff(elem,document_srl,history_srl)
 {
-    var type = "div";
-    var diffDiv = elem.find(type).eq(1);
+    var type = "td";
+    var diffDiv = jQuery("#"+elem);
     if (!diffDiv.hasClass("hide"))
     {
 	diffDiv.addClass("hide");

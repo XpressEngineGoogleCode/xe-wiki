@@ -404,17 +404,17 @@
 a, a:hover, a:active, a:hover, a:focus{
     color: #000000;
     font-weight: bold;
-    font-size: 10px;
+    font-size: 11px;
     text-decoration: none;
 }
 a span, a:hover span, a:active span, a:hover span, a:focus span{
     color: #000000;
     font-weight: bold;
-    font-size: 10px;
+    font-size: 11px;
     text-decoration: none;
 }
 
-dd a, dd a:hover, dd a:active, dd a:hover, dd a:focus{font-size: 10px;}
+dd a, dd a:hover, dd a:active, dd a:hover, dd a:focus{font-size: 11px;}
 h3 a, h3 a:hover, h3 a:active, h3 a:hover, h3 a:focus
 {
     color: #BA0000;
@@ -439,17 +439,22 @@ h3 a, h3 a:hover, h3 a:active, h3 a:hover, h3 a:focus
     color: #adadad;
     border-bottom: 1px solid #adadad;
 }
-
-.diff
+.history_content
 {
-    margin-top: 10px; 
-    margin-bottom: 10px;
-    padding: 8px;
+    background-color: #edf2c2;
+    padding: 3px;
     border: 1px dashed #DDDDDD;
     width: 100%;
-    font-weight: bold;
+    font-weight: normal;
 }
-
+.diff
+{
+    background-color: #E0E8EC;
+    padding: 3px;
+    border: 1px dashed #DDDDDD;
+    width: 100%;
+    font-weight: normal;
+}
 .wDiffHtmlInsert, .wDiffHtmlInsert *
 {
     color: #009900;
