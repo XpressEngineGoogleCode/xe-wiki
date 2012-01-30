@@ -6,8 +6,8 @@
 	<input type="hidden" name="document_srl" value="{$oComment->get('document_srl')}" />
 	<input type="hidden" name="comment_srl" value="{$oComment->get('comment_srl')}" />
 	<div class="inputPassword tCenter">
-		<span class="button"><input type="submit" value="{$lang->cmd_delete}" accesskey="s" /></span>
-		<a href="{getUrl('act','','comment_srl','')}" class="button"><span>{$lang->cmd_cancel}</span></a>
+		<input class="bn" type="submit" value="{$lang->cmd_delete}" accesskey="s" />
+		<a class="bn" href="{getUrl('act','','comment_srl','')}">{$lang->cmd_cancel}</a>
 	</div>
 </form>
 <!--#include("footer.html")-->

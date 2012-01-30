@@ -36,9 +36,9 @@
         </select>
         <input type="text" name="search_keyword" value="{htmlspecialchars($search_keyword)}" class="inputText" accesskey="S" title="{$lang->cmd_search}" />
         <!--@if($last_division)-->
-            <a href="{getUrl('page',1,'document_srl','','division',$last_division,'last_division','')}" class="button"><span>{$lang->cmd_search_next}</span></a>
+            <a href="{getUrl('page',1,'document_srl','','division',$last_division,'last_division','')}" class="bn">{$lang->cmd_search_next}</a>
         <!--@end-->
-        <span class="buttonOfficial"><input type="submit" value="{$lang->cmd_search}" /></span>
+        <input class="bn" type="submit" value="{$lang->cmd_search}" />
     </fieldset>
 </form>
 

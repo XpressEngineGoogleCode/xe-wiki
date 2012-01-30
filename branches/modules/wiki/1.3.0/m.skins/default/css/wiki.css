@@ -130,7 +130,7 @@
 .wikiList td .category{ color:#888; background-image:url(../img/white/lineVr9.gif);}
 .wikiList td .by{ color:#ccc;}
 
-/* Board Navigation */
+/* Wiki Navigation */
 .wiki .wikiNavigation{ padding:30px 0; margin:2px 0 0 0; text-align:center; border-top:1px solid; *zoom:1; _zoom:0;}
 .wiki .wikiNavigation:after{ content:""; display:block; float:none; clear:both;}
 .wiki .wikiNavigation .pagination{ padding:5px 0;}
@@ -387,78 +387,6 @@
 .pagination a.nextEnd{ padding-right:14px; background-position:right center; }
 
 /* Button */
-
-.buttonOfficial {
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	background: #f1f1f1;
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0, rgb(228,228,228)),
-		color-stop(1, rgb(255,255,255))
-	);
-	background-image: -moz-linear-gradient(
-		center bottom,
-		rgb(228,228,228) 0%,
-		rgb(255,255,255) 100%
-	);
-	border: 1px solid #7e7e7e;
-	line-height: normal;
-	padding: 1px 1px;
-	margin: 2px;
-	font-size: 10px;
-}
-
-.buttonOfficial:active {
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0, rgb(255,255,255)),
-		color-stop(1, rgb(228,228,228))
-	);
-	background-image: -moz-linear-gradient(
-		center bottom,
-		rgb(255,255,255) 0%,
-		rgb(228,228,228) 100%
-	);
-	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.4);
-	-webkit-box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.4);
-}
-
-.buttonOfficial:hover {
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0, rgb(255,255,255)),
-		color-stop(1, rgb(228,228,228))
-	);
-	background-image: -moz-linear-gradient(
-		center bottom,
-		rgb(255,255,255) 0%,
-		rgb(228,228,228) 100%
-	);
-}
-.buttonOfficial:focus {
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0, rgb(255,255,255)),
-		color-stop(1, rgb(228,228,228))
-	);
-	background-image: -moz-linear-gradient(
-		center bottom,
-		rgb(255,255,255) 0%,
-		rgb(228,228,228) 100%
-	);
-}
-
 .hide { display:none; }
 
 /* tree */
@@ -470,16 +398,6 @@
 
 .wiki a.exists { text-decoration:underline; color:green; }
 .wiki a.notexist { text-decoration:none; border-bottom:1px dotted #EE0000; color:#EE0000; }
-
-input[type=button],
-input[type=submit] 
-{
-    font-family: Tahoma, Sans-serif;
-    font-size: 10px;
-    color: #000;
-    border: none;
-    font-weight: bold;
-}
 
 #content_Body { clear: both; padding-left: 3px; padding-right: 3px;}
 #clearAll {clear: both;}
@@ -542,3 +460,7 @@ h3 a, h3 a:hover, h3 a:active, h3 a:hover, h3 a:focus
     color: #990000;
     text-decoration: line-through;
 }
+
+.bn, .bn:active, .bn:visited
+{display:inline-block;padding:2px;font-weight:normal;font-size:10px;border:1px solid #333;background:#eee;color:#000;text-shadow:1px 1px 0 #fff;box-shadow:0 0 3px #333;-moz-box-shadow:0 0 3px #333;-webkit-box-shadow:0 0 3px #333;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-decoration:none}
+.bn:focus, .bn:hover{display:inline-block;padding:2px;font-weight:normal;font-size:10px;border:1px solid #333;background:#ccc;color:#000;text-shadow:1px 1px 0 #fff;box-shadow:0 0 3px #333;-moz-box-shadow:0 0 3px #333;-webkit-box-shadow:0 0 3px #333;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-decoration:none}

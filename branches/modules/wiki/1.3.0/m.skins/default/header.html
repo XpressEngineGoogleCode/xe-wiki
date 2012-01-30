@@ -50,10 +50,10 @@
 	<br />
 	<br />
         <div style="clear:left; margin-top: 13px; width:100%; text-align: center;">
-	    <div>
-		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">Front Page</a></span>
-		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a></span>
-		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a></span>
+	    <div class="cm">
+		<a class="bn" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">Front Page</a>
+		<a class="bn" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a>
+		<a class="bn" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a>
 	    </div>
         </div>
     </div>
@@ -106,13 +106,13 @@
 		    <!--@if(!$history && ($oDocument->isExists()||$use_history != 'N'))-->
 		    <div class="command">
 			<!--@if($oDocument->isExists()&&$act!='dispWikiEditPage')-->
-			    <span><a class="buttonOfficial" href="{getUrl('act','dispWikiEditPage','entry',$entry)}"><span>{$lang->cmd_edit}</span></a></span>
+			    <a class="bn" href="{getUrl('act','dispWikiEditPage','entry',$entry)}"><span>{$lang->cmd_edit}</span></a>
 			<!--@end-->
 			<!--@if($oDocument->isExists()&&$grant->delete_document && $oDocument->get('title')!='Front Page')-->
-			    <span><a class="buttonOfficial" href="#" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;"><span>{$lang->cmd_delete}</span></a></span>
+			    <a class="bn" href="#" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;"><span>{$lang->cmd_delete}</span></a>
 			<!--@end-->
 			<!--@if($use_history != 'N')-->
-			    <span><a class="buttonOfficial" href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}"><span>Histories</span></a></span>
+			    <a class="bn" href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}"><span>Histories</span></a>
 			<!--@end-->
 		    </div>
 		    <!--@else-->
@@ -120,7 +120,7 @@
 			<!--@if($history)-->
 			    {$lang->notice_old_revision}
 			<!--@end-->
-			<span><a class="buttonOfficial" href="{getUrl('act','','history_srl','')}">{$lang->cmd_back}</a></span>
+			<a class="bn" href="{getUrl('act','','history_srl','')}">{$lang->cmd_back}</a>
 		    </div>
 		    <!--@end-->
 		</div>
