@@ -24,7 +24,9 @@
 		<input type="text" name="alias" value="{$oDocument->get('alias')}" class="inputTypeText" />
 	</div>
 	
-    <div class="editor">{$oDocument->getEditor()}</div>
+    <div class="editor">
+			{$oDocument->getEditor()}
+	</div>
 	
     <div class="tag">
         {$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})

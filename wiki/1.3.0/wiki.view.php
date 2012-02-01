@@ -37,6 +37,18 @@ class wikiView extends wiki
 			Context::addJsFile($this->module_path.'tpl/js/wiki.js');
 
 			Context::set('grant', $this->grant);
+			
+			$editor_config = $oModuleModel->getModulePartConfig('editor', $this->module_info->module_srl);
+			if($this->module_info->markup_type == 'wiki_markup'){
+				$editor_config->editor_skin = 'xpresseditor';
+				$editor_config->content_style = 'default';
+				// $editor_config->content_font = '"Courier New"';
+				// $editor_config->sel_editor_colorset = 'white_text_nohtml'; 
+				
+				$oModuleController = &getController('module');
+				$oModuleController->insertModulePartConfig('editor', $this->module_info->module_srl, $editor_config);
+			}
+			// var_dump($editor_config);
 		}
 
 
@@ -108,7 +120,8 @@ class wikiView extends wiki
 			}
 			$oDocument = $oDocumentModel->getDocument(0, $this->grant->manager);
 			$oDocument->setDocument($document_srl);
-			if (!Mobile::isFromMobilePhone()) $oDocument->variables['content'] = nl2br($oDocument->getContentText());
+			if (!Mobile::isFromMobilePhone() && $this->module_info->markup_type != 'wiki_markup') $oDocument->variables['content'] = nl2br($oDocument->getContentText());
+			
 			$oDocument->add('module_srl', $this->module_srl);
 			if($oDocument->isExists()){
 				$oDocument->add('alias', $oDocumentModel->getAlias($document_srl));
@@ -584,7 +597,7 @@ class wikiView extends wiki
 					Context::set('history', $output);
 				}
 			} 
-			$content = $oDocument->getContent(false);
+			$content = $oDocument->getContent(false, false, false, false);
 			$content = $this->_renderWikiContent($oDocument->document_srl, $content);
 			$oDocument->add('content', $content);
 		}
@@ -595,13 +608,22 @@ class wikiView extends wiki
 		function _renderWikiContent($document_srl, $org_content)
 		{
 			$oCacheHandler = &CacheHandler::getInstance('object', null, true);
+			/*
 			if($oCacheHandler->isSupport()){
 				$object_key = sprintf('%s.%s.php', $document_srl, Context::getLangType());
                 $cache_key = $oCacheHandler->getGroupKey('wikiContent', $object_key);
 				$content = $oCacheHandler->get($cache_key);				
 			}
+			 * */
             if (!$content)
             {
+				// Parse wiki syntax
+				if($this->module_info->markup_type == 'wiki_markup'){
+					require_once($this->module_path . "lib/wiky.inc.php");
+					$wiki_syntax_parser = new WikiSyntaxParser;
+					$org_content = $wiki_syntax_parser->parse($org_content);
+				}
+				
                 $content = preg_replace_callback("!\[([^\]]+)\]!is", array( $this, 'callback_check_exists' ), $org_content );
                 $entries = array_keys($this->document_exists);
 			
@@ -619,8 +641,8 @@ class wikiView extends wiki
 						} 
 					}
 				}
-				$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $content );
-				$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
+				//$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $content );
+				//$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
 				
 				if($oCacheHandler->isSupport()) $oCacheHandler->put($cache_key, $content);
 			}
