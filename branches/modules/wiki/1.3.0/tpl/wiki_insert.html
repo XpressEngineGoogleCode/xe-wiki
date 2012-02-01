@@ -49,7 +49,18 @@
             <p>{$lang->about_browser_title}</p>
         </td>
     </tr>
-
+    
+	<tr>
+        <th scope="row"><div>{$lang->markup_type}</div></th>
+        <td>
+            <select name="markup_type">
+                <option value="wiki_markup" <!--@if($module_info->markup_type=='wiki_markup')-->selected="selected"<!--@end--> >{$lang->wiki_markup}</option>
+                <option value="html_markup" <!--@if($module_info->markup_type!='wiki_markup')-->selected="selected"<!--@end--> >{$lang->html_markup}</option>
+            </select>
+            <p>{$lang->about_markup_type}</p>
+        </td>
+    </tr>
+	
     <tr>
         <th scope="row"><div>{$lang->layout}</div></th>
         <td>

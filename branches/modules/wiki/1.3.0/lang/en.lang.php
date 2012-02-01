@@ -23,9 +23,17 @@
     $lang->show_tree = "Show tree";
     $lang->content = "Document content";
     $lang->diff = "Diff";
+	
+	$lang->markup_type = 'Markup type';
+	$lang->wiki_markup = 'Wiki markup';
+	$lang->html_markup = 'HTML markup';
+	$lang->about_markup_type = 'HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.';
+
     $lang->revision = "Revision";
     $lang->current = "current";
-    
+
+   
+	$lang->notify_no_editor = 'Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.';
     // lang for mobile
     //$lang->mobile_view
     //$lang->about_mobile_view
