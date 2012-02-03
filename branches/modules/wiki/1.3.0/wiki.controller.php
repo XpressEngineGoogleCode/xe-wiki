@@ -371,53 +371,78 @@
 		    $this->add('current', $current_content);
 		}
 		
+		/*
+		 * @brief function, used by Ajax call, that return HTML Comment Editor
+		 */
+		function procDispCommentEditor()
+		{
+			$document_srl = Context::get("document_srl");
+			$oDocumentModel = &getModel('document');
+			$oDocument = $oDocumentModel->getDocument($document_srl);
+			$editor = $oDocument->getCommentEditor();
+			$oEditorModel = &getModel('editor');
 
-    private function writeDocToCache($document_srl, $content)
-    {
-        // generate the file path
-        $phpFileFullPath = sprintf(wiki::CACHE_DIR . "/%s.%s.php", $document_srl, Context::getLangType());
-        // Remove previous cache
-        FileHandler::removeFile($phpFileFullPath);
-        // render the content to convert wiki links to HTML links.
-        $wikiView = &getView('wiki');
-        $wikiView->mid = $this->module_info->mid;
-        $wikiView->module_info = $this->module_info;
-        $content = $wikiView->_renderWikiContent($document_srl, $content);
-        // Write contents to a file.
-        FileHandler::writeFile($phpFileFullPath, $content);
-    }		
-    
-    public function recreateCache()
-    {
-        $document_srl = Context::get('document_srl');
+			// get an editor
+			$option->primary_key_name = 'comment_srl';
+			$option->content_key_name = 'content';
+			$option->allow_fileupload = false;
+			$option->enable_autosave = false;
+			$option->disable_html = true;
+			$option->enable_default_component = false;
+			$option->enable_component = false;
+			$option->resizable = true;
+			$option->height = 150;
+			$editor = $oEditorModel->getEditor(0, $option);
+			Context::set('editor', $editor);
+			$this->add('editor',$editor);
+		}
 
-        if (!$document_srl)
-        {
-            return new Object(-1, 'msg_invalid_request');
-        }
+		private function writeDocToCache($document_srl, $content)
+		{
+			// generate the file path
+			$phpFileFullPath = sprintf(wiki::CACHE_DIR . "/%s.%s.php", $document_srl, Context::getLangType());
+			// Remove previous cache
+			FileHandler::removeFile($phpFileFullPath);
+			// render the content to convert wiki links to HTML links.
+			$wikiView = &getView('wiki');
+			$wikiView->mid = $this->module_info->mid;
+			$wikiView->module_info = $this->module_info;
+			$content = $wikiView->_renderWikiContent($document_srl, $content);
+			// Write contents to a file.
+			FileHandler::writeFile($phpFileFullPath, $content);
+		}		
 
-        $oDocumentModel = &getModel('document');
-        $oDocument = $oDocumentModel->getDocument($document_srl);
+		public function recreateCache()
+		{
+			$document_srl = Context::get('document_srl');
 
-        if (!$oDocument->isExists())
-        {
-            return new Object(-1, 'msg_invalid_request');
-        }
+			if (!$document_srl)
+			{
+				return new Object(-1, 'msg_invalid_request');
+			}
 
-        $oModuleModel = &getModel('module');
-        $this->module_info = $oModuleModel->getModuleInfoByModuleSrl($oDocument->get('module_srl'));
+			$oDocumentModel = &getModel('document');
+			$oDocument = $oDocumentModel->getDocument($document_srl);
 
-        if (!$this->module_info->module_srl || !$this->module_info->mid)
-        {
-            return new Object(-1, 'msg_invalid_request');
-        }
+			if (!$oDocument->isExists())
+			{
+				return new Object(-1, 'msg_invalid_request');
+			}
 
-        $this->writeDocToCache($document_srl, $oDocument->get('content'));
+			$oModuleModel = &getModel('module');
+			$this->module_info = $oModuleModel->getModuleInfoByModuleSrl($oDocument->get('module_srl'));
 
-        $oDocument->alias_title = $oDocumentModel->getAlias($oDocument->document_srl);
-        $this->add('redirect_url', getUrl('', 'mid', $this->module_info->mid, 'entry', $oDocument->alias_title));
-        return new Object(0, 'successfully_cached');
-    }    
+			if (!$this->module_info->module_srl || !$this->module_info->mid)
+			{
+				return new Object(-1, 'msg_invalid_request');
+			}
+
+			$this->writeDocToCache($document_srl, $oDocument->get('content'));
+
+			$oDocument->alias_title = $oDocumentModel->getAlias($oDocument->document_srl);
+			$this->add('redirect_url', getUrl('', 'mid', $this->module_info->mid, 'entry', $oDocument->alias_title));
+			return new Object(0, 'successfully_cached');
+		}    
 		
 	}
 ?>

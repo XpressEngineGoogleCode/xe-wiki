@@ -31,10 +31,8 @@
 
     $lang->revision = "Revision";
     $lang->current = "current";
-
-   
+    $lang->leave_comment = "Leave your comment";
+    $lang->cancel = "Cancel";
+ 
 	$lang->notify_no_editor = 'Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.';
-    // lang for mobile
-    //$lang->mobile_view
-    //$lang->about_mobile_view
 ?>
