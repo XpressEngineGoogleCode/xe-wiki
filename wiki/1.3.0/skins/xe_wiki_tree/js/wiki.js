@@ -117,34 +117,34 @@ function getDiff(elem,document_srl,history_srl)
     }
     else
     {
-	jQuery.exec_json
-	(
-	    "wiki.procWikiContentDiff",
-	    {
-		"document_srl": document_srl,
-		"history_srl": history_srl
-	    },
-	    function(data)
-	    {
-		var old = data.old;
-		var current = data.current;
-		wDiffHtmlInsertStart = "<span class='wDiffHtmlInsert'>";
-		wDiffHtmlInsertEnd = "</span>";
-		wDiffHtmlDeleteStart = "<span class='wDiffHtmlDelete'>";
-		wDiffHtmlDeleteEnd = "</span>";
-		var htmlText = WDiffString(old, current);
-		//var htmlText = diffString(old,current);
-		jQuery('#diff'+history_srl).html(htmlText).decHTML();
-		jQuery(type+'[name*="diff"]').each(function()
-		{
-		    if (!jQuery(this).hasClass("hide")) 
-			jQuery(this).addClass("hide");
-		});
-		jQuery('#diff'+history_srl).toggleClass("hide");
-		docHeight = jQuery("#content_Body").height();
-		resizeDiv(docHeight);
-	    }
-	);
+		jQuery.exec_json
+		(
+			"wiki.procWikiContentDiff",
+			{
+				"document_srl": document_srl,
+				"history_srl": history_srl
+			},
+			function(data)
+			{
+				var old = data.old;
+				var current = data.current;
+				wDiffHtmlInsertStart = "<span class='wDiffHtmlInsert'>";
+				wDiffHtmlInsertEnd = "</span>";
+				wDiffHtmlDeleteStart = "<span class='wDiffHtmlDelete'>";
+				wDiffHtmlDeleteEnd = "</span>";
+				var htmlText = WDiffString(old, current);
+				//var htmlText = diffString(old,current);
+				jQuery('#diff'+history_srl).html(htmlText).decHTML();
+				jQuery(type+'[name*="diff"]').each(function()
+				{
+					if (!jQuery(this).hasClass("hide")) 
+					jQuery(this).addClass("hide");
+				});
+				jQuery('#diff'+history_srl).toggleClass("hide");
+				docHeight = jQuery("#content_Body").height();
+				resizeDiv(docHeight);
+			}
+		);
     }
     docHeight = jQuery("#content_Body").height();
     resizeDiv(docHeight);
@@ -160,38 +160,41 @@ jQuery(document).ready(function(){
     leftWidth = jQuery("#leftSideTreeList").width();
     jQuery("#showHideTree").click(function()
     {
-	jQuery("#leftSideTreeList").animate({
-	    width: 'toggle'
-	}, 200, function() {
-	    resizeDiv(docHeight);
-	});
-	if( jQuery("#showHideTree").css("left") == "1px" )
-	{
-	    jQuery("#showHideTree").animate({
-		left: '+='+(leftWidth-1)
-	    }, 200, function() {
-		jQuery("#showHideTree").css('background-position', "0px 0px");
-		jQuery("#showHideTree").attr("title",titleDivShowHideTree[0]);
-	    });
-	}
-	else
-	{
-	    jQuery("#showHideTree").animate({
-		left: '-='+(leftWidth-1)
-	    }, 200, function() {
-		jQuery("#showHideTree").css('background-position', "-13px 0px");
-		jQuery("#showHideTree").attr("title",titleDivShowHideTree[1]);
-	    });
-	}
+		jQuery("#leftSideTreeList").animate({
+			width: 'toggle'
+			}, 200, function() {
+			resizeDiv(docHeight);
+		});
+		if( jQuery("#showHideTree").css("left") == "1px" )
+		{
+			jQuery("#showHideTree").animate({
+			left: '+='+(leftWidth-1)
+			}, 200, function() {
+			jQuery("#showHideTree").css('background-position', "0px 0px");
+			jQuery("#showHideTree").attr("title",titleDivShowHideTree[0]);
+			});
+		}
+		else
+		{
+			jQuery("#showHideTree").animate({
+				left: '-='+(leftWidth-1)
+				}, 200, function() {
+				jQuery("#showHideTree").css('background-position', "-13px 0px");
+				jQuery("#showHideTree").attr("title",titleDivShowHideTree[1]);
+			});
+		}
     });
+	if (jQuery("input[name=title]").length && jQuery("input[name=title]").hasClass("inputTypeText"))
+		jQuery("input[name=title]").focus();
 });
+
 jQuery(window).load(function() {
     docHeight = jQuery("#content_Body").height();
     resizeDiv(docHeight);
     if (jQuery("#showHideTree").length > 0)
     {
-	titleDivShowHideTree = jQuery("#showHideTree").attr("title").split("/");
-	jQuery("#showHideTree").attr("title",titleDivShowHideTree[0]);
+		titleDivShowHideTree = jQuery("#showHideTree").attr("title").split("/");
+		jQuery("#showHideTree").attr("title",titleDivShowHideTree[0]);
     }
 });
 
@@ -211,3 +214,55 @@ jQuery(window).resize(function(){
     docHeight = jQuery("#content_Body").height();
     resizeDiv(docHeight);
 });
+
+function loadCommentForm(document_srl)
+{
+	jQuery.exec_json
+	(
+		"wiki.procDispCommentEditor",
+		{
+			"document_srl": document_srl
+		},
+		function(data)
+		{
+			var editor = data.editor;
+			var pos = -1;
+			var posEnd;
+			while ((pos = editor.indexOf('<!--#Meta:', pos + 1)) > -1)
+			{
+				posEnd = editor.indexOf('-->', pos);
+
+				// Check if the resource has extension .CSS
+				if (editor.substr(posEnd - 4, 4) == '.css')
+				{
+					// 10 is the length of "<!--#Meta:"
+					jQuery("head").append('<link rel="stylesheet" type="text/css" href="' + editor.substring(pos + 10, posEnd) + '" />');
+				}
+				else{
+					// 10 is the length of "<!--#Meta:"
+					jQuery("head").append('<script type="text/javascript" src="' + editor.substring(pos + 10, posEnd) + '"></script>');
+				}
+			}
+			jQuery('div.editor').append(editor);
+			jQuery("#editor-box").hide();
+			jQuery("div.commentEditor").find(".wikiNavigation").removeClass("hide");
+			scrollTo("div.editor");
+			docHeight = jQuery("#content_Body").height();
+			resizeDiv(docHeight);
+		}
+	)
+}
+
+function hideEditor()
+{
+	jQuery('div.editor').html("");
+	jQuery("div.commentEditor").find(".wikiNavigation").addClass("hide");
+	jQuery("#editor-box").show();
+	docHeight = jQuery("#content_Body").height();
+	resizeDiv(docHeight);
+}
+
+function scrollTo(elem)
+{
+    jQuery("html, body").animate({scrollTop: jQuery(elem).offset().top}, 2000);
+}

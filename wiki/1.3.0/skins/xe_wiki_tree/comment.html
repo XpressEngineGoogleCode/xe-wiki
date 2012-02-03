@@ -18,7 +18,9 @@
 					<div class="itemAside">
                         <!--@if($comment->getProfileImage())-->
                             <img src="{$comment->getProfileImage()}" alt="profile" class="profile" />
-                        <!--@end-->
+                        <!--@else-->
+							<img src="img/no_avatar.png" alt="profile" class="profile" />
+						<!--@end-->
 						<h4 class="fHeader">
 						<!--@if(!$comment->member_srl)-->
 							<!--@if($comment->homepage)-->

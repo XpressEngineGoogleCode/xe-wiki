@@ -89,8 +89,10 @@
         <input type="hidden" name="comment_srl" value="" />
         <input type="hidden" name="content" value="" />
             <div class="wikiWrite commentEditor">
-                <div class="editor">{$oDocument->getCommentEditor()}</div>
-
+                <div class="editor"></div>
+				<div id="editor-box">
+					<span class="button" id="loadEditorButton"><a onclick="loadCommentForm({$oDocument->document_srl})">{$lang->leave_comment}</a></span>
+				</div>
                 <div class="editorOption">
                 <!--@if(!$is_logged)-->
                    <input type="text" name="nick_name" class="inputText userName" value="{$lang->writer}" onfocus="this.value=''" />
@@ -107,8 +109,9 @@
 					<label for="is_secret">{$lang->secret}</label>
                 </div>
         
-                <div class="wikiNavigation">
+                <div class="wikiNavigation hide">
                     <span class="buttonOfficial"><input type="submit" value="{$lang->cmd_comment_registration}" accesskey="s" /></span>
+                    <span class="buttonOfficial"><input type="button" value="{$lang->cancel}" onclick="hideEditor()" /></span>
                 </div>
 
             </div>

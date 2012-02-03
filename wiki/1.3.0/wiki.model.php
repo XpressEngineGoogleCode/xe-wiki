@@ -1,23 +1,23 @@
 <?php
 	/**
-	 * @class  wikiModel
-	 * @author NHN (developers@xpressengine.com) 
-	 * @brief  wiki 모듈의 Model class
-	 **/
+	* @class  wikiModel
+	* @author NHN (developers@xpressengine.com) 
+	* @brief  wiki 모듈의 Model class
+	**/
 
 	class wikiModel extends module {
 		/**
-		 * @brief 초기화
-		 **/
+		* @brief 초기화
+		**/
 		function init() {
 		    
 		}
 
 		/**
-		 * @brief 계층구조 추출
-		 * document_category테이블을 이용해서 위키 문서의 계층 구조도를 그림
-		 * document_category테이블에 등록되어 있지 않은 경우 depth = 0 으로 하여 신규 생성
-		 **/
+		* @brief 계층구조 추출
+		* document_category테이블을 이용해서 위키 문서의 계층 구조도를 그림
+		* document_category테이블에 등록되어 있지 않은 경우 depth = 0 으로 하여 신규 생성
+		**/
 		function getWikiTreeList() {
 			$oWikiController = &getController('wiki');
 
@@ -39,8 +39,8 @@
 
 
 		/**
-		 * @brief 캐시로부터 계층 구조 읽기
-		 */
+		* @brief 캐시로부터 계층 구조 읽기
+		*/
 		function readWikiTreeCache($module_srl) {
 		    	
 			$oWikiController = &getController('wiki');
@@ -61,17 +61,17 @@
 				$obj->title = $m[5];
 				
 				if ($module_info->menu_style == "classic")
-				    $list[] = $obj;
+					$list[] = $obj;
 				else
-				    $list[$obj->document_srl] = $obj;
+					$list[$obj->document_srl] = $obj;
 			}
 			return $list;
 		}
 
 
 		/**
-		 * @brief 계층 구조 읽기
-		 */
+		* @brief 계층 구조 읽기
+		*/
 		function loadWikiTreeList($module_srl) {
 			// 목록을 구함
 			$args->module_srl = $module_srl;
@@ -112,8 +112,8 @@
 
 
 		/**
-		 * @brief 이전 / 다음 문서 구하기
-		 */
+		* @brief 이전 / 다음 문서 구하기
+		*/
 		function getPrevNextDocument($module_srl, $document_srl) {
 			$list = $this->readWikiTreeCache($module_srl);
 			if(!count($list)) return array(0,0);
@@ -183,22 +183,22 @@
 
 			/* Mark current node as type 'active' */
 			if($current_node->parent_srl != 0)
-			    $current_node->type = 'current';
+				$current_node->type = 'current';
 
 			/* Find and mark parents */
 			$node_srl_iterator = $current_node->parent_srl;
 
 			while($node_srl_iterator > 0){
-			    if($documents_tree[$node_srl_iterator]->parent_srl != 0)
+				if($documents_tree[$node_srl_iterator]->parent_srl != 0)
 				$documents_tree[$node_srl_iterator]->type = 'parent';
-			    else
+				else
 				$documents_tree[$node_srl_iterator]->type = 'active_root';
-			    $node_srl_iterator = $documents_tree[$node_srl_iterator]->parent_srl;
+				$node_srl_iterator = $documents_tree[$node_srl_iterator]->parent_srl;
 			}
 
 			foreach($documents_tree as $node){
-			    $node->href = getSiteUrl('','mid',$mid,'entry',$node->alias, 'document_srl', $node->document_srl);
-			    if(!isset($documents_tree[$node->document_srl]->type)){
+				$node->href = getSiteUrl('','mid',$mid,'entry',$node->alias, 'document_srl', $node->document_srl);
+				if(!isset($documents_tree[$node->document_srl]->type)){
 				if($node->parent_srl == 0)
 					$documents_tree[$node->document_srl]->type = 'root';
 				else if($node->parent_srl == $current_node->parent_srl)
@@ -206,11 +206,53 @@
 				else if($node->parent_srl == $current_node->document_srl)
 					$documents_tree[$node->document_srl]->type = 'child';
 				else unset($documents_tree[$node->document_srl]);
-			    }
+				}
 			}
 
 			return $documents_tree;
 		}
 		
+		/**
+		* @brief Recursive function that create BreadCrumbs Menu Array
+		* @access public
+		* 
+		* @param $document_srl
+		* @param $list
+		* @param $list_breadcrumbs
+		* 
+		* @return array
+		*/
+		function createBreadcrumbsList($document_srl, $list, $list_breadcrumbs = array())
+		{
+			$oDocumentModel = &getModel("document");
+			
+			if ((int)$list[$document_srl]->parent_srl > 0)
+			{
+				$list_breadcrumbs[$list[$document_srl]->title] = $oDocumentModel->getAlias($document_srl);
+				$list_breadcrumbs = $this->createBreadcrumbsList((int)$list[$document_srl]->parent_srl, $list, $list_breadcrumbs);
+			}
+			//$list_breadcrumbs = array_reverse($list_breadcrumbs);
+			return $list_breadcrumbs;
+		}
+		
+		/**
+		* @brief Function that return BreadCrumbs Menu
+		* @access public
+		* 
+		* @param $breadcrumbs_list
+		* 
+		* @return string
+		*/
+		function getBreadcrumbs($document_srl, $list)
+		{
+			$breadcrumbs = array_reverse($this->createBreadcrumbsList($document_srl, $list));
+			$uri = Context::getRequestUri().Context::get("mid")."/";
+			$menu_breadcrumbs = "<a href='" . $uri . "'>Front Page</a>";
+			foreach($breadcrumbs as $key=>$value)
+			{
+				$menu_breadcrumbs .= " -> <a href='" . $uri . "entry/$value'>" . $key . "</a>";
+			}
+			return $menu_breadcrumbs;
+		}
 	}
 ?>

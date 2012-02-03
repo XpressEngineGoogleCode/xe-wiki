@@ -70,10 +70,18 @@
 
 	<!--@if($visit_log)-->
 	<div class="visitLog">
-	    {@ $bFirst = true; }
-	    <!--@foreach($visit_log as $_entry)-->
-		<!--@if(!$bFirst)--> > <!--@else-->{@ $bFirst = false; }<!--@end--> <a href="{getUrl('entry',$_entry,'document_srl','')}">{$_entry}</a>
-	    <!--@end-->
+		<div class="lang_bar">
+			<!--@foreach($langs as $key => $val)-->
+				<!--@if (in_array($key, $translatedlangs))-->
+					<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{$val}" style="border:1px solid #AA0000;">{strtoupper($key)}</a>
+				<!--@else-->
+					<!--@if($is_logged)-->
+						<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{$val}">{strtoupper($key)}</a>
+					<!--@end-->
+				<!--@end-->
+			<!--@endforeach-->
+		</div>
+		<div class="breadcrumbs_bar">{$breadcrumbs}</div>
 	</div>
 	<!--@end-->
 
