@@ -533,7 +533,7 @@ input[type=submit]
 }
 */
 #leftSideTreeList a, a:hover, a:active { text-decoration: none; font-size: 12px; font-weight: normal; }
-#content_Body { float: left; margin-left: 20px; min-width: 300px; width: 60%;}
+#content_Body { float: left; margin-left: 20px; min-width: 300px; width: fill-available;}
 #clearAll {clear: both;}
 a, a:hover, a:active, a:hover, a:focus{
     color: #000000;
