@@ -130,6 +130,19 @@ class WikiSyntaxParser {
 									(?!/)		# Star isn't followed by slash 
 									~x", "<strong>$1</strong>", $text); // Bold is only replaced on the same line
 			
+			// Replace #summary
+			$text = preg_replace("/^#summary(.*)/m"    , "<i>$1</i>", $text);
+			
+			// Replace links
+			$text = preg_replace("/
+									\[		# Starts with bracket
+									([^ ]+)  # Text without spaces
+									[ ]		# Space
+									(.*)	# Any character
+									\]		# Ends with bracket
+									/x"    , "<a href='$1'>$2</a>", $text);
+			
+			
 			// Replace new lines with paragraphs
 			$text = preg_replace("/\n(.+)\n/", '<p>$1</p>', $text);
 		}
