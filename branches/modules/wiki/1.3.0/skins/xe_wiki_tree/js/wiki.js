@@ -86,17 +86,31 @@ function Tree(){
 
 function resizeDiv(docHeight)
 {
-    if (docHeight < (jQuery(window).height()-140))
+	
+	if (docHeight < (jQuery(window).height()-140))
     {
-	docHeight = jQuery(window).height()-140;
+		docHeight = jQuery(window).height()-140;
     }
     jQuery("#leftSideTreeList").height(docHeight);
-    rightWidth = jQuery(document).width()-jQuery("#leftSideTreeList").width()-70;
+	leftWidth = jQuery("#leftSideTreeList").width();
+	
+	if (jQuery("#columnRight").length > 0)
+	{
+		jQuery("div.wiki").css("min-width",jQuery("#columnRight").width());
+		//leftWidth += jQuery("#columnRight").position().left;
+	}
+	else
+	{
+		rightWidth = jQuery(document).width()-leftWidth-30;
+	}
+	leftWidth += jQuery("div.wiki").position().left;
+	rightWidth = jQuery("div.wiki").width()-jQuery("#leftSideTreeList").width()-30;
     jQuery("#content_Body").width(rightWidth);
-    leftWidth = jQuery("#leftSideTreeList").width();
-    //jQuery("#wdth").text(jQuery(window).height()+ " - " + jQuery("#content_Body").height() + " : " + docHeight);
-    if ( jQuery("#showHideTree").css("left") != "1px")
-    jQuery("#showHideTree").css("left",jQuery("#leftSideTreeList").width());
+	 
+	if( jQuery("#leftSideTreeList").width() > 1 )
+	{
+		jQuery("#showHideTree").css("left",(leftWidth-7)+"px");
+	}
 }
 
 jQuery.fn.decHTML = function() {
@@ -157,7 +171,12 @@ jQuery(document).ready(function(){
 	    unique: false,
 	    persist: "cookie"
     });
-    leftWidth = jQuery("#leftSideTreeList").width();
+	if (jQuery("#columnRight").length > 0)
+	{
+		jQuery("div.wiki").css("min-width",jQuery("#columnRight").width());
+	}
+	leftWidth = jQuery("#leftSideTreeList").width();
+	slideWidth = jQuery("#leftSideTreeList").width()
     jQuery("#showHideTree").click(function()
     {
 		jQuery("#leftSideTreeList").animate({
@@ -165,27 +184,31 @@ jQuery(document).ready(function(){
 			}, 200, function() {
 			resizeDiv(docHeight);
 		});
-		if( jQuery("#showHideTree").css("left") == "1px" )
+		if( jQuery("#leftSideTreeList").width() == 1 )
 		{
 			jQuery("#showHideTree").animate({
-			left: '+='+(leftWidth-1)
+			left: '+='+(slideWidth-7)
 			}, 200, function() {
-			jQuery("#showHideTree").css('background-position', "0px 0px");
-			jQuery("#showHideTree").attr("title",titleDivShowHideTree[0]);
+				jQuery("#showHideTree").css('background-position', "0px 0px");
+				jQuery("#showHideTree").attr("title",titleDivShowHideTree[0]);
 			});
 		}
 		else
 		{
 			jQuery("#showHideTree").animate({
-				left: '-='+(leftWidth-1)
+				left: '-='+(slideWidth-7)
 				}, 200, function() {
+				jQuery("#content_Body").width(jQuery("div.wiki").width()-30);
 				jQuery("#showHideTree").css('background-position', "-13px 0px");
 				jQuery("#showHideTree").attr("title",titleDivShowHideTree[1]);
 			});
 		}
     });
 	if (jQuery("input[name=title]").length && jQuery("input[name=title]").hasClass("inputTypeText"))
+	{
 		jQuery("input[name=title]").focus();
+	}
+	jQuery("div.sitemap").addClass("hide");
 });
 
 jQuery(window).load(function() {
