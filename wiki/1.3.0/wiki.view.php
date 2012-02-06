@@ -1,5 +1,4 @@
 <?php
-require_once _XE_PATH_ . "libs/wiky.inc.php";
 /**
  * @class  wikiView
  * @author haneul (haneul0318@gmail.com)
@@ -49,6 +48,8 @@ class wikiView extends wiki
 				$oModuleController = &getController('module');
 				$oModuleController->insertModulePartConfig('editor', $this->module_info->module_srl, $editor_config);
 			}
+			
+			require_once($this->module_path . 'lib/wiky.inc.php');
 			// var_dump($editor_config);
 		}
 		
