@@ -1,11 +1,12 @@
 <div id="leftSideTreeList">
     <div class="leftSearchForm">
 	<form action="{getUrl()}" method="get" class="wikiSearchForm">
+		<input type="hidden" name="act" value="" />
 	    <input type="hidden" name="mid" value="{$mid}" />
 	    <input type="hidden" name="vid" value="{$vid}" />
 	    <input type="text" class="inputText" name="entry" />
 	    <br />
-	    <span class="buttonOfficial"><input type="submit" value="{$lang->cmd_move}" /></span>
+	    <span class="buttonOfficial"><input type="submit" value="{$lang->cmd_move}" onclick="jQuery('.leftSearchForm[name=act]').value('');" /></span>
 	    <!--@if($grant->manager)-->
 	    <span class="buttonOfficial"><input type="button" onclick="location.href='{getUrl('act','dispWikiAdminInsertWiki')}';return false;" value="{$lang->cmd_setup}" /></span>
 	    <!--@end-->
@@ -34,7 +35,7 @@
 		<!--@end-->
 		<!--@if($val->childs)-->
 		<!--@end-->
-		<!--@if(isset($oDocumentModel) && ($val->title == $oDocumentModel->get('title') || $entry == $oDocumentModel->getAlias($val->document_srl) ))-->
+		<!--@if(isset($oDocument) && ($val->document_srl == $oDocument->document_srl || $val->title == $oDocument->get('title') || $entry == $oDocumentModel->getAlias($val->document_srl) || $alias == $oDocumentModel->getAlias($val->document_srl)))-->
 			<a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'entry',$oDocumentModel->getAlias($val->document_srl))}"><b>{$val->title}</b></a>
 		<!--@else-->
 		    <a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'entry',$oDocumentModel->getAlias($val->document_srl))}">{$val->title}</a>
@@ -72,9 +73,11 @@
 				font-weight: bold;
 			<!--@end-->
 		">
-			<a href="{$node->href}">
-				{$node->title}
-			</a>
+			<!--@if(isset($oDocument) && $node->document_srl == $oDocument->document_srl)-->
+				<a href="{$node->href}"><b>{$node->title}</b></a>
+			<!--@else-->
+				<a href="{$node->href}">{$node->title}</a>
+			<!--@end-->
 		</li>
 		<!--@end-->
 	    </ul>

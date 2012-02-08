@@ -146,7 +146,7 @@ class wikiView extends wiki
 				}
 			} 
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert.xml');
-			
+				
 			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
 			{
 				$oWikiModel = &getModel("wiki");
@@ -155,17 +155,25 @@ class wikiView extends wiki
 			}
 			else
 			{
-				$entry = Context::get('entry');
-
+				$module_srl=$this->module_info->module_srl;
 				if(!$document_srl) {
 					if (!$entry) {
 						$entry = "Front Page";
 						Context::set('entry', $entry);
 					}
+					else
+					{
+						if(is_null($oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry)))
+							$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByTitle($module_srl, "Front Page"));
+						else
+							$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByAlias($module_srl, $entry));
+					}
 					$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
 				}
-				$module_srl=$this->module_info->module_srl;
-				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
+				else
+				{
+					$this->_loadSidebarTreeMenu($module_srl, $document_srl);
+				}
 			}
 			
 			$this->setTemplateFile('write_form');
@@ -230,7 +238,7 @@ class wikiView extends wiki
 						$entry = "Front Page";
 						Context::set('entry', $entry);
 					}
-					$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+					$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
 				}
 				$module_srl=$this->module_info->module_srl;
 				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
@@ -258,15 +266,14 @@ class wikiView extends wiki
 				$oDocumentModel = &getModel('document');
 				$document_srl = Context::get('document_srl');
 				$entry = Context::get('entry');
-
+				$module_srl=$this->module_info->module_srl;
 				if(!$document_srl) {
 					if (!$entry) {
 						$entry = "Front Page";
 						Context::set('entry', $entry);
 					}
-					$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+					$document_srl = $oDocumentModel->getDocumentSrlByTitle($module_srl, $entry);
 				}
-				$module_srl=$this->module_info->module_srl;
 				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
 			}
 			
@@ -292,15 +299,14 @@ class wikiView extends wiki
 				$oDocumentModel = &getModel('document');
 				$document_srl = Context::get('document_srl');
 				$entry = Context::get('entry');
-
+				$module_srl=$this->module_info->module_srl;
 				if(!$document_srl) {
 					if (!$entry) {
 						$entry = "Front Page";
 						Context::set('entry', $entry);
 					}
-					$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+					$document_srl = $oDocumentModel->getDocumentSrlByTitle($module_srl, $entry);
 				}
-				$module_srl=$this->module_info->module_srl;
 				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
 			}
 			
@@ -357,12 +363,13 @@ class wikiView extends wiki
 			if (!$document_srl) {
 				if (!$entry) {
 					$entry = "Front page";
+					$entry = $oDocumentModel->getAlias($oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry));
 					Context::set('entry', $entry);
 				}
 				$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
 				if(!$document_srl) 	$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
 			}
-
+		
 			/**
 			* 요청된 문서 번호가 있다면 문서를 구함
 			**/
@@ -382,10 +389,27 @@ class wikiView extends wiki
 					return new Object(-1, 'msg_not_founded');
 				}
 			// 요청된 문서 번호가 아예 없다면 빈 문서 객체 생성
-			} else {
+			}
+			else
+			{
 				$oDocument = $oDocumentModel->getDocument(0);
 			}
-
+			
+			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			{
+				$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
+				Context::set('list',$this->list);
+			}
+			else
+			{
+				$module_srl=$this->module_info->module_srl;
+				$doc_srl = $oDocument->document_srl;
+				if(is_null($doc_srl) || $doc_srl == 0 )
+					$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByTitle($module_srl, "Front Page"));
+				else
+					$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry));
+			}
+			
 			// 글 보기 권한을 체크해서 권한이 없으면 오류 메세지 출력하도록 처리
 			if($oDocument->isExists()) {
 				// 브라우저 타이틀에 글의 제목을 추가
@@ -422,7 +446,11 @@ class wikiView extends wiki
 			Context::set('visit_log', $_SESSION['wiki_visit_log'][$this->module_info->module_srl]);
 			// 스킨에서 사용할 oDocument 변수 세팅
 			Context::set('oDocument', $oDocument);
-			Context::set('entry', $oDocument->get('alias'));
+			Context::set('entry', $alias);
+			
+			// 사용되는 javascript 필터 추가
+			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
+			// Redirect to user friendly URL if request comes from Search
 			
 			// get translated language for current document
 			$translatedlangs = $oDocument->getTranslationLangCodes();
@@ -432,25 +460,11 @@ class wikiView extends wiki
 				$arr_translation_langs[] = $langs->lang_code;
 			}
 			Context::set("translatedlangs", $arr_translation_langs);
-					
-			// 사용되는 javascript 필터 추가
-			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
-			$oWikiModel = &getModel("wiki");
-			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
-			{
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
-				Context::set('list',$this->list);
-			}
-			else
-			{
-				$module_srl=$this->module_info->module_srl;
-				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
-			}
 			
+			// get Breadcrumbs menu
 			$menu_breadcrumbs = $oWikiModel->getBreadcrumbs((int)$oDocument->document_srl,$this->list);
 			Context::set('breadcrumbs',$menu_breadcrumbs);
-			// Redirect to user friendly URL if request comes from Search
-
+			
 			$error_return_url = Context::get('error_return_url');
 			if(isset($error_return_url)) {
 				$site_module_info = Context::get('site_module_info');
@@ -551,7 +565,7 @@ class wikiView extends wiki
 			* 사용되는 javascript 필터 추가
 			**/
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
-
+			
 			$this->setTemplateFile('comment_form');
 		}
 

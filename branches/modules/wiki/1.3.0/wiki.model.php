@@ -195,9 +195,10 @@
 				$documents_tree[$node_srl_iterator]->type = 'active_root';
 				$node_srl_iterator = $documents_tree[$node_srl_iterator]->parent_srl;
 			}
-
+			$oDocumentModel = &getModel("document");
 			foreach($documents_tree as $node){
-				$node->href = getSiteUrl('','mid',$mid,'entry',$node->alias, 'document_srl', $node->document_srl);
+				//$node->href = getSiteUrl('','mid',$mid,'entry',$node->alias, 'document_srl', $node->document_srl);
+				$node->href = getSiteUrl('','mid',$mid,'entry',$oDocumentModel->getAlias($node->document_srl));
 				if(!isset($documents_tree[$node->document_srl]->type)){
 				if($node->parent_srl == 0)
 					$documents_tree[$node->document_srl]->type = 'root';
