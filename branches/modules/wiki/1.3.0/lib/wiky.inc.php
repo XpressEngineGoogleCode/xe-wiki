@@ -1,98 +1,22 @@
 <?php
 
 class WikiSyntaxParser {
-	private $patterns, $replacements;
+	// Number of blocks of code that will skip parsing;
+	// By temporarily saving them in this array, we can later insert them back in inital string	
+	private $code_blocks;
+	
+	// Number of code blocks injected back in initial text (after all other parsing is done)	
+	private $replaced_code_blocks;
+	
+	// Number of code block batches replaced
+	// Batch 1: all single line {{{ text }}}
+	// Batch 2: all multiline {{{ text }}} etc.	
+	private $batch_count;
 
-	public function __construct($analyze=false) {
-		$this->patterns=array(
-			// Headings
-			"/^==== (.+?) ====$/m",						// Subsubheading
-			"/^=== (.+?) ===$/m",						// Subheading
-			"/^== (.+?) ==$/m",						// Heading
-	
-			// Formatting
-			"/\'\'\'\'\'(.+?)\'\'\'\'\'/s",					// Bold-italic
-			"/\'\'\'(.+?)\'\'\'/s",						// Bold
-			"/\'\'(.+?)\'\'/s",						// Italic
-	
-			// Special
-			"/^----+(\s*)$/m",						// Horizontal line
-			"/\[\[(file|img):((ht|f)tp(s?):\/\/(.+?))( (.+))*\]\]/i",	// (File|img):(http|https|ftp) aka image
-			"/\[((news|(ht|f)tp(s?)|irc):\/\/(.+?))( (.+))\]/i",		// Other urls with text
-			"/\[((news|(ht|f)tp(s?)|irc):\/\/(.+?))\]/i",			// Other urls without text
-	
-			// Indentations
-			"/[\n\r]: *.+([\n\r]:+.+)*/",					// Indentation first pass
-			"/^:(?!:) *(.+)$/m",						// Indentation second pass
-			"/([\n\r]:: *.+)+/",						// Subindentation first pass
-			"/^:: *(.+)$/m",						// Subindentation second pass
-	
-			// Ordered list
-			"/[\n\r]#.+([\n|\r]#.+)+/",					// First pass, finding all blocks
-			"/[\n\r]#(?!#) *(.+)(([\n\r]#{2,}.+)+)/",			// List item with sub items of 2 or more
-			"/[\n\r]#{2}(?!#) *(.+)(([\n\r]#{3,}.+)+)/",			// List item with sub items of 3 or more
-			"/[\n\r]#{3}(?!#) *(.+)(([\n\r]#{4,}.+)+)/",			// List item with sub items of 4 or more
-	
-			// Unordered list
-			"/[\n\r]\*.+([\n|\r]\*.+)+/",					// First pass, finding all blocks
-			"/[\n\r]\*(?!\*) *(.+)(([\n\r]\*{2,}.+)+)/",			// List item with sub items of 2 or more
-			"/[\n\r]\*{2}(?!\*) *(.+)(([\n\r]\*{3,}.+)+)/",			// List item with sub items of 3 or more
-			"/[\n\r]\*{3}(?!\*) *(.+)(([\n\r]\*{4,}.+)+)/",			// List item with sub items of 4 or more
-	
-			// List items
-			"/^[#\*]+ *(.+)$/m",						// Wraps all list items to <li/>
-	
-			// Newlines (TODO: make it smarter and so that it groupd paragraphs)
-			"/^(?!<li|dd).+(?=(<a|strong|em|img)).+$/mi",			// Ones with breakable elements (TODO: Fix this crap, the li|dd comparison here is just stupid)
-			"/^[^><\n\r]+$/m",						// Ones with no elements
-		);
-		$this->replacements=array(
-			// Headings
-			"<h3>$1</h3>",
-			"<h2>$1</h2>",
-			"<h1>$1</h1>",
-	
-			//Formatting
-			"<strong><em>$1</em></strong>",
-			"<strong>$1</strong>",
-			"<em>$1</em>",
-	
-			// Special
-			"<hr/>",
-			"<img src=\"$2\" alt=\"$6\"/>",
-			"<a href=\"$1\">$7</a>",
-			"<a href=\"$1\">$1</a>",
-	
-			// Indentations
-			"\n<dl>$0\n</dl>", // Newline is here to make the second pass easier
-			"<dd>$1</dd>",
-			"\n<dd><dl>$0\n</dl></dd>",
-			"<dd>$1</dd>",
-	
-			// Ordered list
-			"\n<ol>$0\n</ol>",
-			"\n<li>$1\n<ol>$2\n</ol>\n</li>",
-			"\n<li>$1\n<ol>$2\n</ol>\n</li>",
-			"\n<li>$1\n<ol>$2\n</ol>\n</li>",
-	
-			// Unordered list
-			"\n<ul>$0\n</ul>",
-			"\n<li>$1\n<ul>$2\n</ul>\n</li>",
-			"\n<li>$1\n<ul>$2\n</ul>\n</li>",
-			"\n<li>$1\n<ul>$2\n</ul>\n</li>",
-	
-			// List items
-			"<li>$1</li>",
-	
-			// Newlines
-			"$0<br/>",
-			"$0<br/>",
-		);
-		if($analyze) {
-			foreach($this->patterns as $k=>$v) {
-				$this->patterns[$k].="S";
-			}
-		}
+	public function __construct() {
+		$this->code_blocks = array();
+		$this->replaced_code_blocks = 0;
+		$this->batches = 0;
 	}
 	
 	public function parse($text) {
@@ -119,30 +43,42 @@ class WikiSyntaxParser {
 			// = Heading 1 =
 			$text = preg_replace("/^= (.+?) =( *)$/m"    , "<h1>$1</h1>", $text);
 			
+			
 			// Replace code blocks
-			// {{{ This is some multiline code }}}
-			$text = preg_replace("/
-									{{{			# Starts with three braces
+			// We need to make sure text in code blocks is no longer parsed {{{ _italic_ }}} should skip the italic and leave text as is
+			// For this, we use preg_replace_callback to save code blocks in an array that we will later inject back in the original string
+			// {{{ This is some code }}}
+			// $text = preg_replace("/[^`]{{{(.+?)}}}/me"    , "'<span class=\'inline_code\'>' . htmlentities('$1') . '</span>'", $text);	
+			$this->batch_count++;
+			$text = preg_replace_callback("/[^`]{{{(.+?)}}}/m"    , array($this, "parse_inline_code_block"), $text);	
+			$this->batch_count++;
+			$text = preg_replace_callback("/
+									[^`]{{{			# Starts with three braces
 									([\n]*)		# Followed by one or more newlines
 									(.+?)		# One or more characters (including line breaks, see s modifier)
 									([\n]*)		# Followed by one or more newlines
 									}}}			# And ends with another three braces
-								 /sxe"    , "'<pre class=\'prettyprint\'>' . nl2br(htmlspecialchars(stripslashes('$2'))) . '</pre>'", $text);			
+								 /sx"    ,array($this, "parse_multiline_code_block") , $text);					
 			// `This is a short snippet of code`
-			$text = preg_replace("/`(.+?)`/"    , "<span class='inline_code'>$1</span>", $text);			
+			$this->batch_count++;
+			$text = preg_replace_callback("/`(.+?)`/m", array($this, "parse_inline_code_block"), $text);
 			
 			// Replace bold			
-			// *This be bold*
+			// * This be bold*
 			$text = preg_replace("~
 									(?<!		# Star is not preceded
 										/)		#					by a / 
 									[*]			# Starts with star
-									([^ ])		# Must be followed by some non-space char
 									(.+?)		# Any number of characters, including whitespace (see s modifier)
 									[*]			# Ends with star
 									(?!/)		# Star isn't followed by slash 
-									~x", "<strong>$1$2</strong>", $text); // Bold is only replaced on the same line
+									~x", " <strong>$1$2</strong> ", $text); // Bold is only replaced on the same line
 			
+			// Replace italic
+			// _italics_ but not in_middle_of_word
+			$text = preg_replace("/_(.+?)_/x", "<em>$1</em>", $text);
+			
+			/*
 			// Replace #summary
 			// #summary Summries are short descriptions of an article
 			$text = preg_replace("/^#summary(.*)/m"    , "<i>$1</i>", $text);
@@ -186,7 +122,7 @@ class WikiSyntaxParser {
 										\|\|		# ||
 									  )+			# One or more times
 									)				# Capture all
-									/msx", "<table border=1 cellspacing=0 cellpadding=5>\n$1\n</table>", $text);
+									/msx", "<table border=1 cellspacing=0 cellpadding=5>$1</table>", $text);
 
 			// Second pass, replace rows (<tr>) and cells (<td>)
 			$text = preg_replace("/
@@ -198,10 +134,38 @@ class WikiSyntaxParser {
 			$text = preg_replace("/	
 									(\|\|)	# Any || found in text 
 									/mx", "</td><td>", $text);
-
+			*/
+			
 			// Replace new lines with paragraphs
-			$text = preg_replace("/\n(.+)\n/", '<p>$1</p>', $text);
+			$text = preg_replace("/\n(.+)/", '<p>$1</p>', $text);
+			
+			$text = $this->put_back_code_blocks($text);
 		}
 		return $text;
+	}
+	
+	function parse_inline_code_block(&$matches){
+		$this->code_blocks[] = '<span class=\'inline_code\'>' . htmlentities($matches[1]) . '</span>';
+		return "###" . $this->batch_count . "###";
+	}
+	
+	function parse_multiline_code_block(&$matches){
+		$this->code_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
+		return "###" . $this->batch_count . "###";
+	}
+	
+	function put_back_code_blocks($text){
+		for($i = 1; $i <= $this->batch_count; $i++){
+			$text = preg_replace_callback(
+					'/###'. $i .'###/',
+					array($this, 'put_back_code_block'),
+					$text
+				);		
+		}
+		return $text;
+	}
+	
+	function put_back_code_block(&$matches){
+		return $this->code_blocks[$this->replaced_code_blocks++];
 	}
 }

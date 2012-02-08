@@ -453,4 +453,4 @@ a.buttonOfficial a{ _vertical-align:top;}
 .wiki a.notexist { text-decoration:none; border-bottom:1px dotted #EE0000; color:#EE0000; }
 
 .code { background-color: #EEE; max-width:70em; padding:5px; }
-.inline_code { font-family: Courier New;}
+.inline_code { font-family: Courier New; display:inline; }
