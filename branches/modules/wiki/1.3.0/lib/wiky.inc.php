@@ -147,6 +147,9 @@ class WikiSyntaxParser {
 								)+
 								)/x", "<blockquote>$1</blockquote>", $text);
 			
+			// Replace horizontal rule
+			$text = preg_replace("/^-{4,}/m", "<hr />", $text);
+			
 			// Replace new lines with paragraphs
 			$text = preg_replace("/\n(.+)/", '<p>$1</p>', $text);
 			
