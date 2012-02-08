@@ -76,9 +76,15 @@ class WikiSyntaxParser {
 			
 			// Replace italic
 			// _italics_ but not in_middle_of_word
-			$text = preg_replace("/_(.+?)_/x", "<em>$1</em>", $text);
+			$text = preg_replace("/ _(.+?)_ /x", "<em>$1</em>", $text);
+			// Replace ^super^script
+			$text = preg_replace("/\^(.+?)\^/x", "<sup>$1</sup>", $text);
+			// Replace ,,sub,,script
+			$text = preg_replace("/,,(.+?),,/x", "<sub>$1</sub>", $text);
+			// Replace ~~strikeout~~
+			$text = preg_replace("/~~(.+?)~~/x", "<span style='text-decoration:line-through'>$1</span>", $text);
 			
-			/*
+			
 			// Replace #summary
 			// #summary Summries are short descriptions of an article
 			$text = preg_replace("/^#summary(.*)/m"    , "<i>$1</i>", $text);
@@ -94,35 +100,32 @@ class WikiSyntaxParser {
 									/x"    , "<a href='$1'>$2</a>", $text);
 
 			// Unordered/Ordered list
-			// # First pass, replace entire block (ul)
+            // # First pass, replace entire block (ul)
 			$text = preg_replace("/
 									(\s+)	# At least one space
 									[#*]	# Star or #
 									(.+)	# Any number of characters
 									((\n)(\s+)[#*].+)*	# New line, and the above repeated any number of times
-									/x", "<ul>\n$0\n</ul>", $text);
-			// # Second pass, replace li elements
+									/x", "<ul>\n$0\n</ul>", $text);		
+            // # Second pass, replace li elements
 			$text = preg_replace("/
 									(\s+)	# At least one space
 									([#*])	# A star or #
 									\s+		# At least one space
 									(.*)	# Any number of characters
 									/x", "<li>$3</li>", $text);
-			
+                  
 			// Tables
 			// || 1 ||  2  ||  3 ||
 			// First pass, replace <table>
-			$text = preg_replace("/
-									^		# Start from beginning of the line
-									(		
-									  (		
-									    \n			# Newline
-										\|\|		# ||
-										.*			# Any text except |
-										\|\|		# ||
-									  )+			# One or more times
-									)				# Capture all
-									/msx", "<table border=1 cellspacing=0 cellpadding=5>$1</table>", $text);
+			$text = preg_replace("/(
+									(
+									\|\|			# Start with ||
+									.*				# Any character except newline
+									\|\|			# Finish with ||
+									[\r]?[\n]?		# Followed by an optional newline
+									)+				# And repeat at least one time (table rows)
+								)/x", "<table border=1 cellspacing=0 cellpadding=5>\n$1\n</table>", $text);
 
 			// Second pass, replace rows (<tr>) and cells (<td>)
 			$text = preg_replace("/
@@ -134,8 +137,7 @@ class WikiSyntaxParser {
 			$text = preg_replace("/	
 									(\|\|)	# Any || found in text 
 									/mx", "</td><td>", $text);
-			*/
-			
+			            
 			// Replace new lines with paragraphs
 			$text = preg_replace("/\n(.+)/", '<p>$1</p>', $text);
 			
@@ -146,18 +148,18 @@ class WikiSyntaxParser {
 	
 	function parse_inline_code_block(&$matches){
 		$this->code_blocks[] = '<span class=\'inline_code\'>' . htmlentities($matches[1]) . '</span>';
-		return "###" . $this->batch_count . "###";
+		return "%%%" . $this->batch_count . "%%%";
 	}
 	
 	function parse_multiline_code_block(&$matches){
 		$this->code_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
-		return "###" . $this->batch_count . "###";
+		return "%%%" . $this->batch_count . "%%%";
 	}
 	
 	function put_back_code_blocks($text){
 		for($i = 1; $i <= $this->batch_count; $i++){
 			$text = preg_replace_callback(
-					'/###'. $i .'###/',
+					'/%%%'. $i .'%%%/',
 					array($this, 'put_back_code_block'),
 					$text
 				);		
