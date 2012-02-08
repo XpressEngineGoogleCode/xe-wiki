@@ -22,27 +22,7 @@ class WikiSyntaxParser {
 	public function parse($text) {
 		if(!empty($text)){
 			// Convert Windows end of line (\r\n) to Linux (\n) end of line, otherwise preg_replace doesn't work
-			$text = str_replace(chr(13), '', $text);
-
-			// Replace headings
-			// ====== Heading 6 ====== 
-			$text = preg_replace("/^====== (.+?) ======( *)$/m"  , "<h6>$1</h6>", $text);
-			// ===== Heading 5 ===== 
-			$text = preg_replace("/^===== (.+?) =====( *)$/m"  , "<h5>$1</h5>", $text);
-			// ==== Heading 4 ==== 
-			$text = preg_replace("/^==== (.+?) ====( *)$/m"  , "<h4>$1</h4>", $text);
-			// === Heading 3 === 
-			$text = preg_replace("/
-									^===\s     # Line starts with three equal signs, followed by a space
-									(.+?)      # One or more characters (of any type except line breaks)
-									\s===      # Followed by another space and three equal signs
-									(\s*)$     # The line can end directly, or there can be spaces  
-								  /mx", "<h3>$1</h3>", $text); // The m modifier specifies that matches are per line, instead of per document
-			// == Heading 2 == 
-			$text = preg_replace("/^== (.+?) ==( *)$/m"  , "<h2>$1</h2>", $text);
-			// = Heading 1 =
-			$text = preg_replace("/^= (.+?) =( *)$/m"    , "<h1>$1</h1>", $text);
-			
+			$text = str_replace(chr(13), '', $text);			
 			
 			// Replace code blocks
 			// We need to make sure text in code blocks is no longer parsed {{{ _italic_ }}} should skip the italic and leave text as is
@@ -62,6 +42,27 @@ class WikiSyntaxParser {
 			// `This is a short snippet of code`
 			$this->batch_count++;
 			$text = preg_replace_callback("/`(.+?)`/m", array($this, "parse_inline_code_block"), $text);
+			
+			
+			// Replace headings
+			// ====== Heading 6 ====== 
+			$text = preg_replace("/^====== (.+?) ======( *)$/m"  , "<h6>$1</h6>", $text);
+			// ===== Heading 5 ===== 
+			$text = preg_replace("/^===== (.+?) =====( *)$/m"  , "<h5>$1</h5>", $text);
+			// ==== Heading 4 ==== 
+			$text = preg_replace("/^==== (.+?) ====( *)$/m"  , "<h4>$1</h4>", $text);
+			// === Heading 3 === 
+			$text = preg_replace("/
+									^===\s     # Line starts with three equal signs, followed by a space
+									(.+?)      # One or more characters (of any type except line breaks)
+									\s===      # Followed by another space and three equal signs
+									(\s*)$     # The line can end directly, or there can be spaces  
+								  /mx", "<h3>$1</h3>", $text); // The m modifier specifies that matches are per line, instead of per document
+			// == Heading 2 == 
+			$text = preg_replace("/^== (.+?) ==( *)$/m"  , "<h2>$1</h2>", $text);
+			// = Heading 1 =
+			$text = preg_replace("/^= (.+?) =( *)$/m"    , "<h1>$1</h1>", $text);
+
 			
 			// Replace bold			
 			// * This be bold*
@@ -137,7 +138,15 @@ class WikiSyntaxParser {
 			$text = preg_replace("/	
 									(\|\|)	# Any || found in text 
 									/mx", "</td><td>", $text);
-			            
+			
+			// Replace quotes
+			$text = preg_replace("/(
+								((\s+)	# At least one space
+								[ ]	# Star or #
+								(.+)	# Any number of characters
+								)+
+								)/x", "<blockquote>$1</blockquote>", $text);
+			
 			// Replace new lines with paragraphs
 			$text = preg_replace("/\n(.+)/", '<p>$1</p>', $text);
 			
