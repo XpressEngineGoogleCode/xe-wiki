@@ -101,21 +101,8 @@ class WikiSyntaxParser {
 									/x"    , "<a href='$1'>$2</a>", $text);
 
 			// Unordered/Ordered list
-            // # First pass, replace entire block (ul)
-			$text = preg_replace("/
-									(\s+)	# At least one space
-									[#*]	# Star or #
-									(.+)	# Any number of characters
-									((\n)(\s+)[#*].+)*	# New line, and the above repeated any number of times
-									/x", "<ul>\n$0\n</ul>", $text);		
-            // # Second pass, replace li elements
-			$text = preg_replace("/
-									(\s+)	# At least one space
-									([#*])	# A star or #
-									\s+		# At least one space
-									(.*)	# Any number of characters
-									/x", "<li>$3</li>", $text);
-                  
+			$text = $this->parse_lists($text);
+			
 			// Tables
 			// || 1 ||  2  ||  3 ||
 			// First pass, replace <table>
@@ -141,9 +128,9 @@ class WikiSyntaxParser {
 			
 			// Replace quotes
 			$text = preg_replace("/(
-								((\s+)	# At least one space
-								[ ]	# Star or #
-								(.+)	# Any number of characters
+								((\s+)	
+								[ ]	
+								(.+)	
 								)+
 								)/x", "<blockquote>$1</blockquote>", $text);
 			
@@ -158,16 +145,33 @@ class WikiSyntaxParser {
 		return $text;
 	}
 	
+	/**
+	 * @brief preg_replace callback function for inline code blocks
+	 *  - replaces wiki syntax code block with HTML span and saves it locally
+	 *  - removes wiky syntax code block from initial string and replaces it with dummy text
+	 *  - reference will be later injected back in string, after all other parsing is done
+	 * The purpose of this function is to skip parsing text inside code blocks
+	 */
 	function parse_inline_code_block(&$matches){
 		$this->code_blocks[] = '<span class=\'inline_code\'>' . htmlentities($matches[1]) . '</span>';
 		return "%%%" . $this->batch_count . "%%%";
 	}
-	
+
+	/**
+	 * @brief preg_replace callback function for multiline code blocks
+	 *  - replaces wiki syntax code block with HTML pre and saves it locally
+	 *  - removes wiky syntax code block from initial string and replaces it with dummy text
+	 *  - reference will be later injected back in string, after all other parsing is done
+	 * The purpose of this function is to skip parsing text inside code blocks
+	 */	
 	function parse_multiline_code_block(&$matches){
 		$this->code_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
 		return "%%%" . $this->batch_count . "%%%";
 	}
 	
+	/**
+	 * @brief Injects code blocks back into initial string
+	 */
 	function put_back_code_blocks($text){
 		for($i = 1; $i <= $this->batch_count; $i++){
 			$text = preg_replace_callback(
@@ -179,7 +183,79 @@ class WikiSyntaxParser {
 		return $text;
 	}
 	
+	/**
+	 * @brief preg_replace callback function for injecting code blocks back in initial string
+	 */
 	function put_back_code_block(&$matches){
 		return $this->code_blocks[$this->replaced_code_blocks++];
 	}
+	
+	/**
+	 * @brief Replaces Wiki Syntax lists with HTML lists
+	 */
+	function parse_lists($text){
+		$lists = $this->get_lists($text);
+		$offset_error = 0; // Length of final string changes during the function, so offset needs to be adjusted
+		
+		foreach($lists as $list_info){
+			$list = $list_info[0];
+			$list_offset = $list_info[1];
+			
+			$new_list = $this->parse_list($list);
+			$new_list = $this->parse_lists($new_list);
+			$offset_error -= strlen($text);
+			$text = substr_replace($text, $new_list, $list_offset + $offset_error, strlen($list));
+			$offset_error += strlen($text);
+		}	
+		return $text;		
+	}
+	
+	/**
+	 * @brief Replaces a block of text containing a Wiki syntax list with an HTML list 
+	 * Parses only first level list (in case we have nested lists)
+	 */
+	function parse_list($list){
+		$list = str_replace(' ', '@', $list);
+		$i = 0;
+		$char = substr($list, $i, 1);
+		while(!in_array($char, array('*', '#'))) { 
+			$i++; 
+			$char = substr($list, $i, 1);
+		}
+		if($char == '*') $list_type = 'ul';
+		else $list_type = 'ol';
+		
+		$current_list_indent = substr($list, 0, $i);
+		
+		// Add block tags
+		$list = '<' . $list_type . '>'. $list . '</' . $list_type . '>';
+		
+		// Remove indenting for current indentation level
+		$regex = '/^'. trim($current_list_indent) .'(.*)/m';
+		$list = preg_replace($regex, '$1', $list);
+		
+		// Replace list items
+		$regex = '/^[' . $char . ']@?(.*)/m';
+		$list = preg_replace($regex, '<li>$1</li>', $list);
+		$list = str_replace('@', ' ', $list);
+
+		return $list;
+	}
+	
+	/**
+	 * @brief Searches for list blocks in a string
+	 */
+	function get_lists($text){
+		$matches = array();
+		$list_finder_regex = "/ (
+						  (
+						   [\r]?[\n]?
+						   [ ]+	# At least one space
+						   [*#]	# Star or #
+						   (.+)	# Any number of characters
+						  )+
+						)/x";		
+		preg_match_all($list_finder_regex, $text, $matches, PREG_OFFSET_CAPTURE);
+		return $matches[0];	
+	}	
 }
