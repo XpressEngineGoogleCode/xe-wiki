@@ -20,15 +20,15 @@ class wikiMobile extends wikiView {
 	$this->except_notice = $this->module_info->except_notice == 'N' ? false : true;
 
 	/**
-	* 상담 기능 체크. 현재 게시판의 관리자이면 상담기능을 off시킴
-	* 현재 사용자가 비로그인 사용자라면 글쓰기/댓글쓰기/목록보기/글보기 권한을 제거함
+	* Check consultation stats.
+	* If the current user is not logged the Writing / Comment / List / View grants will be removes
 	**/
 	if($this->module_info->consultation == 'Y' && !$this->grant->manager) 
 	{
 	    $this->consultation = true; 
 	    if(!Context::get('is_logged'))
 	    {
-		$this->grant->list = $this->grant->write_document = $this->grant->write_comment = $this->grant->view = false;
+			$this->grant->list = $this->grant->write_document = $this->grant->write_comment = $this->grant->view = false;
 	    }
 	} 
 	else 

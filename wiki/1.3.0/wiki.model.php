@@ -39,7 +39,7 @@
 
 
 		/**
-		* @brief 캐시로부터 계층 구조 읽기
+		* @brief Read hierarchy from the cache 
 		*/
 		function readWikiTreeCache($module_srl) {
 		    	
@@ -70,10 +70,10 @@
 
 
 		/**
-		* @brief 계층 구조 읽기
+		* @brief Read hierarchy 
 		*/
 		function loadWikiTreeList($module_srl) {
-			// 목록을 구함
+			// Select wanted List
 			$args->module_srl = $module_srl;
 			$output = executeQueryArray('wiki.getTreeList', $args);
 
@@ -112,7 +112,7 @@
 
 
 		/**
-		* @brief 이전 / 다음 문서 구하기
+		* @brief Load previous / next article
 		*/
 		function getPrevNextDocument($module_srl, $document_srl) {
 			$list = $this->readWikiTreeCache($module_srl);
@@ -232,7 +232,6 @@
 				$list_breadcrumbs[$list[$document_srl]->title] = $oDocumentModel->getAlias($document_srl);
 				$list_breadcrumbs = $this->createBreadcrumbsList((int)$list[$document_srl]->parent_srl, $list, $list_breadcrumbs);
 			}
-			//$list_breadcrumbs = array_reverse($list_breadcrumbs);
 			return $list_breadcrumbs;
 		}
 		

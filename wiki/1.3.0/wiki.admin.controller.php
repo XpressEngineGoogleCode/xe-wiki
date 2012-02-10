@@ -8,13 +8,13 @@
 	class wikiAdminController extends wiki {
 
 		/**
-		 * @brief 초기화
+		 * @brief Initialization
 		 **/
 		function init() {
 		}
 
 		/**
-		 * @brief 위키 모듈 추가
+		 * @brief Add a wiki module
 		 */
 		function procWikiAdminInsertWiki($args = null) {
 			// module 모듈의 model/controller 객체 생성
@@ -48,7 +48,7 @@
 		}
 
 		/**
-		 * @brief 위키 모듈 삭제
+		 * @brief Deleting a wiki module
 		 */
 		function procWikiAdminDeleteWiki() {
 			$module_srl = Context::get('module_srl');
@@ -63,18 +63,18 @@
 		}
 
 		/**
-		 * @brief 제목으로 접근할 수 없는 글을 정리
+		 * @brief Theorem can not be accessed by writing the title
 		 */ 
 		function procWikiAdminArrangeList() {
 			$oModuleModel = &getModel('module');
 			$oDocumentController = &getController('document');
 
-			// 대상 위키 검증
+			// Verification target Wiki
 			$module_srl = Context::get('module_srl');
 			$module_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl);
 			if(!$module_info->module_srl || $module_info->module != 'wiki') return new Object(-1,'msg_invalid_request');
 
-			// 대상 위키의 entry값이 없는 글을 추출
+			// Wiki article of the target entry has no value extraction
 			$args->module_srl = $module_srl;
 			$output = executeQueryArray('wiki.getDocumentWithoutAlias', $args);
 			if(!$output->toBool() || !$output->data) return new Object();

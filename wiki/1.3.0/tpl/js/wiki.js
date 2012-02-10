@@ -4,7 +4,7 @@
  * @brief  wiki 모듈의 javascript
  **/
 
-/* 글삭제 요청 */
+/* Delete wiki document */
 function doDeleteWiki(document_srl) {
     var params = new Array();
     params['mid'] = current_mid;
@@ -12,7 +12,7 @@ function doDeleteWiki(document_srl) {
     exec_xml('wiki','procWikiDeleteDocument', params);
 }
 
-/* 댓글 글쓰기 작성후 */
+/* insert the comment and than return to view document's page */
 function completeInsertComment(ret_obj) {
     var error = ret_obj['error'];
     var message = ret_obj['message'];
@@ -26,7 +26,7 @@ function completeInsertComment(ret_obj) {
     location.href = url;
 }
 
-/* 댓글 삭제 */
+/* Delete comment */
 function completeDeleteComment(ret_obj) {
     var error = ret_obj['error'];
     var message = ret_obj['message'];
@@ -40,7 +40,7 @@ function completeDeleteComment(ret_obj) {
     location.href = url;
 }
 
-/* 계층 구조 재생성 */
+/* Recreate the hierarchy */
 function doRecompileTree() {
     var params = new Array();
     params['mid'] = current_mid;

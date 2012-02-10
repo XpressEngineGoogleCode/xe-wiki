@@ -11,7 +11,7 @@
 		static $replacing_characters = array('', '', '', '_');
 
 		/**
-		 * @brief entry 이름으로 사용할 문자열을 생성
+		 * @brief Generate the string to use as entry name
 		 */
 		static function makeEntryName($matches)
 		{
@@ -61,7 +61,7 @@
 		}
 
 		/**
-		 * @brief 설치가 이상이 없으며 업데이트할 것이 있는지 확인.
+		 * @brief Check if exist a new version
 		 **/
 		function checkUpdate() {
 			$flag = false;
@@ -70,7 +70,7 @@
 		}
 
 		/**
-		 * @brief 모듈을 업데이트
+		 * @brief Module Updates
 		 */
 		function moduleUpdate() {
 			$this->_updateOldStyleAliases();
@@ -78,14 +78,14 @@
 		}
 
 		/**
-		 * @brief 모듈 제거시 조치
+		 * @brief uninstall module
 		 */
 		function moduleUninstall() {
 			return new Object();
 		}
 
 		/**
-		 * @brief 캐시 파일 재생성
+		 * @brief Recompile Cache
 		 **/
 		function recompileCache() {
 			$oCacheHandler = &CacheHandler::getInstance('object', null, true);
@@ -95,11 +95,11 @@
 		}
 
 		/**
-		 * @brief 특수 문자 / 공백 등이 제거되지 않은 alias 가 있는지 확인.
+		 * @brief Make sure that alias does not contain special characters / spaces, etc
 		 */
 		function _hasOldStyleAliases()
 		{
-			// Wiki 모듈의 modules_srl 을 모두 구함.
+			// Get all Wiki module_srl.
 			$output = executeQueryArray('wiki.getAllWikiList', null);
 			$wiki_srls = array();
 			if(count($output->data))
@@ -130,11 +130,11 @@
 
 
 		/**
-		 * @brief 특수 문자 / 공백 등이 제거되지 않은 alias 를 일괄 수정
+		 * @brief special characters / spaces that have not been removed and fixes alias in a batch
 		 */
 		function _updateOldStyleAliases()
 		{	   
-			// Wiki 모듈의 modules_srl 을 모두 구함.
+			// Get all Wiki module_srl
 			$output = executeQueryArray('wiki.getAllWikiList', null);
 			$wiki_srls = array();
 			if(count($output->data))
