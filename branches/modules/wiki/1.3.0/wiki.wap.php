@@ -11,26 +11,26 @@
          * @brief wap procedure method
          **/
         function procWAP(&$oMobile) {
-            // 권한 체크
+            // Check permissions
             if(!$this->grant->list || $this->module_info->consultation == 'Y') return $oMobile->setContent(Context::getLang('msg_not_permitted'));
 
-            // document model 객체 생성
+            // Create document model
             $oDocumentModel = &getModel('document');
 
-            // 선택된 게시글이 있을 경우
+            // Check if you have selected an existing document (article)
             $document_srl = Context::get('document_srl');
             if($document_srl) {
                 $oDocument = $oDocumentModel->getDocument($document_srl);
                 if($oDocument->isExists()) {
-                    // 권한 확인
+                    // Verify permissions to view
                     if(!$this->grant->view) return $oMobile->setContent(Context::getLang('msg_not_permitted'));
 
-                    // 글 제목 설정
+                    // Set browser's title
                     Context::setBrowserTitle($oDocument->getTitleText());
 
-                    // 댓글 보기 일 경우
-                    if($this->act=='dispWikiContentView') {
-
+                    // If a comment
+                    if($this->act=='dispWikiContentView') 
+					{
                         $oCommentModel = &getModel('comment');
                         $output = $oCommentModel->getCommentList($oDocument->document_srl, 0, false, $oDocument->getCommentCount());
 
@@ -44,27 +44,28 @@
                             }
                         }
 
-                        // 내용 설정
+                        // Setting the content
                         $oMobile->setContent( $content );
 
-                        // 상위 페이지를 목록으로 돌아가기로 지정
+                        // Back to the list specified in the parent page
                         $oMobile->setUpperUrl( getUrl('act',''), Context::getLang('cmd_go_upper') );
 
-                    // 댓글 보기가 아니면 글 보여줌
-                    } else {
-
-                        // 내용 지정 (태그를 모두 제거한 내용을 설정)
+						// Post or show a comment
+                    }
+					else
+					{
+                        // Prepare the content (removes all tags from content)
                         $content = strip_tags(str_replace('<p>','<br>&nbsp;&nbsp;&nbsp;',$oDocument->getContent(false,false,false)),'<br><b><i><u><em><small><strong><big>');
 
 
-                        // 내용 상단에 정보 출력 (댓글 보기 링크 포함)
+                        // For information on the top of the output (including the comments link)
                         $content = Context::getLang('replies').' : <a href="'.getUrl('act','dispWikiContentView').'">'.$oDocument->getCommentCount().'</a><br>'."\r\n".$content;
                         $content = '<b>'.$oDocument->getNickName().'</b> ('.$oDocument->getRegdate("Y-m-d").")<br>\r\n".$content;
                         
-                        // 내용 설정
+                        // Setting the content
                         $oMobile->setContent( $content );
 
-                        // 상위 페이지를 목록으로 돌아가기로 지정
+                        // Back to the list specified in the parent page
                         $oMobile->setUpperUrl( getUrl('document_srl',''), Context::getLang('cmd_list') );
 
                     }
@@ -73,7 +74,7 @@
                 }
             }
 
-            // 게시글 목록
+            // List of posts
             $args->module_srl = $this->module_srl; 
             $args->page = Context::get('page');; 
             $args->list_count = 9;
@@ -102,7 +103,7 @@
             $page = (int)Context::get('page');
             if(!$page) $page = 1;
 
-            // next/prevUrl 지정
+            // Specify the next/prev Url
             if($page>1) $oMobile->setPrevUrl(getUrl('mid',$_GET['mid'],'page',$page-1), sprintf('%s (%d/%d)', Context::getLang('cmd_prev'), $page-1, $totalPage));
 
             if($page<$totalPage) $oMobile->setNextUrl(getUrl('mid',$_GET['mid'],'page',$page+1), sprintf('%s (%d/%d)', Context::getLang('cmd_next'), $page+1, $totalPage));

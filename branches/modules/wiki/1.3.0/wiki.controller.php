@@ -11,26 +11,26 @@
 		}
 
 		/**
-		 * @brief 위키 모듈을 추가.
+		 * @brief Add a wiki module.
 		 */
 		function procWikiInsertDocument() {
-			// document module의 model 객체 생성
+			// Create object model of document module
 			$oDocumentModel = &getModel('document');
 
-			// document module의 controller 객체 생성
+			// Create object controller of document module
 			$oDocumentController = &getController('document');
 
-			// 권한 체크
+			// Check permissions
 			if(!$this->grant->write_document) return new Object(-1, 'msg_not_permitted');
 			$entry = Context::get('entry');
 
-			// 글작성시 필요한 변수를 세팅
+			// Get required parameters settings
 			$obj = Context::getRequestVars();
 			$obj->module_srl = $this->module_srl;
 			if($this->module_info->use_comment != 'N') $obj->allow_comment = 'Y';
 			else $obj->allow_comment = 'N';
 
-			// 수정시 nick_name 설정
+			// Set nick_name
 			if(!$obj->nick_name)
 			{
 				$logged_info = Context::get('logged_info');
@@ -42,18 +42,18 @@
 
 			settype($obj->title, "string");
 			if($obj->title == '') $obj->title = cut_str(strip_tags($obj->content),20,'...');
-			//그래도 없으면 Untitled
+			//If you still Untitled
 			if($obj->title == '') $obj->title = 'Untitled';
 
-			// 이미 존재하는 글인지 체크
+			// Check that already exist
 			$oDocument = $oDocumentModel->getDocument($obj->document_srl, $this->grant->manager);
 
-			// 이미 존재하는 경우 수정
+			// Modified if it already exists
 			if($oDocument->isExists() && $oDocument->document_srl == $obj->document_srl) {
 				if($oDocument->get('title')=='Front Page') $obj->title = 'Front Page';
 				$output = $oDocumentController->updateDocument($oDocument, $obj);
 
-				// 성공적으로 수정되었을 경우 계층구조/ alias 변경
+				// Have been successfully modified the hierarchy/ alias change
 				if($output->toBool()) {
 					$oDocumentController->deleteDocumentAliasByDocument($obj->document_srl);
 					$aliasName = Context::get('alias');
@@ -81,12 +81,12 @@
 				$oDocumentController->insertAlias($obj->module_srl, $obj->document_srl, $aliasName);
 			}
 
-			// 오류 발생시 멈춤
+			// Stop when an error occurs
 			if(!$output->toBool()) return $output;
 
 			$this->recompileTree($this->module_srl);
 		
-			// 결과를 리턴
+			// Returns the results
 			$entry = $oDocumentModel->getAlias($output->get('document_srl'));
 			if($entry) {
 				$site_module_info = Context::get('site_module_info');
@@ -96,57 +96,63 @@
 			}
 			$this->setRedirectUrl($url);
 
-			// 성공 메세지 등록
+			// Registration success message
 			$this->setMessage($msg_code);
 		}
 
 
 		/**
-		 * @brief 위키에 댓글 등록
+		 * @brief Register comments on the wiki
 		 */
 		function procWikiInsertComment() {
-			// 권한 체크
+			// Check permissions
 			if(!$this->grant->write_comment) return new Object(-1, 'msg_not_permitted');
 
-			// 댓글 입력에 필요한 데이터 추출
+			// extract data required
 			$obj = Context::gets('document_srl','comment_srl','parent_srl','content','password','nick_name','nick_name','member_srl','email_address','homepage','is_secret','notify_message');
 			$obj->module_srl = $this->module_srl;
 
-			// 원글이 존재하는지 체크
+			// Check for the presence of document object
 			$oDocumentModel = &getModel('document');
 			$oDocument = $oDocumentModel->getDocument($obj->document_srl);
 			if(!$oDocument->isExists()) return new Object(-1,'msg_not_permitted');
 
-			// comment 모듈의 model 객체 생성
+			// Create object model of document module
 			$oCommentModel = &getModel('comment');
 
-			// comment 모듈의 controller 객체 생성
+			// Create object controller of document module
 			$oCommentController = &getController('comment');
 
-			// comment_srl이 존재하는지 체크
-				  // 만일 comment_srl이 n/a라면 getNextSequence()로 값을 얻어온다.
-				  if(!$obj->comment_srl) {
+			// Check for the presence of comment_srl
+			// if comment_srl is n/a then retrieves a value with getNextSequence()
+			if(!$obj->comment_srl)
+			{
 				$obj->comment_srl = getNextSequence();
-			} else {
+			}
+			else
+			{
 				$comment = $oCommentModel->getComment($obj->comment_srl, $this->grant->manager);
 			}
 
-			// comment_srl이 없을 경우 신규 입력
-			if($comment->comment_srl != $obj->comment_srl) {
-
-				// parent_srl이 있으면 답변으로
-				if($obj->parent_srl) {
+			// If there is no new comment_srl
+			if($comment->comment_srl != $obj->comment_srl)
+			{
+				// If there is no new parent_srl
+				if($obj->parent_srl)
+				{
 					$parent_comment = $oCommentModel->getComment($obj->parent_srl);
-					if(!$parent_comment->comment_srl) return new Object(-1, 'msg_invalid_request');
-
+					if(!$parent_comment->comment_srl)
+					{
+						return new Object(-1, 'msg_invalid_request');
+					}
 					$output = $oCommentController->insertComment($obj);
-
-				// 없으면 신규
-				} else {
+				}
+				else
+				{
 					$output = $oCommentController->insertComment($obj);
 				}
 
-				// 문제가 없고 모듈 설정에 관리자 메일이 등록되어 있으면 메일 발송
+				// If there is no problem to register comment then send an email to admin
 				if($output->toBool() && $this->module_info->admin_mail) {
 					$oMail = new Mail();
 					$oMail->setTitle($oDocument->getTitleText());
@@ -161,9 +167,10 @@
 						$oMail->send();
 					}
 				}
-
-			// comment_srl이 있으면 수정으로
-			} else {
+			// If you have to modify comment_srl
+			}
+			else
+			{
 				$obj->parent_srl = $comment->parent_srl;
 				$output = $oCommentController->updateComment($obj, $this->grant->manager);
 				$comment_srl = $obj->comment_srl;
@@ -179,13 +186,13 @@
 
 
 		/**
-		 * @brief 위키에서 문서 삭제
+		 * @brief Delete article from the wiki 
 		 */
 		function procWikiDeleteDocument() {
 			$oDocumentController = &getController('document');
 			$oDocumentModel = &getModel('document');
 
-			// 권한 체크
+			// Check permissions
 			if(!$this->grant->delete_document) return new Object(-1, 'msg_not_permitted');
 
 			$document_srl = Context::get('document_srl');
@@ -219,7 +226,7 @@
 
 		
 		/**
-		 * @brief 위키 문서에서 댓글 삭제
+		 * @brief Delete comment from the wiki
 		 */
 		function procWikiDeleteComment() {
 			// check the comment's sequence number 
@@ -240,16 +247,16 @@
 
 		
 		/**
-		 * @brief 계층 구조 내 문서 이동
+		 * @brief Change position of the document on hierarchy
 		 */
 		function procWikiMoveTree() {
-			// 권한 체크
+			// Check permissions
 			if(!$this->grant->write_document) return new Object(-1, 'msg_not_permitted');
 
-			// request argument 추출
+			// request arguments
 			$args = Context::gets('parent_srl','target_srl','source_srl');
 
-			// 노드 정보 구함
+			// retrieve Node information
 			$output = executeQuery('wiki.getTreeNode', $args);
 			$node = $output->data;
 			if(!$node->document_srl) return new Object('msg_invalid_request');
@@ -257,13 +264,16 @@
 			$args->module_srl = $node->module_srl;
 			$args->title = $node->title;
 			if(!$args->parent_srl) $args->parent_srl = 0;
-			// target이 없으면 부모의 list_order중 최소 list_order를 구함
-			if(!$args->target_srl) {
+			// target without parent list_order must have a minimum list_order
+			if(!$args->target_srl)
+			{
 				$list_order->parent_srl = $args->parent_srl;
 				$output = executeQuery('wiki.getTreeMinListorder',$list_order);
 				if($output->data->list_order) $args->list_order = $output->data->list_order-1;
-				// target이 있으면 그 target의 list_order + 1
-			} else {
+				// target이 있으면 그 target of list_order + 1
+			}
+			else
+			{
 				$t_args->source_srl = $args->target_srl;
 				$output = executeQuery('wiki.getTreeNode', $t_args);
 				$target = $output->data;
@@ -289,7 +299,8 @@
 			else $output = executeQuery('wiki.updateTreeNode',$args);
 			if(!$output->toBool()) return $output;
 
-			if($args->list_order) {
+			if($args->list_order)
+			{
 				$doc->document_srl = $args->source_srl;
 				$doc->list_order = $args->list_order;
 				$output = executeQuery('wiki.updateDocumentListOrder', $doc);
@@ -301,7 +312,7 @@
 
 
 		/**
-		 * @brief 위키 계층 구조 재생성
+		 * @brief recreate Wiki the hierarchy
 		 **/
 		function procWikiRecompileTree() {
 			if(!$this->grant->write_document) return new Object(-1,'msg_not_permitted');
@@ -318,7 +329,7 @@
 			$buff = '';
 			$xml_buff = "<root>\n";
 
-			// cache 파일 생성
+			// cache file creation
 			foreach($list as $key => $val) {
 				$buff .= sprintf('%d,%d,%d,%d,%s%s',$val->parent_srl,$val->document_srl,$val->depth,$val->childs,$val->title,"\n");
 				$xml_buff .= sprintf('<node node_srl="%d" parent_srl="%d"><![CDATA[%s]]></node>%s', $val->document_srl, $val->parent_srl, $val->title,"\n");
@@ -335,7 +346,7 @@
 
 
 		/**
-		 * @brief 비회원 댓글 수정을 위한 패스워드 확인
+		 * @brief Confirm password for modifying non-members Comments
 		 */
 		function procWikiVerificationPassword()
 		{
@@ -396,7 +407,10 @@
 			Context::set('editor', $editor);
 			$this->add('editor',$editor);
 		}
-
+		
+		/*
+		 * @brief Write document to chache
+		 */
 		private function writeDocToCache($document_srl, $content)
 		{
 			// generate the file path

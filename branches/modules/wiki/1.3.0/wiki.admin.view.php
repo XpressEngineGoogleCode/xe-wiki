@@ -7,17 +7,17 @@
 	class wikiAdminView extends wiki {
 
 		function init() {
-			// module_srl이 있으면 미리 체크하여 존재하는 모듈이면 module_info 세팅
+			// check if module_srl is already set
 			$module_srl = Context::get('module_srl');
 			if(!$module_srl && $this->module_srl) {
 				$module_srl = $this->module_srl;
 				Context::set('module_srl', $module_srl);
 			}
 
-			// module model 객체 생성 
+			// Create Object Module model 
 			$oModuleModel = &getModel('module');
 
-			// module_srl이 넘어오면 해당 모듈의 정보를 미리 구해 놓음
+			// Second module_srl come over to save the module, putting the information in advance
 			if($module_srl) {
 				$module_info = $oModuleModel->getModuleInfoByModuleSrl($module_srl);
 				if(!$module_info) {
@@ -33,14 +33,14 @@
 			$module_category = $oModuleModel->getModuleCategories();
 			Context::set('module_category', $module_category);
 
-			// 템플릿 경로 지정 (board의 경우 tpl에 관리자용 템플릿 모아놓음)
+			// Specify template path
 			$template_path = sprintf("%stpl/",$this->module_path);
 			$this->setTemplatePath($template_path);
 		}
 
 		
 		/**
-		 * @brief 위키 모듈 목록
+		 * @brief List of Wiki module
 		 */
 		function dispWikiAdminContent() {
 			$args->sort_index = "module_srl";
@@ -51,27 +51,27 @@
 			$output = executeQueryArray('wiki.getWikiList', $args);
 			ModuleModel::syncModuleToSite($output->data);
 
-			// 템플릿에 쓰기 위해서 context::set
+			// In order to write in the template context::set
 			Context::set('total_count', $output->total_count);
 			Context::set('total_page', $output->total_page);
 			Context::set('page', $output->page);
 			Context::set('wiki_list', $output->data);
 			Context::set('page_navigation', $output->page_navigation);
 
-			// 템플릿 파일 지정
+			// Specify the template file
 			$this->setTemplateFile('index');
 		}
 
 
 		/**
-		 * @brief 위키 모듈 추가를 위한 정보입력 화면
+		 * @brief Wiki module input screen for additional information
 		 */
 		function dispWikiAdminInsertWiki() {
 			if(!in_array($this->module_info->module, array('admin', 'wiki'))) {
 				return $this->alertMessage('msg_invalid_request');
 			}
 
-			// 스킨 목록을 구해옴
+			// set skin list
 			$oModuleModel = &getModel('module');
 			$skin_list = $oModuleModel->getSkins($this->module_path);
 			Context::set('skin_list',$skin_list);
@@ -79,7 +79,7 @@
 			$mskin_list = $oModuleModel->getSkins($this->module_path, "m.skins");
 			Context::set('mskin_list', $mskin_list);
 			
-			// 레이아웃 목록을 구해옴
+			// set layout list
 			$oLayoutModel = &getModel('layout');
 			$layout_list = $oLayoutModel->getLayoutList();
 			Context::set('layout_list', $layout_list);
@@ -93,13 +93,13 @@
 			$security->encodeHTML('layout_list..title','layout_list..layout');
 			$security->encodeHTML('mlayout_list..title','mlayout_list..layout');
 			
-			// 템플릿 파일 지정
+			// Specify the template file
 			$this->setTemplateFile('wiki_insert');
 		}
 
 
 		/**
-		 * @brief 위키 모듈 삭제를 위한 확인 화면
+		 * @brief Confirmation screen for deleting wiki module
 		 */
 		function dispWikiAdminDeleteWiki() {
 			if(!Context::get('module_srl')) return $this->dispWikiAdminContent();
@@ -118,28 +118,28 @@
 
 
 		/**
-		 * @brief 위키 모듈에 대한 추가 설정 화면
+		 * @brief Additional setup screen for Wiki module
 		 */
 		function dispWikiAdminWikiAdditionSetup() {
 			// content는 다른 모듈에서 call by reference로 받아오기에 미리 변수 선언만 해 놓음
 			$content = '';
 
-			// 추가 설정을 위한 트리거 호출 
-			// 게시판 모듈이지만 차후 다른 모듈에서의 사용도 고려하여 trigger 이름을 공용으로 사용할 수 있도록 하였음
+			// Trigger calls for additional settings 
+			// trigger name to be used
 			$output = ModuleHandler::triggerCall('module.dispAdditionSetup', 'before', $content);
 			$output = ModuleHandler::triggerCall('module.dispAdditionSetup', 'after', $content);
 			Context::set('setup_content', $content);
 
-			// 템플릿 파일 지정
+			// Specify the template file
 			$this->setTemplateFile('addition_setup');
 		}
 
 		
 		/**
-		 * @brief 위키 모듈에 대한 권한 설정 화면
+		 * @brief Set permissions for a wiki module screen
 		 */
 		function dispWikiAdminGrantInfo() {
-			// 공통 모듈 권한 설정 페이지 호출
+			// Call the common page for managing grants information
 			$oModuleAdminModel = &getAdminModel('module');
 			$grant_content = $oModuleAdminModel->getModuleGrantHTML($this->module_info->module_srl, $this->xml_info->grant);
 			Context::set('grant_content', $grant_content);
@@ -149,7 +149,7 @@
 
 	
 		/**
-		 * @brief 위키 모듈 스킨 설정 화면
+		 * @brief Wiki module screen skins settings
 		 */
 		function dispWikiAdminSkinInfo() {
 			// Call the common page for managing skin information
@@ -162,7 +162,7 @@
 
 
 		/**
-		 * @brief 위키 모듈 목록 갱신 화면
+		 * @brief Wiki module list update screen
 		 */
 		function dispWikiAdminArrange() {
 

@@ -42,27 +42,25 @@ class wikiView extends wiki
 			if($this->module_info->markup_type == 'wiki_markup'){
 				$editor_config->editor_skin = 'xpresseditor';
 				$editor_config->content_style = 'default';
-				// $editor_config->content_font = '"Courier New"';
-				// $editor_config->sel_editor_colorset = 'white_text_nohtml'; 
 				
 				$oModuleController = &getController('module');
 				$oModuleController->insertModulePartConfig('editor', $this->module_info->module_srl, $editor_config);
 			}
 			
 			require_once($this->module_path . 'lib/wiky.inc.php');
-			// var_dump($editor_config);
 		}
 		
 
 
 		/**
-		* @brief 선택된 글 출력
+		* @brief Posts selected output
 		**/
-		function dispWikiContent() {
+		function dispWikiContent()
+		{
 			// 이동시 혹은 entry 값을 넣어서 문서를 요청할 때에도 처리된 alias를 사용하도록 수정
-		//$entry = Context::get('entry');
-		//$beautifulEntry = $this->beautifyEntryName($entry);
-		//Context::set('entry', $beautifulEntry);
+			//$entry = Context::get('entry');
+			//$beautifulEntry = $this->beautifyEntryName($entry);
+			//Context::set('entry', $beautifulEntry);
 						
 			$output = $this->dispWikiContentView();
 			if(!$output->toBool()) return;
@@ -109,7 +107,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 문서 편집 화면
+		* @brief Document editing screen
 		*/
 		function dispWikiEditPage() {
 			if(!$this->grant->write_document) return $this->dispWikiMessage('msg_not_permitted');
@@ -192,7 +190,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 해당 위키의 문서 목록 보기
+		* @brief View a list wiki's articles
 		*/
 		function dispWikiTitleIndex() {
 			$page = Context::get('page');
@@ -218,7 +216,7 @@ class wikiView extends wiki
 			Context::set('page', $output->page);
 			Context::set('page_navigation', $output->page_navigation);
 
-			// 검색 옵션 세팅
+			// search options settings
 			foreach($this->search_option as $opt) $search_option[$opt] = Context::getLang($opt);
 			Context::set('search_option', $search_option);
 			
@@ -249,7 +247,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 해당 위키의 계층 구조 보기
+		* @brief hierarchical view of the appropriate wiki
 		*/
 		function dispWikiTreeIndex() {
 			$oWikiModel = &getModel('wiki');
@@ -282,7 +280,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 계층 구조 수정 화면
+		* @brief Display screen for changing the hierarchy
 		*/
 		function dispWikiModifyTree() {
 			if(!$this->grant->write_document) return new Object(-1,'msg_not_permitted');
@@ -315,7 +313,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 열람이력 갱신
+		* @brief View update history
 		*/
 		function addToVisitLog($entry) {
 			$module_srl = $this->module_info->module_srl;
@@ -347,7 +345,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 위키 문서 출력
+		* @brief Wiki document output
 		* Input: entry or document_srl
 		* Output: oDocument and alias
 		*	oDocument must have title set
@@ -356,7 +354,7 @@ class wikiView extends wiki
 			$oWikiModel = &getModel('wiki');
 			$oDocumentModel = &getModel('document');
 
-			// 요청된 변수 값들을 정리
+			// The requested order parameter values
 			$document_srl = Context::get('document_srl');
 			$entry = Context::get('entry');
 
@@ -371,7 +369,7 @@ class wikiView extends wiki
 			}
 		
 			/**
-			* 요청된 문서 번호가 있다면 문서를 구함
+			* Check if exists document_srl for requested document
 			**/
 			if($document_srl) {
 				$oDocument = $oDocumentModel->getDocument($document_srl);
@@ -388,7 +386,7 @@ class wikiView extends wiki
 					Context::set('document_srl','',true);
 					return new Object(-1, 'msg_not_founded');
 				}
-			// 요청된 문서 번호가 아예 없다면 빈 문서 객체 생성
+			// generate an empty document object if you do not have a document_srl for requested document
 			}
 			else
 			{
@@ -485,39 +483,43 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 댓글의 댓글 화면 출력
+		* @brief Display screen for Post a comment
 		**/
 		function dispWikiReplyComment() {
-			// 권한 체크
+			// Check permission
 			if(!$this->grant->write_comment) return $this->dispWikiMessage('msg_not_permitted');
 
-			// 목록 구현에 필요한 변수들을 가져온다
+			// Produces a list of variables needed to implement
 			$parent_srl = Context::get('comment_srl');
 
 			// 지정된 원 댓글이 없다면 오류
 			if(!$parent_srl) return new Object(-1, 'msg_invalid_request');
 
-			// 해당 댓글를 찾아본다
+			// Look for the comment
 			$oCommentModel = &getModel('comment');
 			$oSourceComment = $oCommentModel->getComment($parent_srl, $this->grant->manager);
 
-			// 댓글이 없다면 오류
+			// If there is no reply error
 			if(!$oSourceComment->isExists()) return $this->dispWikiMessage('msg_invalid_request');
 			if(Context::get('document_srl') && $oSourceComment->get('document_srl') != Context::get('document_srl')) return $this->dispWikiMessage('msg_invalid_request');
 
-			// 대상 댓글을 생성
+			// Generate the target comment
 			$oComment = $oCommentModel->getComment();
 			$oComment->add('parent_srl', $parent_srl);
 			$oComment->add('document_srl', $oSourceComment->get('document_srl'));
 
-			// 필요한 정보들 세팅
+			// Set the necessary informations
 			Context::set('oSourceComment',$oSourceComment);
 			Context::set('oComment',$oComment);
 
 			/** 
-			* 사용되는 javascript 필터 추가
+			* Add javascript filter
 			**/
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
+			
+			/**
+			 *load tree list for left menu 
+			 */
 			$oWikiModel = &getModel("wiki");
 			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
 			{
@@ -534,35 +536,35 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 댓글 수정 폼 출력
+		* @brief Modify Comment form output
 		**/
 		function dispWikiModifyComment() {
-			// 권한 체크
+			// Check persmission
 			if(!$this->grant->write_comment) return $this->dispWikiMessage('msg_not_permitted');
 
-			// 목록 구현에 필요한 변수들을 가져온다
+			// Produce a list of variables needed to implement
 			$document_srl = Context::get('document_srl');
 			$comment_srl = Context::get('comment_srl');
 
-			// 지정된 댓글이 없다면 오류
+			// If you do not have error for specified comment 
 			if(!$comment_srl) return new Object(-1, 'msg_invalid_request');
 
-			// 해당 댓글를 찾아본다
+			// Look for the comment
 			$oCommentModel = &getModel('comment');
 			$oComment = $oCommentModel->getComment($comment_srl, $this->grant->manager);
 
-			// 댓글이 없다면 오류
+			// If there is no reply error
 			if(!$oComment->isExists()) return $this->dispWikiMessage('msg_invalid_request');
 
-			// 글을 수정하려고 할 경우 권한이 없는 경우 비밀번호 입력화면으로
+			// If the article does not have permission then display the password input screen
 			if(!$oComment->isGranted()) return $this->setTemplateFile('input_password_form');
 
-			// 필요한 정보들 세팅
+			// Set the necessary informations
 			Context::set('oSourceComment', $oCommentModel->getComment());
 			Context::set('oComment', $oComment);
 
 			/** 
-			* 사용되는 javascript 필터 추가
+			* Add javascript filter
 			**/
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
 			
@@ -571,31 +573,31 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 댓글 삭제 화면 출력
+		* @brief Delete comment form
 		**/
 		function dispWikiDeleteComment() {
-			// 권한 체크
+			// Check permission
 			if(!$this->grant->write_comment) return $this->dispWikiMessage('msg_not_permitted');
 
-			// 삭제할 댓글번호를 가져온다
+			// Produce a list of variables needed to implement
 			$comment_srl = Context::get('comment_srl');
 
-			// 삭제하려는 댓글이 있는지 확인
+			// If you do not have error for specified comment
 			if($comment_srl) {
 				$oCommentModel = &getModel('comment');
 				$oComment = $oCommentModel->getComment($comment_srl, $this->grant->manager);
 			}
 
-			// 삭제하려는 글이 없으면 에러
+			// If there is no reply error
 			if(!$oComment->isExists() ) return $this->dispWikiContent();
 
-			// 권한이 없는 경우 비밀번호 입력화면으로
+			// If the article does not have permission then display the password input screen
 			if(!$oComment->isGranted()) return $this->setTemplateFile('input_password_form');
 
 			Context::set('oComment',$oComment);
 
 			/** 
-			* 필요한 필터 추가
+			* Add javascript filter
 			**/
 			Context::addJsFilter($this->module_path.'tpl/filter', 'delete_comment.xml');
 
@@ -652,7 +654,7 @@ class wikiView extends wiki
 			// 글과 요청된 모듈이 다르다면 오류 표시
 			if($oDocument->get('module_srl')!=$this->module_info->module_srl ) return $this->stop('msg_invalid_request');
 
-			// 관리 권한이 있다면 권한을 부여
+			// Check if you have administrative authority to grant
 			if($this->grant->manager) $oDocument->setGrant();
 
 					/*
@@ -665,7 +667,7 @@ class wikiView extends wiki
 
 					*/
 
-			// 상담기능이 사용되고 공지사항이 아니고 사용자의 글도 아니면 무시
+			// Check if history is enable and get Document history otherwise ignore it
 			$history_srl = Context::get('history_srl');
 			if($history_srl)
 			{
@@ -682,7 +684,7 @@ class wikiView extends wiki
 		}
 
 		/**
-		* @brief 위키 문법에 따라 쓰여진 컨텐츠의 링크를 렌더링 (private)
+		* @brief Wiki syntax is written according to the rendering of the content links(private)
 		*/
 		function _renderWikiContent($document_srl, $org_content)
 		{
@@ -731,7 +733,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 위키 문법으로 링크된 문서가 존재하는지를 체크.
+		* @brief Wiki syntax checking for the presence of linked documents.
 		*/
 		function callback_check_exists($matches)
 		{
@@ -743,7 +745,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 위키 문법으로 링크된 문서가 존재하는지를 체크하여 링크의 CSS class를 리턴
+		* @brief Linked wiki article link exists by checking the return of the CSS class
 		*/
 		function getCSSClass($name)
 		{
@@ -754,7 +756,7 @@ class wikiView extends wiki
 
 
 		/**
-		* @brief 위키 문법에 따라 치환되는 링크를 리턴
+		* @brief The return link to be substituted according to wiki
 		*/
 		function callback_wikilink($matches)
 		{
