@@ -39,7 +39,7 @@ class wikiView extends wiki
 			Context::set('langs', Context::loadLangSupported());
 			
 			$editor_config = $oModuleModel->getModulePartConfig('editor', $this->module_info->module_srl);
-			if($this->module_info->markup_type == 'wiki_markup'){
+			if($this->module_info->markup_type != 'xe_wiki_markup'){
 				$editor_config->editor_skin = 'xpresseditor';
 				$editor_config->content_style = 'default';
 				
@@ -111,7 +111,7 @@ class wikiView extends wiki
 			}
 			$oDocument = $oDocumentModel->getDocument(0, $this->grant->manager);
 			$oDocument->setDocument($document_srl);
-			if (!Mobile::isFromMobilePhone() && $this->module_info->markup_type != 'wiki_markup') $oDocument->variables['content'] = nl2br($oDocument->getContentText());
+			if (!Mobile::isFromMobilePhone() && $this->module_info->markup_type == 'xe_wiki_markup') $oDocument->variables['content'] = nl2br($oDocument->getContentText());
 			
 			$oDocument->add('module_srl', $this->module_srl);
 			if($oDocument->isExists()){
@@ -589,14 +589,20 @@ class wikiView extends wiki
             if (!$content)
             {
 				// Parse wiki syntax
-				if($this->module_info->markup_type == 'wiki_markup'){
-					require_once($this->module_path . "lib/wiky.inc.php");
-					$wiki_syntax_parser = new WikiSyntaxParser;
+				if($this->module_info->markup_type == 'googlecode_markup'){
+					require_once($this->module_path . "lib/GoogleCodeWikiParser.class.php");
+					$wiki_syntax_parser = new GoogleCodeWikiParser;
 					$org_content = $wiki_syntax_parser->parse($org_content);
 				}
+				else if($this->module_info->markup_type == 'mediawiki_markup'){
+					require_once($this->module_path . "lib/MediaWikiParser.class.php");
+					$wiki_syntax_parser = new MediaWikiParser;
+					$org_content = $wiki_syntax_parser->parse($org_content);
+				}				
 				
                 $content = preg_replace_callback("!\[([^\]]+)\]!is", array( $this, 'callback_check_exists' ), $org_content );
-                $entries = array_keys($this->document_exists);
+                /*
+				$entries = array_keys($this->document_exists);
 			
 				if(count($entries))
 				{ 
@@ -614,6 +620,7 @@ class wikiView extends wiki
 				}
 				//$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $content );
 				//$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
+				*/
 				
 				if($oCacheHandler->isSupport()) $oCacheHandler->put($cache_key, $content);
 			}
@@ -693,6 +700,7 @@ class wikiView extends wiki
 			else
 			{
 				$module_srl=$this->module_info->module_srl;
+				$oDocumentModel = &getModel('document');
 				if(!$document_srl) {
 					if (!$entry) {
 						$entry = "Front Page";

@@ -127,6 +127,7 @@ class WikiSyntaxParser {
 									/mx", "</td><td>", $text);
 			
 			// Replace quotes
+			//	  Inferred by indentation
 			$text = preg_replace("/(
 								((\s+)	
 								[ ]	
@@ -135,7 +136,24 @@ class WikiSyntaxParser {
 								)/x", "<blockquote>$1</blockquote>", $text);
 			
 			// Replace horizontal rule
+			// ----
 			$text = preg_replace("/^-{4,}/m", "<hr />", $text);
+			
+			// Links
+			//	Internal links
+			//		- to pages that do not exist -> show up with ? after, and link to page creation form, if logged in; otherwise, leave as plain text
+			//		- to pages that exist
+			//		WikiWord, [Nonwikiword], [PageTitle Description], !WikiWordEscaped
+			//		- to local anchors -> defined by h1, h2 etc TODO
+			//  Links to issues and revisions
+			//	Links to extenal pages
+			//		- anyhting that starts with http, https, ftp 
+			//		- [URL description]
+			//		- anything that starts with http, https, ftp and ends with png, gif, jpg, jpeg -> image
+			//		- [Url ImageUrl] -> image links
+			// 
+			
+			
 			
 			// Replace new lines with paragraphs
 			$text = preg_replace("/\n(.+)/", '<p>$1</p>', $text);

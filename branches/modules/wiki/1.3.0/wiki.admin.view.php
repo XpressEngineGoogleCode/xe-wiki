@@ -87,6 +87,10 @@
 			$mobile_layout_list = $oLayoutModel->getLayoutList(0,"M");
 			Context::set('mlayout_list', $mobile_layout_list);
 			
+			$wiki_markup_list = array("googlecode_markup", "xe_wiki_markup", "mediawiki_markup");
+			if(!$this->module_info->markup_type) $this->module_info->markup_type = 'xe_wiki_markup';
+			Context::set('wiki_markup_list', $wiki_markup_list);
+			
 			$security = new Security();
 			$security->encodeHTML('wiki_list..browser_title','wiki_list..mid');
 			$security->encodeHTML('skin_list..title','mskin_list..title');
