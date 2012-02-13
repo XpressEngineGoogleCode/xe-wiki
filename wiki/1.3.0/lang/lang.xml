@@ -279,4 +279,22 @@
 		<value xml:lang="tr"><![CDATA[ results match your querry]]></value>
 		<value xml:lang="vi"><![CDATA[ results match your querry]]></value>
 	</item>
+	<item name="title_lang_bar">
+		<value xml:lang="ko"><![CDATA[Languages]]></value>
+		<value xml:lang="en"><![CDATA[Languages]]></value>
+		<value xml:lang="jp"><![CDATA[Languages]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Languages]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Languages]]></value>
+		<value xml:lang="tr"><![CDATA[Languages]]></value>
+		<value xml:lang="vi"><![CDATA[Languages]]></value>
+	</item>
+	<item name="title_breadcrumbs_bar">
+		<value xml:lang="ko"><![CDATA[Breadcrumbs]]></value>
+		<value xml:lang="en"><![CDATA[Breadcrumbs]]></value>
+		<value xml:lang="jp"><![CDATA[Breadcrumbs]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Breadcrumbs]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Breadcrumbs]]></value>
+		<value xml:lang="tr"><![CDATA[Breadcrumbs]]></value>
+		<value xml:lang="vi"><![CDATA[Breadcrumbs]]></value>
+	</item>
 </lang>

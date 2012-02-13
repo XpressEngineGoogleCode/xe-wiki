@@ -393,8 +393,14 @@
 #tree { position:relative; padding-top:10px;}
 #tree div.treeUI { float: right;padding-right: 8px;}
 
-.visitLog { width: 100%; height: 15px; padding-top:5px; padding-bottom:5px; border-bottom: 1px solid #dcdcdc; text-align: right;}
+.visitLog { width: 100%; padding-top:5px; padding-bottom:5px; border-bottom: 1px solid #dcdcdc; text-align: right;}
 .visitLog a { color:#AAA; text-decoration:underline; }
+.visitLog .languages { width: 100%; height:15px; padding-bottom:5px; border-bottom: 1px solid #dcdcdc; text-align: right;}
+.visitLog .breadcrumbs { padding-top:5px; width: 100%; height:15px; }
+.visitLog .title_lang_bar {float:left;}
+.visitLog .title_breadcrumbs_bar {float:left;}
+.visitLog .lang_bar {float:right;}
+.visitLog .breadcrumbs_bar {float:right;}
 
 .wiki a.exists { text-decoration:underline; color:green; }
 .wiki a.notexist { text-decoration:none; border-bottom:1px dotted #EE0000; color:#EE0000; }
