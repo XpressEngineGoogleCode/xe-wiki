@@ -56,12 +56,7 @@ class wikiView extends wiki
 		* @brief Posts selected output
 		**/
 		function dispWikiContent()
-		{
-			// 이동시 혹은 entry 값을 넣어서 문서를 요청할 때에도 처리된 alias를 사용하도록 수정
-			//$entry = Context::get('entry');
-			//$beautifulEntry = $this->beautifyEntryName($entry);
-			//Context::set('entry', $beautifulEntry);
-						
+		{	
 			$output = $this->dispWikiContentView();
 			if(!$output->toBool()) return;
 		}
@@ -91,17 +86,12 @@ class wikiView extends wiki
 			
 			Context::set('oDocument', $oDocument);
 			
-			if ($this->module_info->menu_style == "msdn")
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$module_srl=$oDocument->get('module_srl');
-				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
+				$this->getLeftmenu();
 			}
-			else
-			{
-				$oWikiModel = &getModel("wiki");
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_info->module_srl);
-				Context::set('list',$this->list);
-			}
+			
 			$this->setTemplateFile('histories');
 		}
 
@@ -144,35 +134,12 @@ class wikiView extends wiki
 				}
 			} 
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert.xml');
-				
-			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$oWikiModel = &getModel("wiki");
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
-				Context::set('list',$this->list);
-			}
-			else
-			{
-				$module_srl=$this->module_info->module_srl;
-				if(!$document_srl) {
-					if (!$entry) {
-						$entry = "Front Page";
-						Context::set('entry', $entry);
-					}
-					else
-					{
-						if(is_null($oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry)))
-							$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByTitle($module_srl, "Front Page"));
-						else
-							$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByAlias($module_srl, $entry));
-					}
-					$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
-				}
-				else
-				{
-					$this->_loadSidebarTreeMenu($module_srl, $document_srl);
-				}
-			}
+				$this->getLeftmenu();
+			}			
 			
 			$this->setTemplateFile('write_form');
 		}
@@ -220,26 +187,10 @@ class wikiView extends wiki
 			foreach($this->search_option as $opt) $search_option[$opt] = Context::getLang($opt);
 			Context::set('search_option', $search_option);
 			
-			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$oWikiModel = &getModel("wiki");
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_info->module_srl);
-				Context::set('list',$this->list);
-			}
-			else
-			{
-				$document_srl = Context::get('document_srl');
-				$entry = Context::get('entry');
-
-				if(!$document_srl) {
-					if (!$entry) {
-						$entry = "Front Page";
-						Context::set('entry', $entry);
-					}
-					$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
-				}
-				$module_srl=$this->module_info->module_srl;
-				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
+				$this->getLeftmenu();
 			}
 			
 			$this->setTemplateFile('title_index');
@@ -253,28 +204,12 @@ class wikiView extends wiki
 			$oWikiModel = &getModel('wiki');
 			Context::set('document_tree', $oWikiModel->readWikiTreeCache($this->module_srl));
 			
-			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$oWikiModel = &getModel("wiki");
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_info->module_srl);
-				Context::set('list',$this->list);
+				$this->getLeftmenu();
 			}
-			else
-			{
-				$oDocumentModel = &getModel('document');
-				$document_srl = Context::get('document_srl');
-				$entry = Context::get('entry');
-				$module_srl=$this->module_info->module_srl;
-				if(!$document_srl) {
-					if (!$entry) {
-						$entry = "Front Page";
-						Context::set('entry', $entry);
-					}
-					$document_srl = $oDocumentModel->getDocumentSrlByTitle($module_srl, $entry);
-				}
-				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
-			}
-			
+						
 			$this->setTemplateFile('tree_list');
 		}
 
@@ -286,26 +221,10 @@ class wikiView extends wiki
 			if(!$this->grant->write_document) return new Object(-1,'msg_not_permitted');
 			Context::set('isManageGranted', $this->grant->write_document?'true':'false');
 			
-			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$oWikiModel = &getModel("wiki");
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_info->module_srl);
-				Context::set('list',$this->list);
-			}
-			else
-			{
-				$oDocumentModel = &getModel('document');
-				$document_srl = Context::get('document_srl');
-				$entry = Context::get('entry');
-				$module_srl=$this->module_info->module_srl;
-				if(!$document_srl) {
-					if (!$entry) {
-						$entry = "Front Page";
-						Context::set('entry', $entry);
-					}
-					$document_srl = $oDocumentModel->getDocumentSrlByTitle($module_srl, $entry);
-				}
-				$this->_loadSidebarTreeMenu($module_srl, $document_srl);
+				$this->getLeftmenu();
 			}
 			
 			$this->setTemplateFile('modify_tree');
@@ -393,30 +312,21 @@ class wikiView extends wiki
 				$oDocument = $oDocumentModel->getDocument(0);
 			}
 			
-			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
-				Context::set('list',$this->list);
-			}
-			else
-			{
-				$module_srl=$this->module_info->module_srl;
-				$doc_srl = $oDocument->document_srl;
-				if(is_null($doc_srl) || $doc_srl == 0 )
-					$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByTitle($module_srl, "Front Page"));
-				else
-					$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry));
+				$this->getLeftmenu();
 			}
 			
-			// 글 보기 권한을 체크해서 권한이 없으면 오류 메세지 출력하도록 처리
+			// View posts by checking permissions or display an error message if you do not have permission
 			if($oDocument->isExists()) {
-				// 브라우저 타이틀에 글의 제목을 추가
+				// add page title to the browser title
 				Context::addBrowserTitle($oDocument->getTitleText());
 
-				// 조회수 증가 (비밀글일 경우 권한 체크)
+				// Increase in hits (if document has permissions)
 				if(!$oDocument->isSecret() || $oDocument->isGranted()) $oDocument->updateReadedCount();
 
-				// 비밀글일때 컨텐츠를 보여주지 말자.
+				// Not showing the content if it is secret
 				if($oDocument->isSecret() && !$oDocument->isGranted()) $oDocument->add('content',Context::getLang('thisissecret'));
 				$this->setTemplateFile('view_document');
 
@@ -428,7 +338,7 @@ class wikiView extends wiki
 					Context::set('contributors', $contributors);
 				}
 
-				// 댓글 허용일 경우 문서에 강제 지정
+				// If the document has no rights set for comments is forced to use
 				if($this->module_info->use_comment != 'N') $oDocument->add('allow_comment','Y');
 				// Set up alias
 				$alias = $oDocumentModel->getAlias($oDocument->document_srl);
@@ -442,11 +352,11 @@ class wikiView extends wiki
 				$this->setTemplateFile('create_document');		
 			}
 			Context::set('visit_log', $_SESSION['wiki_visit_log'][$this->module_info->module_srl]);
-			// 스킨에서 사용할 oDocument 변수 세팅
+			// Setting a value oDocument for being use in skins
 			Context::set('oDocument', $oDocument);
 			Context::set('entry', $alias);
 			
-			// 사용되는 javascript 필터 추가
+			// Adding javascript filter 
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
 			// Redirect to user friendly URL if request comes from Search
 			
@@ -459,9 +369,7 @@ class wikiView extends wiki
 			}
 			Context::set("translatedlangs", $arr_translation_langs);
 			
-			// get Breadcrumbs menu
-			$menu_breadcrumbs = $oWikiModel->getBreadcrumbs((int)$oDocument->document_srl,$this->list);
-			Context::set('breadcrumbs',$menu_breadcrumbs);
+			$this->getBreadCrumbs((int)$oDocument->document_srl);
 			
 			$error_return_url = Context::get('error_return_url');
 			if(isset($error_return_url)) {
@@ -492,7 +400,7 @@ class wikiView extends wiki
 			// Produces a list of variables needed to implement
 			$parent_srl = Context::get('comment_srl');
 
-			// 지정된 원 댓글이 없다면 오류
+			// Return message error if there is no parent_srl
 			if(!$parent_srl) return new Object(-1, 'msg_invalid_request');
 
 			// Look for the comment
@@ -517,20 +425,12 @@ class wikiView extends wiki
 			**/
 			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
 			
-			/**
-			 *load tree list for left menu 
-			 */
-			$oWikiModel = &getModel("wiki");
-			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
-				Context::set('list',$this->list);
+				$this->getLeftmenu();
 			}
-			else
-			{
-				$module_srl=$this->module_info->module_srl;
-				$this->_loadSidebarTreeMenu($module_srl, Context::get('document_srl'));
-			}
+			
 			$this->setTemplateFile('comment_form');
 		}
 
@@ -651,21 +551,11 @@ class wikiView extends wiki
 
 		function _handleWithExistingDocument(&$oDocument)
 		{	
-			// 글과 요청된 모듈이 다르다면 오류 표시
+			// Display error message if it is a different module than requested module
 			if($oDocument->get('module_srl')!=$this->module_info->module_srl ) return $this->stop('msg_invalid_request');
 
 			// Check if you have administrative authority to grant
 			if($this->grant->manager) $oDocument->setGrant();
-
-					/*
-
-					if(!$entry)
-					{
-						$entry = $oDocument->getTitleText();
-						Context::set('entry', $entry);
-					}
-
-					*/
 
 			// Check if history is enable and get Document history otherwise ignore it
 			$history_srl = Context::get('history_srl');
@@ -785,6 +675,54 @@ class wikiView extends wiki
 				$this->list = $oWikiModel->getMenuTree($module_srl, $document_srl, $this->module_info->mid);
 			}
 			Context::set("list", $this->list);
+		}
+		
+		/*
+		* @brief Generate Left menu according with settings from admin panel
+		* 
+		*/
+		function getLeftMenu()
+		{
+			$oWikiModel = &getModel("wiki");
+			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			{
+				$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
+				Context::set('list',$this->list);
+			}
+			else
+			{
+				$module_srl=$this->module_info->module_srl;
+				if(!$document_srl) {
+					if (!$entry) {
+						$entry = "Front Page";
+						Context::set('entry', $entry);
+					}
+					else
+					{
+						if(is_null($oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry)))
+							$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByTitle($module_srl, "Front Page"));
+						else
+							$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByAlias($module_srl, $entry));
+					}
+					$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+				}
+				else
+				{
+					$this->_loadSidebarTreeMenu($module_srl, $document_srl);
+				}
+			}
+		}
+		
+		/*
+		* @brief Generate Breadcrumbs
+		* 
+		*/
+		function getBreadCrumbs($document_srl)
+		{
+			// get Breadcrumbs menu
+			$oWikiModel = &getModel("wiki");
+			$menu_breadcrumbs = $oWikiModel->getBreadcrumbs($document_srl,$this->list);
+			Context::set('breadcrumbs',$menu_breadcrumbs);
 		}
 }
 ?>
