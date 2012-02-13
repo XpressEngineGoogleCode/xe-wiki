@@ -624,3 +624,45 @@ h3 a, h3 a:hover, h3 a:active, h3 a:hover, h3 a:focus
 {
 	float: right;
 }
+
+/*
+* search button set
+*/
+#xeWikiSearch {
+	overflow: hidden;
+	background: url(../img/search_div.png) no-repeat left transparent;
+}
+
+#xeWikiSearchText {
+	float: left;
+	padding: 0;
+	margin: 8px;
+	width: 150px;
+	border:0;
+	overflow: hidden;
+	background-color: transparent;
+	outline: none;
+}
+
+#xeWikiSearchButton {
+	float:left;
+	background: url('../img/search_button.png') 0 0 no-repeat transparent;
+	border: 0;
+	margin-top: 8px;
+	width: 16px;
+	height: 16px;
+}
+
+#xeWikiSearchButton:hover {
+	background: url('../img/search_button.png') -16px 0 no-repeat transparent;
+	cursor: pointer;
+}
+
+#xeWikiSearchButton:focus {
+	background: url('../img/search_button.png') -16px 0 no-repeat transparent;
+	outline: none;
+}
+
+#xeWikiSearchButton:active {
+	outline: none;
+}

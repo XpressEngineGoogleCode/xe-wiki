@@ -12,6 +12,7 @@ function viewHistory(history_srl) {
 var simpleTreeCollection;
 var leftWidth;
 var docHeight;
+var marginRight = 50;
 var titleDivShowHideTree = new Array();
 
 function Tree(){
@@ -101,10 +102,10 @@ function resizeDiv(docHeight)
 	}
 	else
 	{
-		rightWidth = jQuery(document).width()-leftWidth-30;
+		rightWidth = jQuery(document).width()-leftWidth-marginRight;
 	}
 	leftWidth += jQuery("div.wiki").position().left;
-	rightWidth = jQuery("div.wiki").width()-jQuery("#leftSideTreeList").width()-30;
+	rightWidth = jQuery("div.wiki").width()-jQuery("#leftSideTreeList").width()-marginRight;
     jQuery("#content_Body").width(rightWidth);
 	 
 	if( jQuery("#leftSideTreeList").width() > 1 )
@@ -198,7 +199,7 @@ jQuery(document).ready(function(){
 			jQuery("#showHideTree").animate({
 				left: '-='+(slideWidth-7)
 				}, 200, function() {
-				jQuery("#content_Body").width(jQuery("div.wiki").width()-30);
+				jQuery("#content_Body").width(jQuery("div.wiki").width()-marginRigh);
 				jQuery("#showHideTree").css('background-position', "-13px 0px");
 				jQuery("#showHideTree").attr("title",titleDivShowHideTree[1]);
 			});

@@ -254,5 +254,71 @@
 			}
 			return $menu_breadcrumbs;
 		}
+		
+		/**
+		* Retrieves a list of all XE Wikimodules
+		*/
+        function getModuleList($add_extravars = false)
+        {
+            $args->sort_index = "module_srl";
+            $args->page = 1;
+            $args->list_count = 200;
+            $args->page_count = 10;
+            $args->s_module_category_srl = Context::get('module_category_srl');
+
+            $output = executeQueryArray('wiki.getManualList', $args);
+            ModuleModel::syncModuleToSite($output->data);
+
+            if(!$add_extravars){
+                    return  $output->data;
+            }
+
+            $oModuleModel = &getModel('module');
+
+            foreach($output->data as $module_info){
+                    $extra_vars = $oModuleModel->getModuleExtraVars($module_info->module_srl);
+                    foreach($extra_vars[$module_info->module_srl] as $k=>$v){
+                            $module_info->{$k} = $v;
+                    }
+            }
+
+            return  $output->data;
+        }
+		
+		/**
+		* Searches through documents for the existence of a certain string
+		*/
+        function search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page= 10)
+        {
+            //$oLuceneModule = &getModule('lucene');
+
+            if( !isset($oLuceneModule) ){
+                    //if nlucene not installed we fallback to IS (integrated search module)
+                    return $this->_is_search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page);
+            }
+
+            return $this->_lucene_search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page);
+        }
+		
+		/**
+		* Searches through documents for the existence of a certain string
+		*
+		* Used for XE Wiki search textbox when nLucene is not installed.
+		*/
+        function _is_search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page= 10)
+        {
+            $oDocumentModel = &getModel('document');
+
+            $obj = null;
+            $obj->module_srl = array($target_module_srl);
+            $obj->page = $page;
+            $obj->list_count = $items_per_page;
+            $obj->exclude_module_srl = '0';
+            $obj->sort_index = 'module';
+            //$obj->order_type = 'asc';
+            $obj->search_keyword = $is_keyword;
+            $obj->search_target = $search_target;
+            return $oDocumentModel->getDocumentList($obj);
+        }
 	}
 ?>
