@@ -40,15 +40,14 @@
 	</div>
 	
         <div class="infoView">
+		<span><a class="buttonOfficial" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">New Document</a></span>
 		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">Front Page</a></span>
 		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a></span>
 		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a></span>
         </div>
     </div>
     
-    <!--@if(isset($module_info->with_tree) && $module_info->with_tree)-->
 	<!--#include("left_side_tree_list.html")-->
-    <!--@end-->
     <div id="content_Body">
 	<!--@if($oDocument && $oDocument->isExists())-->
 	<div class="wikiRead">

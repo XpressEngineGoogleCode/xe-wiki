@@ -684,6 +684,7 @@ class wikiView extends wiki
 		function getLeftMenu()
 		{
 			$oWikiModel = &getModel("wiki");
+			$oDocumentModel = &getModel("document");
 			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
 			{
 				$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
@@ -723,6 +724,105 @@ class wikiView extends wiki
 			$oWikiModel = &getModel("wiki");
 			$menu_breadcrumbs = $oWikiModel->getBreadcrumbs($document_srl,$this->list);
 			Context::set('breadcrumbs',$menu_breadcrumbs);
+		}
+		
+		/**
+		* @brief View dor displaying search results
+		*/
+		function dispWikiSearchResults()
+		{
+			$oWikiModel = &getModel('wiki');
+			$oDocumentModel = &getModel('document');
+			$oModuleModel = &getModel('module');
+
+			$moduleList = $oWikiModel->getModuleList(true);
+			$moduleList = $this->_sortArrayByKeyDesc($moduleList, 'search_rank');
+			Context::set('module_list', $moduleList);
+
+			$target_mid = $this->module_info->module_srl;
+			$is_keyword = Context::get("search_keyword");
+
+			$this->_searchKeyword($target_mid, $is_keyword);
+
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
+			{
+				$this->getLeftmenu();
+			}
+			$this->setTemplateFile('document_search');
+		}
+		
+		/**
+		* @brief Sorts array descending by key
+		* // TODO See if can be removed and replaced with a query
+		*/
+		function _sortArrayByKeyDesc($object_array, $key ){
+			$key_array = array();
+			foreach($object_array as $obj ){
+					$key_array[$obj->{$key}] = $obj;
+			}
+
+			krsort($key_array);
+
+			$result = array();
+			foreach($key_array as $rank => $obj ){
+					$result[] = $obj;
+			}
+			return $result;
+		}
+		
+		/**
+		* @brief Adds info to document - user friendly url and others
+		* for pretty displaying in search results
+		* // TODO See if it can be replaced / removed
+		*/
+		function _resolveDocumentDetails($oModuleModel, $oDocumentModel, $doc){
+
+			$entry = $oDocumentModel->getAlias($doc->document_srl);
+
+			$module_info = $oModuleModel->getModuleInfoByDocumentSrl($doc->document_srl);
+			$doc->browser_title = $module_info->browser_title;
+			$doc->mid = $module_info->mid;
+
+
+			if ( isset($entry) ){
+					$doc->entry = $entry;
+			}else{
+					$doc->entry = "bugbug";
+			}
+		}
+
+		/**
+		* @brief Helper method for search
+		*/
+		function _searchKeyword($target_mid, $is_keyword){
+			$page =  Context::get('page');
+			if (!isset($page)) $page = 1;
+
+			$search_target = Context::get('search_target');
+			if(isset($search_target)){
+					if ($search_target == 'tag') $search_target = 'tags';
+			}
+			$oWikiModel = &getModel('wiki');
+			$oModuleModel = &getModel('module');
+			$oDocumentModel = &getModel('document');
+
+
+			$output = $oWikiModel->search($is_keyword, $target_mid, $search_target, $page, 10);
+
+			if($output->data)
+			foreach($output->data as $doc){
+					$this->_resolveDocumentDetails($oModuleModel, $oDocumentModel, $doc);
+			}
+
+			Context::set('document_list', $output->data);
+			Context::set('total_count', $output->total_count);
+			Context::set('total_page', $output->total_page);
+
+			Context::set('page', $page);
+			Context::set('page_navigation', $output->page_navigation);
+
+			return $output;
 		}
 }
 ?>

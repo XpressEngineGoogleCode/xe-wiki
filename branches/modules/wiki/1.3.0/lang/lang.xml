@@ -243,4 +243,40 @@
 		<value xml:lang="tr"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
 		<value xml:lang="vi"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
 	</item>
+	<item name="xewiki_no_results">
+		<value xml:lang="ko"><![CDATA[No results found for your querry.]]></value>
+		<value xml:lang="en"><![CDATA[No results found for your querry.]]></value>
+		<value xml:lang="jp"><![CDATA[No results found for your querry.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[No results found for your querry.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[No results found for your querry.]]></value>
+		<value xml:lang="tr"><![CDATA[No results found for your querry.]]></value>
+		<value xml:lang="vi"><![CDATA[No results found for your querry.]]></value>
+	</item>
+	<item name="search_results">
+		<value xml:lang="ko"><![CDATA[Search results]]></value>
+		<value xml:lang="en"><![CDATA[Search results]]></value>
+		<value xml:lang="jp"><![CDATA[Search results]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Search results]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Search results]]></value>
+		<value xml:lang="tr"><![CDATA[Search results]]></value>
+		<value xml:lang="vi"><![CDATA[Search results]]></value>
+	</item>
+	<item name="too_many_results">
+		<value xml:lang="ko"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+		<value xml:lang="en"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+		<value xml:lang="jp"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+		<value xml:lang="tr"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+		<value xml:lang="vi"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+	</item>
+	<item name="results_number">
+		<value xml:lang="ko"><![CDATA[ results match your querry]]></value>
+		<value xml:lang="en"><![CDATA[ results match your querry]]></value>
+		<value xml:lang="jp"><![CDATA[ results match your querry]]></value>
+		<value xml:lang="zh-CN"><![CDATA[ results match your querry]]></value>
+		<value xml:lang="zh-TW"><![CDATA[ results match your querry]]></value>
+		<value xml:lang="tr"><![CDATA[ results match your querry]]></value>
+		<value xml:lang="vi"><![CDATA[ results match your querry]]></value>
+	</item>
 </lang>

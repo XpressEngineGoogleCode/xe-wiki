@@ -1,19 +1,15 @@
 <div id="leftSideTreeList">
-    <div class="leftSearchForm">
-	<form action="{getUrl()}" method="get" class="wikiSearchForm">
-		<input type="hidden" name="act" value="" />
-	    <input type="hidden" name="mid" value="{$mid}" />
-	    <input type="hidden" name="vid" value="{$vid}" />
-	    <input type="text" class="inputText" name="entry" />
-	    <br />
-	    <span class="buttonOfficial"><input type="submit" value="{$lang->cmd_move}" onclick="jQuery('.leftSearchForm[name=act]').value('');" /></span>
-	    <!--@if($grant->manager)-->
-	    <span class="buttonOfficial"><input type="button" onclick="location.href='{getUrl('act','dispWikiAdminInsertWiki')}';return false;" value="{$lang->cmd_setup}" /></span>
-	    <!--@end-->
-	</form>
-	<span id="wdth"></span>
-    </div>
-    
+	<div id="xeWikiSearch">
+		<form action="{getUrl('mid', $mid, 'search_keyword', $search_keyword, 'act', 'dispWikiSearchResults', 'vid', $vid)}" method="get" >
+			<input type="hidden" name="search_target" value="title_content" />
+			<input type="hidden" name="act" value="dispWikiSearchResults" />
+            <input type="hidden" name="error_return_url" value="" />
+
+			<input id="xeWikiSearchText" type="text" name="search_keyword" value="{$search_keyword}" class="xeDocsInputText" />
+			<input id="xeWikiSearchButton" type="submit" value="" title="{$lang->Search}" />
+		</form>
+	</div>
+	
     <div class="clearAll"></div>
     {@ $oDocumentModel = &getModel("document");}
     <!--@if($module_info->menu_style == 'classic')-->
