@@ -171,23 +171,14 @@
 		<value xml:lang="tr"><![CDATA[Markup type]]></value>
 		<value xml:lang="vi"><![CDATA[Markup type]]></value>
 	</item>
-	<item name="wiki_markup">
-		<value xml:lang="ko"><![CDATA[Wiki markup]]></value>
-		<value xml:lang="en"><![CDATA[Wiki markup]]></value>
-		<value xml:lang="jp"><![CDATA[Wiki markup]]></value>
-		<value xml:lang="zh-CN"><![CDATA[Wiki markup]]></value>
-		<value xml:lang="zh-TW"><![CDATA[Wiki markup]]></value>
-		<value xml:lang="tr"><![CDATA[Wiki markup]]></value>
-		<value xml:lang="vi"><![CDATA[Wiki markup]]></value>
+	<item name="googlecode_markup">
+		<value xml:lang="en"><![CDATA[Google Code Wiki markup]]></value>
 	</item>
-	<item name="html_markup">
-		<value xml:lang="ko"><![CDATA[HTML markup]]></value>
-		<value xml:lang="en"><![CDATA[HTML markup]]></value>
-		<value xml:lang="jp"><![CDATA[HTML markup]]></value>
-		<value xml:lang="zh-CN"><![CDATA[HTML markup]]></value>
-		<value xml:lang="zh-TW"><![CDATA[HTML markup]]></value>
-		<value xml:lang="tr"><![CDATA[HTML markup]]></value>
-		<value xml:lang="vi"><![CDATA[HTML markup]]></value>
+	<item name="mediawiki_markup">
+		<value xml:lang="en"><![CDATA[MediaWiki markup]]></value>
+	</item>	
+	<item name="xe_wiki_markup">
+		<value xml:lang="en"><![CDATA[XE Wiki markup]]></value>
 	</item>
 	<item name="about_markup_type">
 		<value xml:lang="ko"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>

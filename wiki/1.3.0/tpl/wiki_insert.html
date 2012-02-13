@@ -54,8 +54,9 @@
         <th scope="row"><div>{$lang->markup_type}</div></th>
         <td>
             <select name="markup_type">
-                <option value="wiki_markup" <!--@if($module_info->markup_type=='wiki_markup')-->selected="selected"<!--@end--> >{$lang->wiki_markup}</option>
-                <option value="html_markup" <!--@if($module_info->markup_type!='wiki_markup')-->selected="selected"<!--@end--> >{$lang->html_markup}</option>
+				<!--@foreach($wiki_markup_list as $markup)-->
+                <option value="{$markup}" <!--@if($module_info->markup_type==$markup)-->selected="selected"<!--@end--> ><!--@ echo $lang->{$markup}; --><!--@end--></option>
+				<!--@end-->
             </select>
             <p>{$lang->about_markup_type}</p>
         </td>
