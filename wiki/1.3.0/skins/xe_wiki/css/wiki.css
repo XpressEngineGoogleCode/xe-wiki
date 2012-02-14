@@ -452,5 +452,9 @@ a.buttonOfficial a{ _vertical-align:top;}
 .wiki a.exists { text-decoration:underline; color:green; }
 .wiki a.notexist { text-decoration:none; border-bottom:1px dotted #EE0000; color:#EE0000; }
 
-.code { background-color: #EEE; max-width:70em; padding:5px; }
+/*
+.code { background-color: #EEE; max-width:70em; padding:5px; overflow-x: auto; }
 .inline_code { font-family: Courier New; display:inline; }
+*/
+
+.prettyprint { overflow-x: auto;}

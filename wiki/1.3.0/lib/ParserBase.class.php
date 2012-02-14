@@ -77,7 +77,7 @@ class ParserBase {
 		$this->text = preg_replace_callback($regex_find_singleline_multiline_code    , array($this, "_parseInlineCodeBlock"), $this->text);	
 		$this->batch_count++;
 		$this->text = preg_replace_callback("/
-								[^" . $this->typeface_symbols["inline_code"] . "]" . $this->typeface_symbols["multiline_code_open"] . "	# Starts with three braces, not preceded by single line code symbol
+								(?<![" . $this->typeface_symbols["inline_code"] . "])" . $this->typeface_symbols["multiline_code_open"] . "	# Starts with three braces, not preceded by single line code symbol
 								([\n]*)		# Followed by one or more newlines
 								(.+?)		# One or more characters (including line breaks, see s modifier)
 								([\n]*)		# Followed by one or more newlines
@@ -192,7 +192,7 @@ class ParserBase {
 	protected function parsePragmas(){
 		// Replace #summary
 		// #summary Summries are short descriptions of an article
-		$this->text = preg_replace("/^#summary(.*)/m"    , "<i>$1</i>", $this->text);		
+		$this->text = preg_replace("/^#summary[ ]?(.*)/m"    , "<i>$1</i>", $this->text);		
 	}
 
 	/**
@@ -212,13 +212,71 @@ class ParserBase {
 	protected function parseLinks(){
 		// Replace links
 		// [https://my.link Click here]
+//		$this->text = preg_replace("/
+//								\[		# Starts with bracket
+//								([^ ]+)  # Text without spaces
+//								[ ]		# Space
+//								(.*)	# Any character
+//								\]		# Ends with bracket
+//								/x"    , "<a href='$1'>$2</a>", $this->text);		
+		
+		// Find internal links given as CamelCase words
 		$this->text = preg_replace("/
-								\[		# Starts with bracket
-								([^ ]+)  # Text without spaces
-								[ ]		# Space
-								(.*)	# Any character
-								\]		# Ends with bracket
-								/x"    , "<a href='$1'>$2</a>", $this->text);		
+								(
+								(?<!			# Doesn't begin with ..
+									( 
+									[!]			#   .. a ! (these need to be escaped)
+									|			#   or
+									[[]			#   .. a [ (these will be treated later)
+									)
+								)	
+								(				# Sequence of letters that ..
+									[A-Z]	    # Start with an uppercase letter
+									[a-z0-9]+	# Followed by at least one lowercase letter
+								){2,}			# Repeated at least two times
+								)	
+								/x", "<a href=$1>$1</a>", $this->text);
+		// <a href=$1>$1</a>
+		
+		
+		// Find internal links given between [brackets]
+		//	- can contain description [myLink description that can have many words]
+		//	- can link to local content [myLink#local_anchor and some description maybe]
+		// Also catches external links
+		// TODO treat images separately
+		$this->text = preg_replace("/
+									[[]				# Starts with [
+									([^#]+?)		# Followed by any word
+									([#](.*?))?		# Followed by an optional group that starts with #
+									([ ](.*?))?		# Followed by an optional group that starts with a space
+									[]]				# Ends with ]
+								/xe", "'<a href=$1$2>' . ('$5' ? '$5' : '$1') . '</a>'", $this->text);
+		
+		// Replace image URLs with img tags
+		/*
+		$this->text = preg_replace("#
+									(https?|ftp|file)
+									://
+									[^ ]*?
+									(.gif|.png|.jpe?g)
+									#x", "<img src=$0 />", $this->text);
+		 * */
+		
+		// [-A-Z0-9+&@\#/%?=~_|!:,.;]*[A-Z0-9+&@\#/%=~_|]
+		
+		
+		
+		
+		
+		
+		// Internal links
+		// Between [ and ] or automatic
+		// Can be
+		//		- simple: ThisIsAWikiWord so it will be linked
+		//		- between brackets [Mypage] or [Mypage | Description time]
+		//			also [Main page] and [Main p age | wassup] -> replace space with underscore
+		//		- with local anchor [MyPage#Introduction] or [MyPage#How_you-doing | How you doin?]
+		
 	}
 	
 	
@@ -263,9 +321,6 @@ class ParserBase {
 		
 		$current_list_indent = substr($list, 0, $i);
 		
-		// Add block tags
-		$list = '<' . $list_type . '>'. $list . '</' . $list_type . '>';
-		
 		// Remove indenting for current indentation level
 		$regex = '/^'. trim($current_list_indent) .'(.*)/m';
 		$list = preg_replace($regex, '$1', $list);
@@ -275,6 +330,9 @@ class ParserBase {
 		$list = preg_replace($regex, '<li>$1</li>', $list);
 		$list = str_replace('@', ' ', $list);
 
+		// Add block tags
+		$list = '<' . $list_type . '>'. $list . '</' . $list_type . '>';
+		
 		return $list;
 	}
 	
@@ -285,7 +343,7 @@ class ParserBase {
 		$matches = array();
 		$list_finder_regex = "/ (
 						  (
-						   [\r]?[\n]?
+						   [\r]?[\n]+
 						   [ ]+	# At least one space
 						   [*#]	# Star or #
 						   (.+)	# Any number of characters
