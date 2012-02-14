@@ -123,7 +123,7 @@
 			<!--@if($oDocument->isExists()&&$act!='dispWikiEditPage')-->
 			    <a class="bn" href="{getUrl('act','dispWikiEditPage','entry',$entry)}"><span>{$lang->cmd_edit}</span></a>
 			<!--@end-->
-			<!--@if($oDocument->isExists()&&$grant->delete_document && $oDocument->get('title')!='Front Page')-->
+			<!--@if($oDocument->isExists() && $grant->delete_document)-->
 			    <a class="bn" href="#" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;"><span>{$lang->cmd_delete}</span></a>
 			<!--@end-->
 			<!--@if($use_history != 'N')-->

@@ -50,7 +50,7 @@
 
 			// Modified if it already exists
 			if($oDocument->isExists() && $oDocument->document_srl == $obj->document_srl) {
-				if($oDocument->get('title')=='Front Page') $obj->title = 'Front Page';
+				//if($oDocument->get('title')=='Front Page') $obj->title = 'Front Page';
 				$output = $oDocumentController->updateDocument($oDocument, $obj);
 
 				// Have been successfully modified the hierarchy/ alias change
@@ -200,7 +200,7 @@
 
 			$oDocument = $oDocumentModel->getDocument($document_srl);
 			if(!$oDocument || !$oDocument->isExists()) return new Object(-1,'msg_invalid_request');
-			if($oDocument->get('title')=='Front Page') return new Object(-1,'msg_invalid_request');
+			//if($oDocument->get('title')=='Front Page') return new Object(-1,'msg_invalid_request');
 
 			$output = $oDocumentController->deleteDocument($oDocument->document_srl);
 			if(!$output->toBool()) return $output;

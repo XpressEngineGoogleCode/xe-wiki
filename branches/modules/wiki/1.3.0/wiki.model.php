@@ -80,13 +80,18 @@
 			if(!$output->data || !$output->toBool()) return array();
 
 			$list = array();
-			$root_node = null;
-			foreach($output->data as $node) {
-				if($node->title == 'Front Page') {
-					$root_node = $node;
-					$root_node->parent_srl = 0;
+			$root = $this->getRootDocument($module_srl);
+			$root_node = $root;
+			$root_node->parent_srl = 0;
+			foreach($output->data as $node)
+			{
+				if($node->document_srl == $root_node->document_srl)
+				{
+					//$root_node = $node;
+					//$root_node->parent_srl = 0;
 					continue;
-				} 
+				}
+				
 				unset($obj);
 				$obj->parent_srl = (int)$node->parent_srl;
 				$obj->document_srl = (int)$node->document_srl;
@@ -109,7 +114,33 @@
 			$this->getTreeToList($tree[$root_node->document_srl]->childs, $result,1);
 			return $result;
 		}
-
+		
+		function getRootDocument($module_srl)
+		{
+			$docs_list = $this->readWikiTreeCache($module_srl);
+			$min = -1;
+			$selected = 0;
+			foreach ($docs_list as $key => $node) 
+			{
+				if($node->parent_srl == 0)
+				{
+					if ($min < 0)
+					{
+						$min = (int)$node->document_srl;
+						$selected = $key;
+					}
+					else
+					{
+						if ((int)$node->document_srl < $min)
+						{
+							$min = (int)$node->document_srl;
+							$selected = $key;
+						}
+					}
+				}
+			}
+			return $docs_list[$selected];
+		}
 
 		/**
 		* @brief Load previous / next article
@@ -247,7 +278,14 @@
 		{
 			$breadcrumbs = array_reverse($this->createBreadcrumbsList($document_srl, $list));
 			$uri = Context::getRequestUri().Context::get("mid")."/";
-			$menu_breadcrumbs = "<a href='" . $uri . "'>Front Page</a>";
+			//$menu_breadcrumbs = "<a href='" . $uri . "'>Front Page</a>";
+			$oModuleModel = &getModel("module");
+			$oDocumentModel = &getModel("document");
+			$module_srl = $oModuleModel->getModuleSrlByMid(Context::get("mid"));
+			$root = $this->getRootDocument($module_srl[0]);
+			$document_srl = $root->document_srl;
+			$entry = $oDocumentModel->getAlias($document_srl);
+			$menu_breadcrumbs = "<a href='" . $uri . "entry/".$entry."'>".$root->title."</a>";
 			foreach($breadcrumbs as $key=>$value)
 			{
 				$menu_breadcrumbs .= " -> <a href='" . $uri . "entry/$value'>" . $key . "</a>";
