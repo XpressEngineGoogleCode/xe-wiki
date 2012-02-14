@@ -33,7 +33,7 @@ class MediaWikiParser extends ParserBase {
 		// Escape text right after <nowiki/>
 		$this->batch_count++;
 		$this->text = preg_replace_callback("~
-												[<]nowiki[/][>]
+												[<]nowiki[ ]?[/][>]
 												([^ ]*)
 											~x", array($this, "_escapeBlock"), $this->text);
 	}	
