@@ -118,7 +118,7 @@
 
 				foreach($output->data as $key => $doc_alias)
 				{
-					if($doc_alias->alias_title == 'Front Page') continue;
+					//if($doc_alias->alias_title == 'Front Page') continue;
 					foreach($omitting_characters as $key => $char)
 					{	
 						if(strpos($doc_alias->alias_title, $char)) return true;
@@ -152,7 +152,7 @@
 				foreach($output->data as $key => $doc_alias)
 				{	   
 					$omitting_characters = array('&','//', ',', ' ');
-					if($doc_alias->alias_title == 'Front Page') continue;
+					//if($doc_alias->alias_title == 'Front Page') continue;
 					foreach($omitting_characters as $key => $char)
 					{	   
 						if(strpos($doc_alias->alias_title, $char)) 

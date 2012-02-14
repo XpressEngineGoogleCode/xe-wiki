@@ -89,7 +89,7 @@ class wikiView extends wiki
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->getLeftmenu();
+				$this->getLeftMenu();
 			}
 			
 			$this->setTemplateFile('histories');
@@ -138,7 +138,7 @@ class wikiView extends wiki
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->getLeftmenu();
+				$this->getLeftMenu();
 			}			
 			
 			$this->setTemplateFile('write_form');
@@ -190,7 +190,7 @@ class wikiView extends wiki
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->getLeftmenu();
+				$this->getLeftMenu();
 			}
 			
 			$this->setTemplateFile('title_index');
@@ -207,7 +207,7 @@ class wikiView extends wiki
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->getLeftmenu();
+				$this->getLeftMenu();
 			}
 						
 			$this->setTemplateFile('tree_list');
@@ -224,7 +224,7 @@ class wikiView extends wiki
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->getLeftmenu();
+				$this->getLeftMenu();
 			}
 			
 			$this->setTemplateFile('modify_tree');
@@ -279,8 +279,9 @@ class wikiView extends wiki
 
 			if (!$document_srl) {
 				if (!$entry) {
-					$entry = "Front page";
-					$entry = $oDocumentModel->getAlias($oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry));
+					$root = $oWikiModel->getRootDocument($this->module_info->module_srl);
+					$document_srl = $root->document_srl;
+					$entry = $oDocumentModel->getAlias($document_srl);
 					Context::set('entry', $entry);
 				}
 				$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
@@ -315,7 +316,7 @@ class wikiView extends wiki
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->getLeftmenu();
+				$this->getLeftMenu();
 			}
 			
 			// View posts by checking permissions or display an error message if you do not have permission
@@ -428,7 +429,7 @@ class wikiView extends wiki
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->getLeftmenu();
+				$this->getLeftMenu();
 			}
 			
 			$this->setTemplateFile('comment_form');
@@ -692,28 +693,37 @@ class wikiView extends wiki
 		{
 			$oWikiModel = &getModel("wiki");
 			$oDocumentModel = &getModel("document");
+			$module_srl=$this->module_info->module_srl;
 			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
 			{
-				$this->list = $oWikiModel->loadWikiTreeList($this->module_srl);
+				$this->list = $oWikiModel->loadWikiTreeList($module_srl);
 				Context::set('list',$this->list);
 			}
 			else
 			{
-				$module_srl=$this->module_info->module_srl;
-				$oDocumentModel = &getModel('document');
+				
+				$document_srl = Context::get("document_srl");
+				$entry = Context::get("entry");
 				if(!$document_srl) {
 					if (!$entry) {
-						$entry = "Front Page";
+						$root = $oWikiModel->getRootDocument($module_srl);
+						$document_srl = $root->document_srl;
+						$entry = $oDocumentModel->getAlias($document_srl);
 						Context::set('entry', $entry);
 					}
 					else
 					{
 						if(is_null($oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry)))
-							$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByTitle($module_srl, "Front Page"));
+						{
+							$root = $oWikiModel->getRootDocument($module_srl);
+							$document_srl = $root->document_srl;
+							$this->_loadSidebarTreeMenu($module_srl, $document_srl);
+						}
 						else
 							$this->_loadSidebarTreeMenu($module_srl, $oDocumentModel->getDocumentSrlByAlias($module_srl, $entry));
 					}
 					$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+					$this->_loadSidebarTreeMenu($module_srl, $document_srl);
 				}
 				else
 				{
@@ -755,7 +765,7 @@ class wikiView extends wiki
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
 			{
-				$this->getLeftmenu();
+				$this->getLeftMenu();
 			}
 			$this->setTemplateFile('document_search');
 		}

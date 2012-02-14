@@ -8,17 +8,12 @@
 <input type="hidden" name="content" value="{$oDocument->getContentText()}" />
 <!--@end-->
 <input type="hidden" name="document_srl" value="{$document_srl}" />
-<!--@if($oDocument->isExists()&&$oDocument->get('title')=='Front Page')-->
-<input type="hidden" name="title" value="{$oDocument->get('title')}" />
-<!--@end-->
 
 <div class="wikiWriteHeader">
-    <!--@if($oDocument->get('title')!='Front Page')-->
     <div class="title">
 	    <em>Title:</em>
 	    <input type="text" name="title" value="{$oDocument->get('title')}" class="inputTypeText" />
     </div>
-    <!--@end-->
     <div class="alias">
 	    <em>Alias:</em>
 	    {getFullUrl()}
