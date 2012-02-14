@@ -343,7 +343,7 @@ class ParserBase {
 		$matches = array();
 		$list_finder_regex = "/ (
 						  (
-						   [\r]?[\n]+
+						   [\r]?[\n]?
 						   [ ]+	# At least one space
 						   [*#]	# Star or #
 						   (.+)	# Any number of characters

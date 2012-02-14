@@ -143,4 +143,89 @@ EXPECTED;
 		$output = $this->wikiParser->parse("~~as well as _this_ way round~~");
 		$this->assertEquals("<span style='text-decoration:line-through'>as well as <em>this</em> way round</span>", $output);		
 	}
+	
+	/**
+	 * Headings
+	 */
+	public function testHeadings(){
+		$output = $this->wikiParser->parse("= Heading 1 =");
+		$this->assertEquals("<h1>Heading 1</h1>", $output);
+		
+		$output = $this->wikiParser->parse("== Heading 2 ==");
+		$this->assertEquals("<h2>Heading 2</h2>", $output);
+		
+		$output = $this->wikiParser->parse("=== Heading 3 ===");
+		$this->assertEquals("<h3>Heading 3</h3>", $output);
+		
+		$output = $this->wikiParser->parse("==== Heading 4 ====");
+		$this->assertEquals("<h4>Heading 4</h4>", $output);
+		
+		$output = $this->wikiParser->parse("===== Heading 5 =====");
+		$this->assertEquals("<h5>Heading 5</h5>", $output);		
+		
+		$output = $this->wikiParser->parse("====== Heading 6 ======");
+		$this->assertEquals("<h6>Heading 6</h6>", $output);		
+	}
+	
+	/**
+	 * Dividers - four ore more dashes on a single line 
+	 */
+	public function testDividers(){
+		$output = $this->wikiParser->parse("----");
+		$this->assertEquals("<hr />", $output);
+		
+		$output = $this->wikiParser->parse("Random words and ---");
+		$this->assertEquals("Random words and ---", $output);
+		
+		$output = $this->wikiParser->parse("----------------------------------------");
+		$this->assertEquals("<hr />", $output);		
+	}
+	
+	/**
+	 * Lists http://code.google.com/p/support/wiki/WikiSyntax#Lists 
+	 */
+	public function testLists(){
+		$input_string = <<<HEREDOC
+The following is:
+  * A list
+  * Of bulleted items
+    # This is a numbered sublist
+    # Which is done by indenting further
+  * And back to the main bulleted list
+
+ * This is also a list
+ * With a single leading space
+ * Notice that it is rendered
+  # At the same levels
+  # As the above lists.
+ * Despite the different indentation levels
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$expected_output = <<<HEREDOC
+The following is:<ul>
+<li>A list</li>
+<li>Of bulleted items</li><ol>
+<li>This is a numbered sublist</li>
+<li>Which is done by indenting further</li></ol>
+<li>And back to the main bulleted list</li></ul>
+<ul>
+<li>This is also a list</li>
+<li>With a single leading space</li>
+<li>Notice that it is rendered</li><ol>
+<li>At the same levels</li>
+<li>As the above lists.</li></ol>
+<li>Despite the different indentation levels</li></ul>
+HEREDOC;
+		$expected_output = str_replace(chr(13), '', $expected_output);
+		$expected_output = preg_replace("/\n(.+)/", '<p>$1</p>', $expected_output);		
+		$this->assertEquals($expected_output, $output);
+
+		$output = $this->wikiParser->parse('How out * list in the middle of text');
+		$this->assertEquals("How about * list in the middle of text", $output);		
+		
+		$output = $this->wikiParser->parse('* One line list');
+		$this->assertEquals("<ul><li>One line list</li><ul>", $output);
+		
+
+	}
 }
