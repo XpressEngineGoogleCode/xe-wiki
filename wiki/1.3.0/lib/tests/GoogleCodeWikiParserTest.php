@@ -78,6 +78,69 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	public function testTypefaceCodeMultiline(){
 		$output = $this->wikiParser->parse("{{{code}}}");
 		$this->assertEquals("<pre class='prettyprint'>code</pre>", $output);
+		
+		$input_string = <<<INPUT
+{{{
+def fib(n):
+  if n == 0 or n == 1:
+    return n
+  else:
+    # This recursion is not good for large numbers.
+    return fib(n-1) + fib(n-2)
+}}}
+INPUT;
+		$output = $this->wikiParser->parse($input_string);
+		$expected_string = <<<EXPECTED
+<pre class='prettyprint'>def fib(n):<br />
+  if n == 0 or n == 1:<br />
+    return n<br />
+  else:<br />
+    # This recursion is not good for large numbers.<br />
+    return fib(n-1) + fib(n-2)</pre>
+EXPECTED;
+		$expected_string = str_replace(chr(13), '', $expected_string);
+		
+		$this->assertEquals($expected_string,$output);
 	}		
 
+	/**
+	 * superscript	^super^script
+	 */
+	public function testTypefaceSuperscript(){
+		$output = $this->wikiParser->parse("^super^script");
+		$this->assertEquals("<sup>super</sup>script", $output);
+	}			
+	
+	/**
+	 * subscript	,,sub,,script
+	 */
+	public function testTypefaceSubscript(){
+		$output = $this->wikiParser->parse(",,sub,,script");
+		$this->assertEquals("<sub>sub</sub>script", $output);
+	}				
+	
+	/**
+	 * strikeout ~~strikeout~~
+	 */
+	public function testTypefaceStrikeout(){
+		$output = $this->wikiParser->parse("~~strikeout~~");
+		$this->assertEquals("<span style='text-decoration:line-through'>strikeout</span>", $output);
+	}					
+	
+	/**
+	 * Mixed typeface styles 
+	 */
+	public function testTypefaceCombinations(){
+		$output = $this->wikiParser->parse("_*bold* in italics_");
+		$this->assertEquals("<em><strong>bold</strong> in italics</em>", $output);
+		
+		$output = $this->wikiParser->parse("*_italics_ in bold*");
+		$this->assertEquals("<strong><em>italics</em> in bold</strong>", $output);
+
+		$output = $this->wikiParser->parse("*~~strike~~ works too*");
+		$this->assertEquals("<strong><span style='text-decoration:line-through'>strike</span> works too</strong>", $output);
+		
+		$output = $this->wikiParser->parse("~~as well as _this_ way round~~");
+		$this->assertEquals("<span style='text-decoration:line-through'>as well as <em>this</em> way round</span>", $output);		
+	}
 }
