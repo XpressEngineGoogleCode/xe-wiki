@@ -17,9 +17,9 @@
 			</form>
 		<!--@else-->
             <!--@if($history)-->
-                {$history->content}
+                {nl2br($history->content)}
             <!--@else-->
-                {$oDocument->getContent()}
+                {nl2br($oDocument->getContent())}
             <!--@endif-->
 		<!--@end-->
 	</div>
