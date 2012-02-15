@@ -345,6 +345,16 @@ HEREDOC;
 		$output = $this->wikiParser->parse("If your link points to an image, it will get inserted as an image tag into the page: http://code.google.com/images/code_sm.png");
 		$this->assertEquals("If your link points to an image, it will get inserted as an image tag into the page: <img src=http://code.google.com/images/code_sm.png />", $output);
 		
+		$output = $this->wikiParser->parse("http://chart.apis.google.com/chart?chs=200x125&chd=t:48.14,33.79,19.77|83.18,18.73,12.04&cht=bvg&nonsense=something_that_ends_with.png");
+		$this->assertEquals("<img src=http://chart.apis.google.com/chart?chs=200x125&chd=t:48.14,33.79,19.77|83.18,18.73,12.04&cht=bvg&nonsense=something_that_ends_with.png />", $output);
+	}
+		
+	/**
+	 * Image links 
+	 */
+	public function testImg_WithLink(){
+		$output = $this->wikiParser->parse("[http://code.google.com/ http://code.google.com/images/code_sm.png]");
+		$this->assertEquals("<a href=http://code.google.com/><img src=http://code.google.com/images/code_sm.png /></a>", $output);
 	}
 	
 	

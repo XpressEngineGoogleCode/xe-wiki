@@ -175,7 +175,7 @@ class ParserBase {
 
 		// Replace italic
 		// _italics_ but not in_middle_of_word
-		$this->text = preg_replace("/ ". $this->typeface_symbols["italic"] . "(.+?)". $this->typeface_symbols["italic"] . " /x", "<em>$1</em>", $this->text);
+		$this->text = preg_replace("/(?<![^ \n*>])". $this->typeface_symbols["italic"] . "(.+?)". $this->typeface_symbols["italic"] . "/x", "<em>$1</em>", $this->text);
 		// Replace ^super^script
 		$this->text = preg_replace("/". $this->typeface_symbols["superscript"] . "(.+?)". $this->typeface_symbols["superscript"] . "/x", "<sup>$1</sup>", $this->text);
 		// Replace ,,sub,,script
