@@ -73,7 +73,7 @@ class ParserBase {
 		// {{{ This is some code }}}
 		// $text = preg_replace("/[^`]{{{(.+?)}}}/me"    , "'<span class=\'inline_code\'>' . htmlentities('$1') . '</span>'", $text);	
 		$this->batch_count++;
-		$regex_find_singleline_multiline_code = "/[^`]" . $this->typeface_symbols["multiline_code_open"] ."(.+?)" . $this->typeface_symbols["multiline_code_close"] ."/m";
+		$regex_find_singleline_multiline_code = "/(?<![`])" . $this->typeface_symbols["multiline_code_open"] ."(.+?)" . $this->typeface_symbols["multiline_code_close"] ."/m";
 		$this->text = preg_replace_callback($regex_find_singleline_multiline_code    , array($this, "_parseInlineCodeBlock"), $this->text);	
 		$this->batch_count++;
 		$this->text = preg_replace_callback("/
@@ -97,7 +97,7 @@ class ParserBase {
 	 * The purpose of this function is to skip parsing text inside code blocks
 	 */
 	private function _parseInlineCodeBlock(&$matches){
-		$this->escaped_blocks[] = '<span class=\'inline_code\'>' . htmlentities($matches[1]) . '</span>';
+		$this->escaped_blocks[] = '<tt>' . htmlentities($matches[1]) . '</tt>';
 		return "%%%" . $this->batch_count . "%%%";
 	}
 
