@@ -299,6 +299,7 @@ HEREDOC;
 	
 	/**
 	 * Internal link to page anchor 
+	 * TODO Make sure local anchors are automatically generated for headings
 	 */
 	public function testLinks_InternalLocalAnchor(){
 		$output = $this->wikiParser->parse("[WikiSyntax#Wiki-style_markup]");
@@ -307,5 +308,32 @@ HEREDOC;
 		$output = $this->wikiParser->parse("[WikiSyntax#Wiki-style_markup Read about style]");
 		$this->assertEquals("<a href=WikiSyntax#Wiki-style_markup>Read about style</a>", $output);
 	}
+	
+	/**
+	 * Links to issues and revisions
+	 * TODO: Setup a field in module admin where you can link wiki to GoogleCode projects, so that issues / revision links will still work 
+	 */
+	public function testLinks_IssuesAndRevisions(){
+		$this->markTestSkipped("Work in progress.");
+	}
+	
+	/**
+	 * External urls - plain links
+	 */
+	public function testLinks_ExternalsPlain(){
+		$output = $this->wikiParser->parse("Plain URLs such as http://www.google.com/ or ftp://ftp.kernel.org/ are automatically made into links.");
+		$this->assertEquals("Plain URLs such as <a href=http://www.google.com/>http://www.google.com/</a> or <a href=ftp://ftp.kernel.org/>ftp://ftp.kernel.org/</a> are automatically made into links.",$output);
+	}
+	
+	/**
+	 * External urls - bracket with description 
+	 */
+	public function testLinks_ExternalBracketsWithDescription(){
+		$output = $this->wikiParser->parse("You can also provide some descriptive text. For example, the following link points to the [http://www.google.com Google home page].");
+		$this->assertEquals("You can also provide some descriptive text. For example, the following link points to the <a href=http://www.google.com>Google home page</a>.", $output);
+		
+	}
+	
+	
 	
 }

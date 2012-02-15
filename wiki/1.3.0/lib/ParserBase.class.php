@@ -240,7 +240,13 @@ class ParserBase {
 		$this->text = preg_replace("/(!)(([A-Z][a-z0-9]+){2,})/x", '$2', $this->text);
 		
 		
-		// <a href=$1>$1</a>
+		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets
+		$this->text = preg_replace("#
+									(?<![[])
+									((https?|ftp|file)
+									://
+									[^ ]*)
+									#x", "<a href=$1>$1</a>", $this->text);		
 		
 		
 		// Find internal links given between [brackets]
@@ -264,7 +270,8 @@ class ParserBase {
 									[^ ]*?
 									(.gif|.png|.jpe?g)
 									#x", "<img src=$0 />", $this->text);
-		 * */
+		*/
+
 		
 		// [-A-Z0-9+&@\#/%?=~_|!:,.;]*[A-Z0-9+&@\#/%=~_|]
 		
