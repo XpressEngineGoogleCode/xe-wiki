@@ -7,14 +7,14 @@
 
 	class wikiModel extends module {
 		/**
-		* @brief 초기화
+		* @brief Initialization
 		**/
 		function init() {
 		    
 		}
 
 		/**
-		* @brief 계층구조 추출
+		* @brief Retrieve the Tree hierarchy
 		* document_category테이블을 이용해서 위키 문서의 계층 구조도를 그림
 		* document_category테이블에 등록되어 있지 않은 경우 depth = 0 으로 하여 신규 생성
 		**/
@@ -389,8 +389,7 @@
             $encodedParams = $this->getService()->encode($params);
             $searchResult = FileHandler::getRemoteResource($searchUrl."searchByMap", $encodedParams, 3, "POST", "application/json; charset=UTF-8", array(), array());
 
-            // 결과가 유효한지 확인
-            // Results confirm the validity of
+            // Validate the results
             if (!$searchResult && $searchResult != "null") {
                 $idList = array();
             } else {
@@ -402,7 +401,6 @@
             $documents = array();
             if (count($idList) > 0) {
                 $tmpDocuments = $oModelDocument->getDocuments($idList, false, false);
-                // 받아온 문서 목록을 루씬에서 반환한 순서대로 재배열
                 // Russineseo received a list of documents returned by rearranging the order
                 foreach($idList as $id) {
                     $documents['doc'.$id] = $tmpDocuments[$id];
