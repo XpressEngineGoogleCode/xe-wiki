@@ -236,6 +236,10 @@ class ParserBase {
 								){2,}			# Repeated at least two times
 								)	
 								/x", "<a href=$1>$1</a>", $this->text);
+		// Remove exclamation marks from CamelCase words
+		$this->text = preg_replace("/(!)(([A-Z][a-z0-9]+){2,})/x", '$2', $this->text);
+		
+		
 		// <a href=$1>$1</a>
 		
 		

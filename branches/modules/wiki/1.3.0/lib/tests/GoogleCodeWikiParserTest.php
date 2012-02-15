@@ -249,4 +249,52 @@ HEREDOC;
 		
 		$this->assertEquals($expected_output, $output);
 	}
+	
+	/**
+	 * Internal link, automatically convert camel case words to links 
+	 */
+	public function testLinks_InternalCamelCase(){
+		// Test CamelCase links
+		$output = $this->wikiParser->parse("WikiSyntax is identified and linked automatically.");
+		$this->assertEquals("<a href=WikiSyntax>WikiSyntax</a> is identified and linked automatically.", $output);
+	}
+	
+	/**
+	 * Internal links, denoted by square brackets
+	 */
+	public function testLinks_InternalBracketsSimple(){
+		// TODO Check (if possible) that brackets are replaced with links only if user is logged in. Otherwise, escape brackets.
+		$output = $this->wikiParser->parse("Wikipage is not identified, so if you have a page named [Wikipage] you need to link it explicitly.");
+		$this->assertEquals("Wikipage is not identified, so if you have a page named <a href=Wikipage>Wikipage</a> you need to link it explicitly.",$output);
+	}	
+	
+	/**
+	 * Internal links, denoted by square brackets. Contain description given through a space.
+	 */
+	public function testLinks_InternalBracketsWithDescription(){
+		$input_string = "If the WikiSyntax page is actually about reindeers, you can provide a
+						description, so that people know you are actually linking to a page on
+						[WikiSyntax reindeer flotillas].";
+		$input_string = str_replace(array(chr(13), chr(10), chr(9)), '', $input_string);
+		$expected_output = "
+						If the <a href=WikiSyntax>WikiSyntax</a> page is actually about reindeers, you can provide a
+						description, so that people know you are actually linking to a page on
+						<a href=WikiSyntax>reindeer flotillas</a>.";
+		$expected_output = str_replace(array(chr(13), chr(10), chr(9)), '', $expected_output);
+		
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}		
+	
+	/**
+	 * Internal links - escpae words in CamelCase
+	 */
+	public function testLinks_InternalEscapedCamelCase(){
+		$input_string = "If you want to mention !WikiSyntax without it being autolinked, use an exclamation mark to prevent linking.";
+		$expected_output = "If you want to mention WikiSyntax without it being autolinked, use an exclamation mark to prevent linking.";
+		
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}			
+	
 }
