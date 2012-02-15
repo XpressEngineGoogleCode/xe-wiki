@@ -288,4 +288,49 @@
 		<value xml:lang="tr"><![CDATA[Breadcrumbs]]></value>
 		<value xml:lang="vi"><![CDATA[Breadcrumbs]]></value>
 	</item>
+	<item name="new_document">
+		<value xml:lang="ko"><![CDATA[New Document]]></value>
+		<value xml:lang="en"><![CDATA[New Document]]></value>
+		<value xml:lang="jp"><![CDATA[New Document]]></value>
+		<value xml:lang="zh-CN"><![CDATA[New Document]]></value>
+		<value xml:lang="zh-TW"><![CDATA[New Document]]></value>
+		<value xml:lang="tr"><![CDATA[New Document]]></value>
+		<value xml:lang="vi"><![CDATA[New Document]]></value>
+	</item>
+	<item name="home_page">
+		<value xml:lang="ko"><![CDATA[Home page]]></value>
+		<value xml:lang="en"><![CDATA[Home page]]></value>
+		<value xml:lang="jp"><![CDATA[Home page]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Home page]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Home page]]></value>
+		<value xml:lang="tr"><![CDATA[Home page]]></value>
+		<value xml:lang="vi"><![CDATA[Home page]]></value>
+	</item>
+	<item name="histories">
+		<value xml:lang="ko"><![CDATA[Histories]]></value>
+		<value xml:lang="en"><![CDATA[Histories]]></value>
+		<value xml:lang="jp"><![CDATA[Histories]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Histories]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Histories]]></value>
+		<value xml:lang="tr"><![CDATA[Histories]]></value>
+		<value xml:lang="vi"><![CDATA[Histories]]></value>
+	</item>
+	<item name="wiki_search_title">
+		<value xml:lang="ko"><![CDATA[Wiki Search]]></value>
+		<value xml:lang="en"><![CDATA[Wiki Search]]></value>
+		<value xml:lang="jp"><![CDATA[Wiki Search]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Wiki Search]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Wiki Search]]></value>
+		<value xml:lang="tr"><![CDATA[Wiki Search]]></value>
+		<value xml:lang="vi"><![CDATA[Wiki Search]]></value>
+	</item>
+	<item name="write_form_alias">
+		<value xml:lang="ko"><![CDATA[Alias:]]></value>
+		<value xml:lang="en"><![CDATA[Alias:]]></value>
+		<value xml:lang="jp"><![CDATA[Alias:]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Alias:]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Alias:]]></value>
+		<value xml:lang="tr"><![CDATA[Alias:]]></value>
+		<value xml:lang="vi"><![CDATA[Alias:]]></value>
+	</item>
 </lang>

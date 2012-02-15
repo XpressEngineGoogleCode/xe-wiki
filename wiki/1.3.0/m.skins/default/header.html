@@ -51,8 +51,8 @@
 	<br />
         <div style="clear:left; margin-top: 13px; width:100%; text-align: center;">
 	    <div class="cm">
-			<a class="bn" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">New Document</a>
-			<a class="bn" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">Front Page</a>
+			<a class="bn" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a>
+			<a class="bn" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">{$lang->home_page}</a>
 			<a class="bn" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a>
 			<a class="bn" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a>
 	    </div>
@@ -127,7 +127,7 @@
 			    <a class="bn" href="#" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;"><span>{$lang->cmd_delete}</span></a>
 			<!--@end-->
 			<!--@if($use_history != 'N')-->
-			    <a class="bn" href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}"><span>Histories</span></a>
+			    <a class="bn" href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}"><span>{$lang->histories}</span></a>
 			<!--@end-->
 		    </div>
 		    <!--@else-->
