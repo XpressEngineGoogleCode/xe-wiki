@@ -68,7 +68,7 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testTypefaceCodeInline(){
 		$output = $this->wikiParser->parse("`code`");
-		$this->assertEquals("<span class='inline_code'>code</span>", $output);
+		$this->assertEquals("<tt>code</tt>", $output);
 	}	
 	
 
@@ -77,7 +77,7 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testTypefaceCodeMultiline(){
 		$output = $this->wikiParser->parse("{{{code}}}");
-		$this->assertEquals("<pre class='prettyprint'>code</pre>", $output);
+		$this->assertEquals("<tt>code</tt>", $output);
 		
 		$input_string = <<<INPUT
 {{{
@@ -357,6 +357,35 @@ HEREDOC;
 		$this->assertEquals("<a href=http://code.google.com/><img src=http://code.google.com/images/code_sm.png /></a>", $output);
 	}
 	
+	/**
+	 * Tables 
+	 */
+	public function testTables(){
+		$input_string = <<<HEREDOC
+|| *Year* || *Temperature (low)* || *Temperature (high)* ||
+|| 1900 || -10 || 25 ||
+|| 1910 || -15 || 30 ||
+|| 1920 || -10 || 32 ||
+|| 1930 || _N/A_ || _N/A_ ||
+|| 1940 || -2 || 40 ||
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<table border=1 cellspacing=0 cellpadding=5><p><tr><td> <strong>Year</strong> </td><td> <strong>Temperature (low)</strong> </td><td> <strong>Temperature (high)</strong> </td></tr></p><p><tr><td> 1900 </td><td> -10 </td><td> 25 </td></tr></p><p><tr><td> 1910 </td><td> -15 </td><td> 30 </td></tr></p><p><tr><td> 1920 </td><td> -10 </td><td> 32 </td></tr></p><p><tr><td> 1930 </td><td> <em>N/A</em> </td><td> <em>N/A</em> </td></tr></p><p><tr><td> 1940 </td><td> -2 </td><td> 40 </td></tr></p><p></table></p>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output, $output);
+	}
+	
+	/**
+	 * Escaping special HTML tags 
+	 */
+	public function testHTMLTagEscaping(){
+		$output = $this->wikiParser->parse("`<hr>`");
+		$this->assertEquals("<tt>&lt;hr&gt;</tt>", $output);
+		
+		$output = $this->wikiParser->parse("{{{<hr>}}}");
+		$this->assertEquals("<tt>&lt;hr&gt;</tt>", $output);		
+	}
 	
 	
 }
