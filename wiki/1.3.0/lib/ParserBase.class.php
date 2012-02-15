@@ -407,7 +407,7 @@ class ParserBase {
 		// Replace quotes
 		//	  Inferred by indentation
 		$this->text = preg_replace("/(
-							(([\n]+)	
+							(([\n])
 							[ ]	
 							(.+)	
 							)+

@@ -248,7 +248,7 @@ HEREDOC;
 		$output = $this->wikiParser->parse($input_string);
 		
 		$expected_output = <<<HEREDOC
-<p>Someone once said:<blockquote>  This sentence will be quoted in the future as the canonical example  of a quote that is so important that it should be visually separate  from the rest of the text in which it appears.</blockquote></p>
+<p>Someone once said:</p><p><blockquote>  This sentence will be quoted in the future as the canonical example  of a quote that is so important that it should be visually separate  from the rest of the text in which it appears.</blockquote></p>
 HEREDOC;
 		
 		$this->assertEquals($expected_output, $output);
