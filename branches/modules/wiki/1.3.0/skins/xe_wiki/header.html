@@ -22,7 +22,8 @@
 
     <div class="wikiInformation">
         <div class="infoView">
-            <span class="buttonOfficial"><a href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">Front Page</a></span>
+            <span><a class="buttonOfficial" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
+		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">{$lang->home_page}</a></span>
             <span class="buttonOfficial"><a href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a></span>
             <span class="buttonOfficial"><a href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a></span>
         </div>
@@ -93,7 +94,7 @@
                         <span class="buttonOfficial"><a href="#" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;">{$lang->cmd_delete}</a></span>
                     <!--@end-->
                     <!--@if($use_history != 'N')-->
-                        <span class="buttonOfficial"><a href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}">Histories</a></span>
+                        <span class="buttonOfficial"><a href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}">{$lang->histories}</a></span>
                     <!--@end-->
                 </div>
                 <!--@else-->

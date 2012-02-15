@@ -11,11 +11,11 @@
 
 <div class="wikiWriteHeader">
     <div class="title">
-	    <em>Title:</em>
+	    <em>{$lang->wiki_search_title}</em>
 	    <input type="text" name="title" value="{$oDocument->get('title')}" class="inputTypeText" />
     </div>
     <div class="alias">
-	    <em>Alias:</em>
+	    <em>{$lang->wiki_search_alias}</em>
 	    {getFullUrl()}
 	    <input type="text" name="alias" value="{$oDocument->get('alias')}" class="inputTypeText" />
     </div>
@@ -24,7 +24,6 @@
 	
     <div class="tag">
         {$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
-        <p />
     </div>
 
 	<div class="wikiNavigation">
