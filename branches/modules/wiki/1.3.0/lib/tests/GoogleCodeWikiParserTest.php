@@ -220,11 +220,15 @@ HEREDOC;
 		$expected_output = preg_replace("/\n(.+)/", '<p>$1</p>', $expected_output);		
 		$this->assertEquals($expected_output, $output);
 
-		$output = $this->wikiParser->parse('How out * list in the middle of text');
+		$output = $this->wikiParser->parse('How about * list in the middle of text');
 		$this->assertEquals("How about * list in the middle of text", $output);		
 		
-		$output = $this->wikiParser->parse('* One line list');
-		$this->assertEquals("<ul><li>One line list</li><ul>", $output);
+		$one_line_list = <<<HEREDOC
+Here\'s a one line list:
+ * One line list
+HEREDOC;
+		$output = $this->wikiParser->parse($one_line_list);
+		$this->assertEquals("Here\'s a one line list:<ul><p><li>One line list</li></ul></p>", $output);
 		
 
 	}
@@ -244,7 +248,7 @@ HEREDOC;
 		$output = $this->wikiParser->parse($input_string);
 		
 		$expected_output = <<<HEREDOC
-<p>Someone once said:<blockquote></p><p> This sentence will be quoted in the future as the canonical example of a quote that is so important that it should be visually separate from the rest of the text in which it appears.</blockquote></p>
+<p>Someone once said:<blockquote>  This sentence will be quoted in the future as the canonical example  of a quote that is so important that it should be visually separate  from the rest of the text in which it appears.</blockquote></p>
 HEREDOC;
 		
 		$this->assertEquals($expected_output, $output);
@@ -331,6 +335,15 @@ HEREDOC;
 	public function testLinks_ExternalBracketsWithDescription(){
 		$output = $this->wikiParser->parse("You can also provide some descriptive text. For example, the following link points to the [http://www.google.com Google home page].");
 		$this->assertEquals("You can also provide some descriptive text. For example, the following link points to the <a href=http://www.google.com>Google home page</a>.", $output);
+		
+	}
+	
+	/**
+	 * External urls - links that point to images 
+	 */
+	public function testImg_PlainURL(){
+		$output = $this->wikiParser->parse("If your link points to an image, it will get inserted as an image tag into the page: http://code.google.com/images/code_sm.png");
+		$this->assertEquals("If your link points to an image, it will get inserted as an image tag into the page: <img src=http://code.google.com/images/code_sm.png />", $output);
 		
 	}
 	

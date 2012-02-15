@@ -239,15 +239,29 @@ class ParserBase {
 		// Remove exclamation marks from CamelCase words
 		$this->text = preg_replace("/(!)(([A-Z][a-z0-9]+){2,})/x", '$2', $this->text);
 		
+		// Replace image URLs with img tags
+		$this->text = preg_replace("#
+									(https?|ftp|file)
+									://
+									[^ ]*?
+									(.gif|.png|.jpe?g)
+									#x", "<img src=$0 />", $this->text);		
 		
 		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets
+		/*
 		$this->text = preg_replace("#
-									(?<![[])
+									(?<!
+										(
+										[[]
+										|
+										(src)
+										)
+									)
 									((https?|ftp|file)
 									://
 									[^ ]*)
 									#x", "<a href=$1>$1</a>", $this->text);		
-		
+		*/
 		
 		// Find internal links given between [brackets]
 		//	- can contain description [myLink description that can have many words]
@@ -262,15 +276,8 @@ class ParserBase {
 									[]]				# Ends with ]
 								/xe", "'<a href=$1$2>' . ('$5' ? '$5' : '$1') . '</a>'", $this->text);
 		
-		// Replace image URLs with img tags
-		/*
-		$this->text = preg_replace("#
-									(https?|ftp|file)
-									://
-									[^ ]*?
-									(.gif|.png|.jpe?g)
-									#x", "<img src=$0 />", $this->text);
-		*/
+
+
 
 		
 		// [-A-Z0-9+&@\#/%?=~_|!:,.;]*[A-Z0-9+&@\#/%=~_|]
@@ -354,7 +361,7 @@ class ParserBase {
 		$matches = array();
 		$list_finder_regex = "/ (
 						  (
-						   [\r]?[\n]?
+						   [\r]?[\n]
 						   [ ]+	# At least one space
 						   [*#]	# Star or #
 						   (.+)	# Any number of characters
@@ -401,7 +408,7 @@ class ParserBase {
 		// Replace quotes
 		//	  Inferred by indentation
 		$this->text = preg_replace("/(
-							((\s+)	
+							(([\n]+)	
 							[ ]	
 							(.+)	
 							)+
