@@ -297,4 +297,15 @@ HEREDOC;
 		$this->assertEquals($expected_output,$output);
 	}			
 	
+	/**
+	 * Internal link to page anchor 
+	 */
+	public function testLinks_InternalLocalAnchor(){
+		$output = $this->wikiParser->parse("[WikiSyntax#Wiki-style_markup]");
+		$this->assertEquals("<a href=WikiSyntax#Wiki-style_markup>WikiSyntax</a>", $output);
+		
+		$output = $this->wikiParser->parse("[WikiSyntax#Wiki-style_markup Read about style]");
+		$this->assertEquals("<a href=WikiSyntax#Wiki-style_markup>Read about style</a>", $output);
+	}
+	
 }
