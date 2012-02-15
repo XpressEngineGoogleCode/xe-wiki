@@ -228,4 +228,25 @@ HEREDOC;
 		
 
 	}
+	
+	/**
+	 * Block quotes are created by indenting a paragraph by at least one space 
+	 */
+	public function testBlockQuotes(){
+		$input_string = <<<HEREDOC
+
+Someone once said:
+
+  This sentence will be quoted in the future as the canonical example
+  of a quote that is so important that it should be visually separate
+  from the rest of the text in which it appears.
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		
+		$expected_output = <<<HEREDOC
+<p>Someone once said:<blockquote></p><p> This sentence will be quoted in the future as the canonical example of a quote that is so important that it should be visually separate from the rest of the text in which it appears.</blockquote></p>
+HEREDOC;
+		
+		$this->assertEquals($expected_output, $output);
+	}
 }
