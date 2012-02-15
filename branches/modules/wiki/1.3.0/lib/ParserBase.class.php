@@ -27,11 +27,15 @@ class ParserBase {
 		"strikeout" => '~~'
 	);
 	
-	public function __construct() {
+	// Keeps a reference to a wiki instance, used to check if documents exist and such
+	private $wiki_site = null;
+	
+	public function __construct($wiki_site = null) {
 		$this->escaped_blocks = array();
 		$this->replaced_escaped_blocks = 0;
 		$this->batch_count = 0;
 		$this->text = '';
+		$this->wiki_site = $wiki_site;
 	}
 	
 	public function parse($text) {
@@ -221,7 +225,7 @@ class ParserBase {
 //								/x"    , "<a href='$1'>$2</a>", $this->text);		
 		
 		// Find internal links given as CamelCase words
-		$this->text = preg_replace("/
+		$this->text = preg_replace_callback("/
 								(
 								(?<!			# Doesn't begin with ..
 									( 
@@ -235,7 +239,7 @@ class ParserBase {
 									[a-z0-9]+	# Followed by at least one lowercase letter
 								){2,}			# Repeated at least two times
 								)	
-								/x", "<a href=$1>$1</a>", $this->text);
+								/x",array($this, "_handle_link"), $this->text);
 		// Remove exclamation marks from CamelCase words
 		$this->text = preg_replace("/(!)(([A-Z][a-z0-9]+){2,})/x", '$2', $this->text);
 		
@@ -248,7 +252,6 @@ class ParserBase {
 									#x", "<img src=$0 />", $this->text);		
 		
 		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets
-
 		$this->text = preg_replace("#
 									(?<!
 										(
@@ -260,20 +263,20 @@ class ParserBase {
 									((https?|ftp|file)
 									://
 									[^ ]*)
-									#x", "<a href=$2>$2</a>", $this->text);		
+									#x","<a href=$2>$2</a>", $this->text);		
 		
 		// Find internal links given between [brackets]
 		//	- can contain description [myLink description that can have many words]
 		//	- can link to local content [myLink#local_anchor and some description maybe]
 		// Also catches external links
 		// TODO treat images separately
-		$this->text = preg_replace("/
+		$this->text = preg_replace_callback("/
 									[[]				# Starts with [
 									([^#]+?)		# Followed by any word
 									([#](.*?))?		# Followed by an optional group that starts with #
 									([ ](.*?))?		# Followed by an optional group that starts with a space
 									[]]				# Ends with ]
-								/xe", "'<a href=$1$2>' . ('$5' ? '$5' : '$1') . '</a>'", $this->text);
+								/x",array($this, "_handle_link"), $this->text);
 		
 
 
@@ -296,6 +299,16 @@ class ParserBase {
 		
 	}
 	
+	/**
+	 * Callback for CamelCase and bracket links 
+	 */
+	private function _handle_link(&$matches){
+		$url = $matches[1];
+		$local_anchor = $matches[2];
+		$description = $matches[5];
+
+		return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
+	}
 	
 	/**
 	 * @brief Replaces Wiki Syntax lists with HTML lists
