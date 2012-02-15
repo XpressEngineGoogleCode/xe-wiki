@@ -248,20 +248,19 @@ class ParserBase {
 									#x", "<img src=$0 />", $this->text);		
 		
 		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets
-		/*
+
 		$this->text = preg_replace("#
 									(?<!
 										(
 										[[]
 										|
-										(src)
+										[=]
 										)
 									)
 									((https?|ftp|file)
 									://
 									[^ ]*)
-									#x", "<a href=$1>$1</a>", $this->text);		
-		*/
+									#x", "<a href=$2>$2</a>", $this->text);		
 		
 		// Find internal links given between [brackets]
 		//	- can contain description [myLink description that can have many words]
