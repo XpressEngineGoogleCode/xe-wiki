@@ -394,7 +394,7 @@ class ParserBase {
 							[ ]	
 							(.+)	
 							)+
-							)/x", "<blockquote>$1</blockquote>", $this->text);		
+							)/xe", "str_replace('$3', '', '<blockquote>$1</blockquote>')", $this->text);		
 	}
 	
 	public function parseHorizontalRules(){
