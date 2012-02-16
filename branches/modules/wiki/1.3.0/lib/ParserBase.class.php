@@ -316,7 +316,7 @@ class ParserBase {
 	 * @brief Replaces a block of text containing a Wiki syntax list with an HTML list 
 	 * Parses only first level list (in case we have nested lists)
 	 */
-	private function _parseList($list){
+	protected function _parseList($list){
 		$list = str_replace(' ', '@', $list);
 		$i = 0;
 		$char = substr($list, $i, 1);
@@ -347,7 +347,7 @@ class ParserBase {
 	/**
 	 * @brief Searches for list blocks in a string
 	 */
-	private function _getLists($text){
+	protected function _getLists($text){
 		$matches = array();
 		$list_finder_regex = "/ (
 						  (
