@@ -324,4 +324,7 @@
 		<value xml:lang="tr"><![CDATA[Alias:]]></value>
 		<value xml:lang="vi"><![CDATA[Alias:]]></value>
 	</item>
+	<item name="create_first_page">
+		<value xml:lang="en"><![CDATA[Your Wiki have no documents. You should create your first Wiki document!]]></value>
+	</item>
 </lang>

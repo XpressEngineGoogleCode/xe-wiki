@@ -17,10 +17,15 @@
 			</form>
 		<!--@else-->
             <!--@if($history)-->
-                {nl2br($history->content)}
+                {@ $document_content = $history->content}
             <!--@else-->
-                {nl2br($oDocument->getContent())}
-            <!--@endif-->
+                {@ $document_content = $oDocument->getContent()}
+            <!--@end-->
+			<!--@if ($markup_type != 'xe_wiki_markup')-->
+				{$document_content}
+			<!--@else-->
+				{nl2br($document_content)}
+			<!--@end-->
 		<!--@end-->
 	</div>
 	<div class="wikiReadFooter">

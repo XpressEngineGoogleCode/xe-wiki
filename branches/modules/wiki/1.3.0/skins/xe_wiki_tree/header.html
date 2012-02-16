@@ -106,7 +106,7 @@
 			<!--@if($oDocument->isExists()&&$act!='dispWikiEditPage')-->
 			    <span><a class="buttonOfficial" href="{getUrl('act','dispWikiEditPage','entry',$entry)}"><span>{$lang->cmd_edit}</span></a></span>
 			<!--@end-->
-			<!--@if($oDocument->isExists() && $grant->delete_document)-->
+			<!--@if($oDocument->isExists() && $grant->delete_document && $oDocument->document_srl != (int)$root->document_srl)-->
 			    <span><a class="buttonOfficial" href="#" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;"><span>{$lang->cmd_delete}</span></a></span>
 			<!--@end-->
 			<!--@if($use_history != 'N')-->
