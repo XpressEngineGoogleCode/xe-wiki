@@ -35,7 +35,7 @@
 
 			// Specify template path
 			$template_path = sprintf("%stpl/",$this->module_path);
-			$this->setTemplatePath($template_path);
+			$this->setTemplatePath($template_path);		
 		}
 
 		
@@ -134,6 +134,9 @@
 			$output = ModuleHandler::triggerCall('module.dispAdditionSetup', 'after', $content);
 			Context::set('setup_content', $content);
 
+			// Setup markup type, for disabling certain fields when wiki syntax is used
+			Context::set('markup_type', $this->module_info->markup_type);
+			
 			// Specify the template file
 			$this->setTemplateFile('addition_setup');
 		}

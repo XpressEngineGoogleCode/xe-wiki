@@ -225,15 +225,6 @@
 		<value xml:lang="tr"><![CDATA[Cancel]]></value>
 		<value xml:lang="vi"><![CDATA[Cancel]]></value>
 	</item>
-	<item name="notify_no_editor">
-		<value xml:lang="ko"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
-		<value xml:lang="en"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
-		<value xml:lang="jp"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
-		<value xml:lang="zh-CN"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
-		<value xml:lang="zh-TW"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
-		<value xml:lang="tr"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
-		<value xml:lang="vi"><![CDATA[Please note than when Wiki markup editor is used, the module will not take into account the editor settings below.]]></value>
-	</item>
 	<item name="xewiki_no_results">
 		<value xml:lang="ko"><![CDATA[No results found for your querry.]]></value>
 		<value xml:lang="en"><![CDATA[No results found for your querry.]]></value>
