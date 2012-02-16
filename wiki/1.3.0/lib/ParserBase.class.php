@@ -365,7 +365,7 @@ class ParserBase {
 	 * Tables
 	 * || 1 ||  2  ||  3 ||
 	 */
-	public function parseTables(){
+	protected function parseTables(){
 		// Tables
 		// || 1 ||  2  ||  3 ||
 		// First pass, replace <table>
@@ -394,7 +394,7 @@ class ParserBase {
 	/**
 	 * 
 	 */
-	public function parseQuotes(){
+	protected function parseQuotes(){
 		// Replace quotes
 		//	  Inferred by indentation
 		$this->text = preg_replace("/(
@@ -405,13 +405,13 @@ class ParserBase {
 							)/xe", "str_replace('$3', '', '<blockquote>$1</blockquote>')", $this->text);		
 	}
 	
-	public function parseHorizontalRules(){
+	protected function parseHorizontalRules(){
 		// Replace horizontal rule
 		// ----
 		$this->text = preg_replace("/^-{4,}/m", "<hr />", $this->text);		
 	}
 	
-	public function parseParagraphs(){
+	protected function parseParagraphs(){
 		// Replace new lines with paragraphs
 		$this->text = preg_replace("/\n(.+)/", '<p>$1</p>', $this->text);		
 	}
