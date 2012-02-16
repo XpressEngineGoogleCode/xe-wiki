@@ -277,7 +277,7 @@ class ParserBase {
 		$description = $matches[5];
 		
 		// If document exists, return expected link and exit
-		if($this->wiki_site->documentExists($url)){
+		if(preg_match("/^(https?|ftp|file)/", $url) || $this->wiki_site->documentExists($url)){
 			return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
 		}
 		
@@ -285,7 +285,7 @@ class ParserBase {
 		//   If user is not allowed to create content, return plain text
 		if(!$this->wiki_site->currentUserCanCreateContent()) return $description ? $description : $url;
 		//   Else return link to create new page
-		return "<a href=$url$local_anchor class=notexists>" . ($description ? $description : $url) . "</a>";
+		return "<a href=$url$local_anchor class=notexist>" . ($description ? $description : $url) . "</a>";
 	}
 	
 	/**
