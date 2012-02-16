@@ -1,22 +1,22 @@
 <?php
-
-	require_once("lib\WikiSite.interface.php");
 	/**
 	* @class  wikiModel
 	* @author NHN (developers@xpressengine.com) 
 	* @brief  wiki 모듈의 Model class
 	**/
 
+	require_once("lib\WikiSite.interface.php");
+
 	class wikiModel extends module implements WikiSite {
 		/**
-		* @brief 초기화
+		* @brief Initialization
 		**/
 		function init() {
 		    
 		}
 
 		/**
-		* @brief 계층구조 추출
+		* @brief Retrieve the Tree hierarchy
 		* document_category테이블을 이용해서 위키 문서의 계층 구조도를 그림
 		* document_category테이블에 등록되어 있지 않은 경우 depth = 0 으로 하여 신규 생성
 		**/
@@ -82,13 +82,18 @@
 			if(!$output->data || !$output->toBool()) return array();
 
 			$list = array();
-			$root_node = null;
-			foreach($output->data as $node) {
-				if($node->title == 'Front Page') {
-					$root_node = $node;
-					$root_node->parent_srl = 0;
+			$root = $this->getRootDocument($module_srl);
+			$root_node = $root;
+			$root_node->parent_srl = 0;
+			foreach($output->data as $node)
+			{
+				if($node->document_srl == $root_node->document_srl)
+				{
+					//$root_node = $node;
+					//$root_node->parent_srl = 0;
 					continue;
-				} 
+				}
+				
 				unset($obj);
 				$obj->parent_srl = (int)$node->parent_srl;
 				$obj->document_srl = (int)$node->document_srl;
@@ -111,7 +116,33 @@
 			$this->getTreeToList($tree[$root_node->document_srl]->childs, $result,1);
 			return $result;
 		}
-
+		
+		function getRootDocument($module_srl)
+		{
+			$docs_list = $this->readWikiTreeCache($module_srl);
+			$min = -1;
+			$selected = 0;
+			foreach ($docs_list as $key => $node) 
+			{
+				if($node->parent_srl == 0)
+				{
+					if ($min < 0)
+					{
+						$min = (int)$node->document_srl;
+						$selected = $key;
+					}
+					else
+					{
+						if ((int)$node->document_srl < $min)
+						{
+							$min = (int)$node->document_srl;
+							$selected = $key;
+						}
+					}
+				}
+			}
+			return $docs_list[$selected];
+		}
 
 		/**
 		* @brief Load previous / next article
@@ -249,7 +280,14 @@
 		{
 			$breadcrumbs = array_reverse($this->createBreadcrumbsList($document_srl, $list));
 			$uri = Context::getRequestUri().Context::get("mid")."/";
-			$menu_breadcrumbs = "<a href='" . $uri . "'>Front Page</a>";
+			//$menu_breadcrumbs = "<a href='" . $uri . "'>Front Page</a>";
+			$oModuleModel = &getModel("module");
+			$oDocumentModel = &getModel("document");
+			$module_srl = $oModuleModel->getModuleSrlByMid(Context::get("mid"));
+			$root = $this->getRootDocument($module_srl[0]);
+			$document_srl = $root->document_srl;
+			$entry = $oDocumentModel->getAlias($document_srl);
+			$menu_breadcrumbs = "<a href='" . $uri . "entry/".$entry."'>".$root->title."</a>";
 			foreach($breadcrumbs as $key=>$value)
 			{
 				$menu_breadcrumbs .= " -> <a href='" . $uri . "entry/$value'>" . $key . "</a>";
@@ -292,7 +330,7 @@
 		*/
         function search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page= 10)
         {
-            //$oLuceneModule = &getModule('lucene');
+            $oLuceneModule = &getModule('lucene');
 
             if( !isset($oLuceneModule) ){
                     //if nlucene not installed we fallback to IS (integrated search module)
@@ -300,6 +338,152 @@
             }
 
             return $this->_lucene_search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page);
+        }
+		
+		/**
+		* Searches through documents for the existence of a certain string
+		*
+		* Used when nLucene module is installed.
+		*/
+        function _lucene_search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page= 10 )
+        {
+            $oLuceneModel = &getModel('wiki'); //temporary imported sources so we not interfere with nlucene
+
+            $searchAPI = "lucene_search_bloc-1.0/SearchBO/";
+            $searchUrl = $oLuceneModel->getDefaultSearchUrl($searchAPI);
+
+            if(!$oLuceneModel->isFieldCorrect($search_target)){
+              $search_target = 'title_content';
+            }
+
+            //Search queries applied to the target module
+            $query = $oLuceneModel->getSubquery($target_module_srl, "include", null);
+
+            //Parameter setting
+			$json_obj = new stdClass();
+            $json_obj->query = $oLuceneModel->getQuery($is_keyword, $search_target, null);
+            $json_obj->curPage = $page;
+            $json_obj->numPerPage = $items_per_page;
+            $json_obj->indexType = "db";
+            $json_obj->fieldName = $search_target;
+            $json_obj->target_mid = $target_module_srl;
+            $json_obj->target_mode = $target_mode;
+
+            $json_obj->subquery = $query;
+
+            return $oLuceneModel->getDocuments($searchUrl, $json_obj);
+        }
+		
+		/**
+		* @brief Post id list, bringing the article.
+		*/
+        function getDocuments($searchUrl, $params, $service_prefix = null) {
+			$output = new stdClass;
+			if( !isset($service_prefix) ){
+					$service_prefix = $this->getDefaultServicePrefix();
+			}
+            $oModelDocument = &getModel('document');
+
+            $params->serviceName = $service_prefix.'_document';
+            $params->query = '('.$params->query.')'.$params->subquery;
+            $params->displayFields = array("id");
+
+            $encodedParams = $this->getService()->encode($params);
+            $searchResult = FileHandler::getRemoteResource($searchUrl."searchByMap", $encodedParams, 3, "POST", "application/json; charset=UTF-8", array(), array());
+
+            // Validate the results
+            if (!$searchResult && $searchResult != "null") {
+                $idList = array();
+            } else {
+                $idList = $this->result2idArray($searchResult);
+            }
+
+            // 결과가 1개 이상이어야 글 본문을 요청함.
+            // Results must be at least one body has requested post.
+            $documents = array();
+            if (count($idList) > 0) {
+                $tmpDocuments = $oModelDocument->getDocuments($idList, false, false);
+                // Russineseo received a list of documents returned by rearranging the order
+                foreach($idList as $id) {
+                    $documents['doc'.$id] = $tmpDocuments[$id];
+                }
+            }
+            $searchResult = json_decode($searchResult);
+            $page_navigation = new PageHandler($searchResult->totalSize, ceil( (float)$searchResult->totalSize / 10.0 ), $params->curPage, 10);
+
+            $output->total_count = $searchResult->totalSize;
+            $output->data = $documents;
+            $output->page_navigation = $page_navigation;
+            return $output;
+        }
+		
+		/**
+		* @brief Results extracted from an array of id
+		*/
+        function result2idArray($res) {
+            $res = json_decode($res);
+            $results = $res->results;
+            $answer = array();
+            if ( count($results) > 0) {
+                foreach ($results as $result) {
+                    $answer[] = $result->id;
+                }
+            }
+            return $answer;
+       }
+		
+		/**
+		* @brief To determine which fields to search
+		* Check the Search for field
+		*/
+        function isFieldCorrect($fieldname) {
+            $fields = array('title', 'content', 'title_content', 'tags');
+            $answer = in_array($fieldname, $fields);
+            return $answer;
+        }
+		
+		function getDefaultSearchUrl($searchAPI)
+        {
+            $oModuleModel = &getModel('module');
+            $config = $oModuleModel->getModuleConfig('lucene');
+            syslog(1, "lucene config: ".print_r($config, true)."\n");
+            return $searchUrl = $config->searchUrl.$searchAPI;
+        }
+		
+		/**
+		* @brief List and include / exclude based on whether the clause making
+		*/
+        function getSubquery($target_mid, $target_mode, $exclude_module_srl=NULL) {
+          if( isset($exclude_module_srl) ){
+            $no_secret = ' AND NOT is_secret:yes AND NOT module_srl:'.$exclude_module_srl."; ";
+          }else{
+                $no_secret = ' AND NOT is_secret:yes ';
+          }
+            $target_mid = trim($target_mid);
+            if ('' == $target_mid) return $no_secret;
+
+            $target_mid_list = explode(',', $target_mid);
+            $connective = strcmp('include', $target_mode) ? ' AND NOT ':' AND ';
+
+            $query = $no_secret.$connective.'(module_srl:'.implode(' OR module_srl:', $target_mid_list).')';
+            return $query;
+        }
+
+        /**
+		* @brief Results for query syntax to apply the nLucene
+        */
+        function getQuery($query, $search_target, $exclude_module_srl='0') {
+            $query_arr = explode(' ', $query);
+            $answer = '';
+
+            if ($search_target == "title_content") {
+              return $this->getQuery($query, "title", $exclude_module_srl).$this->getQuery($query, "content", $exclude_module_srl);
+            } else {
+                foreach ($query_arr as $val) {
+                    $answer .= $search_target.':'.$val.' ';
+                }
+            }
+            return $answer;
         }
 		
 		/**
@@ -322,9 +506,10 @@
             $obj->search_target = $search_target;
             return $oDocumentModel->getDocumentList($obj);
         }
+		
 
 	public function currentUserCanCreateContent() {
-		return true;
+		return false;
 	}
 
 	public function documentExists($document_name) {

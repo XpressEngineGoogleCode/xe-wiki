@@ -213,17 +213,7 @@ class ParserBase {
 	 * 		- anything that starts with http, https, ftp and ends with png, gif, jpg, jpeg -> image
 	 * 		- [Url ImageUrl] -> image links	
 	 */
-	protected function parseLinks(){
-		// Replace links
-		// [https://my.link Click here]
-//		$this->text = preg_replace("/
-//								\[		# Starts with bracket
-//								([^ ]+)  # Text without spaces
-//								[ ]		# Space
-//								(.*)	# Any character
-//								\]		# Ends with bracket
-//								/x"    , "<a href='$1'>$2</a>", $this->text);		
-		
+	protected function parseLinks(){	
 		// Find internal links given as CamelCase words
 		$this->text = preg_replace_callback("/
 								(
@@ -269,34 +259,13 @@ class ParserBase {
 		//	- can contain description [myLink description that can have many words]
 		//	- can link to local content [myLink#local_anchor and some description maybe]
 		// Also catches external links
-		// TODO treat images separately
 		$this->text = preg_replace_callback("/
 									[[]				# Starts with [
 									([^#]+?)		# Followed by any word
 									([#](.*?))?		# Followed by an optional group that starts with #
 									([ ](.*?))?		# Followed by an optional group that starts with a space
 									[]]				# Ends with ]
-								/x",array($this, "_handle_link"), $this->text);
-		
-
-
-
-		
-		// [-A-Z0-9+&@\#/%?=~_|!:,.;]*[A-Z0-9+&@\#/%=~_|]
-		
-		
-		
-		
-		
-		
-		// Internal links
-		// Between [ and ] or automatic
-		// Can be
-		//		- simple: ThisIsAWikiWord so it will be linked
-		//		- between brackets [Mypage] or [Mypage | Description time]
-		//			also [Main page] and [Main p age | wassup] -> replace space with underscore
-		//		- with local anchor [MyPage#Introduction] or [MyPage#How_you-doing | How you doin?]
-		
+								/x",array($this, "_handle_link"), $this->text);		
 	}
 	
 	/**
@@ -306,8 +275,17 @@ class ParserBase {
 		$url = $matches[1];
 		$local_anchor = $matches[2];
 		$description = $matches[5];
-
-		return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
+		
+		// If document exists, return expected link and exit
+		if($this->wiki_site->documentExists($url)){
+			return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
+		}
+		
+		// Else, if document does not exist
+		//   If user is not allowed to create content, return plain text
+		if(!$this->wiki_site->currentUserCanCreateContent()) return $description ? $description : $url;
+		//   Else return link to create new page
+		return "<a href=$url$local_anchor class=notexists>" . ($description ? $description : $url) . "</a>";
 	}
 	
 	/**

@@ -46,8 +46,6 @@ class wikiView extends wiki
 				$oModuleController = &getController('module');
 				$oModuleController->insertModulePartConfig('editor', $this->module_info->module_srl, $editor_config);
 			}
-			
-			require_once($this->module_path . 'lib/wiky.inc.php');
 		}
 		
 
