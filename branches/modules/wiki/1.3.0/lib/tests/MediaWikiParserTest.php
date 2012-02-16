@@ -16,8 +16,8 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	public function testPragmasSummary()
 	{
 		// When found at the beginning of the line, convert to italic
-		$output = $this->wikiParser->parse('# How you doing?');
-		$this->assertEquals('# How you doing?', $output);
+		$output = $this->wikiParser->parse('#summary How you doing?');
+		$this->assertEquals('<i>How you doing?</i>', $output);
 		
 		// When found inside document text, parsing should skip it
 		// Also, it should not be converted to a list either 
@@ -144,13 +144,6 @@ EXPECTED;
 		
 		$output = $this->wikiParser->parse("'''''italic'' in bold'''");
 		$this->assertEquals("<strong><em>italic</em> in bold</strong>", $output);
-		/*
-		$output = $this->wikiParser->parse("*~~strike~~ works too*");
-		$this->assertEquals("<strong><span style='text-decoration:line-through'>strike</span> works too</strong>", $output);
-		
-		$output = $this->wikiParser->parse("~~as well as _this_ way round~~");
-		$this->assertEquals("<span style='text-decoration:line-through'>as well as <em>this</em> way round</span>", $output);		
-		*/
 	}
 	
 	/**
@@ -205,46 +198,40 @@ EXPECTED;
 Any other start ends the list.
 HEREDOC;
 		$output = $this->wikiParser->parse($input_string);
+		$output = str_replace(array('<p>', '</p>'), '', $output);
+		
 		$expected_output = <<<HEREDOC
 <ul>
-<li>Start each line</li>
-<li>with an asterisk (*).
-<ul>
-<li>More asterisks gives deeper
-<ul>
-<li>and deeper levels.</li>
+	<li>
+		Start each line
+	</li>
+	<li>
+		with an asterisk (*).
+		<ul>
+			<li>More asterisks gives deeper
+				<ul>
+					<li>and deeper levels.</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li>Line breaks<br/>
+			don't break levels.
+		<ul>
+			<li>
+				But jumping levels creates empty space.
+			</li>
+		</ul>
+	</li>
 </ul>
-</li>
-</ul>
-</li>
-<li>Line breaks<br>
-don't break levels.
-<ul>
-<li>
-<ul>
-<li>But jumping levels creates empty space.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+Any other start ends the list.
 HEREDOC;
-		$expected_output = str_replace(chr(13), '', $expected_output);
-		$expected_output = preg_replace("/\n(.+)/", '<p>$1</p>', $expected_output);		
+		$expected_output = str_replace(array(chr(13), chr(10), chr(9)), '', $expected_output);
+		// $expected_output = preg_replace("/\n(.+)/", '<p>$1</p>', $expected_output);		
 		$this->assertEquals($expected_output, $output);
 
 		$output = $this->wikiParser->parse('How about * list in the middle of text');
 		$this->assertEquals("How about * list in the middle of text", $output);		
-		
-		$input_string = 
-<<<HEREDOC
-
- * One line list
-HEREDOC;
-		$output = $this->wikiParser->parse($input_string);
-		$this->assertEquals("<ul><p><li>One line list</li></ul></p>", $output);
-		
-
 	}
 	
 	/**
