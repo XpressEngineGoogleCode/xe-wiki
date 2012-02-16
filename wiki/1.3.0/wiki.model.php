@@ -118,28 +118,35 @@
 		function getRootDocument($module_srl)
 		{
 			$docs_list = $this->readWikiTreeCache($module_srl);
-			$min = -1;
-			$selected = 0;
-			foreach ($docs_list as $key => $node) 
+			if (is_array($docs_list))
 			{
-				if($node->parent_srl == 0)
+				$min = -1;
+				$selected = 0;
+				foreach ($docs_list as $key => $node) 
 				{
-					if ($min < 0)
+					if($node->parent_srl == 0)
 					{
-						$min = (int)$node->document_srl;
-						$selected = $key;
-					}
-					else
-					{
-						if ((int)$node->document_srl < $min)
+						if ($min < 0)
 						{
 							$min = (int)$node->document_srl;
 							$selected = $key;
 						}
+						else
+						{
+							if ((int)$node->document_srl < $min)
+							{
+								$min = (int)$node->document_srl;
+								$selected = $key;
+							}
+						}
 					}
 				}
+				return $docs_list[$selected];
 			}
-			return $docs_list[$selected];
+			else
+			{
+				return null;
+			}
 		}
 
 		/**

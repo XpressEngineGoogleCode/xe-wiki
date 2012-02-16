@@ -282,9 +282,16 @@ class wikiView extends wiki implements WikiSite
 			if (!$document_srl) {
 				if (!$entry) {
 					$root = $oWikiModel->getRootDocument($this->module_info->module_srl);
-					$document_srl = $root->document_srl;
-					$entry = $oDocumentModel->getAlias($document_srl);
-					Context::set('entry', $entry);
+					if (!is_null($root))
+					{
+						$document_srl = $root->document_srl;
+						$entry = $oDocumentModel->getAlias($document_srl);
+						Context::set('entry', $entry);
+					}
+					else
+					{
+						Context::set('_first_page_', 'true');
+					}
 				}
 				$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
 				if(!$document_srl) 	$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
@@ -304,12 +311,13 @@ class wikiView extends wiki implements WikiSite
 					if($next_document_srl) Context::set('oDocumentNext', $oDocumentModel->getDocument($next_document_srl));
 					$this->addToVisitLog($entry);
 
-				} else {
+				}
+				else 
+				{
 					Context::set('document_srl','',true);
 					return new Object(-1, 'msg_not_founded');
 				}
-			// generate an empty document object if you do not have a document_srl for requested document
-			}
+			}// generate an empty document object if you do not have a document_srl for requested document
 			else
 			{
 				$oDocument = $oDocumentModel->getDocument(0);
@@ -336,8 +344,7 @@ class wikiView extends wiki implements WikiSite
 				// set contributors
 				if($this->use_history)
 				{
-					$oModel = &getModel('wiki');
-					$contributors = $oModel->getContributors($oDocument->document_srl);
+					$contributors = $oWikiModel->getContributors($oDocument->document_srl);
 					Context::set('contributors', $contributors);
 				}
 
@@ -345,7 +352,11 @@ class wikiView extends wiki implements WikiSite
 				if($this->module_info->use_comment != 'N') $oDocument->add('allow_comment','Y');
 				// Set up alias
 				$alias = $oDocumentModel->getAlias($oDocument->document_srl);
-				$oDocument->add('alias', $alias);			
+				$oDocument->add('alias', $alias);
+				// Put root element in context
+				$root = $oWikiModel->getRootDocument($this->module_info->module_srl);
+				Context::set('root',$root);
+				
 			}
 			else
 			{
@@ -722,9 +733,9 @@ class wikiView extends wiki implements WikiSite
 				
 				$document_srl = Context::get("document_srl");
 				$entry = Context::get("entry");
+				$root = $oWikiModel->getRootDocument($module_srl);
 				if(!$document_srl) {
 					if (!$entry) {
-						$root = $oWikiModel->getRootDocument($module_srl);
 						$document_srl = $root->document_srl;
 						$entry = $oDocumentModel->getAlias($document_srl);
 						Context::set('entry', $entry);
@@ -733,7 +744,6 @@ class wikiView extends wiki implements WikiSite
 					{
 						if(is_null($oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry)))
 						{
-							$root = $oWikiModel->getRootDocument($module_srl);
 							$document_srl = $root->document_srl;
 							$this->_loadSidebarTreeMenu($module_srl, $document_srl);
 						}
