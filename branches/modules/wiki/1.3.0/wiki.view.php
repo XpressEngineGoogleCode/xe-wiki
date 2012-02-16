@@ -42,8 +42,9 @@ class wikiView extends wiki implements WikiSite
 			Context::set('langs', Context::loadLangSupported());
 			
 			$editor_config = $oModuleModel->getModulePartConfig('editor', $this->module_info->module_srl);
-			if($this->module_info->markup_type != 'xe_wiki_markup'){
+			if(!$editor_config && $this->module_info->markup_type != 'xe_wiki_markup'){			
 				$editor_config->editor_skin = 'xpresseditor';
+				$editor_config->sel_editor_colorset = 'white_text_usehtml';
 				$editor_config->content_style = 'default';
 				
 				$oModuleController = &getController('module');
