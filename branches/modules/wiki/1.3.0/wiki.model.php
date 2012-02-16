@@ -5,9 +5,7 @@
 	* @brief  wiki 모듈의 Model class
 	**/
 
-	require_once("lib\WikiSite.interface.php");
-
-	class wikiModel extends module implements WikiSite {
+	class wikiModel extends module {
 		/**
 		* @brief Initialization
 		**/
@@ -506,15 +504,6 @@
             $obj->search_target = $search_target;
             return $oDocumentModel->getDocumentList($obj);
         }
-		
-
-	public function currentUserCanCreateContent() {
-		return false;
-	}
-
-	public function documentExists($document_name) {
-		return false;
-	}
 	
 	}
 ?>

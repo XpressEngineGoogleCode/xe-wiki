@@ -4,7 +4,10 @@
  * @author haneul (haneul0318@gmail.com)
  * @brief  wiki module View class
  **/
-class wikiView extends wiki 
+
+require_once("lib\WikiSite.interface.php");
+
+class wikiView extends wiki implements WikiSite
 {
 		var $list;
 		var $search_option = array('title', 'content', 'title_content', 'comment', 'user_name', 'nick_name', 'user_id', 'tag');
@@ -590,7 +593,7 @@ class wikiView extends wiki
 				// Parse wiki syntax
 				if($this->module_info->markup_type == 'googlecode_markup'){
 					require_once($this->module_path . "lib/GoogleCodeWikiParser.class.php");
-					$wiki_syntax_parser = new GoogleCodeWikiParser;
+					$wiki_syntax_parser = new GoogleCodeWikiParser($this);
 					$org_content = $wiki_syntax_parser->parse($org_content);
 				}
 				else if($this->module_info->markup_type == 'mediawiki_markup'){
@@ -627,6 +630,22 @@ class wikiView extends wiki
 			return $content;
 		}
 
+		public function documentExists($document_name){
+			$oDocumentModel  = &getModel('document');
+			// Search for document by alias
+			$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $document_name);
+			if($document_srl) return true;
+			
+			// If not found, search by title
+			$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $document_name);			
+			if($document_srl) return true;
+			
+			return false;
+		}
+		
+		public function currentUserCanCreateContent(){
+			return $this->grant->write_document;
+		}
 
 		/**
 		* @brief Wiki syntax checking for the presence of linked documents.
