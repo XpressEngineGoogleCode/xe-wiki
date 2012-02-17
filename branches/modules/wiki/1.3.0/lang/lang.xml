@@ -315,6 +315,15 @@
 		<value xml:lang="tr"><![CDATA[Wiki Search]]></value>
 		<value xml:lang="vi"><![CDATA[Wiki Search]]></value>
 	</item>
+	<item name="write_form_title">
+		<value xml:lang="ko"><![CDATA[Title:]]></value>
+		<value xml:lang="en"><![CDATA[Title:]]></value>
+		<value xml:lang="jp"><![CDATA[Title:]]></value>
+		<value xml:lang="zh-CN"><![CDATA[Title:]]></value>
+		<value xml:lang="zh-TW"><![CDATA[Title:]]></value>
+		<value xml:lang="tr"><![CDATA[Title:]]></value>
+		<value xml:lang="vi"><![CDATA[Title:]]></value>
+	</item>
 	<item name="write_form_alias">
 		<value xml:lang="ko"><![CDATA[Alias:]]></value>
 		<value xml:lang="en"><![CDATA[Alias:]]></value>
