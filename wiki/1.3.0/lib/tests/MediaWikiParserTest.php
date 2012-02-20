@@ -1,14 +1,24 @@
 <?php
 
 require_once('../MediaWikiParser.class.php');
+require_once('MockWikiSite.class.php');
 
 class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 {
 	protected $wikiParser = null;
 	
 	protected function setUp(){
-		$this->wikiParser = new MediaWikiParser("");
+		$this->wikiParser = new MediaWikiParser(new MockWikiSite);
 	}
+	
+	private function escapeParserOutput($output){
+		$output = str_replace(array(chr(13), chr(10), chr(9)), '', $output);
+		return str_replace(array('<p>', '</p>'), '', $output);
+	}
+	
+	private function escapeExpectedOutput($output){
+		return str_replace(array(chr(13), chr(10), chr(9)), '', $output);
+	}	
 	
 	/**
 	 * #summary	 One-line summary of the page 
@@ -79,37 +89,6 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals("<tt>code</tt>", $output);
 	}	
 	
-
-	/**
-	 * code	{{{{code}}}
-	 */
-	public function testTypefaceCodeMultiline(){
-		$output = $this->wikiParser->parse("{{{code}}}");
-		$this->assertEquals("<tt>code</tt>", $output);
-		
-		$input_string = <<<INPUT
-{{{
-def fib(n):
-  if n == 0 or n == 1:
-    return n
-  else:
-    # This recursion is not good for large numbers.
-    return fib(n-1) + fib(n-2)
-}}}
-INPUT;
-		$output = $this->wikiParser->parse($input_string);
-		$expected_string = <<<EXPECTED
-<pre class='prettyprint'>def fib(n):<br />
-  if n == 0 or n == 1:<br />
-    return n<br />
-  else:<br />
-    # This recursion is not good for large numbers.<br />
-    return fib(n-1) + fib(n-2)</pre>
-EXPECTED;
-		$expected_string = str_replace(chr(13), '', $expected_string);
-		
-		$this->assertEquals($expected_string,$output);
-	}		
 
 	/**
 	 * superscript	^super^script
@@ -198,7 +177,7 @@ EXPECTED;
 Any other start ends the list.
 HEREDOC;
 		$output = $this->wikiParser->parse($input_string);
-		$output = str_replace(array('<p>', '</p>'), '', $output);
+		$output = $this->escapeParserOutput($output);
 		
 		$expected_output = <<<HEREDOC
 <ul>
@@ -226,32 +205,254 @@ HEREDOC;
 </ul>
 Any other start ends the list.
 HEREDOC;
-		$expected_output = str_replace(array(chr(13), chr(10), chr(9)), '', $expected_output);
-		// $expected_output = preg_replace("/\n(.+)/", '<p>$1</p>', $expected_output);		
+		$expected_output = $this->escapeExpectedOutput($output);
 		$this->assertEquals($expected_output, $output);
 
 		$output = $this->wikiParser->parse('How about * list in the middle of text');
 		$this->assertEquals("How about * list in the middle of text", $output);		
-	}
-	
-	/**
-	 * Block quotes are created by indenting a paragraph by at least one space 
-	 */
-	public function testBlockQuotes(){
+		
 		$input_string = <<<HEREDOC
 
-Someone once said:
+# Start each line
+# with a (#).
+## More number signs gives deeper
+### and deeper
+### levels.
+# Line breaks<br/>don't break levels.
+### But jumping levels creates empty space.
+# Blank lines
 
- This sentence will be quoted in the future as the canonical example
- of a quote that is so important that it should be visually separate
- from the rest of the text in which it appears.
+# end the list and start another.
+Any other start also
+ends the list.
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$output = $this->escapeParserOutput($output);
+		
+		$expected_output = <<<HEREDOC
+<ol>
+<li>Start each line</li>
+<li>with a (#).
+<ol>
+<li>More number signs gives deeper
+<ol>
+<li>and deeper</li>
+<li>levels.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Line breaks<br/>
+don't break levels.
+<ol>
+<li>
+<ol>
+<li>But jumping levels creates empty space.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Blank lines</li>
+</ol>
+<ol>
+<li>end the list and start another.</li>
+</ol>
+<p>Any other start also ends the list.</p>
+HEREDOC;
+		$expected_output = $this->escapeExpectedOutput($expected_output);
+		$this->assertEquals($expected_output, $output);		
+	}
+	
+	public function testDefinitionList(){
+		$input_string = <<<HEREDOC
+;item 1
+: definition 1
+;item 2
+: definition 2-1
+: definition 2-2
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<dl>
+<dt>item 1</dt>
+<dd>definition 1</dd>
+<dt>item 2</dt>
+<dd>definition 2-1</dd>
+<dd>definition 2-2</dd>
+</dl>
 HEREDOC;
 		$output = $this->wikiParser->parse($input_string);
 		
-		$expected_output = <<<HEREDOC
-<p>Someone once said:</p><p><blockquote> This sentence will be quoted in the future as the canonical example of a quote that is so important that it should be visually separate from the rest of the text in which it appears.</blockquote></p>
-HEREDOC;
+		$output = $this->escapeParserOutput($output);
+		$expected_output = $this->escapeExpectedOutput($expected_output);
 		
 		$this->assertEquals($expected_output, $output);
+	}
+	
+	public function testIndentText(){
+		$input_string = <<<HEREDOC
+: Single indent
+:: Double indent
+::::: Multiple indent
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<dl>
+	<dd>Single indent
+	<dl>
+		<dd>Double indent
+		<dl>
+			<dd>
+			<dl>
+				<dd>
+				<dl>
+					<dd>Multiple indent</dd>
+				</dl>
+				</dd>
+			</dl>
+			</dd>
+		</dl>
+		</dd>
+	</dl>
+	</dd>
+</dl>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		
+		$output = $this->escapeParserOutput($output);
+		$expected_output = $this->escapeExpectedOutput($expected_output);		
+		
+		$this->assertEquals($expected_output, $output);		
+	}
+	
+	public function testMixtureOfLists(){
+		$input_string = <<<HEREDOC
+# one
+# two
+#* two point one
+#* two point two
+# three
+#; three item one
+#: three def one
+# four
+#: four def one
+#: this looks like a continuation
+#: and is often used
+#: instead<br/>of <nowiki><br/></nowiki>
+# five
+## five sub 1
+### five sub 1 sub 1
+## five sub 2
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<ol>
+	<li>one</li>
+	<li>two
+		<ul>
+			<li>two point one</li>
+			<li>two point two</li>
+		</ul>
+	</li>
+	<li>three
+		<dl>
+			<dt>three item one</dt>
+			<dd>three def one</dd>
+		</dl>
+	</li>
+	<li>four
+		<dl>
+			<dd>four def one</dd>
+			<dd>this looks like a continuation</dd>
+			<dd>and is often used</dd>
+			<dd>instead<br>
+			of &lt;br/&gt;</dd>
+		</dl>
+	</li>
+	<li>five
+		<ol>
+			<li>five sub 1
+				<ol>
+					<li>five sub 1 sub 1</li>
+				</ol>
+			</li>
+			<li>five sub 2<span id="pre"></span></li>
+		</ol>
+	</li>
+</ol>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		
+		$output = $this->escapeParserOutput($output);
+		$expected_output = $this->escapeExpectedOutput($expected_output);
+		
+		$this->assertEquals($expected_output, $output);				
+	}
+	
+	public function testPreformattedText(){
+		$input_string = <<<HEREDOC
+
+ Start each line with a space.
+ Text is '''preformatted''' and
+ ''markups'' '''''can''''' be done.
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<pre> Start each line with a space.
+ Text is <strong>preformatted</strong> and
+ <em>markups</em> <strong><em>can</strong></em> be done.
+</pre>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+
+		$output = $this->escapeParserOutput($output);
+		$expected_output = $this->escapeExpectedOutput($expected_output);
+		
+		$this->assertEquals($expected_output, $output);			
+	}
+	
+	public function testPreformattedTextBlocks(){
+		$input_string = <<<HEREDOC
+
+ <nowiki>Start with a space in the first column,
+(before the <nowiki>).
+
+Then your block format will be
+    maintained.
+ 
+This is good for copying in code blocks:
+
+def function():
+    """documentation string"""
+
+    if True:
+        print True
+    else:
+        print False</nowiki>
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<pre class='prettyprint'>Start with a space in the first column,
+(before the &lt;nowiki&gt;).
+
+Then your block format will be
+    maintained.
+
+ This is good for copying in code blocks:
+
+def function():
+    &quot;&quot;&quot;documentation string&quot;&quot;&quot;
+
+    if True:
+        print True
+    else:
+        print False
+</pre>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		
+		$output = $this->escapeParserOutput($output);
+		$expected_output = $this->escapeExpectedOutput($expected_output);
+		
+		$this->assertEquals($expected_output, $output);			
+	}	
+	
+	public function testLinks(){
+		$this->markTestSkipped();
 	}
 }

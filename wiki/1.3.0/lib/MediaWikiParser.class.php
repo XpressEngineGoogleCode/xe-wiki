@@ -7,8 +7,8 @@ class MediaWikiParser extends ParserBase {
 		"italic" => "\'\'",
 		"bold"	=> "\'\'\'",
 		"inline_code" => "`",
-		"multiline_code_open" => "{{{",
-		"multiline_code_close" => "}}}",
+		"multiline_code_open" => "[\n][ ][<]nowiki[>]",
+		"multiline_code_close" => "[<][\/]nowiki[>]",
 		"superscript" => '\^',
 		"subscript" => ',,',
 		"strikeout" => '~~'
@@ -18,6 +18,12 @@ class MediaWikiParser extends ParserBase {
 		parent::__construct($wiki_site);	
 	}
 		
+	protected function parseText() {
+		parent::parseText();
+		
+		$this->parsePreformattedText();
+	}
+	
 	/**
 	 * Override
 	 */
@@ -69,6 +75,23 @@ class MediaWikiParser extends ParserBase {
 		$this->text = preg_replace("/^[#\*]+ *(.+)$/m","<li>$1</li>", $this->text);	
 	
 		return;
+	}
+	
+	/**
+	 * @override
+	 * Skip blockquote parsing; indenting means Preformatted text in MediaWiki 
+	 */
+	protected function parseQuotes(){
+		
+	}
+	
+	protected function parsePreformattedText(){
+		$this->text = preg_replace("/(
+							(([\n])			# Start with newline
+							[ ]				# One space
+							(.+)			# Any number of characters
+							)+				# Repeat at least once
+							)/xe", "str_replace('$3', '', '<pre>$1</pre>')", $this->text);				
 	}
 		
 }

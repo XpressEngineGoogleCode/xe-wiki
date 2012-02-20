@@ -41,26 +41,35 @@ class ParserBase {
 	public function parse($text) {
 		$this->text = $text;
 		if(!empty($this->text)){
-			// Convert Windows end of line (\r\n) to Linux (\n) end of line, otherwise preg_replace doesn't work
-			$this->text = str_replace(chr(13), '', $this->text);			
-			
-			$this->escapeWhateverThereIsToEscape();
-			$this->parseCodeBlocksAndEscapeThemFromParsing();
-			
-			
-			$this->parseHeadings();
-			$this->parseBoldUnderlineAndSuch();
-			$this->parsePragmas();
-			$this->parseLinks();
-			$this->parseLists();
-			$this->parseTables();
-			$this->parseQuotes();
-			$this->parseHorizontalRules();		
-			$this->parseParagraphs();
-		
-			$this->putBackEscapedBlocks();
+			$this->parseInit();		
+			$this->parseText();
+			$this->parseEnd(); 
 		}
 		return $this->text;
+	}
+	
+	protected function parseInit(){
+		// Convert Windows end of line (\r\n) to Linux (\n) end of line, otherwise preg_replace doesn't work
+		$this->text = str_replace(chr(13), '', $this->text);			
+
+		$this->escapeWhateverThereIsToEscape();		
+		$this->parseCodeBlocksAndEscapeThemFromParsing();
+	}
+	
+	protected function parseText(){
+		$this->parseHeadings();
+		$this->parseBoldUnderlineAndSuch();
+		$this->parsePragmas();
+		$this->parseLinks();
+		$this->parseLists();
+		$this->parseTables();
+		$this->parseQuotes();
+		$this->parseHorizontalRules();				
+	}
+	
+	protected function parseEnd(){
+		$this->parseParagraphs();
+		$this->putBackEscapedBlocks();		
 	}
 	
 	protected function escapeWhateverThereIsToEscape(){
@@ -113,7 +122,8 @@ class ParserBase {
 	 * The purpose of this function is to skip parsing text inside code blocks
 	 */	
 	private function _parseMultilineCodeBlock(&$matches){
-		$this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
+		// $this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
+		$this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . htmlentities(stripslashes($matches[2])) . '</pre>';
 		return "%%%" . $this->batch_count . "%%%";
 	}
 	
@@ -401,7 +411,7 @@ class ParserBase {
 							(([\n])
 							[ ]	
 							(.+)	
-							)+
+							)+ 
 							)/xe", "str_replace('$3', '', '<blockquote>$1</blockquote>')", $this->text);		
 	}
 	
