@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.0">
+    <customrules>
+    </customrules>
+	<fields>
+		<field name="document_srl" required="true" />
+		<field name="nick_name" required="true" />
+		<field name="password" required="true" />
+		<field name="email_address" maxlength="1:250" />
+		<field name="homepage" maxlength="1:250" />
+		<field name="content" required="true" minlength="1" />
+	</fields>
+</ruleset>

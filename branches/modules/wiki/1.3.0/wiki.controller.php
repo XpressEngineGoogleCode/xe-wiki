@@ -11,7 +11,7 @@
 		}
 
 		/**
-		 * @brief Add a wiki module.
+		 * @brief Add a wiki document.
 		 */
 		function procWikiInsertDocument() {
 			// Create object model of document module
@@ -100,7 +100,13 @@
 			$this->setMessage($msg_code);
 		}
 
-
+		/**
+		 * @brief Register comments on the wiki if user is not logged
+		 */
+		function procWikiInsertCommentNotLogged() {
+			procWikiInsertComment();
+		}
+		
 		/**
 		 * @brief Register comments on the wiki
 		 */
@@ -177,11 +183,16 @@
 			}
 
 			if(!$output->toBool()) return $output;
-
-			$this->setMessage('success_registed');
+			
+			
+			
 			$this->add('mid', Context::get('mid'));
 			$this->add('document_srl', $obj->document_srl);
 			$this->add('comment_srl', $obj->comment_srl);
+			$this->setMessage('success_registed');
+			$this->setRedirectUrl(Context::get('success_return_url'));
+			
+			
 		}
 
 
@@ -242,7 +253,8 @@
 			$this->add('mid', Context::get('mid'));
 			$this->add('page', Context::get('page'));
 			$this->add('document_srl', $output->get('document_srl'));
-			$this->setMessage('success_deleted');
+			$this->setRedirectUrl(Context::get('success_return_url'));
+			//$this->setMessage('success_deleted');
 		}
 
 		

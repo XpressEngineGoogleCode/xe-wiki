@@ -144,7 +144,3 @@ jQuery(document).ready(function(){
 	jQuery("input[name='content']").val(v);
     })
 })
-function test(elem)
-{
-    procFilter(elem, insert_comment);
-}
