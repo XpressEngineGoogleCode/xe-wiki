@@ -135,7 +135,7 @@ class wikiView extends wiki implements WikiSite
 					Context::set('history', $output);
 				}
 			} 
-			Context::addJsFilter($this->module_path.'tpl/filter', 'insert.xml');
+			//Context::addJsFilter($this->module_path.'tpl/filter', 'insert.xml');
 			
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
@@ -371,7 +371,7 @@ class wikiView extends wiki implements WikiSite
 			Context::set('entry', $alias);
 			
 			// Adding javascript filter 
-			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
+			//Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
 			// Redirect to user friendly URL if request comes from Search
 			
 			// get translated language for current document
@@ -437,7 +437,7 @@ class wikiView extends wiki implements WikiSite
 			/** 
 			* Add javascript filter
 			**/
-			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
+			//Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
 			
 			// set tree menu for left side of page
 			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
@@ -480,7 +480,13 @@ class wikiView extends wiki implements WikiSite
 			/** 
 			* Add javascript filter
 			**/
-			Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
+			//Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
+			// 
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
+			{
+				$this->getLeftMenu();
+			}
 			
 			$this->setTemplateFile('comment_form');
 		}
@@ -513,8 +519,14 @@ class wikiView extends wiki implements WikiSite
 			/** 
 			* Add javascript filter
 			**/
-			Context::addJsFilter($this->module_path.'tpl/filter', 'delete_comment.xml');
+			//Context::addJsFilter($this->module_path.'tpl/filter', 'delete_comment.xml');
 
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
+			{
+				$this->getLeftMenu();
+			}
+			
 			$this->setTemplateFile('delete_comment_form');
 		}
 		
@@ -556,6 +568,12 @@ class wikiView extends wiki implements WikiSite
                 $skin_path = $module_path . 'skins/xe_wiki/';
             }
 
+			// set tree menu for left side of page
+			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
+			{
+				$this->getLeftMenu();
+			}
+			
             $oTemplateHandler = &TemplateHandler::getInstance();
 
             $this->add('html', $oTemplateHandler->compile($skin_path, 'comment_form.html'));

@@ -2,10 +2,13 @@
 <!--%import("js/wiki_admin.js")-->
 <!--#include("header.html")-->
 
-<form action="./" method="get" onsubmit="return procFilter(this, delete_wiki)">
-<input type="hidden" name="page" value="{$page}" />
-<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
-
+<form action="./" method="get" ruleset="delete_wiki">
+	<input type="hidden" name="page" value="{$page}" />
+	<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
+	<input type="hidden" name="act" value="procWikiAdminDeleteWiki" />
+	<input type="hidden" name="module" value="wiki" />
+    <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiAdminContent', 'module_srl', $module_info->module_srl)}" />
+	
     <h4 class="xeAdmin">{$lang->confirm_delete}</h4>
     <table cellspacing="0" class="rowTable">
     <tr>

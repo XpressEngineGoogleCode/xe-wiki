@@ -2,10 +2,13 @@
 <!--%import("js/wiki_admin.js")-->
 <!--#include("header.html")-->
 
-<form action="./" method="post" onsubmit="return procFilter(this, insert_wiki)" enctype="multipart/form-data">
-<input type="hidden" name="page" value="{$page}" />
-<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
-
+<form action="./" method="post" ruleset="insert_wiki" enctype="multipart/form-data">
+	<input type="hidden" name="page" value="{$page}" />
+	<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
+	<input type="hidden" name="act" value="procWikiAdminInsertWiki" />
+	<input type="hidden" name="module" value="wiki" />
+    <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiAdminContent', 'module_srl', $module_info->module_srl)}" />
+	
     <table cellspacing="0" class="rowTable">
     <!--@if($logged_info->is_admin!='Y')-->
     <input type="hidden" name="mid" value="{$module_info->mid}" />
