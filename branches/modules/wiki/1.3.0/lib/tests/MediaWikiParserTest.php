@@ -452,7 +452,118 @@ HEREDOC;
 		$this->assertEquals($expected_output, $output);			
 	}	
 	
-	public function testLinks(){
-		$this->markTestSkipped();
-	}
+	/**
+	 * Internal links
+	 */
+	public function testLinks_InternalSimple(){
+		$input_string = "[[Main Page]]";
+		$expected_output = "<a href=\"Main_Page\" title=\"Main Page\">Main Page</a>";
+		
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}		
+	
+	/**
+	 * Internal links
+	 */
+	public function testLinks_InternalPiped(){
+		$input_string = "[[Main Page|different text]]";
+		$expected_output = "<a href=\"Main_Page\" title=\"Main Page\">different text</a>";
+		
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}			
+	
+	/**
+	 * Internal links
+	 * Short for [[Help:Contents|Contents]]
+	 */
+	public function testLinks_InternalNamespaceSimple(){
+		$input_string = "[[Help:Contents]]";
+		$expected_output = "<a href=\"Contents\" title=\"Contents\">Contents</a>";
+		
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}			
+	
+	/**
+	 * Internal links
+	 */
+	public function testLinks_InternalWordEndings(){	
+		$output = $this->wikiParser->parse("[[Help]]s");
+		$this->assertEquals("<a href=\"Help\" title=\"Help\">Helps</a>",$output);
+		
+		$output = $this->wikiParser->parse("[[Help]]ing");
+		$this->assertEquals("<a href=\"Help\" title=\"Help\">Helping</a>",$output);		
+		 
+		$output = $this->wikiParser->parse("[[Help]]anylettersyoulikehere");
+		$this->assertEquals("<a href=\"Help\" title=\"Help\">Helpanylettersyoulikehere</a>",$output);			
+	}				
+	
+	/**
+	 * Internal links
+	 */
+	public function testLinks_InternalWordEndingsEscape(){	
+		$output = $this->wikiParser->parse("[[Help]]<nowiki />ful advice");
+		$this->assertEquals("<a href=\"Help\" title=\"Help\">Help</a>ful advice",$output);
+	}					
+	
+	/**
+	 * Internal links
+	 */
+	public function testLinks_InternalToAnchor(){	
+		$output = $this->wikiParser->parse("[[#See also]]");
+		$this->assertEquals("<a href=\"#See_also\">#See also</a>",$output);
+	}						
+	
+	/**
+	 * Internal links
+	 */
+	public function testLinks_InternalToAnchorWithDescription(){	
+		$output = $this->wikiParser->parse("[[#See also|different text]]");
+		$this->assertEquals("<a href=\"#See_also\">different text</a>",$output);
+	}							
+
+	/**
+	 * Internal links
+	 */
+	public function testLinks_InternalToAnchorOnAnotherPage(){	
+		$output = $this->wikiParser->parse("[[Help:Images#See also]]");
+		$this->assertEquals("<a href=\"Images#See_also\" title=\"Images\">Images#See also</a>",$output);
+	}							
+	
+	/**
+	 * External links
+	 */
+	public function testLinks_ExternalWithoutTag(){	
+		$output = $this->wikiParser->parse("http://mediawiki.org");
+		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">http://mediawiki.org</a>",$output);
+	}								
+	
+	/**
+	 * External links
+	 */
+	public function testLinks_ExternalSimple(){	
+		$output = $this->wikiParser->parse("[http://mediawiki.org MediaWiki]");
+		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">MediaWiki</a>",$output);
+	}									
+	
+	/**
+	 * External links
+	 */
+	public function testLinks_ExternalNumbered(){	
+		$output = $this->wikiParser->parse("[http://mediawiki.org]");
+		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external autonumber\">[1]</a>",$output);
+		
+		$output = $this->wikiParser->parse("[http://mediawiki.com]");
+		$this->assertEquals("<a href=\"http://mediawiki.com\" title=\"http://mediawiki.com\" class=\"external autonumber\">[2]</a>",$output);		
+	}				
+	
+	/**
+	 * External links
+	 */
+	public function testLinks_ExternalWithFileIcons(){	
+		$output = $this->wikiParser->parse("[http://mediawiki.org MediaWiki]");
+		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">MediaWiki</a>",$output);
+	}					
 }
