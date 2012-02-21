@@ -28,7 +28,7 @@ class ParserBase {
 	);
 	
 	// Keeps a reference to a wiki instance, used to check if documents exist and such
-	private $wiki_site = null;
+	protected $wiki_site = null;
 	
 	public function __construct($wiki_site = null) {
 		$this->escaped_blocks = array();
