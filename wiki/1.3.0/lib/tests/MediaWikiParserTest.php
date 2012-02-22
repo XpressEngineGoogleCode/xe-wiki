@@ -265,6 +265,7 @@ HEREDOC;
 	
 	public function testDefinitionList(){
 		$input_string = <<<HEREDOC
+
 ;item 1
 : definition 1
 ;item 2
@@ -274,10 +275,10 @@ HEREDOC;
 		$expected_output = <<<HEREDOC
 <dl>
 <dt>item 1</dt>
-<dd>definition 1</dd>
+<dd> definition 1</dd>
 <dt>item 2</dt>
-<dd>definition 2-1</dd>
-<dd>definition 2-2</dd>
+<dd> definition 2-1</dd>
+<dd> definition 2-2</dd>
 </dl>
 HEREDOC;
 		$output = $this->wikiParser->parse($input_string);
@@ -566,4 +567,172 @@ HEREDOC;
 		$output = $this->wikiParser->parse("[http://mediawiki.org MediaWiki]");
 		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">MediaWiki</a>",$output);
 	}					
+	
+	public function testAgrregate1(){
+		$input_string = <<<HEREDOC
+=== Heading ===
+Some content
+I would like to add another line
+
+== Subheading ==
+Some more content
+Some more lines1
+:A line with indent
+:: A 2-indented line
+:: more
+:back to 1-indented line
+Something here
+
+==== subsub ====
+I'm a sub of a sub
+
+=== New heading ===
+
+This is an image.
+[[File:http://lygon.net/lygonsoftware.png Lygon Software]]
+This is some more text
+
+This is a link: [http://www.google.com Google blaah blaahg].
+This is a bold link: '''[http://www.google.com Google]'''.
+This is a bold-italic link: '''''[http://www.google.com Google]'''''.
+This is '''bold''', '''''bold-italic''''', and ''italic''
+This here is a link without text [http://lygon.net]
+Don't forget to strip out, or convert any <strong>html</html> if planning on echoing directly to a page.
+
+Some more lines1
+:A line with indent
+:: A 2-indented line
+:: more
+:back to 1-indented line
+
+And a hr thingy here
+----
+
+== Listings hiar ==
+
+# First
+# second
+## Second-First
+### third
+#### z
+#### y
+#### x
+## Second-Second [ftp://www.facebook.com Facebook FTP]
+## Second-Third [http://www.google.com Google Here] 
+# third
+### hax
+### lol
+#### omg
+# wtf
+
+* apple
+* orange
+** banana
+*** cactus
+*** dolphin
+**** monkey
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$output = $this->escapeParserOutput($output);
+		
+		$expected_output = <<<HEREDOC
+<h2>Heading</h2>
+Some content<br/>
+I would like to add another line<br/>
+
+<h1>Subheading</h1>
+Some more content<br/>
+Some more lines1<br/>
+<dl>
+<dd>A line with indent</dd>
+<dd><dl>
+<dd>A 2-indented line</dd> 
+<dd>more</dd>
+</dl></dd>
+<dd>back to 1-indented line</dd>
+</dl>
+Something here<br/>
+
+<h3>subsub</h3>
+I'm a sub of a sub<br/>
+
+<h2>New heading</h2>
+
+This is an image.<br/>
+<img src="http://lygon.net/lygonsoftware.png" alt=" Lygon Software"/><br/>
+This is some more text<br/>
+
+This is a link: <a href="http://www.google.com">Google blaah blaahg</a>.<br/>
+This is a bold link: <strong><a href="http://www.google.com">Google</a></strong>.<br/>
+This is a bold-italic link: <strong><em><a href="http://www.google.com">Google</a></em></strong>.<br/>
+This is <strong>bold</strong>, <strong><em>bold-italic</em></strong>, and <em>italic</em><br/>
+This here is a link without text <a href="http://lygon.net">http://lygon.net</a><br/>
+
+Some more lines1<br/>
+<dl>
+<dd>A line with indent</dd>
+<dd><dl>
+<dd>A 2-indented line</dd>
+<dd>more</dd>
+</dl></dd>
+<dd>back to 1-indented line</dd>
+</dl>
+
+And a hr thingy here<br/>
+<hr/>
+<h1>Listings hiar</h1>
+
+<ol>
+<li>First</li>
+<li>second
+<ol>
+<li>Second-First
+<ol>
+<li>third
+<ol>
+<li>z</li>
+<li>y</li>
+<li>x</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Second-Second <a href="ftp://www.facebook.com">Facebook FTP</a></li>
+<li>Second-Third <a href="http://www.google.com">Google Here</a> </li>
+</ol>
+</li>
+<li>third
+<ol>
+<li>hax</li>
+<li>lol
+<ol>
+<li>omg</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>wtf</li>
+</ol>
+
+<ul>
+<li>apple</li>
+<li>orange
+<ul>
+<li>banana
+<ul>
+<li>cactus</li>
+<li>dolphin
+<ul>
+<li>monkey</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+HEREDOC;
+		$expected_output = $this->escapeExpectedOutput($expected_output);
+		$this->assertEquals($expected_output, $output);
+	}
 }
