@@ -20,7 +20,8 @@ class MediaWikiParser extends ParserBase {
 		
 	protected function parseText() {
 		parent::parseText();
-		
+
+		$this->parseDefinitionLists();
 		$this->parsePreformattedText();
 	}
 	
@@ -51,8 +52,14 @@ class MediaWikiParser extends ParserBase {
 		
 	protected function parseLists(){
 		// Ordered list
+		// Find all ordered list blocks - at most 4 levels deep - and surround them with <ol></ol>
 		// First pass, finding all blocks
-		$this->text = preg_replace("/[\n\r]#.+([\n|\r]#.+)+/","\n<ol>$0\n</ol>", $this->text);
+		$this->text = preg_replace("/						# This parses all list blocks (includes all LIs)
+									[\n\r]					# Newline
+									[#]						# That start with #
+									.+						# Followed by any characters (at least one)
+									([\n|\r][#].+)+			# Then repeat at least once
+									/x","\n<ol>$0\n</ol>", $this->text);
 		// List item with sub items of 2 or more
 		$this->text = preg_replace("/[\n\r]#(?!#) *(.+)(([\n\r]#{2,}.+)+)/","\n<li>$1\n<ol>$2\n</ol>\n</li>", $this->text);
 		// List item with sub items of 3 or more
@@ -75,6 +82,24 @@ class MediaWikiParser extends ParserBase {
 		$this->text = preg_replace("/^[#\*]+ *(.+)$/m","<li>$1</li>", $this->text);	
 	
 		return;
+	}
+	
+	/**
+	 * Only allow one level lists - anything else is ignored
+	 */
+	protected function parseDefinitionLists(){
+		// Wrap block with <dl> tags
+		$this->text = preg_replace("/	
+									[\r]?[\n]					# Newline
+									[;:]						# That start with #
+									.+						# Followed by any characters (at least one)
+									(([\r]?[\n])[:;].+)+			# Then repeat at least once										
+									/x","\n<dl>$0\n</dl>", $this->text);
+		// Wrap term with <dt>
+		$this->text = preg_replace("/^[;](.+)$/m","<dt>$1</dt>", $this->text);	
+		
+		// Wrap definitio with <dd>
+		$this->text = preg_replace("/^[:](.+)$/m","<dd>$1</dd>", $this->text);	
 	}
 	
 	/**
