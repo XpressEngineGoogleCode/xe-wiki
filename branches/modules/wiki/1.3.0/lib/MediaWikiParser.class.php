@@ -102,6 +102,9 @@ class MediaWikiParser extends ParserBase {
 		$this->text = preg_replace("/^[:](.+)$/m","<dd>$1</dd>", $this->text);	
 	}
 	
+	protected function parseIndents(){
+	}
+	
 	/**
 	 * @override
 	 * Skip blockquote parsing; indenting means Preformatted text in MediaWiki 

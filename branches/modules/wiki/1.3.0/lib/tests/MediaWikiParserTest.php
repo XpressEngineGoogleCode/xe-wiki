@@ -291,6 +291,7 @@ HEREDOC;
 	
 	public function testIndentText(){
 		$input_string = <<<HEREDOC
+
 : Single indent
 :: Double indent
 ::::: Multiple indent
@@ -735,4 +736,299 @@ HEREDOC;
 		$expected_output = $this->escapeExpectedOutput($expected_output);
 		$this->assertEquals($expected_output, $output);
 	}
+	
+	
+	/**
+	 * Tables
+	 */
+	public function testTables1(){	
+		$input_string = <<<HEREDOC
+{|
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<table>
+<tbody><tr>
+<td>Orange</td>
+<td>Apple</td>
+</tr>
+<tr>
+<td>Bread</td>
+<td>Pie</td>
+</tr>
+<tr>
+<td>Butter</td>
+<td>Ice cream</td>
+</tr>
+</tbody></table>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}			
+	
+	/**
+	 * Tables
+	 */
+	public function testTables2(){	
+		$input_string = <<<HEREDOC
+{|
+|Orange||Apple||more
+|-
+|Bread||Pie||more
+|-
+|Butter||Ice<br />cream||and<br />more
+|}
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<table>
+<tbody><tr>
+<td>Orange</td>
+<td>Apple</td>
+<td>more</td>
+</tr>
+<tr>
+<td>Bread</td>
+<td>Pie</td>
+<td>more</td>
+</tr>
+<tr>
+<td>Butter</td>
+<td>Ice<br>
+cream</td>
+<td>and<br>
+more</td>
+</tr>
+</tbody></table>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}				
+	
+	/**
+	 * Tables
+	 */
+	public function testTables3(){	
+		$input_string = <<<HEREDOC
+{|
+|  Orange    ||   Apple   ||   more
+|-
+|   Bread    ||   Pie     ||   more
+|-
+|   Butter   || Ice cream ||  and more
+|}
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<table>
+<tbody><tr>
+<td>Orange</td>
+<td>Apple</td>
+<td>more</td>
+</tr>
+<tr>
+<td>Bread</td>
+<td>Pie</td>
+<td>more</td>
+</tr>
+<tr>
+<td>Butter</td>
+<td>Ice<br>
+cream</td>
+<td>and<br>
+more</td>
+</tr>
+</tbody></table>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}		
+	
+	/**
+	 * Tables
+	 */
+	public function testTables4(){	
+		$input_string = <<<HEREDOC
+{|
+|Lorem ipsum dolor sit amet, 
+consetetur sadipscing elitr, 
+sed diam nonumy eirmod tempor invidunt
+ut labore et dolore magna aliquyam erat, 
+sed diam voluptua. 
+
+At vero eos et accusam et justo duo dolores
+et ea rebum. Stet clita kasd gubergren,
+no sea takimata sanctus est Lorem ipsum
+dolor sit amet. 
+|
+* Lorem ipsum dolor sit amet
+* consetetur sadipscing elitr
+* sed diam nonumy eirmod tempor invidunt
+|}
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<table>
+<tbody><tr>
+<td>Lorem ipsum dolor sit amet,
+<p>consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+<p>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+</td>
+<td>
+<ul>
+<li>Lorem ipsum dolor sit amet</li>
+<li>consetetur sadipscing elitr</li>
+<li>sed diam nonumy eirmod tempor invidunt</li>
+</ul>
+</td>
+</tr>
+</tbody></table>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}			
+	
+	/**
+	 * Tables
+	 */
+	public function testTables_Headers(){	
+		$input_string = <<<HEREDOC
+{|
+! align="left"|Item
+! Amount
+! Cost
+|-
+|Orange
+|10
+|7.00
+|-
+|Bread
+|4
+|3.00
+|-
+|Butter
+|1
+|5.00
+|-
+!Total
+|
+|15.00
+|}
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<table>
+<tbody><tr>
+<th style="text-align: left;">Item</th>
+<th>Amount</th>
+<th>Cost</th>
+</tr>
+<tr>
+<td>Orange</td>
+<td>10</td>
+<td>7.00</td>
+</tr>
+<tr>
+<td>Bread</td>
+<td>4</td>
+<td>3.00</td>
+</tr>
+<tr>
+<td>Butter</td>
+<td>1</td>
+<td>5.00</td>
+</tr>
+<tr>
+<th>Total</th>
+<td></td>
+<td>15.00</td>
+</tr>
+</tbody></table>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}			
+	
+/**
+	 * Tables
+	 */
+	public function testTables_Caption(){	
+		$input_string = <<<HEREDOC
+{|
+|+Food complements
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<table>
+<caption>Food complements</caption>
+<tbody><tr>
+<td>Orange</td>
+<td>Apple</td>
+</tr>
+<tr>
+<td>Bread</td>
+<td>Pie</td>
+</tr>
+<tr>
+<td>Butter</td>
+<td>Ice cream</td>
+</tr>
+</tbody></table>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}			
+	
+	/**
+	 * Images
+	 */
+	public function testImage_Simple(){	
+		$input_string = <<<HEREDOC
+[[File:Wiki.png|thumb|alt=text|Caption]]
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<div class="thumb tright">
+<div class="thumbinner" style="width:137px;"><a href="/wiki/File:Wiki.png" class="image"><img alt="text" src="//upload.wikimedia.org/wikipedia/en/b/bc/Wiki.png" width="135" height="155" class="thumbimage"></a>
+<div class="thumbcaption">
+<div class="magnify"><a href="/wiki/File:Wiki.png" class="internal" title="Enlarge"><img src="//bits.wikimedia.org/skins-1.18/common/images/magnify-clip.png" width="15" height="11" alt=""></a></div>
+Caption</div>
+</div>
+</div>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}					
+	
+	/**
+	 * Images
+	 */
+	public function testImage_Resized(){	
+		$input_string = <<<HEREDOC
+[[File:Wiki.png|thumb|60px|alt=text|Cap]]
+HEREDOC;
+		$expected_output = <<<HEREDOC
+<div class="thumb tright">
+<div class="thumbinner" style="width:62px;"><a href="/wiki/File:Wiki.png" class="image"><img alt="Alt text" src="//upload.wikimedia.org/wikipedia/en/thumb/b/bc/Wiki.png/60px-Wiki.png" width="60" height="69" class="thumbimage"></a>
+<div class="thumbcaption">
+<div class="magnify"><a href="/wiki/File:Wiki.png" class="internal" title="Enlarge"><img src="//bits.wikimedia.org/skins-1.18/common/images/magnify-clip.png" width="15" height="11" alt=""></a></div>
+Cap</div>
+</div>
+</div>
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$this->assertEquals($expected_output,$output);
+	}		
 }
