@@ -50,6 +50,9 @@ class wikiView extends wiki implements WikiSite
 				$oModuleController = &getController('module');
 				$oModuleController->insertModulePartConfig('editor', $this->module_info->module_srl, $editor_config);
 			}
+			
+			// Load wiki title
+			if(!isset($this->module_info->title)) $this->module_info->title = $this->module_info->browser_title;
 		}
 		
 
