@@ -31,7 +31,7 @@
 			if(!$this->module_srl) return new Object(-1,'msg_invalid_request');
 
 			$xml_file = sprintf('%sfiles/cache/wiki/%d.xml', _XE_PATH_,$this->module_srl);
-			if(!file_exists($xml_file)) $oWikiController->recompileTree($this->module_srl);
+			if(!file_exists($xml_file)) $oWikiController->loadWikiTreeList($this->module_srl);
 			print FileHandler::readFile($xml_file);
 			Context::close();
 			exit();
@@ -51,6 +51,7 @@
 			$buff = explode("\n", trim(FileHandler::readFile($dat_file)));
 			if(!count($buff)) return array();
 			$module_info = Context::get('module_info');
+			$list = array();
 			foreach($buff as $val) {
 				if(!preg_match('/^([0-9]+),([0-9]+),([0-9]+),([0-9]+),(.+)$/i', $val, $m)) continue;
 				unset($obj);
@@ -80,15 +81,36 @@
 			if(!$output->data || !$output->toBool()) return array();
 
 			$list = array();
-			$root = $this->getRootDocument($module_srl);
-			$root_node = $root;
+			//$root = $this->getRootDocument($module_srl);
+			// root
+			$min = -1;
+			$selected = 0;
+			foreach ($output->data as $key => $node) 
+			{
+				if($node->list_order == 0)
+				{
+					if ($min < 0)
+					{
+						$min = (int)$node->document_srl;
+						$selected = $key;
+					}
+					else
+					{
+						if ((int)$node->document_srl < $min)
+						{
+							$min = (int)$node->document_srl;
+							$selected = $key;
+						}
+					}
+				}
+			}
+			
+			$root_node = $output->data[$selected];
 			$root_node->parent_srl = 0;
 			foreach($output->data as $node)
 			{
 				if($node->document_srl == $root_node->document_srl)
 				{
-					//$root_node = $node;
-					//$root_node->parent_srl = 0;
 					continue;
 				}
 				
@@ -98,7 +120,8 @@
 				$obj->title = $node->title;
 				$list[$obj->document_srl] = $obj;
 			}
-
+			$tree = array();
+			$result = array();
 			$tree[$root_node->document_srl]->node = $root_node;
 
 			foreach($list as $document_srl => $node) {

@@ -88,6 +88,9 @@
 		
 			// Returns the results
 			$entry = $oDocumentModel->getAlias($output->get('document_srl'));
+			// Registration success message
+			$this->setMessage($msg_code);
+			
 			if($entry) {
 				$site_module_info = Context::get('site_module_info');
 				$url = getSiteUrl($site_module_info->document,'','mid',$this->module_info->mid,'entry',$entry);
@@ -96,15 +99,13 @@
 			}
 			$this->setRedirectUrl($url);
 
-			// Registration success message
-			$this->setMessage($msg_code);
 		}
 
 		/**
 		 * @brief Register comments on the wiki if user is not logged
 		 */
 		function procWikiInsertCommentNotLogged() {
-			procWikiInsertComment();
+			$this->procWikiInsertComment();
 		}
 		
 		/**
@@ -179,7 +180,7 @@
 			{
 				$obj->parent_srl = $comment->parent_srl;
 				$output = $oCommentController->updateComment($obj, $this->grant->manager);
-				$comment_srl = $obj->comment_srl;
+				//$comment_srl = $obj->comment_srl;
 			}
 
 			if(!$output->toBool()) return $output;
