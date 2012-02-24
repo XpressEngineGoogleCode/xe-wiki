@@ -24,7 +24,9 @@
 			$args = Context::getRequestVars();
 			$args->module = 'wiki';
 			if($args->use_comment!='N') $args->use_comment = 'Y';
-
+			if($args->use_comment_validation!='N') $args->use_comment_validation = 'Y';
+			
+			//unset($args->wiki_name);
 			if($args->module_srl) {
 				$module_info = $oModuleModel->getModuleInfoByModuleSrl($args->module_srl);
 				if($module_info->module_srl != $args->module_srl) unset($args->module_srl);

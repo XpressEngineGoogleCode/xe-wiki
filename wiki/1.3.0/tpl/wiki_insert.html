@@ -7,7 +7,7 @@
 	<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
 	<input type="hidden" name="act" value="procWikiAdminInsertWiki" />
 	<input type="hidden" name="module" value="wiki" />
-    <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiAdminContent', 'module_srl', $module_info->module_srl)}" />
+    <input type="hidden" name="success_return_url" value="{getUrl('module','admin','act','dispWikiAdminInsertWiki', 'module_srl', $module_info->module_srl)}" />
 	
     <table cellspacing="0" class="rowTable">
     <!--@if($logged_info->is_admin!='Y')-->
@@ -43,7 +43,7 @@
             <p>{$lang->about_use_comment}</p>
         </td>
     </tr>
-
+	
     <tr>
         <th scope="row"><div>{$lang->browser_title}</div></th>
         <td>
