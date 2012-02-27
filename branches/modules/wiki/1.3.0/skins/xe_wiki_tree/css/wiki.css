@@ -302,3 +302,56 @@ a.wikiButtonAdmin, a.wikiButton  {
 #wikiTitleArea input {
 	width:40%;
 }
+
+#wikiTitleArea h2 a {
+	text-decoration: none;
+	color: #BA0000;
+}
+
+#wikiNavigation {
+	margin: 5px 0;
+	border-top: 1px dotted #b9b8b8;
+	border-bottom: 1px dotted #b9b8b8;
+	padding: 0 10px;
+	background: #fffbde;
+}
+
+#wikiPrev {
+	float: left;
+	text-align: left;
+}
+
+#wikiNext {
+	float: right;
+	text-align: right;
+}
+
+#wikiPrev, #wikiNext {
+	font-weight: bold;
+	color: #333;
+	width: 50%;
+}
+
+#wikiComments {
+	float: left;
+	width: 98.3%;
+	margin: 0 5px
+}
+
+#wikiComments h3, #wikiSearchForm  h3 {
+	font-size: 18px;
+	font-weight: normal;
+	border-bottom: 1px dotted #b9b8b8;
+	padding-bottom: 4px;
+	margin: 5px 0;
+}
+
+#wikiEditorActions {
+	float: right;
+	margin-top: 4px;
+}
+
+#wikiEditorActions img {
+	margin: 0 5px 0 0;
+	vertical-align: top;
+}
