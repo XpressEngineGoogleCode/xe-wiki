@@ -9,93 +9,74 @@
 <!--@end-->
 <!--%import("js/wiki.js")-->
 
-<!--@if(!$module_info->colorset)-->
-    {@$module_info->colorset = "white"}
-<!--@end-->
-<div id="wikiCustomHeader" cond="$module_info->header_text">
-		{$module_info->header_text}
-</div>
-<div class="wiki">
-	<div class="wikiHeader">
+
+<div id="wiki">
+	<div id="wikiCustomHeader" cond="$module_info->header_text">
+			{$module_info->header_text}
+	</div>	
+	
+	<div id="wikiHeader">
 		<!--@if($module_info->title)-->
-		<div class="wikiTitle">
-			<h1 class="wikiTitleText">
-			    <a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}">
-				{$module_info->title}
-				<!--@if($module_info->sub_title)--> : 
-				    <br /><em>{$module_info->sub_title}</em>
-				<!--@end-->
-			    </a>
-			</h1>
+		<h1><a href="{getUrl('','mid',$mid,'listStyle',$listStyle)}">
+			{$module_info->title}
+			<!--@if($module_info->sub_title)--> : 
+				<br /><em>{$module_info->sub_title}</em>
+			<!--@end-->
+		</a></h1>
+		<!--@end-->
+		
+		<!--@if($module_info->comment)-->
+		<p class="wikiDescription">{$module_info->comment}</p>
+		<!--@end-->		
 			
-			<ul id="navMenu">
+		<ul id="navMenu">
+			<li>
+				<a class="wikiButton" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">
+					<img src="img/icon_manual_index.png" alt="" /><span>{$lang->home_page}</span></a>
+			</li>
+			<li>
+				<a class="wikiButton" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">
+					<img src="img/icon_view_all.png" alt="" />
+					<span>
+						{$lang->cmd_view_document_list}
+					</span>
+				</a>
+			</li>
+			<!--@if($grant->manager)-->
 				<li>
-					<a class="wikiButton" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">
-						<img src="img/icon_manual_index.png" alt="" /><span>{$lang->home_page}</span></a>
-				</li>
-				<li>
-					<a class="wikiButton" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">
-						<img src="img/icon_view_all.png" alt="" />
+					<a class="wikiButtonAdmin" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">
+						<img src="img/icon_change_toc_structure.png" alt="" />
 						<span>
-							{$lang->cmd_view_document_list}
+							{$lang->cmd_view_document_tree}
 						</span>
 					</a>
 				</li>
-				<!--@if($grant->manager)-->
-					<li>
-						<a class="wikiButtonAdmin" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">
-							<img src="img/icon_change_toc_structure.png" alt="" />
-							<span>
-								{$lang->cmd_view_document_tree}
-							</span>
-						</a>
-					</li>
-					<li>
-						<a class="wikiButtonAdmin" href="{getUrl('act','dispWikiAdminInsertWiki','entry','','document_srl','', 'module_srl', $module_info->module_srl)}">
-							<img src="img/icon_module_setup.png" alt="" />
-							<span>
-								{$lang->cmd_setup}
-							</span>
-						</a>					
-					</li>
-				<!--@end-->
-			</ul>				
-			
-			
-		</div>
-		<!--@end-->
-
-		<!--@if($module_info->comment)-->
-		<p class="wikiDescription">{$module_info->comment}</p>
-		<!--@end-->
+				<li>
+					<a class="wikiButtonAdmin" href="{getUrl('act','dispWikiAdminInsertWiki','entry','','document_srl','', 'module_srl', $module_info->module_srl)}">
+						<img src="img/icon_module_setup.png" alt="" />
+						<span>
+							{$lang->cmd_setup}
+						</span>
+					</a>					
+				</li>
+			<!--@end-->
+		</ul>		
 		
-			
+		<div class="cleared"></div>	
 	</div>
 	
+	<!--
     <div class="wikiInformation">
-        <div class="infoView">
-			<span><a class="buttonOfficial" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
-        </div>
-		
-		<div id="xeWikiSearch">
-			<form action="{getUrl('mid', $mid, 'search_keyword', $search_keyword, 'act', 'dispWikiSearchResults', 'vid', $vid)}" method="get" >
-				<input type="hidden" name="search_target" value="title_content" />
-				<input type="hidden" name="act" value="dispWikiSearchResults" />
-				<input type="hidden" name="error_return_url" value="" />
-
-				<input id="xeWikiSearchText" type="text" name="search_keyword" value="{$search_keyword}" class="xeDocsInputText" />
-				<input id="xeWikiSearchButton" type="submit" value="" title="{$lang->Search}" />
-			</form>
-		</div>		
+		<span><a class="wikiButtonAdmin" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
     </div>
+ -->
     
+<div id="wikiBody">
 	<!--#include("left_side_tree_list.html")-->
-    <div id="content_Body">
+    
 	<!--@if($oDocument && $oDocument->isExists())-->
-	<div class="wikiRead">
-	    <div class="wikiReadHeader">
-		<div class="titleArea">
-		    <h3 class="title"><a href="{getUrl('document_srl',$document_srl)}">{$oDocument->getTitle()}</a></h3>
+		<div id="wikiTitleArea">
+		    <h2 id="wikiTitle"><a href="{getUrl('document_srl',$document_srl)}">{$oDocument->getTitle()}</a></h2>
 		    <span class="sum">
 			<span class="read">{$lang->readed_count} <span class="num">{$oDocument->get('readed_count')}</span></span>
 			<span class="vote">{$lang->voted_count} <span class="num">{$oDocument->get('voted_count')}</span></span>
@@ -109,8 +90,6 @@
 		    </span>
 		</div>
 
-	<!--@if($visit_log)-->
-	<div class="visitLog">
 		<div class="lang_bar">
 			<!--@foreach($langs as $key => $val)-->
 				<!--@if (in_array($key, $translatedlangs))-->
@@ -123,8 +102,6 @@
 			<!--@endforeach-->
 		</div>
 		<div class="breadcrumbs_bar">{$breadcrumbs}</div>
-	</div>
-	<!--@end-->
 
 		<div class="authorArea">
 		    <!--@if($history)-->
@@ -163,24 +140,10 @@
 			<span><a class="buttonOfficial" href="{getUrl('act','','history_srl','')}">{$lang->cmd_back}</a></span>
 		    </div>
 		    <!--@end-->
-		</div>
-	    </div>
 	</div>
 	<!--@elseif($oDocument)-->
-	<div class="wikiRead">
-	    <div class="wikiReadHeader">
-		<div class="titleArea">
+		<div id="wikiTitleArea">
 			<!-- Needs to acces title with get('title') instead of getTitle() because oDocument is seen as invalid when doc_srl is 0 -->
-		    <h3 class="title">{$oDocument->get('title')}</h3>
+		    <h2 class="title">{$oDocument->get('title')}</h2>
 		</div>
-	    </div>
-	</div>
-	<!--@if($visit_log)-->
-	<div class="visitLog">
-	    {@ $bFirst = true; }
-	    <!--@foreach($visit_log as $_entry)-->
-		<!--@if(!$bFirst)--> > <!--@else-->{@ $bFirst = false; }<!--@end--> <a href="{getUrl('entry',$_entry)}">{$_entry}</a>
-	    <!--@end-->
-	</div>
-	<!--@end-->
 	<!--@end-->
