@@ -1,15 +1,5 @@
 <div id="leftSideTreeList">
-	<div id="xeWikiSearch">
-		<form action="{getUrl('mid', $mid, 'search_keyword', $search_keyword, 'act', 'dispWikiSearchResults', 'vid', $vid)}" method="get" >
-			<input type="hidden" name="search_target" value="title_content" />
-			<input type="hidden" name="act" value="dispWikiSearchResults" />
-            <input type="hidden" name="error_return_url" value="" />
 
-			<input id="xeWikiSearchText" type="text" name="search_keyword" value="{$search_keyword}" class="xeDocsInputText" />
-			<input id="xeWikiSearchButton" type="submit" value="" title="{$lang->Search}" />
-		</form>
-	</div>
-	
     <div class="clearAll"></div>
     {@ $oDocumentModel = &getModel("document");}
     <!--@if($module_info->menu_style == 'classic')-->
