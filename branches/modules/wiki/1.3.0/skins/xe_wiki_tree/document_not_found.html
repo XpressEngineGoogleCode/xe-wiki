@@ -1,5 +1,10 @@
 <!--#include("header.html")-->
 
+	<div id="wikiTitleArea">
+		<!-- Needs to acces title with get('title') instead of getTitle() because oDocument is seen as invalid when doc_srl is 0 -->
+		<h2>{$oDocument->get('title')}</h2>
+	</div>
+
 	<div id="wikiContentContainer">
 		{$oDocument->get('content')}
 		<!--@if(!$_first_page_)-->
@@ -11,5 +16,5 @@
 			<span class="buttonOfficial"><a href="{getUrl('act','dispWikiEditPage','entry',$oDocument->get('title'))}">{$lang->cmd_create}</a></span>
 		</div>
 	</div>
-</div>
+
 <!--#include("footer.html")-->
