@@ -1,7 +1,8 @@
 <!--#include("header.html")-->
-
-<div class="wikiRead">
-	<div class="wikiReadBody">
+	
+	<div id="showHideTree" class="showHideTree" title="{$lang->hide_tree}/{$lang->show_tree}"></div>
+	
+	<div id="wikiContentContainer">
 		<!--@if($oDocument->isSecret() && !$oDocument->isGranted())-->
 			<form action="./" method="get" ruleset="input_password" class="secretMessage">
 				<input type="hidden" name="act" value="procWikiVerificationPassword" />
@@ -30,57 +31,55 @@
 			<!--@end-->
 		<!--@end-->
 	</div>
-	<div class="wikiReadFooter">
-		<div class="wikiNavigation">
-		<!--@if($oDocumentPrev)-->
-			<a href="{getUrl('document_srl',$oDocumentPrev->document_srl)}" class="wikiPrev">&laquo; {$oDocumentPrev->getTitle()}</a>
-		<!--@end-->
-		<!--@if($oDocumentNext)-->
-			<a href="{getUrl('document_srl',$oDocumentNext->document_srl)}" class="wikiNext">{$oDocumentNext->getTitle()} &raquo;</a>
-		<!--@end-->
-		</div>
 
-		{@ $tag_list = $oDocument->get('tag_list') }
-		<!--@if(count($tag_list))-->
-		<dl class="tag">
-			<dt><img src="./img/common/iconTag.gif" width="27" height="11" alt="{$lang->tag}" /></dt>
-			<!--@for($i=0;$i<count($tag_list);$i++)-->
-				{@ $tag = $tag_list[$i]; }
-				<dd><a href="{getUrl('search_target','tag','search_keyword',$tag,'document_srl','')}" rel="tag">{htmlspecialchars($tag)}</a></dd>
-			<!--@end-->
-		</dl>
-		<!--@end-->
-		
-		<!--@if($oDocument->hasUploadedFiles())-->
-        <dl class="attachedFile">
-            <dt><img src="./img/common/iconFiles.gif" width="27" height="11" alt="{$lang->uploaded_file}" /> <input type="button" class="fileToggle" onclick="jQuery(this).parents('dl.attachedFile').toggleClass('open');return false;">{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})</input></dt>
-            <dd>
-                <ul class="files">
-                    {@ $uploaded_list = $oDocument->getUploadedFiles() }
-                    <!--@foreach($uploaded_list as $key => $file)-->
-                    <li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
-                    <!--@end-->
-                </ul>
-            </dd>
-        </dl>
-		<!--@end-->
-        
-        <!--@if(!$oDocument->getTrackbackCount())-->
-		<dl class="trackbackURL">
-			<dt>{$lang->trackback} : </dt>
-			<dd><a href="{$oDocument->getTrackbackUrl()}" onclick="return false;">{$oDocument->getTrackbackUrl()}</a></dd>
-		</dl>
-        <!--@end-->
-		
-        <!--@if($contributors)-->
-		<dl class="contributors">
-			<dt>{$lang->contributors} : </dt>
-			<dd><!--@foreach($contributors as $key => $val)--><a href="#" class="member_{$val->member_srl}" onclick="return false;">{$val->nick_name}</a><!--@if($key<count($contributors)-1)-->, <!--@end--><!--@end--></dd>
-		</dl>
-        <!--@end-->
+	<div id="wikiNavigation">
+	<!--@if($oDocumentPrev)-->
+		<a href="{getUrl('document_srl',$oDocumentPrev->document_srl)}" class="wikiPrev">&laquo; {$oDocumentPrev->getTitle()}</a>
+	<!--@end-->
+	<!--@if($oDocumentNext)-->
+		<a href="{getUrl('document_srl',$oDocumentNext->document_srl)}" class="wikiNext">{$oDocumentNext->getTitle()} &raquo;</a>
+	<!--@end-->
 	</div>
 
-</div>
+	{@ $tag_list = $oDocument->get('tag_list') }
+	<!--@if(count($tag_list))-->
+	<dl class="tag">
+		<dt><img src="./img/common/iconTag.gif" width="27" height="11" alt="{$lang->tag}" /></dt>
+		<!--@for($i=0;$i<count($tag_list);$i++)-->
+			{@ $tag = $tag_list[$i]; }
+			<dd><a href="{getUrl('search_target','tag','search_keyword',$tag,'document_srl','')}" rel="tag">{htmlspecialchars($tag)}</a></dd>
+		<!--@end-->
+	</dl>
+	<!--@end-->
+
+	<!--@if($oDocument->hasUploadedFiles())-->
+	<dl class="attachedFile">
+		<dt><img src="./img/common/iconFiles.gif" width="27" height="11" alt="{$lang->uploaded_file}" /> <input type="button" class="fileToggle" onclick="jQuery(this).parents('dl.attachedFile').toggleClass('open');return false;">{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})</input></dt>
+		<dd>
+			<ul class="files">
+				{@ $uploaded_list = $oDocument->getUploadedFiles() }
+				<!--@foreach($uploaded_list as $key => $file)-->
+				<li><a href="{getUrl('')}{$file->download_url}">{$file->source_filename} <span class="bubble">[File Size:{FileHandler::filesize($file->file_size)}/Download:{number_format($file->download_count)}]</span></a></li>
+				<!--@end-->
+			</ul>
+		</dd>
+	</dl>
+	<!--@end-->
+
+	<!--@if(!$oDocument->getTrackbackCount())-->
+	<dl class="trackbackURL">
+		<dt>{$lang->trackback} : </dt>
+		<dd><a href="{$oDocument->getTrackbackUrl()}" onclick="return false;">{$oDocument->getTrackbackUrl()}</a></dd>
+	</dl>
+	<!--@end-->
+
+	<!--@if($contributors)-->
+	<dl class="contributors">
+		<dt>{$lang->contributors} : </dt>
+		<dd><!--@foreach($contributors as $key => $val)--><a href="#" class="member_{$val->member_srl}" onclick="return false;">{$val->nick_name}</a><!--@if($key<count($contributors)-1)-->, <!--@end--><!--@end--></dd>
+	</dl>
+	<!--@end-->
+
 
 <!--@if($oDocument->allowTrackback())-->
     <!--#include("./trackback.html")-->
@@ -135,6 +134,6 @@
         </form>
     <!--@end-->
 <!--@end-->
-
+</div>
 
 <!--#include("footer.html")-->

@@ -1,9 +1,17 @@
 <div id="leftSideTreeList">
+	<div id="wikiSearch">
+		<form action="{getUrl('mid', $mid, 'search_keyword', $search_keyword, 'act', 'dispWikiSearchResults', 'vid', $vid)}" method="get" >
+			<input type="hidden" name="search_target" value="title_content" />
+			<input type="hidden" name="act" value="dispWikiSearchResults" />
+			<input type="hidden" name="error_return_url" value="" />
 
-    <div class="clearAll"></div>
+			<input id="wikiSearchText" type="text" name="search_keyword" value="{$search_keyword}" class="xeDocsInputText" />
+			<input id="wikiSearchButton" type="submit" value="" title="{$lang->Search}" />
+		</form>
+	</div>		
+	<h3>Table of contents:</h3>
     {@ $oDocumentModel = &getModel("document");}
     <!--@if($module_info->menu_style == 'classic')-->
-    <div class="tree">
 		{@ $_pDepth = 0;}
 		<ul id="navigation">
 		<!--@foreach($list as $key => $val)-->
@@ -38,13 +46,11 @@
 		<!--@end-->
 		</li>
 		</ul>
-    </div>
     <!--@else-->
 	<!--@if(count($list))-->
-	<div class="tree">
 	    <ul>
 		<!--@foreach($list as $node)-->
-		<li class="xedocsTreeNode" style="
+		<li class="wikiTreeNode" style="
 			<!--@if($node->type == 'root' || $node->type == 'active_root')-->
 				list-style-image:url('./modules/wiki/skins/xe_wiki_tree/img/icon_root.png');
 			<!--@elseif($node->type == 'parent')-->
@@ -67,12 +73,9 @@
 		</li>
 		<!--@end-->
 	    </ul>
-	</div>
 	<!--@end-->
     <!--@end-->
-    
-    <div class="clearAll"></div>
 </div>
-<div id="showHideTree" class="showHideTree" title="{$lang->hide_tree}/{$lang->show_tree}"></div>
+
 
 
