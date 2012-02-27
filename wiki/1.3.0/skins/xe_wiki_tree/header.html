@@ -12,14 +12,10 @@
 <!--@if(!$module_info->colorset)-->
     {@$module_info->colorset = "white"}
 <!--@end-->
-<div id="wikiCustomHeader">
-	<!--@if($module_info->header_text)-->
+<div id="wikiCustomHeader" cond="$module_info->header_text">
 		{$module_info->header_text}
-	<!--@end-->
 </div>
-<div class="clearAll"></div>
 <div class="wiki">
-    <div class="wikiInformation">
 	<div class="wikiHeader">
 		<!--@if($module_info->title)-->
 		<div class="wikiTitle">
@@ -31,20 +27,66 @@
 				<!--@end-->
 			    </a>
 			</h1>
+			
+			<ul id="navMenu">
+				<li>
+					<a class="wikiButton" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">
+						<img src="img/icon_manual_index.png" alt="" /><span>{$lang->home_page}</span></a>
+				</li>
+				<li>
+					<a class="wikiButton" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">
+						<img src="img/icon_view_all.png" alt="" />
+						<span>
+							{$lang->cmd_view_document_list}
+						</span>
+					</a>
+				</li>
+				<!--@if($grant->manager)-->
+					<li>
+						<a class="wikiButtonAdmin" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">
+							<img src="img/icon_change_toc_structure.png" alt="" />
+							<span>
+								{$lang->cmd_view_document_tree}
+							</span>
+						</a>
+					</li>
+					<li>
+						<a class="wikiButtonAdmin" href="{getUrl('act','dispWikiAdminInsertWiki','entry','','document_srl','', 'module_srl', $module_info->module_srl)}">
+							<img src="img/icon_module_setup.png" alt="" />
+							<span>
+								{$lang->cmd_setup}
+							</span>
+						</a>					
+					</li>
+				<!--@end-->
+			</ul>				
+			
+			
 		</div>
 		<!--@end-->
 
 		<!--@if($module_info->comment)-->
 		<p class="wikiDescription">{$module_info->comment}</p>
 		<!--@end-->
+		
+			
 	</div>
 	
+    <div class="wikiInformation">
         <div class="infoView">
-		<span><a class="buttonOfficial" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
-		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">{$lang->home_page}</a></span>
-		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a></span>
-		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a></span>
+			<span><a class="buttonOfficial" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
         </div>
+		
+		<div id="xeWikiSearch">
+			<form action="{getUrl('mid', $mid, 'search_keyword', $search_keyword, 'act', 'dispWikiSearchResults', 'vid', $vid)}" method="get" >
+				<input type="hidden" name="search_target" value="title_content" />
+				<input type="hidden" name="act" value="dispWikiSearchResults" />
+				<input type="hidden" name="error_return_url" value="" />
+
+				<input id="xeWikiSearchText" type="text" name="search_keyword" value="{$search_keyword}" class="xeDocsInputText" />
+				<input id="xeWikiSearchButton" type="submit" value="" title="{$lang->Search}" />
+			</form>
+		</div>		
     </div>
     
 	<!--#include("left_side_tree_list.html")-->
