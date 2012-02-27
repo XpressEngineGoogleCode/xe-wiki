@@ -64,86 +64,14 @@
 		
 		<div class="cleared"></div>	
 	</div>
+	   
+<div id="wikiBody">
+	<!--#include("left_side_tree_list.html")-->
 	
 	<!--
     <div class="wikiInformation">
 		<span><a class="wikiButtonAdmin" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
     </div>
- -->
-    
-<div id="wikiBody">
-	<!--#include("left_side_tree_list.html")-->
-    
-	<!--@if($oDocument && $oDocument->isExists())-->
-		<div id="wikiTitleArea">
-		    <h2 id="wikiTitle"><a href="{getUrl('document_srl',$document_srl)}">{$oDocument->getTitle()}</a></h2>
-		    <span class="sum">
-			<span class="read">{$lang->readed_count} <span class="num">{$oDocument->get('readed_count')}</span></span>
-			<span class="vote">{$lang->voted_count} <span class="num">{$oDocument->get('voted_count')}</span></span>
-			<span class="date">
-			    <!--@if($history)-->
-			    <strong>{zdate($history->regdate, 'Y.m.d')}</strong> {zdate($history->regdate, 'H:i:s')}
-			    <!--@else-->
-			    <strong>{$oDocument->getUpdate('Y.m.d')}</strong> {$oDocument->getUpdate('H:i:s')} 
-			    <!--@end-->
-			</span>
-		    </span>
-		</div>
-
-		<div class="lang_bar">
-			<!--@foreach($langs as $key => $val)-->
-				<!--@if (in_array($key, $translatedlangs))-->
-					<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{$val}" style="border:1px solid #AA0000;">{strtoupper($key)}</a>
-				<!--@else-->
-					<!--@if($is_logged)-->
-						<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{$val}">{strtoupper($key)}</a>
-					<!--@end-->
-				<!--@end-->
-			<!--@endforeach-->
-		</div>
-		<div class="breadcrumbs_bar">{$breadcrumbs}</div>
-
-		<div class="authorArea">
-		    <!--@if($history)-->
-			<a href="#" class="author member_{$history->member_srl}" onclick="return false;">{$history->nick_name}</a>
-		    <!--@else-->
-			<!--@if(!$oDocument->getMemberSrl())-->
-			    <!--@if($oDocument->isExistsHomepage())-->
-				<a href="{$oDocument->getHomepageUrl()}" onclick="window.open(this.href);return false;" class="author">{$oDocument->getNickName()}</a>
-			    <!--@else-->
-				{$oDocument->getNickName()}
-			    <!--@end-->
-			<!--@else-->
-			    <a href="#popup_menu_area" class="member_{$oDocument->get('member_srl')} author" onclick="return false">{$oDocument->getNickName()}</a>
-			<!--@end-->
-		    <!--@end-->
-
-		    <span class="ipAddress"><!--@if($grant->manager || $module_info->display_ip_address!='N')-->{$oDocument->getIpaddress()}<!--@end--></span>
-
-		    <!--@if(!$history && ($oDocument->isExists()||$use_history != 'N'))-->
-		    <div class="command">
-			<!--@if($oDocument->isExists()&&$act!='dispWikiEditPage')-->
-			    <span><a class="buttonOfficial" href="{getUrl('act','dispWikiEditPage','entry',$entry)}"><span>{$lang->cmd_edit}</span></a></span>
-			<!--@end-->
-			<!--@if($oDocument->isExists() && $grant->delete_document && $oDocument->document_srl != (int)$root->document_srl)-->
-			    <span><a class="buttonOfficial" href="#" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }; return false;"><span>{$lang->cmd_delete}</span></a></span>
-			<!--@end-->
-			<!--@if($use_history != 'N')-->
-			    <span><a class="buttonOfficial" href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}"><span>{$lang->histories}</span></a></span>
-			<!--@end-->
-		    </div>
-		    <!--@else-->
-		    <div class="command">
-			<!--@if($history)-->
-			    {$lang->notice_old_revision}
-			<!--@end-->
-			<span><a class="buttonOfficial" href="{getUrl('act','','history_srl','')}">{$lang->cmd_back}</a></span>
-		    </div>
-		    <!--@end-->
-	</div>
-	<!--@elseif($oDocument)-->
-		<div id="wikiTitleArea">
-			<!-- Needs to acces title with get('title') instead of getTitle() because oDocument is seen as invalid when doc_srl is 0 -->
-		    <h2 class="title">{$oDocument->get('title')}</h2>
-		</div>
-	<!--@end-->
+	-->    
+	
+	<div id="showHideTree" class="showHideTree" title="{$lang->hide_tree}/{$lang->show_tree}"></div>

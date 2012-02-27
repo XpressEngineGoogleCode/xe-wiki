@@ -146,7 +146,7 @@ class wikiView extends wiki implements WikiSite
 				$this->getLeftMenu();
 			}			
 			
-			$this->setTemplateFile('write_form');
+			$this->setTemplateFile('document_edit');
 		}
 
 

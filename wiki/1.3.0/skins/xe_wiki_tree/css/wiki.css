@@ -292,3 +292,13 @@ a.wikiButtonAdmin, a.wikiButton  {
 	margin: 20px 10px 0 10px;
 	overflow: hidden;
 }
+
+/* Add / Edit document form */
+#wikiTitleArea input#title {
+	font-size:24px;
+	width:70%;
+}
+
+#wikiTitleArea input {
+	width:40%;
+}
