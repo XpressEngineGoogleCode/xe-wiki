@@ -333,7 +333,13 @@
 		<value xml:lang="tr"><![CDATA[Alias:]]></value>
 		<value xml:lang="vi"><![CDATA[Alias:]]></value>
 	</item>
-	<item name="create_first_page">
-		<value xml:lang="en"><![CDATA[Your Wiki have no documents. You should create your first Wiki document!]]></value>
+	<item name="create_first_page_title">
+		<value xml:lang="en"><![CDATA[Welcome to XpressEngine Wiki!]]></value>
+	</item>	
+	<item name="create_first_page_description">
+		<value xml:lang="en"><![CDATA[You don't have any documents yet. Go ahead and add your first page!]]></value>
 	</item>
+	<item name="top_of_page">
+		<value xml:lang="en"><![CDATA[Go to top]]></value>
+	</item>	
 </lang>

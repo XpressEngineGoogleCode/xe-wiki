@@ -287,3 +287,8 @@ a.wikiButtonAdmin, a.wikiButton  {
 	padding: 0 0 0 14px;
 	background: url('../img/icon_arrow_top.png') 0 0 no-repeat;
 }
+
+#wikiContentContainer {
+	margin: 20px 10px 0 10px;
+	overflow: hidden;
+}
