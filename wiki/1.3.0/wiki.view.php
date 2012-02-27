@@ -293,6 +293,7 @@ class wikiView extends wiki implements WikiSite
 					}
 					else
 					{
+						$visitingAnEmptyWiki = true;
 						Context::set('_first_page_', 'true');
 					}
 				}
@@ -342,7 +343,7 @@ class wikiView extends wiki implements WikiSite
 
 				// Not showing the content if it is secret
 				if($oDocument->isSecret() && !$oDocument->isGranted()) $oDocument->add('content',Context::getLang('thisissecret'));
-				$this->setTemplateFile('view_document');
+				$this->setTemplateFile('document_view');
 
 				// set contributors
 				if($this->use_history)
@@ -363,10 +364,26 @@ class wikiView extends wiki implements WikiSite
 			}
 			else
 			{
-				$oDocument->add('title', $entry);
-				$alias = $this->beautifyEntryName($entry);
-				$oDocument->add('alias', $alias);
-				$this->setTemplateFile('create_document');		
+				// Document was not found
+				//	 If user is for the first time on this wiki and there is no document in the entire site
+				//   show a friendly message
+				if($visitingAnEmptyWiki){
+					$title = Context::getLang('create_first_page_title');
+					$content = Context::getLang('create_first_page_description');
+					
+					$oDocument->add('title', $title);
+					$alias = $this->beautifyEntryName($title);
+					$oDocument->add('alias', $alias);
+					$oDocument->add('content', $content);
+				}
+				//  Otherwise, show the usual message
+				else {
+					$oDocument->add('title', $entry);
+					$alias = $this->beautifyEntryName($entry);
+					$oDocument->add('alias', $alias);					
+				}
+				
+				$this->setTemplateFile('document_not_found');		
 			}
 			Context::set('visit_log', $_SESSION['wiki_visit_log'][$this->module_info->module_srl]);
 			// Setting a value oDocument for being use in skins
