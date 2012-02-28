@@ -269,6 +269,7 @@ a.wikiButtonAdmin, a.wikiButton  {
 	background: #f4f4f4;
 	border-bottom: 1px solid #dfdfdf;
 	padding: 10px;
+	padding-bottom: 0;
 }
 
 #wikiTitleArea p {
@@ -309,10 +310,10 @@ a.wikiButtonAdmin, a.wikiButton  {
 }
 
 #wikiNavigation {
-	margin: 5px 0;
+	margin: 5px 0 0 0;
 	border-top: 1px dotted #b9b8b8;
 	border-bottom: 1px dotted #b9b8b8;
-	padding: 0 10px;
+	padding: 10px;
 	background: #fffbde;
 }
 
@@ -355,3 +356,115 @@ a.wikiButtonAdmin, a.wikiButton  {
 	margin: 0 5px 0 0;
 	vertical-align: top;
 }
+
+#wikiTitle {
+	padding:0;
+	margin:5px 0 10px 0;
+}
+
+#wikiAboveTitleArea, #wikiBelowTitleArea {
+	background: #F4F4F4;
+	padding: 5px 10px;
+	border-bottom: 1px dotted #b9b8b8;
+	position: relative;
+}
+#wikiAboveTitleArea .cleared, #wikiBelowTitleArea .cleared {
+	position:absolute;
+}
+
+#wikiBreadcrumbs {
+
+}
+
+#wikiLanguages {
+	float:right;
+}
+
+#wikiSum {
+	float:right; 
+}
+
+#wikiSum .read, .vote {
+	font-size:11px; 
+	margin-right:5px;
+}
+
+#wikiSum .num {
+	font-size:9px;
+}
+
+#wikiSum .date {
+	padding-left:10px; 
+	font-size:9px; 
+	background-repeat:no-repeat; 
+	background-position:left center;
+}
+
+#wikiAuthorArea { 
+	
+}
+
+#wikiAuthorArea .author {
+	font-size:12px;
+}
+
+#wikiAuthorArea .ipAddress { 
+	font-size:9px; 
+}
+
+/*#wikiTags, #wikiAttachedFiles, #wikiTrackback, #wikiContributors dt{*/
+dl {
+	background: #eee;
+	margin:0;
+	padding:5px;
+	border-bottom: 1px dotted #b9b8b8;
+	font-size:12px;
+}
+dl dt, dl dd {
+	display:inline;
+}
+
+#wikiAttachedFiles ul.files { 
+	display:none; 
+	list-style-type:none;
+	padding: 0 10px;
+}
+
+#wikiAttachedFiles.open ul.files { 
+	display:block; 
+}
+
+#wikiAttachedFiles.open ul.files li { 
+	
+}
+
+#wikiAttachedFiles ul.files a { 
+	padding-left:15px; 
+	background:url(../img/common/iconFile.gif) left center no-repeat;
+}
+
+/* Attached File */
+
+/*
+#wikiAttachedFiles { position:relative; margin:1em 0 1em 0; float:left; width:100%;}
+#wikiAttachedFiles *{ margin:0; padding:0; font-size:11px; vertical-align:middle;}
+#wikiAttachedFiles dt .fileToggle{ border:0; padding:0; overflow:visible; cursor:pointer; font-size:11px; background:none; background-color: yellow;}
+#wikiAttachedFiles dd{ position:relative; margin-right:5px; display:none; margin-top:5px; padding-left:40px;}
+#wikiAttachedFiles.open dd{ display:block;}
+#wikiAttachedFiles ul.files { position:relative; margin:0 0 1em 0; padding:0; clear:both; list-style:none;}
+#wikiAttachedFiles ul.files *{ display:inline-block; padding:0; margin:0; font-size:11px;}
+#wikiAttachedFiles ul.files li{ position:relative; margin:0 10px 0 0;}
+#wikiAttachedFiles ul.files a{ position:relative; background-repeat:no-repeat; background-position:left center; text-decoration:none;}
+#wikiAttachedFiles ul.files a .bubble{ display:none; position:absolute; top:-20px; left:0; padding:2px 5px; z-index:100; white-space:nowrap;}
+#wikiAttachedFiles ul.files a:hover .bubble,
+#wikiAttachedFiles ul.files a:active .bubble,
+#wikiAttachedFiles ul.files a:focus .bubble{ display:block;}
+#wikiAttachedFiles ul.files a{ padding-left:15px; background-image:url(../img/common/iconFile.gif); color:#4d4d4d;}
+#wikiAttachedFiles dt a { color:#4d4d4d;}
+#wikiAttachedFiles ul.files a .bubble{ border:1px solid #ddd; background-color:#fff; color:#4d4d4d;}
+*/
+
+/* Popup Menu */
+#popup_menu_area{background:#fff; border-color:#eee;}
+#popup_menu_area ul{ border-color:#ddd;}
+#popup_menu_area li a{ color:#000;}
