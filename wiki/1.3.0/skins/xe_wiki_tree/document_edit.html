@@ -1,5 +1,10 @@
 <!--#include("header.html")-->
 
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+        <p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+
 <form action="./" method="post" ruleset="insert" id="fo_write">
 	<input type="hidden" name="mid" value="{$mid}" />
 	<input type="hidden" name="act" value="procWikiInsertDocument" />
@@ -29,6 +34,13 @@
 		{$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
 	</div>
 
+	<!--@if(!$is_logged)-->
+	<input type="text" name="nick_name" class="inputText userName" value="{$lang->writer}" onfocus="this.value=''" />
+	<input type="password" name="password" class="inputText userPw" value="{$lang->password}" onfocus="this.value=''" />
+	<input type="text" name="email_address" class="inputText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
+	<input type="text" name="homepage" class="inputText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
+	<!--@end-->	
+	
 	<div class="wikiNavigation">
 		<span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
 	</div>
