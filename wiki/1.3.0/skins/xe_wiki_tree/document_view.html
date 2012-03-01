@@ -1,8 +1,10 @@
 <!--#include("header.html")-->
-	
+<div id="celmaitaremartisor">
 	<!--@if($oDocument && $oDocument->isExists())-->
 	
 		<div id="wikiAboveTitleArea">
+			<div id="wikiBreadcrumbs">{$breadcrumbs}</div>
+			
 			<div id="wikiLanguages">
 				<!--@foreach($langs as $key => $val)-->
 					<!--@if (in_array($key, $translatedlangs))-->
@@ -14,8 +16,6 @@
 					<!--@end-->
 				<!--@endforeach-->
 			</div>		
-
-			<div id="wikiBreadcrumbs">{$breadcrumbs}</div>
 			
 			<div class="cleared"></div>
 		</div>
@@ -189,4 +189,5 @@
 	</div>
 	
 	<div class="cleared" />
+</div>
 <!--#include("footer.html")-->

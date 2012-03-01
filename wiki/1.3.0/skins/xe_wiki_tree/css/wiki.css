@@ -327,6 +327,9 @@ a.wikiButtonAdmin, a.wikiButton  {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0000', endColorstr='#a10000',GradientType=0 ); /* IE6-9 */
 }
 
+#celmaitaremartisor {
+	position: relative;
+}
 
 #wikiBody {
 	padding-left: 250px;
@@ -440,11 +443,15 @@ a.wikiButtonAdmin, a.wikiButton  {
 }
 
 #wikiBreadcrumbs {
-
+	position: absolute;
+	z-index: 1;
 }
 
 #wikiLanguages {
-	float:right;
+	/*	float:right;*/
+	position:relative;
+	right:0;
+	text-align: right;
 }
 
 #wikiSum {
