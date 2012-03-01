@@ -345,4 +345,14 @@
 	<item name="comment">
 		<value xml:lang="en"><![CDATA[Comments]]></value>
 	</item>		
+	<item name="translate_page_into">
+		<value xml:lang="en"><![CDATA[Translate page into]]></value>
+	</item>			
+	<item name="you_are_viewing">
+		<value xml:lang="en"><![CDATA[You are currently viewing this page in]]></value>
+	</item>				
+	<item name="view_this_page_in">
+		<value xml:lang="en"><![CDATA[View this page in]]></value>
+	</item>					
+	
 </lang>
