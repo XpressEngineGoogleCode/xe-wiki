@@ -261,6 +261,73 @@ a.wikiButtonAdmin, a.wikiButton  {
 }
 
 
+.wikiBodyButton {
+	font-weight: bold;
+	color: #fff !important;
+	font-size: 13px;
+	text-shadow: 1px 1px 0 #000;
+	text-decoration: none;
+}
+
+.wikiBodyButton span {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	background: #bababa; /* Old browsers */
+	background: -moz-linear-gradient(top,  #bababa 0%, #707070 32%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bababa), color-stop(32%,#707070)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #bababa 0%,#707070 32%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #bababa 0%,#707070 32%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #bababa 0%,#707070 32%); /* IE10+ */
+	background: linear-gradient(top,  #bababa 0%,#707070 32%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bababa', endColorstr='#707070',GradientType=0 ); /* IE6-9 */
+	padding: 7px 5px;
+}
+
+.wikiBodyButton span span {
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.15), 0 0 0 1px #7f7f7f;
+	-moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.15), 0 0 0 1px #7f7f7f;
+	-webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.15), 0 0 0 1px #7f7f7f;
+	background: #707070; /* Old browsers */
+	background: -moz-linear-gradient(top,  #707070 0%, #424242 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#707070), color-stop(100%,#424242)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #707070 0%,#424242 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #707070 0%,#424242 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #707070 0%,#424242 100%); /* IE10+ */
+	background: linear-gradient(top,  #707070 0%,#424242 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#707070', endColorstr='#424242',GradientType=0 ); /* IE6-9 */
+	padding: 5px 16px;
+}
+
+.wikiBodyButton:hover span span {
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.35), 0 0 0 1px #949494;
+	-moz-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.35), 0 0 0 1px #949494;
+	-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.35), 0 0 0 1px #949494;
+	background: #df0000; /* Old browsers */
+	background: -moz-linear-gradient(top,  #df0000 0%, #ad0000 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#df0000), color-stop(100%,#ad0000)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #df0000 0%,#ad0000 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #df0000 0%,#ad0000 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #df0000 0%,#ad0000 100%); /* IE10+ */
+	background: linear-gradient(top,  #df0000 0%,#ad0000 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#df0000', endColorstr='#ad0000',GradientType=0 ); /* IE6-9 */
+}
+
+.wikiBodyButton:active span span {
+	box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.55), 0 0 0 1px #949494;
+	-moz-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.55), 0 0 0 1px #949494;
+	-webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.55), 0 0 0 1px #949494;
+	background: #cc0000; /* Old browsers */
+	background: -moz-linear-gradient(top,  #cc0000 0%, #a10000 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#a10000)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #cc0000 0%,#a10000 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #cc0000 0%,#a10000 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #cc0000 0%,#a10000 100%); /* IE10+ */
+	background: linear-gradient(top,  #cc0000 0%,#a10000 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0000', endColorstr='#a10000',GradientType=0 ); /* IE6-9 */
+}
+
+
 #wikiBody {
 	padding-left: 250px;
 }
@@ -468,3 +535,299 @@ dl dt, dl dd {
 #popup_menu_area{background:#fff; border-color:#eee;}
 #popup_menu_area ul{ border-color:#ddd;}
 #popup_menu_area li a{ color:#000;}
+
+#commentsList .item { 
+	/*position: relative; */
+	border-bottom: 1px dotted #b9b8b8;
+	padding:5px;
+}
+
+#commentsList .item .indent { 
+	/*position: absolute; */
+}
+#commentsList .item.itemReply .indent { 
+	padding-left:15px; 
+	background-repeat:no-repeat; 
+	background-position:0 1.2em;
+	background-image:url(../img/common/iconReply.gif);
+}
+#commentsList .item .indent:after { 
+	content:""; 
+	display:block; 
+	clear:both;
+}
+
+#commentsList .item .itemAside {
+	float:left;
+	width:100px;
+}
+
+#commentsList .item .itemAside a { 
+	text-decoration:none;
+}
+#commentsList .item .itemAside a:hover,
+#commentsList .item .itemAside a:active,
+#commentsList .item .itemAside a:focus { 
+	text-decoration:underline;
+}
+#commentsList .item .itemAside img.profile{ 
+	display:block; 
+	border:1px solid; 
+	margin-bottom:5px; 
+	width:36px;
+}
+#commentsList .item .itemAside .meta {
+	font-size:9px; 
+	margin:0 0 5px 0; 
+	white-space:nowrap;
+}
+#commentsList .item .itemAside .vote { 
+	margin:0;
+	overflow:hidden;
+}
+#commentsList .item .itemAside .vote:after{ 
+	content:""; 
+	display:block; 
+	clear:both;
+}
+#commentsList .item .itemAside .vote * {
+	margin:0; 
+	padding:0;
+}
+#commentsList .item .itemAside .vote dt{ 
+	position:relative; 
+	left:-5px; 
+	float:left; 
+	width:10px; 
+	height:9px; 
+	margin-right:2px; 
+	padding-left:5px; 
+	background-image:url(../img/common/iconLove.gif); 
+	background-repeat:no-repeat; 
+	overflow:hidden; 
+	border-left:1px solid #e5e5e5;
+}
+#commentsList .item .itemAside .vote dt.love { 
+	background-position:5px 1px;
+}
+#commentsList .item .itemAside .vote dt.hate { 
+	background-position:5px -19px;
+}
+#commentsList .item .itemAside .vote dt span { 
+	position:absolute; 
+	width:0; 
+	height:0; 
+	line-height:0; 
+	font-size:0; 
+	overflow:hidden; 
+	visibility:hidden;
+}
+#commentsList .item .itemAside .vote dd { 
+	position:relative; 
+	left:-5px; 
+	float:left; 
+	margin-right:5px; 
+	font-size:9px; 
+	font-weight:bold;
+}
+
+#commentsList .item .secretMessage { 
+	margin:0; 
+	padding:1em 3em;
+}
+#commentsList .item .secretMessage p { 
+	text-align:center; 
+	margin:1em 0; 
+	font-size:18px;
+}
+#commentsList .item .secretMessage dl { 
+	text-align:center; 
+	margin:1em 0;
+}
+#commentsList .item .secretMessage dt { 
+	font-weight:bold; 
+	display:inline;
+}
+#commentsList .item .secretMessage dd { 
+	margin:0; 
+	display:inline;
+}
+#commentsList .item .secretMessage dd .inputText { 
+	padding:3px 4px; 
+	height:15px; 
+	vertical-align:middle; 
+	margin-right:5px;
+}
+
+
+#commentsList .item .fHeader { 
+	margin:0 0 5px 0;
+}
+
+#commentsList .item .fHeader a { 
+	font-size:12px; text-decoration:none;
+}
+#commentsList .item .fHeader a:hover,
+#commentsList .item .fHeader a:active,
+#commentsList .item .fHeader a:focus { 
+	text-decoration:underline;
+}
+/*
+#commentsList .item .itemContent {
+	padding-left:110px;
+	background-color:yellow;
+	height:100%;
+	display:block;
+}
+*/
+
+#commentsList .item .itemContent { 
+	padding:1em 0 1em 120px; 
+}
+/*}
+#commentsList .item .itemContent:after { 
+	content:""; 
+	display:block; 
+	clear:both;
+}
+*/
+#commentsList .item .itemContent * { 
+	margin-top:0;
+}
+#commentsList .item .itemContent .xe_content a { 
+	text-decoration:underline; 
+}
+
+#commentsList .item .itemContent .option { 
+	margin:1em 0; padding:0; 
+	list-style:none; 
+	/*white-space:nowrap; 
+	overflow:hidden; */
+	float:right;
+}
+#commentsList .item .itemContent .option li{ 
+	/*position:relative; 
+	left:-1px; */
+	display:inline; 
+	padding:0 0 0 5px; 
+	background-repeat:no-repeat; 
+	background-position:left center; 
+	font-size:11px;
+	background-image:url(../img/white/lineVr9.gif);
+}
+#commentsList .item .itemContent .option li.wouldYou { 
+	background:none;
+}
+#commentsList .item .itemContent .option li a { 
+	text-decoration:none;
+	color:#666;
+}
+#commentsList .item .itemContent .option li a:hover,
+#commentsList .item .itemContent .option li a:active,
+#commentsList .item .itemContent .option li a:focus { 
+	text-decoration:underline;
+} 
+#commentsList .item .itemContent .delete{ 
+	/*position:relative; */
+	display:inline-block; 
+	width:13px; 
+	height:13px; 
+	background-repeat:no-repeat; 
+	background-position:center center; 
+	vertical-align:middle;
+	background-image:url(../img/common/buttonDelete.gif);
+}
+#commentsList .item .itemContent .delete span{ 
+	position:absolute; 
+	width:0; 
+	height:0; 
+	font-size:0; 
+	line-height:0; 
+	overflow:hidden; 
+	visibility:hidden;
+}
+
+.wikiEditor {
+	padding:20px 10px;
+}
+#commentDelete input, #commentDelete a {
+	margin:5px;
+}
+
+/*
+.feedbackList{ overflow:hidden; padding-top:15px; margin-bottom:10px; border-top:1px solid;}
+.feedbackList .feedbackHeader{ float:left; font-weight:bold; margin:1em 1em .5em 0; font-size:16px;}
+.feedbackList .feedbackHeader em{ font-style:normal;}
+.feedbackList .trackbackURL{ position:relative; top:1.5em; float:left; font-size:9px;}
+.feedbackList .trackbackURL a{ text-decoration:none;}
+.feedbackList .trackbackURL a:hover,
+.feedbackList .trackbackURL a:active,
+.feedbackList .trackbackURL a:focus{ text-decoration:underline;}
+.feedbackList .trackbackList,
+.feedbackList .replyList{ clear:both;}
+
+.feedbackList .item{ position:relative; border-top:1px dashed; overflow:hidden; *zoom:1; clear:both;}
+.feedbackList .item .indent{ position:relative; *zoom:1; }
+.feedbackList .item .indent:after{ content:""; display:block; clear:both;}
+.feedbackList .item.itemReply .indent{ padding-left:15px; background-repeat:no-repeat; background-position:0 1.2em;}
+
+.feedbackList .item .fHeader{ margin:0 0 5px 0;}
+.feedbackList .item .fHeader a{ font-size:12px; text-decoration:none;}
+.feedbackList .item .fHeader a:hover,
+.feedbackList .item .fHeader a:active,
+.feedbackList .item .fHeader a:focus{ text-decoration:underline;}
+
+.feedbackList .item .itemContent { position:relative; padding:1em 0 1em 120px; *zoom:1; z-index:1;}
+.feedbackList .item .itemContent:after{ content:""; display:block; clear:both;}
+.feedbackList .item .itemContent *{ margin-top:0;}
+.feedbackList .item .itemContent .xe_content{ width:auto !important; clear:none;}
+.feedbackList .item .itemContent .xe_content a { text-decoration:underline; }
+.feedbackList .item .itemContent .option{ position:relative; margin:1em 0; padding:0; list-style:none; white-space:nowrap; overflow:hidden; *zoom:1; float:right;}
+.feedbackList .item .itemContent .option li{ position:relative; left:-1px; display:inline; padding:0 0 0 5px; background-repeat:no-repeat; background-position:left center; font-size:11px;}
+.feedbackList .item .itemContent .option li.wouldYou{ background:none;}
+.feedbackList .item .itemContent .option li a{ text-decoration:none;}
+.feedbackList .item .itemContent .option li a:hover,
+.feedbackList .item .itemContent .option li a:active,
+.feedbackList .item .itemContent .option li a:focus{ text-decoration:underline;} 
+.feedbackList .item .itemContent .delete{ position:relative; display:inline-block; width:13px; height:13px; background-repeat:no-repeat; background-position:center center; vertical-align:middle;}
+.feedbackList .item .itemContent .delete span{ position:absolute; width:0; height:0; font-size:0; line-height:0; overflow:hidden; visibility:hidden;}
+.feedbackList .item.itemOnly{ border-top:0;}
+
+.feedbackList .item .itemAside{ position:relative; float:left; width:100px; margin-right:-100px; padding:1em 0 0 0; *zoom:1; text-align:left; z-index:2;}
+.feedbackList .item .itemAside a{ text-decoration:none;}
+.feedbackList .item .itemAside a:hover,
+.feedbackList .item .itemAside a:active,
+.feedbackList .item .itemAside a:focus{ text-decoration:underline;}
+.feedbackList .item .itemAside img.profile{ display:block; border:1px solid; margin-bottom:5px; width:36px;}
+.feedbackList .item .itemAside .meta{ font-size:9px; margin:0 0 5px 0; white-space:nowrap;}
+.feedbackList .item .itemAside .vote{ margin:0; *zoom:1; overflow:hidden;}
+.feedbackList .item .itemAside .vote:after{ content:""; display:block; clear:both;}
+.feedbackList .item .itemAside .vote *{margin:0; padding:0;}
+.feedbackList .item .itemAside .vote dt{ position:relative; left:-5px; float:left; width:10px; height:9px; margin-right:2px; padding-left:5px; background-image:url(../img/common/iconLove.gif); background-repeat:no-repeat; overflow:hidden; border-left:1px solid #e5e5e5;}
+.feedbackList .item .itemAside .vote dt.love{ background-position:5px 1px;}
+.feedbackList .item .itemAside .vote dt.hate{ background-position:5px -19px;}
+.feedbackList .item .itemAside .vote dt span{ position:absolute; width:0; height:0; line-height:0; font-size:0; overflow:hidden; visibility:hidden;}
+.feedbackList .item .itemAside .vote dd{ position:relative; left:-5px; float:left; margin-right:5px; font-size:9px; font-weight:bold;}
+
+.feedbackList .item .secretMessage{ margin:0; padding:1em 3em;}
+.feedbackList .item .secretMessage p{ text-align:center; margin:1em 0; font-size:18px;}
+.feedbackList .item .secretMessage dl{ text-align:center; margin:1em 0;}
+.feedbackList .item .secretMessage dt{ font-weight:bold; display:inline;}
+.feedbackList .item .secretMessage dd{ margin:0; display:inline;}
+.feedbackList .item .secretMessage dd .inputText{ padding:3px 4px; height:15px; vertical-align:middle; margin-right:5px;}
+
+.feedbackList{ border-color:#f0f0f0;}
+.feedbackList .feedbackHeader a{ color:#000;}
+.feedbackList .feedbackHeader em{ color:#ff6600;}
+.feedbackList .trackbackURL a{ color:#adadad;}
+.feedbackList .item{ border-color:#f0f0f0;}
+.feedbackList .item.itemReply .indent{ background-image:url(../img/common/iconReply.gif);}
+.feedbackList .item .fHeader{ color:#8b8b8b;}
+.feedbackList .item .fHeader a{ color:#262626;}
+.feedbackList .item .itemContent .option li{ background-image:url(../img/white/lineVr9.gif);}
+.feedbackList .item .itemContent .option li a{ color:#666;}
+.feedbackList .item .itemContent .delete{ background-image:url(../img/common/buttonDelete.gif);}
+.feedbackList .item .itemAside img.profile{ border-color:#eee;}
+.feedbackList .item .itemAside .meta{ color:#adadad;}
+.feedbackList .item .itemAside .vote *{ color:#8b8b8b;}
+*/

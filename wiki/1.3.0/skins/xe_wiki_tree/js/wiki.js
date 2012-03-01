@@ -269,6 +269,10 @@ function loadCommentForm(document_srl)
 			}
 			jQuery('div.editor').append(editor);
 			jQuery("#editor-box").hide();
+			
+			jQuery(".wikiEditor .wikiEditorSubmit").show();
+			jQuery(".wikiEditor .editorOption").show();
+			
 			jQuery("div.commentEditor").find(".wikiNavigation").removeClass("hide");
 			scrollTo("div.editor");
 			docHeight = jQuery("#content_Body").height();
@@ -279,6 +283,9 @@ function loadCommentForm(document_srl)
 
 function hideEditor()
 {
+	jQuery(".wikiEditor .wikiEditorSubmit").hide();	
+	jQuery(".wikiEditor .editorOption").hide();	
+	
 	jQuery('div.editor').html("");
 	jQuery("div.commentEditor").find(".wikiNavigation").addClass("hide");
 	jQuery("#editor-box").show();
