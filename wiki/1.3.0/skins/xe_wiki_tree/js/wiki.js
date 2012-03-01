@@ -97,15 +97,15 @@ function resizeDiv(docHeight)
 	
 	if (jQuery("#columnRight").length > 0)
 	{
-		jQuery("div.wiki").css("min-width",jQuery("#columnRight").width());
+		jQuery("#wiki").css("min-width",jQuery("#columnRight").width());
 		//leftWidth += jQuery("#columnRight").position().left;
 	}
 	else
 	{
 		rightWidth = jQuery(document).width()-leftWidth-marginRight;
 	}
-	leftWidth += jQuery("div.wiki").position().left;
-	rightWidth = jQuery("div.wiki").width()-jQuery("#leftSideTreeList").width()-marginRight;
+	leftWidth += jQuery("#wiki").position().left;
+	rightWidth = jQuery("#wiki").width()-jQuery("#leftSideTreeList").width()-marginRight;
     jQuery("#content_Body").width(rightWidth);
 	 
 	if( jQuery("#leftSideTreeList").width() > 1 )
@@ -156,7 +156,7 @@ function getDiff(elem,document_srl,history_srl)
 					jQuery(this).addClass("hide");
 				});
 				jQuery('#diff'+history_srl).toggleClass("hide");
-				docHeight = jQuery("#content_Body").height();
+				docHeight = jQuery("#wikiBody").height();
 				resizeDiv(docHeight);
 			}
 		);
@@ -174,7 +174,7 @@ jQuery(document).ready(function(){
     });
 	if (jQuery("#columnRight").length > 0)
 	{
-		jQuery("div.wiki").css("min-width",jQuery("#columnRight").width());
+		jQuery("#wiki").css("min-width",jQuery("#columnRight").width());
 	}
 	leftWidth = jQuery("#leftSideTreeList").width();
 	slideWidth = jQuery("#leftSideTreeList").width()
@@ -199,7 +199,7 @@ jQuery(document).ready(function(){
 			jQuery("#showHideTree").animate({
 				left: '-='+(slideWidth-7)
 				}, 200, function() {
-				jQuery("#content_Body").width(jQuery("div.wiki").width()-marginRigh);
+				jQuery("#wikiBody").width(jQuery("#wiki").width()-marginRigh);
 				jQuery("#showHideTree").css('background-position', "-13px 0px");
 				jQuery("#showHideTree").attr("title",titleDivShowHideTree[1]);
 			});
@@ -213,7 +213,7 @@ jQuery(document).ready(function(){
 });
 
 jQuery(window).load(function() {
-    docHeight = jQuery("#content_Body").height();
+    docHeight = jQuery("#wikiBody").height();
     resizeDiv(docHeight);
     if (jQuery("#showHideTree").length > 0)
     {
@@ -235,7 +235,7 @@ jQuery(function() {
     
 });
 jQuery(window).resize(function(){
-    docHeight = jQuery("#content_Body").height();
+    docHeight = jQuery("#wikiBody").height();
     resizeDiv(docHeight);
 });
 
@@ -275,7 +275,7 @@ function loadCommentForm(document_srl)
 			
 			jQuery("div.commentEditor").find(".wikiNavigation").removeClass("hide");
 			scrollTo("div.editor");
-			docHeight = jQuery("#content_Body").height();
+			docHeight = jQuery("#wikiBody").height();
 			resizeDiv(docHeight);
 		}
 	)
@@ -289,7 +289,7 @@ function hideEditor()
 	jQuery('div.editor').html("");
 	jQuery("div.commentEditor").find(".wikiNavigation").addClass("hide");
 	jQuery("#editor-box").show();
-	docHeight = jQuery("#content_Body").height();
+	docHeight = jQuery("#wikiBody").height();
 	resizeDiv(docHeight);
 }
 

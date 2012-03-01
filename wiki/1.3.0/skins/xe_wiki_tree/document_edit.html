@@ -1,5 +1,16 @@
 <!--#include("header.html")-->
 
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$("#title").change(function(){
+			if($("#alias").is(":empty")) {
+				var alias = $("#title").val().replace(" ", "_").toLowerCase();
+				$("#alias").val(alias);
+			}
+		});
+	});
+</script>
+
 <form action="./" method="post" ruleset="insert" id="fo_write">
 	<input type="hidden" name="mid" value="{$mid}" />
 	<input type="hidden" name="act" value="procWikiInsertDocument" />
@@ -20,7 +31,7 @@
 		<br />
 		<em>{$lang->write_form_alias}</em>
 		{getFullUrl()}
-		<input type="text" name="alias" value="{$oDocument->get('alias')}" class="inputTypeText" />
+		<input type="text" id="alias" name="alias" value="{$oDocument->get('alias')}" class="inputTypeText" />
 	</div>
 
 	<div id="wikiContentContainer">{$oDocument->getEditor()}</div>

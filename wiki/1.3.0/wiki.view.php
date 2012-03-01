@@ -53,6 +53,12 @@ class wikiView extends wiki implements WikiSite
 			
 			// Load wiki title
 			if(!isset($this->module_info->title)) $this->module_info->title = $this->module_info->browser_title;
+			
+			// Load left side tree, if tree skin is used
+			if($this->module_info->skin == 'xe_wiki_tree'){
+				if(!isset($this->module_info->menu_style)) $this->module_info->menu_style = 'classic';
+				$this->getLeftMenu();
+			};
 		}
 		
 
@@ -90,13 +96,7 @@ class wikiView extends wiki implements WikiSite
 			}
 			
 			Context::set('oDocument', $oDocument);
-			
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
-			
+						
 			$this->setTemplateFile('histories');
 		}
 
@@ -138,13 +138,6 @@ class wikiView extends wiki implements WikiSite
 					Context::set('history', $output);
 				}
 			} 
-			//Context::addJsFilter($this->module_path.'tpl/filter', 'insert.xml');
-			
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}			
 			
 			$this->setTemplateFile('document_edit');
 		}
@@ -192,12 +185,6 @@ class wikiView extends wiki implements WikiSite
 			foreach($this->search_option as $opt) $search_option[$opt] = Context::getLang($opt);
 			Context::set('search_option', $search_option);
 			
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
-			
 			$this->setTemplateFile('title_index');
 		}
 
@@ -208,12 +195,6 @@ class wikiView extends wiki implements WikiSite
 		function dispWikiTreeIndex() {
 			$oWikiModel = &getModel('wiki');
 			Context::set('document_tree', $oWikiModel->readWikiTreeCache($this->module_srl));
-			
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
 						
 			$this->setTemplateFile('tree_list');
 		}
@@ -225,12 +206,6 @@ class wikiView extends wiki implements WikiSite
 		function dispWikiModifyTree() {
 			if(!$this->grant->write_document) return new Object(-1,'msg_not_permitted');
 			Context::set('isManageGranted', $this->grant->write_document?'true':'false');
-			
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
 			
 			$this->setTemplateFile('modify_tree');
 		}
@@ -325,12 +300,6 @@ class wikiView extends wiki implements WikiSite
 			else
 			{
 				$oDocument = $oDocumentModel->getDocument(0);
-			}
-			
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
 			}
 			
 			// View posts by checking permissions or display an error message if you do not have permission
@@ -453,17 +422,6 @@ class wikiView extends wiki implements WikiSite
 			// Set the necessary informations
 			Context::set('oSourceComment',$oSourceComment);
 			Context::set('oComment',$oComment);
-
-			/** 
-			* Add javascript filter
-			**/
-			//Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
-			
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
 			
 			$this->setTemplateFile('comment_edit');
 		}
@@ -496,17 +454,6 @@ class wikiView extends wiki implements WikiSite
 			// Set the necessary informations
 			Context::set('oSourceComment', $oCommentModel->getComment());
 			Context::set('oComment', $oComment);
-
-			/** 
-			* Add javascript filter
-			**/
-			//Context::addJsFilter($this->module_path.'tpl/filter', 'insert_comment.xml');
-			// 
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
 			
 			$this->setTemplateFile('comment_edit');
 		}
@@ -535,17 +482,6 @@ class wikiView extends wiki implements WikiSite
 			if(!$oComment->isGranted()) return $this->setTemplateFile('input_password_form');
 
 			Context::set('oComment',$oComment);
-
-			/** 
-			* Add javascript filter
-			**/
-			//Context::addJsFilter($this->module_path.'tpl/filter', 'delete_comment.xml');
-
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
 			
 			$this->setTemplateFile('delete_comment_form');
 		}
@@ -587,12 +523,6 @@ class wikiView extends wiki implements WikiSite
             {
                 $skin_path = $module_path . 'skins/xe_wiki/';
             }
-
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
 			
             $oTemplateHandler = &TemplateHandler::getInstance();
 
@@ -761,7 +691,7 @@ class wikiView extends wiki implements WikiSite
 			$oWikiModel = &getModel("wiki");
 			$oDocumentModel = &getModel("document");
 			$module_srl=$this->module_info->module_srl;
-			if ( $this->module_info->menu_style == "classic" || !isset($this->module_info->menu_style) )
+			if ( $this->module_info->menu_style == "classic")
 			{
 				$this->list = $oWikiModel->loadWikiTreeList($module_srl);
 				Context::set('list',$this->list);
@@ -828,11 +758,6 @@ class wikiView extends wiki implements WikiSite
 
 			$this->_searchKeyword($target_mid, $is_keyword);
 
-			// set tree menu for left side of page
-			if(isset($this->module_info->with_tree) && $this->module_info->with_tree)
-			{
-				$this->getLeftMenu();
-			}
 			$this->setTemplateFile('document_search');
 		}
 		
@@ -842,6 +767,8 @@ class wikiView extends wiki implements WikiSite
 		*/
 		function _sortArrayByKeyDesc($object_array, $key ){
 			$key_array = array();
+			
+			if($object_array)
 			foreach($object_array as $obj ){
 					$key_array[$obj->{$key}] = $obj;
 			}

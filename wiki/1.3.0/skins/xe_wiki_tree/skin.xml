@@ -9,9 +9,6 @@
     </author>
     <license>GPL</license>
     <extra_vars>
-	<var name="with_tree" type="checkbox">
-	    <title xml:lang="en">Tree menu on left side of pages.</title>
-	</var>
 	<var name="menu_style" type="select">
             <title xml:lang="en">Tree Menu style</title>
 	    <description xml:lang="en">Please choose the style of tree menu.</description>
