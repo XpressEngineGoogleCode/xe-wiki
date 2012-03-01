@@ -453,6 +453,23 @@ a.wikiButtonAdmin, a.wikiButton  {
 	right:0;
 	text-align: right;
 }
+#wikiLanguages a {
+	text-decoration:none;
+}
+#wikiLanguages a:hover {
+	text-decoration:underline;
+}
+#wiki span.currentLanguage {
+	color: #BA0000;
+}
+
+#wiki a.languageTranslated {
+	
+}
+
+#wiki a.languageNotTranslated {
+	color:#707070; 
+}
 
 #wikiSum {
 	float:right; 
