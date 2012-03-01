@@ -10,6 +10,7 @@
 		</form>
 	</div>		
 	<h3>Table of contents:</h3>
+	
     {@ $oDocumentModel = &getModel("document");}
     <!--@if($module_info->menu_style == 'classic')-->
 		{@ $_pDepth = 0;}
@@ -49,6 +50,7 @@
     <!--@else-->
 	<!--@if(count($list))-->
 	    <ul>
+			<?php var_dump($__Context->list); ?>
 		<!--@foreach($list as $node)-->
 		<li class="wikiTreeNode" style="
 			<!--@if($node->type == 'root' || $node->type == 'active_root')-->

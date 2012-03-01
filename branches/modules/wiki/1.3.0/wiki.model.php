@@ -342,7 +342,8 @@
             }
 
             $oModuleModel = &getModel('module');
-
+			
+			if($output->data)
             foreach($output->data as $module_info){
                     $extra_vars = $oModuleModel->getModuleExtraVars($module_info->module_srl);
                     foreach($extra_vars[$module_info->module_srl] as $k=>$v){
