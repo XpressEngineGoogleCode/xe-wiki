@@ -465,7 +465,7 @@ class wikiView extends wiki implements WikiSite
 				$this->getLeftMenu();
 			}
 			
-			$this->setTemplateFile('comment_form');
+			$this->setTemplateFile('comment_edit');
 		}
 
 
@@ -508,7 +508,7 @@ class wikiView extends wiki implements WikiSite
 				$this->getLeftMenu();
 			}
 			
-			$this->setTemplateFile('comment_form');
+			$this->setTemplateFile('comment_edit');
 		}
 
 
@@ -596,7 +596,7 @@ class wikiView extends wiki implements WikiSite
 			
             $oTemplateHandler = &TemplateHandler::getInstance();
 
-            $this->add('html', $oTemplateHandler->compile($skin_path, 'comment_form.html'));
+            $this->add('html', $oTemplateHandler->compile($skin_path, 'comment_edit.html'));
         }
 		
 		//================================================================= private methods

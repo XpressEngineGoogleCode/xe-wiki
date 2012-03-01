@@ -342,4 +342,7 @@
 	<item name="top_of_page">
 		<value xml:lang="en"><![CDATA[Go to top]]></value>
 	</item>	
+	<item name="comment">
+		<value xml:lang="en"><![CDATA[Comments]]></value>
+	</item>		
 </lang>

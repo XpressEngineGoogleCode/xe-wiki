@@ -1,15 +1,13 @@
 <!--@if($oDocument->getCommentCount())-->
-<hr class="hr" />
-<div class="feedbackList" id="reply">
+<div id="commentsArea">
 
-	<h3 class="feedbackHeader">
+	<h3>
 		<!--@if($grant->write_comment && $oDocument->allowComment()) -->
-			{$lang->comment} <em>'{$oDocument->getCommentcount()}'</em>
+			{$lang->comment} <em>({$oDocument->getCommentcount()})</em>
 		<!--@end-->
 	</h3>
-	
-	<div class="replyList">
-
+	 
+	<div id="commentsList">
 		{@ $_comment_list = $oDocument->getComments() }
 		<!--@foreach($_comment_list as $key => $comment)-->
 				<div class="item <!--@if($comment->get('depth'))-->itemReply<!--@end-->" id="comment_{$comment->comment_srl}">
@@ -105,7 +103,6 @@
 			
 		</div>
 		<!--@end-->
-
 </div>
 
     <!--@if($oDocument->comment_page_navigation)-->
