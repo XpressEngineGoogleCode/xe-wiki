@@ -315,11 +315,27 @@
 			$root = $this->getRootDocument($module_srl[0]);
 			$document_srl = $root->document_srl;
 			$entry = $oDocumentModel->getAlias($document_srl);
-			$menu_breadcrumbs = "<a href='" . $uri . "entry/".$entry."'>".$root->title."</a>";
+			$menu_breadcrumbs = '';
+			
+			// Remove info about current page from array, for processing separately
+			// Done with array functions, because array pop only return last element's value and not its key
+			reset($breadcrumbs); // Reset internal pointer
+			end($breadcrumbs); // Go to last element
+			$current_page_title = key($breadcrumbs); // Retrieve its key, which represents page title
+			array_pop($breadcrumbs); // Remove last element from list
+			
 			foreach($breadcrumbs as $key=>$value)
 			{
-				$menu_breadcrumbs .= " -> <a href='" . $uri . "entry/$value'>" . $key . "</a>";
+				$menu_breadcrumbs .= "<strong>&nbsp;»&nbsp;</strong> <a href='" . $uri . "entry/$value'>" . $key . "</a>";
 			}
+			// Display current page without link
+			if($current_page_title)
+				$menu_breadcrumbs .= "<strong>&nbsp;»&nbsp;</strong> $current_page_title ";
+			
+			// Add home page only if current page is not Home page itself
+			if($menu_breadcrumbs != '')
+				$menu_breadcrumbs = "<a href='" . $uri . "entry/".$entry."'>".$root->title."</a>" . $menu_breadcrumbs;
+			
 			return $menu_breadcrumbs;
 		}
 		
