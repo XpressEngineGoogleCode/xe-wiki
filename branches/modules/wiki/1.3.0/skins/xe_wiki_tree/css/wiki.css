@@ -463,7 +463,9 @@ a.wikiButtonAdmin, a.wikiButton  {
 #wikiLanguages a {
 	text-decoration:none;
 }
-#wikiLanguages a:hover {
+#wikiLanguages a:hover,
+#wikiLanguages a:active,
+#wikiLanguages a:focus {
 	text-decoration:underline;
 }
 #wiki span.currentLanguage {
