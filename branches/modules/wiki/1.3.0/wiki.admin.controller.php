@@ -64,6 +64,9 @@
 			$this->add('module','wiki');
 			$this->add('page',Context::get('page'));
 			$this->setMessage('success_deleted');
+			
+			$returnUrl = Context::get('success_return_url');
+			$this->setRedirectUrl($returnUrl);			
 		}
 
 		/**
