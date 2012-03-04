@@ -458,3 +458,12 @@ a.buttonOfficial a{ _vertical-align:top;}
 */
 
 .prettyprint { overflow-x: auto;}
+
+#wikiLanguages { position:relative; right:0; text-align: right; margin:10px; }
+#wikiLanguages a { text-decoration:none; }
+#wikiLanguages a:hover,
+#wikiLanguages a:active,
+#wikiLanguages a:focus { text-decoration:underline; }
+.wiki span.currentLanguage { color: #BA0000; }
+.wiki a.languageTranslated { }
+.wiki a.languageNotTranslated {	color:#707070; }

@@ -45,6 +45,21 @@
 		<!--@end-->
 		</div>
 
+		<div id="wikiLanguages">
+			{@ $current_lang = Context::getLangType(); }
+			<!--@foreach($langs as $key => $val)-->
+				<!--@if ($key == $current_lang) -->
+				<span class="currentLanguage" title="{$lang->you_are_viewing} {$val}">{strtoupper($key)}</span>
+				<!--@elseif (in_array($key, $translatedlangs))-->
+				<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{$lang->view_this_page_in} {$val}" class="languageTranslated">{strtoupper($key)}</a>
+				<!--@else-->
+					<!--@if($is_logged)-->
+					<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{$lang->translate_page_into} {$val}" class="languageNotTranslated">{strtoupper($key)}</a>
+					<!--@end-->
+				<!--@end-->
+			<!--@endforeach-->
+		</div>				
+		
 		{@ $tag_list = $oDocument->get('tag_list') }
 		<!--@if(count($tag_list))-->
 		<dl class="tag">

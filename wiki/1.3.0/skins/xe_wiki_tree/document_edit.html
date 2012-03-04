@@ -4,7 +4,7 @@
 	jQuery(document).ready(function($){
 		$("#title").change(function(){
 			if($("#alias").is(":empty")) {
-				var alias = $("#title").val().replace(" ", "_").toLowerCase();
+				var alias = $("#title").val().replace(/[ ]/g, "_").toLowerCase();
 				$("#alias").val(alias);
 			}
 		});
