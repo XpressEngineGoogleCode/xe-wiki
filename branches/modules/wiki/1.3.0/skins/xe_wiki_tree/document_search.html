@@ -1,13 +1,12 @@
 <!--#include("header.html")-->
 
-<div id="xeDocsBody">
 	<!--ul id="tabSystem">
-		<!--@foreach($module_list as $modul)-->
+		<!--@foreach($module_list as $module)-->
 		<li>
 			<form action="{getUrl()}" method="get" >
 				<input type="hidden" name="vid" value="{$vid}" />
 
-				<input type="hidden" name="mid" value="{$modul->mid}" />
+				<input type="hidden" name="mid" value="{$module->mid}" />
 
 				<input type="hidden" name="category" value="" />
 				<input type="hidden" name="search_target" value="title_content" />
@@ -15,31 +14,33 @@
 
 				<input type="hidden" name="act" value="dispWikiSearchResults" />
 
-				<input class="<!--@if($mid==$modul->mid)-->on<!--@end-->" type="submit" value = "{$lang->ResultsFrom.$modul->browser_title}" />
+				<input class="<!--@if($mid==$module->mid)-->on<!--@end-->" type="submit" value = "{$lang->ResultsFrom.$modul->browser_title}" />
 			</form>
 		</li>
 		<!--@end-->
 	</ul-->
 
-	<h2 id="xeDocsTitle">{$lang->search_results}</h2>
-	<!--@if(!count($document_list))-->
-		<p style="margin: 10px; font-weight: bold;">{$lang->xewiki_no_results}</p>
-		<!--@if($last_division)-->
-		<p>{$lang->msg_document_more_search}</p>
-		<!--@end-->
-	<!--@else-->
-
-	<p id="xeDocsSearchInfo">
+	<div id="wikiTitleArea">
+		<h2 id="wikiTitle">{$lang->search_results}</h2>
+		<!--@if(!count($document_list))-->
+			<p style="margin: 10px; font-weight: bold;">{$lang->xewiki_no_results}</p>
+			<!--@if($last_division)-->
+			<p>{$lang->msg_document_more_search}</p>
+			<!--@end-->
+		<!--@else-->
+	</div>
+	
+	<p id="wikiSearchInfo">
 		<strong>{number_format($total_count)} {$lang->results_number}</strong>
 		<!--@if($total_count>50)-->
 			{$lang->too_many_results}
 		<!--@end-->
 	</p>
 
-	<ul id="xeDocsSearchResults">
+	<ul id="wikiSearchResults">
 		<!--@foreach($document_list as $document)-->
 			<li>
-				<h4><a href="{getFullUrl( '','mid',$document->mid).'/entry/'.$document->entry}">{$document->entry}</a>&nbsp;&nbsp;<span><em>({$document->browser_title})</em></span></h4>
+				<h4><a href="{getFullUrl( '','mid',$document->mid).'/entry/'.$document->entry}">{$document->get('title')}</a>&nbsp;&nbsp;<span><em>({$document->browser_title})</em></span></h4>
 				<p>{preg_replace('/^[ \t]*[\r\n]+/m', '', $document->getSummary(400))}</p>
 				<p><a href="{getFullUrl( '','mid',$document->mid).'/entry/'.$document->entry}">{getFullUrl( '','mid',$document->mid).'/entry/'.$document->entry}{$itemURL}</a></p>
 			</li>
@@ -49,6 +50,5 @@
 	<!--#include("document_pagination.html")-->
 
 	<!--@end-->
-</div>
 
 <!--#include("footer.html")-->
