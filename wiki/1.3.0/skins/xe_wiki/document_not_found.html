@@ -2,7 +2,7 @@
     <div class="wikiRead">
         <div class="wikiReadHeader">
             <div class="authorArea">
-                {$lang->not_exist}
+                {$oDocument->get('content')}
                 <div class="command">
                     <span class="buttonOfficial"><a href="{getUrl('act','dispWikiEditPage','entry',$oDocument->get('title'))}">{$lang->cmd_create}</a></span>
                 </div>

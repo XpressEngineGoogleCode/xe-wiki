@@ -269,7 +269,6 @@ class wikiView extends wiki implements WikiSite
 					else
 					{
 						$visitingAnEmptyWiki = true;
-						Context::set('_first_page_', 'true');
 					}
 				}
 				$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
