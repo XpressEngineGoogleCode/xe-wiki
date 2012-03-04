@@ -627,6 +627,10 @@ class wikiView extends wiki implements WikiSite
 		public function currentUserCanCreateContent(){
 			return $this->grant->write_document;
 		}
+		
+		public function getFullLink($document_name){
+			return getUrl('','mid', $this->module_info->mid, 'entry', $document_name);
+		}
 
 		/**
 		* @brief Wiki syntax checking for the presence of linked documents.

@@ -13,4 +13,10 @@ interface WikiSite {
 	 * @return bool
 	 */
 	public function currentUserCanCreateContent();
+	
+	/**
+	 * Return full link - containg mid information 
+	 * @return string
+	 */
+	public function getFullLink($document_name);
 }
