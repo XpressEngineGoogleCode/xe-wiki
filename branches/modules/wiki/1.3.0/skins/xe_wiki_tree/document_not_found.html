@@ -7,11 +7,6 @@
 
 	<div id="wikiContentContainer">
 		{$oDocument->get('content')}
-		<!--@if(!$_first_page_)-->
-			{$lang->not_exist}
-		<!--@else-->
-			{$lang->create_first_page}
-		<!--@end-->
 		<div class="command">
 			<span class="buttonOfficial"><a href="{getUrl('act','dispWikiEditPage','entry',$oDocument->get('title'))}">{$lang->cmd_create}</a></span>
 		</div>
