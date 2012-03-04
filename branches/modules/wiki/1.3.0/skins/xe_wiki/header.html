@@ -1,6 +1,12 @@
 <!--%import("css/wiki.css")-->
 <!--%import("js/wiki.js")-->
 
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$(".message.info").delay(1500).fadeOut('slow');
+	});
+</script>
+
 <!--@if(!$module_info->colorset)-->
     {@$module_info->colorset = "white"}
 <!--@end-->
