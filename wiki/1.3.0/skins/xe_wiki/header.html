@@ -33,10 +33,11 @@
 
     <div class="wikiInformation">
         <div class="infoView">
-            <span><a class="buttonOfficial" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
+            
 		<span><a class="buttonOfficial" href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">{$lang->home_page}</a></span>
             <span class="buttonOfficial"><a href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a></span>
             <span class="buttonOfficial"><a href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a></span>
+			<span><a class="buttonOfficial" href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
         </div>
 
         <form action="{getUrl()}" method="post" class="wikiSearchForm">

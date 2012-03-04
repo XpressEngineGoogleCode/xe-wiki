@@ -116,7 +116,7 @@ class wikiView extends wiki implements WikiSite
 			}
 			$oDocument = $oDocumentModel->getDocument(0, $this->grant->manager);
 			$oDocument->setDocument($document_srl);
-			if (!Mobile::isFromMobilePhone() && $this->module_info->markup_type == 'xe_wiki_markup') $oDocument->variables['content'] = nl2br($oDocument->getContentText());
+			if (!Mobile::isFromMobilePhone() && $this->module_info->markup_type == 'xe_wiki_markup') $oDocument->variables['content'] = nl2br($oDocument->get('content'));
 			
 			$oDocument->add('module_srl', $this->module_srl);
 			if($oDocument->isExists()){
@@ -346,9 +346,12 @@ class wikiView extends wiki implements WikiSite
 				}
 				//  Otherwise, show the usual message
 				else {
+					$content = Context::getLang('not_exist');
+					
 					$oDocument->add('title', $entry);
-					$alias = $this->beautifyEntryName($entry);
-					$oDocument->add('alias', $alias);					
+					$alias = $this->beautifyEntryName($entry);					
+					$oDocument->add('alias', $alias);	
+					$oDocument->add('content', $content);
 				}
 				
 				$this->setTemplateFile('document_not_found');		
@@ -573,36 +576,35 @@ class wikiView extends wiki implements WikiSite
 				if($this->module_info->markup_type == 'googlecode_markup'){
 					require_once($this->module_path . "lib/GoogleCodeWikiParser.class.php");
 					$wiki_syntax_parser = new GoogleCodeWikiParser($this);
-					$org_content = $wiki_syntax_parser->parse($org_content);
+					$content = $wiki_syntax_parser->parse($org_content);
 				}
 				else if($this->module_info->markup_type == 'mediawiki_markup'){
 					require_once($this->module_path . "lib/MediaWikiParser.class.php");
 					$wiki_syntax_parser = new MediaWikiParser;
-					$org_content = $wiki_syntax_parser->parse($org_content);
-				}				
-				
-                $content = preg_replace_callback("!\[([^\]]+)\]!is", array( $this, 'callback_check_exists' ), $org_content );
-                /*
-				$entries = array_keys($this->document_exists);
-			
-				if(count($entries))
-				{ 
-						$args->entries = "'" . implode("','", $entries) . "'";;
-					$args->module_srl = $this->module_info->module_srl;
-					$output = executeQueryArray("wiki.getDocumentsWithEntries", $args);
-
-					if($output->data)
-					{ 
-						foreach($output->data as $alias)
-						{ 
-							$this->document_exists[$alias->alias_title] = 1;
-						} 
-					}
+					$content = $wiki_syntax_parser->parse($org_content);
 				}
-				//$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $content );
-				//$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
-				*/
-				
+				else {
+					$content = preg_replace_callback("!\[([^\]]+)\]!is", array( $this, 'callback_check_exists' ), $org_content );
+
+					$entries = array_keys($this->document_exists);
+
+					if(count($entries))
+					{ 
+							$args->entries = "'" . implode("','", $entries) . "'";;
+						$args->module_srl = $this->module_info->module_srl;
+						$output = executeQueryArray("wiki.getDocumentsWithEntries", $args);
+
+						if($output->data)
+						{ 
+							foreach($output->data as $alias)
+							{ 
+								$this->document_exists[$alias->alias_title] = 1;
+							} 
+						}
+					}
+					$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $content );
+					$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
+				}
 				if($oCacheHandler->isSupport()) $oCacheHandler->put($cache_key, $content);
 			}
 			
