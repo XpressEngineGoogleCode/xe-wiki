@@ -850,6 +850,8 @@ a.wikiButtonAdmin, a.wikiButton  {
 	text-align: center;
 }
 
+#wiki a.exists { text-decoration:underline; color:green; }
+#wiki a.notexist { text-decoration:none; border-bottom:1px dotted #EE0000; color:#EE0000; }
 
 /*
 .feedbackList{ overflow:hidden; padding-top:15px; margin-bottom:10px; border-top:1px solid;}
