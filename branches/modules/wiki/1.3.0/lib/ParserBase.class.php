@@ -1,6 +1,8 @@
 <?php
 
-class ParserBase {
+require_once('SyntaxParser.interface.php');
+
+class ParserBase implements SyntaxParser {
 	// Number of blocks of text that will skip parsing;
 	// By temporarily saving them in this array, we can later insert them back in inital string	
 	protected $escaped_blocks;
@@ -286,8 +288,13 @@ class ParserBase {
 		$local_anchor = $matches[2];
 		$description = $matches[5];
 		
-		// If document exists, return expected link and exit
-		if(preg_match("/^(https?|ftp|file)/", $url) || $this->wiki_site->documentExists($url)){
+		// If external URL, just return it as is
+		if(preg_match("/^(https?|ftp|file)/", $url)){
+			return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
+		}
+		
+		// If local document that  exists, return expected link and exit
+		if($this->wiki_site->documentExists($url)){
 			$url = $this->wiki_site->getFullLink($url);
 			return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
 		}
