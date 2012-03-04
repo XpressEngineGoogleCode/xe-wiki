@@ -891,3 +891,7 @@ a.wikiButtonAdmin, a.wikiButton  {
 	padding: 10px;
 	margin: 0;
 }
+#wikiSearchFormTitleIndex {
+	margin: 10px;
+	text-align: right;	
+}
