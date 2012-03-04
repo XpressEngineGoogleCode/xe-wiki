@@ -1,5 +1,6 @@
 <?php
 
+require_once('SyntaxParser.interface.php');
 require_once('ParserBase.class.php');
 
 class GoogleCodeWikiParser extends ParserBase {

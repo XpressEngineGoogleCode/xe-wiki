@@ -573,7 +573,12 @@ class wikiView extends wiki implements WikiSite
             if (!$content)
             {
 				// Parse wiki syntax
-				if($this->module_info->markup_type == 'googlecode_markup'){
+				if($this->module_info->markup_type == 'markdown'){
+					require_once($this->module_path . "lib/MarkdownParser.class.php");
+					$wiki_syntax_parser = new MarkdownParser($this);
+					$content = $wiki_syntax_parser->parse($org_content);
+				}				
+				else if($this->module_info->markup_type == 'googlecode_markup'){
 					require_once($this->module_path . "lib/GoogleCodeWikiParser.class.php");
 					$wiki_syntax_parser = new GoogleCodeWikiParser($this);
 					$content = $wiki_syntax_parser->parse($org_content);

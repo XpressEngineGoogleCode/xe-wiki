@@ -1,4 +1,16 @@
 <!--#include("header.html")-->
+
+<!--@if($module_info->markup_type != 'xe_wiki_markup')-->
+	<!--%import("../../lib/google-code-prettify/prettify.css")-->
+	<!--%import("../../lib/google-code-prettify/prettify.js")-->
+
+	<script type="text/javascript">
+		jQuery(document).ready(function($){
+			prettyPrint();
+		});
+	</script>
+<!--@end-->
+
 <div id="wikiDocument">
 	<!--@if($oDocument && $oDocument->isExists())-->
 	

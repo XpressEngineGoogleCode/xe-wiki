@@ -1,14 +1,15 @@
 <!--#include("header.html")-->
 
-<!-- TODO Adaugat prettyprint numai daca wiki markup e activ -->
-<!--%import("../../lib/google-code-prettify/prettify.css")-->
-<!--%import("../../lib/google-code-prettify/prettify.js")-->
+<!--@if($module_info->markup_type != 'xe_wiki_markup')-->
+	<!--%import("../../lib/google-code-prettify/prettify.css")-->
+	<!--%import("../../lib/google-code-prettify/prettify.js")-->
 
-<script type="text/javascript">
-	jQuery(document).ready(function($){
-		prettyPrint();
-	});
-</script>
+	<script type="text/javascript">
+		jQuery(document).ready(function($){
+			prettyPrint();
+		});
+	</script>
+<!--@end-->
 
 <div class="wikiRead">
 	<div class="wikiReadBody">

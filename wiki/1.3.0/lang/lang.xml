@@ -171,6 +171,9 @@
 		<value xml:lang="tr"><![CDATA[Markup type]]></value>
 		<value xml:lang="vi"><![CDATA[Markup type]]></value>
 	</item>
+	<item name="markdown">
+		<value xml:lang="en"><![CDATA[Markdown markup]]></value>
+	</item>	
 	<item name="googlecode_markup">
 		<value xml:lang="en"><![CDATA[Google Code Wiki markup]]></value>
 	</item>
