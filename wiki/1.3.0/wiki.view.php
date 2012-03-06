@@ -11,7 +11,6 @@ class wikiView extends wiki implements WikiSite
 {
 		var $list;
 		var $search_option = array('title', 'content', 'title_content', 'comment', 'user_name', 'nick_name', 'user_id', 'tag');
-		var $document_exists = array();
 
 		/**
 		* @brief Class initialization
@@ -563,68 +562,55 @@ class wikiView extends wiki implements WikiSite
 		function _renderWikiContent($document_srl, $org_content)
 		{
 			$oCacheHandler = &CacheHandler::getInstance('object', null, true);
-			/*
-			if($oCacheHandler->isSupport()){
+			/*if($oCacheHandler->isSupport()){
 				$object_key = sprintf('%s.%s.php', $document_srl, Context::getLangType());
                 $cache_key = $oCacheHandler->getGroupKey('wikiContent', $object_key);
 				$content = $oCacheHandler->get($cache_key);				
-			}
-			 * */
+			}*/
             if (!$content)
             {
 				// Parse wiki syntax
 				if($this->module_info->markup_type == 'markdown'){
 					require_once($this->module_path . "lib/MarkdownParser.class.php");
-					$wiki_syntax_parser = new MarkdownParser($this);
-					$content = $wiki_syntax_parser->parse($org_content);
+					$wiki_syntax_parser = new MarkdownParser($this);					
 				}				
 				else if($this->module_info->markup_type == 'googlecode_markup'){
 					require_once($this->module_path . "lib/GoogleCodeWikiParser.class.php");
 					$wiki_syntax_parser = new GoogleCodeWikiParser($this);
-					$content = $wiki_syntax_parser->parse($org_content);
 				}
 				else if($this->module_info->markup_type == 'mediawiki_markup'){
 					require_once($this->module_path . "lib/MediaWikiParser.class.php");
-					$wiki_syntax_parser = new MediaWikiParser;
-					$content = $wiki_syntax_parser->parse($org_content);
+					$wiki_syntax_parser = new MediaWikiParser($this);
 				}
 				else {
-					$content = preg_replace_callback("!\[([^\]]+)\]!is", array( $this, 'callback_check_exists' ), $org_content );
-
-					$entries = array_keys($this->document_exists);
-
-					if(count($entries))
-					{ 
-							$args->entries = "'" . implode("','", $entries) . "'";;
-						$args->module_srl = $this->module_info->module_srl;
-						$output = executeQueryArray("wiki.getDocumentsWithEntries", $args);
-
-						if($output->data)
-						{ 
-							foreach($output->data as $alias)
-							{ 
-								$this->document_exists[$alias->alias_title] = 1;
-							} 
-						}
-					}
-					$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $content );
-					$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
+					require_once($this->module_path . "lib/XEWikiParser.class.php");
+					$wiki_syntax_parser = new XEWikiParser($this);
 				}
+				$content = $wiki_syntax_parser->parse($org_content);
 				if($oCacheHandler->isSupport()) $oCacheHandler->put($cache_key, $content);
 			}
 			
 			return $content;
 		}
 
+		/**
+		 * Checks if a certain document exists
+		 * Returns doc_alias if document exists or false otherwise
+		 * @param type $document_name
+		 * @return boolean 
+		 */
 		public function documentExists($document_name){
 			$oDocumentModel  = &getModel('document');
 			// Search for document by alias
 			$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $document_name);
-			if($document_srl) return true;
+			if($document_srl) return $document_name;
 			
 			// If not found, search by title
 			$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $document_name);			
-			if($document_srl) return true;
+			if($document_srl) {
+				$alias = $oDocumentModel->getAlias($document_srl);
+				return $alias;
+			}
 			
 			return false;
 		}
@@ -635,48 +621,6 @@ class wikiView extends wiki implements WikiSite
 		
 		public function getFullLink($document_name){
 			return getUrl('','mid', $this->module_info->mid, 'entry', $document_name);
-		}
-
-		/**
-		* @brief Wiki syntax checking for the presence of linked documents.
-		*/
-		function callback_check_exists($matches)
-		{
-			$entry_name = wiki::makeEntryName($matches);
-			$this->document_exists[$entry_name->link_entry] = 0;
-
-			return $matches[0];
-		}
-
-
-		/**
-		* @brief Linked wiki article link exists by checking the return of the CSS class
-		*/
-		function getCSSClass($name)
-		{
-			if($this->document_exists[$name]) return "exists";
-
-			else return "notexist";
-		}
-
-
-		/**
-		* @brief The return link to be substituted according to wiki
-		*/
-		function callback_wikilink($matches)
-		{
-			if($matches[1]{0} == "!") return "[".substr($matches[1], 1)."]";
-
-			$entry_name = wiki::makeEntryName($matches);
-			
-			// If document exists, create link with alias -> the title will be correctly retireved from the database
-			// Otherwise, use title as entry, so that doc title can be retrieved form URL
-			if($this->document_exists[$entry_name->link_entry]) $alias = $entry_name->link_entry;
-			else $alias = $entry_name->printing_name;
-			
-			$answer = "<a href=\"".getFullUrl('', 'mid', $this->mid, 'entry', $alias, 'document_srl', '')."\" class=\"".$this->getCSSClass($entry_name->link_entry)."\" >".$entry_name->printing_name."</a>";
-
-			return $answer;
 		}
 		
 		/*

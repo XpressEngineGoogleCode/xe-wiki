@@ -41,8 +41,8 @@ class MarkdownParser implements SyntaxParser {
 		}
 		
 		// If local document that  exists, return expected link and exit
-		if($this->wiki_site->documentExists($url)){
-			$full_url = $this->wiki_site->getFullLink($url);
+		if($alias = $this->wiki_site->documentExists($url)){
+			$full_url = $this->wiki_site->getFullLink($alias);
 			$anchor = str_replace($url, $full_url, $matches[0]);
 			return $anchor;
 		}

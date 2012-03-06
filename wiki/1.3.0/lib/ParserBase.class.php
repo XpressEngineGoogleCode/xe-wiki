@@ -294,8 +294,8 @@ class ParserBase implements SyntaxParser {
 		}
 		
 		// If local document that  exists, return expected link and exit
-		if($this->wiki_site->documentExists($url)){
-			$url = $this->wiki_site->getFullLink($url);
+		if($alias = $this->wiki_site->documentExists($url)){
+			$url = $this->wiki_site->getFullLink($alias);
 			return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
 		}
 		

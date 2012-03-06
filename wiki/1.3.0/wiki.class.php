@@ -10,41 +10,6 @@
 		static $omitting_characters = array('/&/', '/\//', '/,/', '/ /');
 		static $replacing_characters = array('', '', '', '_');
 
-		/**
-		 * @brief Generate the string to use as entry name
-		 */
-		static function makeEntryName($matches)
-		{
-			$answer->is_alias_link = false;
-
-			$matches[0] = trim($matches[0]);
-
-			$names = explode('|', $matches[1]);
-			foreach ($names as $key => $entry_name)
-			{
-				$names[$key] = trim($entry_name);
-			}
-			$processed_names = array();
-			foreach ($names as $key => $entry_name)
-			{
-				$entry_name = wiki::beautifyEntryName($entry_name);
-				$processed_names[] = $entry_name;
-			}
-
-			if(count($names) == 2)
-			{
-				$answer->is_alias_link = true;
-				$answer->printing_name = $names[1];
-				$answer->link_entry = $processed_names[0];
-			}
-			else
-			{
-				$answer->printing_name = $names[0];
-				$answer->link_entry = $processed_names[0];
-			}
-			return $answer;
-		}
-
 		static function beautifyEntryName($entry_name)
 		{
 			$entry_name = strip_tags($entry_name);

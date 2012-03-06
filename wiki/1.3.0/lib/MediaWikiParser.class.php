@@ -240,7 +240,7 @@ class MediaWikiParser extends ParserBase {
 		else $tail = $matches[8];
 		
 		// If document exists, return expected link and exit
-		if(preg_match("/^(https?|ftp|file)/", $url) || $this->wiki_site->documentExists($url)){
+		if(preg_match("/^(https?|ftp|file)/", $url) || $alias = $this->wiki_site->documentExists($url)){
 			return "<a href=\"$url$local_anchor\" title=\"$page_name\">" . $description . $tail . "</a>" . $after_link;
 		}
 		
