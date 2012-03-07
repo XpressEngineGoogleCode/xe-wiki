@@ -158,20 +158,28 @@
 				{
 					$output = $oCommentController->insertComment($obj);
 				}
+				
+				if ($output->toBool()) 
+				{
+					//check if comment writer is admin or not
+					$oMemberModel = &getModel("member");
+					if (isset($obj->member_srl) && !is_null($obj->member_srl))
+					{
+						$member_info = $oMemberModel->getMemberInfoByMemberSrl($obj->member_srl);
+					}
+					else
+					{
+						$member_info->is_admin = 'N';
+					}
 
-				// If there is no problem to register comment then send an email to admin
-				if($output->toBool() && $this->module_info->admin_mail) {
-					$oMail = new Mail();
-					$oMail->setTitle($oDocument->getTitleText());
-					$oMail->setContent( sprintf("From : <a href=\"%s#comment_%d\">%s#comment_%d</a><br/>\r\n%s", $oDocument->getPermanentUrl(), $obj->comment_srl, $oDocument->getPermanentUrl(), $obj->comment_srl, $obj->content));
-					$oMail->setSender($obj->user_name, $obj->email_address);
-
-					$target_mail = explode(',',$this->module_info->admin_mail);
-					for($i=0;$i<count($target_mail);$i++) {
-						$email_address = trim($target_mail[$i]);
-						if(!$email_address) continue;
-						$oMail->setReceiptor($email_address, $email_address);
-						$oMail->send();
+					// if current module is using Comment Approval System and comment write is not admin user then
+					if($oCommentController->isModuleUsingPublishValidation($this->module_info->module_srl) && $member_info->is_admin != 'Y')
+					{
+						$this->setMessage('comment_to_be_approved');
+					}
+					else
+					{
+						$this->setMessage('success_registed');
 					}
 				}
 			// If you have to modify comment_srl
@@ -185,18 +193,12 @@
 
 			if(!$output->toBool()) return $output;
 			
-			
-			
 			$this->add('mid', Context::get('mid'));
 			$this->add('document_srl', $obj->document_srl);
 			$this->add('comment_srl', $obj->comment_srl);
-			$this->setMessage('success_registed');
 			$this->setRedirectUrl(Context::get('success_return_url'));
-			
-			
 		}
-
-
+		
 		/**
 		 * @brief Delete article from the wiki 
 		 */
