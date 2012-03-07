@@ -5,9 +5,7 @@
  * @brief  wiki module View class
  **/
 
-require_once("lib\WikiSite.interface.php");
-
-class wikiView extends wiki implements WikiSite
+class wikiView extends wiki
 {
 		var $list;
 		var $search_option = array('title', 'content', 'title_content', 'comment', 'user_name', 'nick_name', 'user_id', 'tag');
@@ -328,6 +326,14 @@ class wikiView extends wiki implements WikiSite
 				$root = $oWikiModel->getRootDocument($this->module_info->module_srl);
 				Context::set('root',$root);
 				
+				// Retrieve documents that link here and that this doc links to
+				$oWikiModel = getModel('wiki');
+				$inbound_links = $oWikiModel->getInboundLinks($oDocument->document_srl);
+				$outbound_links = $oWikiModel->getOutboundLinks($oDocument->document_srl);
+				
+				Context::set('inbound_links', $inbound_links);
+				Context::set('outbound_links', $outbound_links);
+				
 			}
 			else
 			{
@@ -569,60 +575,14 @@ class wikiView extends wiki implements WikiSite
 			}*/
             if (!$content)
             {
-				// Parse wiki syntax
-				if($this->module_info->markup_type == 'markdown'){
-					require_once($this->module_path . "lib/MarkdownParser.class.php");
-					$wiki_syntax_parser = new MarkdownParser($this);					
-				}				
-				else if($this->module_info->markup_type == 'googlecode_markup'){
-					require_once($this->module_path . "lib/GoogleCodeWikiParser.class.php");
-					$wiki_syntax_parser = new GoogleCodeWikiParser($this);
-				}
-				else if($this->module_info->markup_type == 'mediawiki_markup'){
-					require_once($this->module_path . "lib/MediaWikiParser.class.php");
-					$wiki_syntax_parser = new MediaWikiParser($this);
-				}
-				else {
-					require_once($this->module_path . "lib/XEWikiParser.class.php");
-					$wiki_syntax_parser = new XEWikiParser($this);
-				}
+				$wiki_syntax_parser = $this->getWikiTextParser();
 				$content = $wiki_syntax_parser->parse($org_content);
 				if($oCacheHandler->isSupport()) $oCacheHandler->put($cache_key, $content);
 			}
 			
 			return $content;
 		}
-
-		/**
-		 * Checks if a certain document exists
-		 * Returns doc_alias if document exists or false otherwise
-		 * @param type $document_name
-		 * @return boolean 
-		 */
-		public function documentExists($document_name){
-			$oDocumentModel  = &getModel('document');
-			// Search for document by alias
-			$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $document_name);
-			if($document_srl) return $document_name;
-			
-			// If not found, search by title
-			$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $document_name);			
-			if($document_srl) {
-				$alias = $oDocumentModel->getAlias($document_srl);
-				return $alias;
-			}
-			
-			return false;
-		}
-		
-		public function currentUserCanCreateContent(){
-			return $this->grant->write_document;
-		}
-		
-		public function getFullLink($document_name){
-			return getUrl('','mid', $this->module_info->mid, 'entry', $document_name);
-		}
-		
+	
 		/*
 		* @brief Set list for Tree menu on left side of pages
 		*/

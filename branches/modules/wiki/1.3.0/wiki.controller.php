@@ -48,6 +48,10 @@
 			// Check that already exist
 			$oDocument = $oDocumentModel->getDocument($obj->document_srl, $this->grant->manager);
 
+			// Get linked docs (by alias)
+			$wiki_text_parser = $this->getWikiTextParser();
+			$linked_documents_aliases = $wiki_text_parser->getLinkedDocuments($obj->content);
+					
 			// Modified if it already exists
 			if($oDocument->isExists() && $oDocument->document_srl == $obj->document_srl) {
 				//if($oDocument->get('title')=='Front Page') $obj->title = 'Front Page';
@@ -55,10 +59,17 @@
 
 				// Have been successfully modified the hierarchy/ alias change
 				if($output->toBool()) {
+					// Update alias
 					$oDocumentController->deleteDocumentAliasByDocument($obj->document_srl);
 					$aliasName = Context::get('alias');
 					if(!$aliasName) $aliasName = $this->beautifyEntryName($obj->title);
 					$oDocumentController->insertAlias($obj->module_srl, $obj->document_srl, $aliasName);
+					
+					// Update linked docs
+					if(count($linked_documents_aliases) > 0){
+						$oWikiController = getController('wiki');
+						$oWikiController->updateLinkedDocuments($obj->document_srl, $linked_documents_aliases, $obj->module_srl);					
+					}
 				}
 				$msg_code = 'success_updated';
 				
@@ -76,9 +87,17 @@
 				$output = $oDocumentController->insertDocument($obj);
 				$msg_code = 'success_registed';
 				$obj->document_srl = $output->get('document_srl');
+				
+				// Insert Alias
 				$aliasName = Context::get('alias');
 				if(!$aliasName) $aliasName = $this->beautifyEntryName($obj->title);				
 				$oDocumentController->insertAlias($obj->module_srl, $obj->document_srl, $aliasName);
+				
+				// Insert linked docs
+				if(count($linked_documents_aliases) > 0){				
+					$oWikiController = getController('wiki');
+					$oWikiController->insertLinkedDocuments($obj->document_srl, $linked_documents_aliases, $obj->module_srl);									
+				}
 			}
 
 			// Stop when an error occurs
@@ -99,6 +118,27 @@
 			}
 			$this->setRedirectUrl($url);
 
+		}
+		
+		function deleteLinkedDocuments($document_srl){
+			$args->document_srl = $document_srl;
+			$output = executeQuery('wiki.deleteLinkedDocuments', $args);
+			return $output;
+		}
+		
+		function insertLinkedDocuments($document_srl, $alias_list, $module_srl){
+			$args->document_srl = $document_srl;
+			$args->alias_list = implode(',', $alias_list);
+			$args->module_srl = $module_srl;
+			$output = executeQuery('wiki.insertLinkedDocuments', $args);
+			return $output;
+		}
+		
+		function updateLinkedDocuments($document_srl, $alias_list, $module_srl){
+			$output = $this->deleteLinkedDocuments($document_srl);
+			if($output->toBool())
+				$output = $this->insertLinkedDocuments($document_srl, $alias_list, $module_srl);
+			return $output;
 		}
 
 		/**

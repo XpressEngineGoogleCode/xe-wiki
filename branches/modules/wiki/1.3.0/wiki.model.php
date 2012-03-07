@@ -551,6 +551,23 @@
             $obj->search_target = $search_target;
             return $oDocumentModel->getDocumentList($obj);
         }
+		
+		/**
+		 * Get pages that link to this document
+		 */
+		function getInboundLinks($document_srl){
+			$args->document_srl = $document_srl;
+			$output = executeQueryArray('wiki.getInboundLinks', $args);
+			return $output->data;
+		}
 	
+		/**
+		 * Get pages this document links to
+		 */
+		function getOutboundLinks($document_srl){
+			$args->document_srl = $document_srl;
+			$output = executeQueryArray('wiki.getLinkedDocuments', $args);
+			return $output->data;
+		}		
 	}
 ?>

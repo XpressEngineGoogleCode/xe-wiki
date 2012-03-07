@@ -148,7 +148,7 @@
 		<a href="{getUrl('document_srl',$oDocumentNext->document_srl)}" class="wikiNext">{$oDocumentNext->getTitle()} &raquo;</a>
 	<!--@end-->
 	</div>
-
+	
 	{@ $tag_list = $oDocument->get('tag_list') }
 	<!--@if(count($tag_list))-->
 	<dl id="wikiTags">
@@ -188,6 +188,19 @@
 	</dl>
 	<!--@end-->
 
+	<div id="wikiInboundLinks">
+		<p><strong>Pages that link here:</strong></p>
+		<!--@foreach($inbound_links as $link)-->
+		<p><a href="{getUrl('mid', $module_info->mid, 'entry', $link->alias)}">{$link->title}</a> </p>
+		<!--@end-->
+	</div>
+	
+	<div id="wikiOutboundLinks">
+		<p><strong>Links in this page:</strong></p>
+		<!--@foreach($outbound_links as $link)-->
+		<p><a href="{getUrl('mid', $module_info->mid, 'entry', $link->alias)}">{$link->title}</a> </p>
+		<!--@end-->
+	</div>	
 
 	<!--@if($oDocument->allowTrackback())-->
 		<!--#include("./trackback.html")-->

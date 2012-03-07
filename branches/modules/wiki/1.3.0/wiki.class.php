@@ -5,11 +5,33 @@
 	 * @brief  wiki module high class
 	 **/
 
-	class wiki extends ModuleObject {
+	require_once("lib\WikiSite.interface.php");
+
+	class wiki extends ModuleObject implements WikiSite {
 
 		static $omitting_characters = array('/&/', '/\//', '/,/', '/ /');
 		static $replacing_characters = array('', '', '', '_');
 
+	    public function getWikiTextParser(){
+			if($this->module_info->markup_type == 'markdown'){
+				require_once($this->module_path . "lib/MarkdownParser.class.php");
+				$wiki_syntax_parser = new MarkdownParser($this);					
+			}				
+			else if($this->module_info->markup_type == 'googlecode_markup'){
+				require_once($this->module_path . "lib/GoogleCodeWikiParser.class.php");
+				$wiki_syntax_parser = new GoogleCodeWikiParser($this);
+			}
+			else if($this->module_info->markup_type == 'mediawiki_markup'){
+				require_once($this->module_path . "lib/MediaWikiParser.class.php");
+				$wiki_syntax_parser = new MediaWikiParser($this);
+			}
+			else {
+				require_once($this->module_path . "lib/XEWikiParser.class.php");
+				$wiki_syntax_parser = new XEWikiParser($this);
+			}		
+			return $wiki_syntax_parser;
+		}
+		
 		static function beautifyEntryName($entry_name)
 		{
 			$entry_name = strip_tags($entry_name);
@@ -20,6 +42,36 @@
 			
 			return $entry_name;			
 		}
+		
+		/**
+		 * Checks if a certain document exists
+		 * Returns doc_alias if document exists or false otherwise
+		 * @param type $document_name
+		 * @return boolean 
+		 */
+		public function documentExists($document_name){
+			$oDocumentModel  = &getModel('document');
+			// Search for document by alias
+			$document_srl =  $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $document_name);
+			if($document_srl) return $document_name;
+			
+			// If not found, search by title
+			$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $document_name);			
+			if($document_srl) {
+				$alias = $oDocumentModel->getAlias($document_srl);
+				return $alias;
+			}
+			
+			return false;
+		}
+		
+		public function currentUserCanCreateContent(){
+			return $this->grant->write_document;
+		}
+		
+		public function getFullLink($document_name){
+			return getUrl('','mid', $this->module_info->mid, 'entry', $document_name);
+		}		
 
 		function moduleInstall() {
 			return new Object();
@@ -31,6 +83,11 @@
 		function checkUpdate() {
 			$flag = false;
 			$flag = $this->_hasOldStyleAliases();
+			
+			$oDB = DB::getInstance();
+			if(!$oDB->isIndexExists("wiki_links","idx_link_doc_cur_doc")) 
+					$flag = true;
+			
 			return $flag;
 		}
 
@@ -38,7 +95,14 @@
 		 * @brief Module Updates
 		 */
 		function moduleUpdate() {
-			$this->_updateOldStyleAliases();
+			if($this->_hasOldStyleAliases())
+				$this->_updateOldStyleAliases();
+			
+            // tag in the index column of the table tag
+			$oDB = DB::getInstance();
+            if(!$oDB->isIndexExists("wiki_links","idx_link_doc_cur_doc")) 
+                $oDB->addIndex("wiki_links","idx_link_doc_cur_doc", array("link_doc_srl","cur_doc_srl"));
+			
 			return new Object(0, 'success_updated');
 		}
 
