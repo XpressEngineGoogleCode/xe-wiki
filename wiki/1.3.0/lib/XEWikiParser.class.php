@@ -11,17 +11,33 @@ require_once('SyntaxParser.interface.php');
 class XEWikiParser implements SyntaxParser {
 	private $wiki_site = null;
 	
+	private $internal_links_regex = "!\[([^\]]+)\]!is";
+	
 	public function __construct($wiki_site = null){
 		$this->wiki_site = $wiki_site;
 	}
 
 	public function parse($org_content) {
 		// Replace square brackets with link
-		$content = preg_replace_callback("!\[([^\]]+)\]!is", array(&$this, 'callback_wikilink' ), $org_content );
+		$content = preg_replace_callback($this->internal_links_regex, array(&$this, 'callback_wikilink' ), $org_content );
 		
 		// No idea what this does :)
 		$content = preg_replace('@<([^>]*)(src|href)="((?!https?://)[^"]*)"([^>]*)>@i','<$1$2="'.Context::getRequestUri().'$3"$4>', $content);
 		return $content;
+	}
+	
+	public function getLinkedDocuments($text){
+		$matches = array();
+		$aliases = array();
+		preg_match_all($this->internal_links_regex, $text, &$matches, PREG_SET_ORDER);
+		
+		foreach($matches as $match){
+			$entry_name = $this->makeEntryName($match);
+			if($entry_name->exists && !in_array($entry_name->link_entry, $aliases))
+				$aliases[] = $entry_name->link_entry;
+		}
+		
+		return $aliases;
 	}
 	
 	/**
