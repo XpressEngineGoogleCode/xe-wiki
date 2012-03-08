@@ -3,6 +3,14 @@ function viewHistory(history_srl) {
     if(zone.css('display')=='block') zone.css('display','none');
     else zone.css('display','block');
 }
+
+jQuery(document).ready(function(){
+	if (jQuery("input[name=title]").length && jQuery("input[name=title]").hasClass("inputTypeText"))
+	{
+		jQuery("input[name=title]").focus();
+	}
+});	
+
 /**
  * @file   modules/document/tpl/js/document_category.js
  * @author sol (sol@ngleader.com)
