@@ -897,3 +897,7 @@ a.wikiButtonAdmin, a.wikiButton  {
 	margin: 10px;
 	text-align: right;	
 }
+
+.wikiLinks {
+	padding:10px 0;
+}

@@ -15,6 +15,16 @@ class MediaWikiParser extends ParserBase {
 		"strikeout" => '~~'
 	);
 	
+	protected $internal_links_regex = "/
+									[[][[]				# Starts with [[
+									(([^#|]+?)[:])?		# Can start with something that ends in : [matches 1,2]
+									([^#|]+?)?		# Followed by any word	[matches 3]
+									([#](.*?))?		# Followed by an optional group that starts with # [matches 4,5]
+									([|](.*?))?		# Followed by an optional group that starts with a pipe [matches 6,7]
+									[]][]]				# Ends with ]]
+									([^ ]*)?		# Optional tail for brackets - take all characters until first space  [matches 8]
+								/x";
+	
 	public function __construct($wiki_site){
 		parent::__construct($wiki_site);	
 	}
@@ -25,6 +35,25 @@ class MediaWikiParser extends ParserBase {
 		$this->parseDefinitionLists();
 		$this->parsePreformattedText();
 	}
+	
+	public function getLinkedDocuments($text){
+		$matches = array();
+		$aliases = array();
+		
+		preg_match_all($this->internal_links_regex, $text, &$matches, PREG_SET_ORDER);
+		
+		foreach($matches as $match){
+			$content = $match[3]; // Page name or external url
+			// If external URL, continue
+			if(preg_match("/^(https?|ftp|file)/", $content)) continue;			
+			
+			$alias = $this->wiki_site->documentExists($content);
+			if($alias && !in_array($alias, $aliases))
+				$aliases[] = $alias;
+		}
+		
+		return $aliases;
+	}		
 	
 	/**
 	 * Override
@@ -139,15 +168,7 @@ class MediaWikiParser extends ParserBase {
 		//	- can contain piped description [my link|description that can have many words]
 		//	- can link to local content [my link#local_anchor|and some description maybe]
 		//	- can contain namespaced page names [Help:Contents|This is the Contents page]
-		$this->text = preg_replace_callback("/
-									[[][[]				# Starts with [[
-									(([^#|]+?)[:])?		# Can start with something that ends in : [matches 1,2]
-									([^#|]+?)?		# Followed by any word	[matches 3]
-									([#](.*?))?		# Followed by an optional group that starts with # [matches 4,5]
-									([|](.*?))?		# Followed by an optional group that starts with a pipe [matches 6,7]
-									[]][]]				# Ends with ]]
-									([^ ]*)?		# Optional tail for brackets - take all characters until first space  [matches 8]
-								/x",array($this, "_handle_internal_link"), $this->text);		
+		$this->text = preg_replace_callback($this->internal_links_regex,array($this, "_handle_internal_link"), $this->text);		
 		
 		// Find external links given between [simple brackets]
 		$this->text = preg_replace_callback("/
@@ -207,48 +228,29 @@ class MediaWikiParser extends ParserBase {
 		
 		// Building href
 		// url#local_anchor		
-		$href = str_replace(' ', '_', $content) 
-				. str_replace(' ', '_',$local_anchor);
+		$alias = $this->wiki_site->documentExists($content);
+		if($alias) $href = $alias;
+		else       $href = str_replace(' ', '_', $content);
+		$href .= str_replace(' ', '_',$local_anchor);
 		
 		// Building title attribute
 		$title = $content ? " title=\"$content\"" : '';
 		
 		// Add class attribute
-		if(preg_match("/^(https?|ftp|file)/", $href)) $class = ' class="external"';
+		$class = '';
+		if(preg_match("/^(https?|ftp|file)/", $href)) $class = 'external ';
+		if($alias) $class .= 'exist';
+		else $class .= 'notexist';
+		$class = " class=\"$class\"";
 		
 		// Build description
 		if(!$description) $description = $content . $local_anchor;
 		if($tail) $description .= $tail;
 		
+		// If document does not exist, return plain text
+		if(!$alias && !$this->wiki_site->currentUserCanCreateContent()) return $description;		
 		
 		return "<a href=\"$href\"$title$class>$description</a>$external_tail";
-		
-		$page_name = $matches[3];
-		$url = str_replace(' ', '_', $page_name);
-		$local_anchor = $matches[5];
-		$description = $matches[7] ? $matches[7] : $page_name;
-		
-		
-		$href = str_replace(' ', '_', $matches[3]) . $matches[4];
-		
-		
-
-		if(strpos($matches[8], '%%%') === 0){
-				$tail = '';
-				$after_link = $matches[8];
-		}
-		else $tail = $matches[8];
-		
-		// If document exists, return expected link and exit
-		if(preg_match("/^(https?|ftp|file)/", $url) || $alias = $this->wiki_site->documentExists($url)){
-			return "<a href=\"$url$local_anchor\" title=\"$page_name\">" . $description . $tail . "</a>" . $after_link;
-		}
-		
-		// Else, if document does not exist
-		//   If user is not allowed to create content, return plain text
-		if(!$this->wiki_site->currentUserCanCreateContent()) return $description . $tail;
-		//   Else return link to create new page
-		return "<a href=\"$url$local_anchor\" class=notexist>" . $description . $tail . "</a>" . $after_link;
 	}	
 		
 }

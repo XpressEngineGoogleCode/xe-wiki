@@ -325,15 +325,6 @@ class wikiView extends wiki
 				// Put root element in context
 				$root = $oWikiModel->getRootDocument($this->module_info->module_srl);
 				Context::set('root',$root);
-				
-				// Retrieve documents that link here and that this doc links to
-				$oWikiModel = getModel('wiki');
-				$inbound_links = $oWikiModel->getInboundLinks($oDocument->document_srl);
-				$outbound_links = $oWikiModel->getOutboundLinks($oDocument->document_srl);
-				
-				Context::set('inbound_links', $inbound_links);
-				Context::set('outbound_links', $outbound_links);
-				
 			}
 			else
 			{
@@ -559,6 +550,30 @@ class wikiView extends wiki
 			} 
 			$content = $oDocument->getContent(false, false, false, false);
 			$content = $this->_renderWikiContent($oDocument->document_srl, $content);
+			
+			// Retrieve documents that link here and that this doc links to
+			$oWikiModel = getModel('wiki');
+			$inbound_links = $oWikiModel->getInboundLinks($oDocument->document_srl);
+			$outbound_links = $oWikiModel->getOutboundLinks($oDocument->document_srl);
+			
+			$inbound_links_html = '';
+			foreach($inbound_links as $link)
+				$inbound_links_html .= '<p><a href="'. getUrl('mid', $this->module_info->mid, 'entry', $link->alias) .'">' 
+										. $link->title 
+										. '</a> </p>';
+			if($inbound_links_html != '')
+				$inbound_links_html = '<div id="wikiInboundLinks" class="wikiLinks"><p><strong>' . Context::getLang('pages_that_link_to_this') . '</strong></p>'. $inbound_links_html . '</div>';
+	
+			$outbound_links_html = '';
+			foreach($outbound_links as $link)
+				$outbound_links_html .= '<p><a href="'. getUrl('mid', $this->module_info->mid, 'entry', $link->alias) .'">'
+										. $link->title 
+										. '</a></p>';
+			if($outbound_links_html != '')
+				$outbound_links_html = '<div id="wikiOutboundLinks" class="wikiLinks"><p><strong>' . Context::getLang('links_in_this_page') . '</strong></p>' . $outbound_links_html . '</div>';
+			
+			$content .= $inbound_links_html . $outbound_links_html;
+			
 			$oDocument->add('content', $content);
 		}
 

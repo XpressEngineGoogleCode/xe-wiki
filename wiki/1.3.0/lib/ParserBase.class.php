@@ -29,6 +29,30 @@ class ParserBase implements SyntaxParser {
 		"strikeout" => '~~'
 	);
 	
+	protected $internal_link_camel_case_regex = "/
+								(
+								(?<!			# Doesn't begin with ..
+									( 
+									[!]			#   .. a ! (these need to be escaped)
+									|			#   or
+									[[]			#   .. a [ (these will be treated later)
+									)
+								)	
+								(				# Sequence of letters that ..
+									[A-Z]	    # Start with an uppercase letter
+									[a-z0-9]+	# Followed by at least one lowercase letter
+								){2,}			# Repeated at least two times
+								)	
+								/x";
+	
+	protected $internal_link_with_brackets_regex = "/
+									[[]				# Starts with [
+									([^#]+?)		# Followed by any word
+									([#](.*?))?		# Followed by an optional group that starts with #
+									([ ](.*?))?		# Followed by an optional group that starts with a space
+									[]]				# Ends with ]
+								/x";
+	
 	// Keeps a reference to a wiki instance, used to check if documents exist and such
 	protected $wiki_site = null;
 	
@@ -73,6 +97,29 @@ class ParserBase implements SyntaxParser {
 		$this->parseParagraphs();
 		$this->putBackEscapedBlocks();		
 	}
+	
+	public function getLinkedDocuments($text){
+		$matches = array();
+		$aliases = array();
+		
+		preg_match_all($this->internal_link_camel_case_regex, $text, &$matches, PREG_SET_ORDER);
+		preg_match_all($this->internal_link_with_brackets_regex, $text, &$matches, PREG_SET_ORDER);
+		
+		foreach($matches as $match){
+			$url = $match[1];
+			$local_anchor = $match[2];
+			$description = $match[5];			
+			
+			// If external URL, continue
+			if(preg_match("/^(https?|ftp|file)/", $url)) continue;
+			
+			$alias = $this->wiki_site->documentExists($url);
+			if($alias && !in_array($alias, $aliases))
+				$aliases[] = $alias;
+		}
+		
+		return $aliases;
+	}	
 	
 	protected function escapeWhateverThereIsToEscape(){
 		
@@ -227,21 +274,7 @@ class ParserBase implements SyntaxParser {
 	 */
 	protected function parseLinks(){	
 		// Find internal links given as CamelCase words
-		$this->text = preg_replace_callback("/
-								(
-								(?<!			# Doesn't begin with ..
-									( 
-									[!]			#   .. a ! (these need to be escaped)
-									|			#   or
-									[[]			#   .. a [ (these will be treated later)
-									)
-								)	
-								(				# Sequence of letters that ..
-									[A-Z]	    # Start with an uppercase letter
-									[a-z0-9]+	# Followed by at least one lowercase letter
-								){2,}			# Repeated at least two times
-								)	
-								/x",array($this, "_handle_link"), $this->text);
+		$this->text = preg_replace_callback($this->internal_link_camel_case_regex,array($this, "_handle_link"), $this->text);
 		// Remove exclamation marks from CamelCase words
 		$this->text = preg_replace("/(!)(([A-Z][a-z0-9]+){2,})/x", '$2', $this->text);
 		
@@ -271,13 +304,7 @@ class ParserBase implements SyntaxParser {
 		//	- can contain description [myLink description that can have many words]
 		//	- can link to local content [myLink#local_anchor and some description maybe]
 		// Also catches external links
-		$this->text = preg_replace_callback("/
-									[[]				# Starts with [
-									([^#]+?)		# Followed by any word
-									([#](.*?))?		# Followed by an optional group that starts with #
-									([ ](.*?))?		# Followed by an optional group that starts with a space
-									[]]				# Ends with ]
-								/x",array($this, "_handle_link"), $this->text);		
+		$this->text = preg_replace_callback($this->internal_link_with_brackets_regex, array($this, "_handle_link"), $this->text);		
 	}
 	
 	/**
