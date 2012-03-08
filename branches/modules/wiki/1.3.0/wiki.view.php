@@ -53,7 +53,6 @@ class wikiView extends wiki
 			
 			// Load left side tree, if tree skin is used
 			if($this->module_info->skin == 'xe_wiki_tree'){
-				if(!isset($this->module_info->menu_style)) $this->module_info->menu_style = 'classic';
 				$this->getLeftMenu();
 			};
 		}
@@ -619,15 +618,20 @@ class wikiView extends wiki
 		{
 			$oWikiModel = &getModel("wiki");
 			$oDocumentModel = &getModel("document");
-			$module_srl=$this->module_info->module_srl;
-			if ( $this->module_info->menu_style == "classic")
+			$module_srl = $this->module_info->module_srl;
+			
+			// We need to retrieve skin info directly from module model
+			// because it wasn't yet synced with module_info (this method executes on init)
+			$oModuleModel = &getModel('module');
+			$skin_vars = $oModuleModel->getModuleSkinVars($module_srl);
+			
+			if ($skin_vars["menu_style"]->value == "classic")
 			{
 				$this->list = $oWikiModel->loadWikiTreeList($module_srl);
 				Context::set('list',$this->list);
 			}
 			else
 			{
-				
 				$document_srl = Context::get("document_srl");
 				$entry = Context::get("entry");
 				$root = $oWikiModel->getRootDocument($module_srl);
