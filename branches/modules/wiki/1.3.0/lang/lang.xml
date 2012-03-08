@@ -357,5 +357,11 @@
 	<item name="view_this_page_in">
 		<value xml:lang="en"><![CDATA[View this page in]]></value>
 	</item>					
-	
+	<item name="pages_that_link_to_this">
+		<value xml:lang="en"><![CDATA[Pages that reference this entry:]]></value>
+	</item>				
+	<item name="links_in_this_page">
+		<value xml:lang="en"><![CDATA[Links in this page:]]></value>
+	</item>					
+
 </lang>

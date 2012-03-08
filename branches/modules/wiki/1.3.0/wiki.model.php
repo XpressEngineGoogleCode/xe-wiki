@@ -558,6 +558,7 @@
 		function getInboundLinks($document_srl){
 			$args->document_srl = $document_srl;
 			$output = executeQueryArray('wiki.getInboundLinks', $args);
+			if(!$output->toBool() || !$output->data) return array();
 			return $output->data;
 		}
 	
@@ -567,6 +568,7 @@
 		function getOutboundLinks($document_srl){
 			$args->document_srl = $document_srl;
 			$output = executeQueryArray('wiki.getLinkedDocuments', $args);
+			if(!$output->toBool() || !$output->data) return array();
 			return $output->data;
 		}		
 	}
