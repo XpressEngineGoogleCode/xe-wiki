@@ -8,10 +8,10 @@
 	<input type="hidden" name="act" value="procWikiAdminInsertWiki" />
 	<input type="hidden" name="module" value="wiki" />
     <input type="hidden" name="success_return_url" 
-							value="{getUrl('module','admin','act','dispWikiAdminInsertWiki', 'module_srl', $module_info->module_srl)}"
+							value="{getUrl('act','dispWikiAdminInsertWiki', 'module_srl', $module_info->module_srl)}"
 							cond="$module_info->module_srl"/>
     <input type="hidden" name="success_return_url" 
-							value="{getUrl('module','admin','act','dispWikiAdminContent')}"
+							value="{getUrl('act','dispWikiAdminContent')}"
 							cond="!$module_info->module_srl"/>	
 	
     <table cellspacing="0" class="rowTable">
