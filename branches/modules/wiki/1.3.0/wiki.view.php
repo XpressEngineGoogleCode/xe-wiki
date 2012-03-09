@@ -93,7 +93,7 @@ class wikiView extends wiki
 			
 			Context::set('oDocument', $oDocument);
 						
-			$this->setTemplateFile('histories');
+			$this->setTemplateFile('document_histories');
 		}
 
 
