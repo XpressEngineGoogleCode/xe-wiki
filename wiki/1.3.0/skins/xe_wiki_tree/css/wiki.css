@@ -308,7 +308,7 @@ a.wikiButtonAdmin, a.wikiButton  {
 	background: -ms-linear-gradient(top,  #707070 0%,#424242 100%); /* IE10+ */
 	background: linear-gradient(top,  #707070 0%,#424242 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#707070', endColorstr='#424242',GradientType=0 ); /* IE6-9 */
-	padding: 5px 16px;
+	padding: 5px 16px;	
 }
 
 .wikiBodyButton:hover span span {
@@ -323,6 +323,7 @@ a.wikiButtonAdmin, a.wikiButton  {
 	background: -ms-linear-gradient(top,  #df0000 0%,#ad0000 100%); /* IE10+ */
 	background: linear-gradient(top,  #df0000 0%,#ad0000 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#df0000', endColorstr='#ad0000',GradientType=0 ); /* IE6-9 */
+	cursor:pointer;
 }
 
 .wikiBodyButton:active span span {
@@ -913,3 +914,33 @@ a.wikiButtonAdmin, a.wikiButton  {
 .wikiLinks {
 	padding:10px 0;
 }
+
+.diff
+{
+    background-color: #E0E8EC;
+    padding: 3px;
+    border: 1px dashed #DDDDDD;
+    width: 100%;
+    font-weight: normal;
+}
+
+.wDiffHtmlInsert, .wDiffHtmlInsert *
+{
+    color: #009900;
+}
+
+.wDiffHtmlDelete, .wDiffHtmlDelete *
+{
+    color: #990000;
+    text-decoration: line-through;
+}
+.history_content
+{
+    background-color: #edf2c2;
+    padding: 3px;
+    border: 1px dashed #DDDDDD;
+    width: 100%;
+    font-weight: normal;
+}
+.hide { display:none; }
+span.date { font:10px Tahoma;}
