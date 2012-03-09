@@ -469,3 +469,22 @@ a.buttonOfficial a{ _vertical-align:top;}
 .wiki a.languageNotTranslated {	color:#707070; }
 #alias { width:40%; }
 .wikiLinks { padding:10px 0;}
+
+.diff, .history_content
+{
+    padding: 10px;
+    border: 1px dashed #DDDDDD;
+    width: 100%;
+    font-weight: normal;
+}
+
+.wDiffHtmlInsert, .wDiffHtmlInsert *
+{
+    color: #009900;
+}
+
+.wDiffHtmlDelete, .wDiffHtmlDelete *
+{
+    color: #990000;
+    text-decoration: line-through;
+}

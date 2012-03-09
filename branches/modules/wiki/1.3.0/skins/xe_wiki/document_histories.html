@@ -22,7 +22,10 @@
             <td class="title">
                 <span class="buttonOfficial"><button type="button" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide');return false;">{$lang->cmd_view}</button></span>
                 <span class="buttonOfficial"><button type="button" onclick="location.href='{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}';return false;">{$lang->restore}</button></span>
-                <div id="historyContent{$val->history_srl}" class="hide">{$val->content}</div>
+				<span class="buttonOfficial"><button type="button" onclick="getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl});">{$lang->diff}</button></span>
+                <div id="historyContent{$val->history_srl}" class="hide history_content">{nl2br($val->content)}</div>
+				<div id="diff{$val->history_srl}" name="diff{$val->history_srl}" class="hide diff">
+				</div>				
             </td>
             <td class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$val->nick_name}</a></td>
             <td class="date">{zdate($val->regdate, 'Y.m.d H:i:s')}</td>
