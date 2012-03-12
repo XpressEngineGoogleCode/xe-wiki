@@ -952,3 +952,16 @@ div.tag, div.wikiNavigation {
 #wikiDocumentPreview {
 	padding:10px;
 }
+
+.showHideTree {
+    width: 13px;
+    overflow: hidden;
+    height: 41px;
+    background: url(../img/open_close_button.png) 0 0 no-repeat;
+    cursor: pointer;
+    position: absolute;
+    padding:0;
+    left: 200px;
+    top: 155px;
+    z-index: 2;
+}

@@ -106,11 +106,11 @@ function resizeDiv(docHeight)
 	}
 	leftWidth += jQuery("#wiki").position().left;
 	rightWidth = jQuery("#wiki").width()-jQuery("#leftSideTreeList").width()-marginRight;
-    jQuery("#content_Body").width(rightWidth);
+    // jQuery("#wikiDocument").width(rightWidth);
 	 
 	if( jQuery("#leftSideTreeList").width() > 1 )
 	{
-		jQuery("#showHideTree").css("left",(leftWidth-7)+"px");
+		jQuery("#showHideTree").css("left",(leftWidth-13)+"px");
 	}
 }
 
@@ -161,7 +161,7 @@ function getDiff(elem,document_srl,history_srl)
 			}
 		);
     }
-    docHeight = jQuery("#content_Body").height();
+    docHeight = jQuery("#wikiBody").height();
     resizeDiv(docHeight);
 }
 
@@ -178,33 +178,53 @@ jQuery(document).ready(function(){
 	}
 	leftWidth = jQuery("#leftSideTreeList").width();
 	slideWidth = jQuery("#leftSideTreeList").width()
+	
     jQuery("#showHideTree").click(function()
     {
-		jQuery("#leftSideTreeList").animate({
+		var leftTree = jQuery("#leftSideTreeList");
+		var toggleButton = jQuery("#showHideTree");
+		
+		leftTree.animate({
 			width: 'toggle'
-			}, 200, function() {
+			}, 500, function() {
 			resizeDiv(docHeight);
 		});
-		if( jQuery("#leftSideTreeList").width() == 1 )
+		
+		var wikiBody = jQuery("#wikiBody");
+		
+		if( leftTree.width() == 1 )
 		{
-			jQuery("#showHideTree").animate({
-			left: '+='+(slideWidth-7)
-			}, 200, function() {
-				jQuery("#showHideTree").css('background-position', "0px 0px");
-				jQuery("#showHideTree").attr("title",titleDivShowHideTree[0]);
-			});
+			jQuery("#leftSideTreeList *").hide();
+			wikiBody.animate({
+				'padding-left': '250px'
+			}, 500);				
+			toggleButton.animate({
+				left: '+='+(slideWidth-13)
+			}, 500, function() {
+					jQuery("#leftSideTreeList *").show();		
+					toggleButton.css('background-position', "0px 0px");
+					toggleButton.attr("title",titleDivShowHideTree[0]);
+				});
+				
 		}
 		else
 		{
-			jQuery("#showHideTree").animate({
-				left: '-='+(slideWidth-7)
-				}, 200, function() {
-				jQuery("#wikiBody").width(jQuery("#wiki").width()-marginRigh);
-				jQuery("#showHideTree").css('background-position', "-13px 0px");
-				jQuery("#showHideTree").attr("title",titleDivShowHideTree[1]);
+			jQuery("#leftSideTreeList *").hide();
+			wikiBody.animate({
+				'padding-left': '0'
+			}, 500);			
+			toggleButton.animate({
+				left: '-='+(slideWidth-13)
+				}, 500, function() {
+					jQuery("#leftSideTreeList *").show();
+				//jQuery("#wikiDocument").width(jQuery("#wiki").width()-marginRight);
+				
+				toggleButton.css('background-position', "-13px 0px");
+				toggleButton.attr("title",titleDivShowHideTree[1]);
 			});
 		}
     });
+	
 	if (jQuery("input[name=title]").length && jQuery("input[name=title]").hasClass("inputTypeText"))
 	{
 		jQuery("input[name=title]").focus();
@@ -223,6 +243,7 @@ jQuery(window).load(function() {
 });
 
 jQuery(function() {
+	/*
     jQuery("#leftSideTreeList").resizable({
 	maxHeight: docHeight,
 	maxWidth: 350,
@@ -232,6 +253,7 @@ jQuery(function() {
 	    resizeDiv(docHeight);
 	}
     });
+	*/
     
 });
 jQuery(window).resize(function(){
