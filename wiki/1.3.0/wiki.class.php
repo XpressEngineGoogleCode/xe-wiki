@@ -7,7 +7,7 @@
 
 	require_once("lib\WikiSite.interface.php");
 
-	class wiki extends ModuleObject implements WikiSite {
+	class Wiki extends ModuleObject implements WikiSite {
 
 		static $omitting_characters = array('/&/', '/\//', '/,/', '/ /');
 		static $replacing_characters = array('', '', '', '_');
