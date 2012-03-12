@@ -228,7 +228,7 @@ class MediaWikiParser extends ParserBase {
 		
 		// Building href
 		// url#local_anchor		
-		$alias = $this->wiki_site->documentExists($content);
+		$alias = $this->wiki_site->documentExists(str_replace(' ', '_', $content));
 		if($alias) $href = $alias;
 		else       $href = str_replace(' ', '_', $content);
 		$href .= str_replace(' ', '_',$local_anchor);
@@ -240,6 +240,7 @@ class MediaWikiParser extends ParserBase {
 		$class = '';
 		if(preg_match("/^(https?|ftp|file)/", $href)) $class = 'external ';
 		if($alias) $class .= 'exist';
+		else if($local_anchor) $class .= 'exist';
 		else $class .= 'notexist';
 		$class = " class=\"$class\"";
 		
@@ -252,5 +253,46 @@ class MediaWikiParser extends ParserBase {
 		
 		return "<a href=\"$href\"$title$class>$description</a>$external_tail";
 	}	
+	
+	protected function parseTables(){
+		// Table rows: |-
+		// First row is default
+		$this->text = preg_replace("/^				# Row starts with
+										[|][-]		# |-
+										/mx", '</tr><tr>', $this->text);
+			
+		// Table start: {|
+		$this->text = preg_replace("/^					# Start on newline
+										[\s]*			# Any number of spaces
+										{[|]				# Starts with {|
+										/mx", '<table><tbody><tr>', $this->text);
+		// Table end: |}
+		$this->text = preg_replace("/^					# Start on newline
+										[\s]*			# Any number of spaces
+										[|]}				# Starts with {|
+										/mx", '</tr></tbody></table>', $this->text);		
+		
+		// Table cells on same line: ||
+		$this->text = preg_replace_callback("/^				# Row starts with
+										[\s]*		# Any number of whitespace
+										[|]			# |
+										(.*)
+										$/mx", array($this, '_handle_cell'), $this->text);		
+		
+		// Table cells on new line: |
+		$this->text = preg_replace("/^
+										[ ]*		# Any number of whitespace
+										[|]			# |
+										[\s]*
+										(.*)
+										[\s]
+										$/mx", '<td>$1</td>', $this->text);				
+
+	}
+	
+	function _handle_cell($matches){
+		$table_cells = preg_replace('/[\s]*[|][|][\s]*/', '</td><td>', $matches[0]);
+		return $table_cells;
+	}
 		
 }
