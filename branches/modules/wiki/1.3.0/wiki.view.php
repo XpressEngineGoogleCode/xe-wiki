@@ -5,7 +5,7 @@
  * @brief  wiki module View class
  **/
 
-class wikiView extends wiki
+class WikiView extends wiki
 {
 		var $list;
 		var $search_option = array('title', 'content', 'title_content', 'comment', 'user_name', 'nick_name', 'user_id', 'tag');

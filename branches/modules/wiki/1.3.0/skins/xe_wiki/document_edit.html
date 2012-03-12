@@ -1,14 +1,28 @@
 <!--#include("header.html")-->
+
+<script type="text/javascript" src="../../lib/pagedown/Markdown.Converter.js"></script> 
 <script type="text/javascript">
 	jQuery(document).ready(function($){
 		$("#title").change(function(){			
-			if($("#alias").is(":empty")) {
+			if($("#alias").val().is(":empty")) {
 				var alias = $("#title").val().replace(/[ ]/g, "_").toLowerCase();
 				$("#alias").val(alias);
 			}
 		});
 	});
+	
+	jQuery(function($) {
+		var $textarea = $('#wikiContentContainer textarea');
+		var $preview = $('#wikiDocumentPreview');
+		converter = new Markdown.Converter().makeHtml;
+
+		$textarea.keyup(function() {
+			$preview.html(converter($textarea.val()));
+		}).trigger('keyup');
+	});		
 </script>
+
+
 <form action="./" method="post" ruleset="insert" id="fo_write">
 	<input type="hidden" name="mid" value="{$mid}" />
 	<input type="hidden" name="act" value="procWikiInsertDocument" />
@@ -22,7 +36,7 @@
 <!--@end-->
 <input type="hidden" name="document_srl" value="{$document_srl}" />
 
-<div class="wikiWriteHeader">
+<div class="wikiWriteHeader" id="wikiContentContainer">
 	<div class="title">
 		<em>{$lang->write_form_title}</em>
 		<input type="text" name="title"  id="title" value="{$oDocument->get('title')}" class="inputTypeText" />
@@ -36,6 +50,8 @@
     <div class="editor">
 			{$oDocument->getEditor()}
 	</div>
+	
+	<div id="wikiDocumentPreview"></div>
 	
     <div class="tag">
         {$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})

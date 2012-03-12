@@ -5,7 +5,7 @@
 	 * @brief  wiki 모듈의 controller class
 	 **/
 
-	class wikiController extends wiki {
+	class WikiController extends wiki {
 
 		function init() {
 		}

@@ -374,7 +374,7 @@ a.wikiButtonAdmin, a.wikiButton  {
 }
 
 #wikiContentContainer {
-	margin: 20px 10px 0 10px;
+	margin: 10px 10px 0 10px;
 	overflow: hidden;
 }
 
@@ -944,3 +944,11 @@ a.wikiButtonAdmin, a.wikiButton  {
 }
 .hide { display:none; }
 span.date { font:10px Tahoma;}
+
+div.tag, div.wikiNavigation {
+	padding:5px 10px;
+}
+
+#wikiDocumentPreview {
+	padding:10px;
+}

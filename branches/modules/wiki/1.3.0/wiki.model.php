@@ -5,7 +5,7 @@
 	* @brief  wiki 모듈의 Model class
 	**/
 
-	class wikiModel extends module {
+	class WikiModel extends module {
 		/**
 		* @brief Initialization
 		**/
