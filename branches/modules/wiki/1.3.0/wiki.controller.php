@@ -289,7 +289,9 @@ class WikiController extends Wiki
 					$member_info->is_admin = 'N';
 				}
 				// if current module is using Comment Approval System and comment write is not admin user then
-				if($oCommentController->isModuleUsingPublishValidation($this->module_info->module_srl) && $member_info->is_admin != 'Y') 
+				if(method_exists($oCommentController,'isModuleUsingPublishValidation') 
+						&& $oCommentController->isModuleUsingPublishValidation($this->module_info->module_srl) 
+						&& $member_info->is_admin != 'Y') 
 				{
 					$this->setMessage('comment_to_be_approved');
 				}
@@ -502,11 +504,11 @@ class WikiController extends Wiki
 	/**
 	 * @brief recreate Wiki hierarchy
 	 * @developer NHN (developers@xpressengine.com)	
-	 * @access private
+	 * @access public
 	 * @param $module_srl
 	 * @return
 	 */	
-	private function recompileTree($module_srl) 
+	public function recompileTree($module_srl) 
 	{
 		$oWikiModel = getModel('wiki'); 
 		$list = $oWikiModel->loadWikiTreeList($module_srl); 
