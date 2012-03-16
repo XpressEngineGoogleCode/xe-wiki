@@ -91,10 +91,10 @@ class Wiki extends ModuleObject implements WikiSite
 	/**
 	 * @brief Checks if current user has permission to add new documents
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
-	 * @access protected
+	 * @access public
 	 * @return boolean
 	 */
-	protected function currentUserCanCreateContent() 
+	public function currentUserCanCreateContent() 
 	{
 		return $this->grant->write_document;
 	}
@@ -102,11 +102,11 @@ class Wiki extends ModuleObject implements WikiSite
 	/**
 	 * @brief Returns qualified internal link, given an alias or doc title
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
-	 * @access protected
+	 * @access public
 	 * @param $document_name string
 	 * @return string
 	 */
-	protected function getFullLink($document_name) 
+	public function getFullLink($document_name) 
 	{
 		return getUrl('', 'mid', $this->module_info->mid, 'entry', $document_name);
 	}

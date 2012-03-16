@@ -824,7 +824,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return
 	*/
-	private function dispWikiSearchResults() 
+	public function dispWikiSearchResults() 
 	{
 		$oWikiModel = getModel('wiki'); 
 		$oDocumentModel = getModel('document'); 
