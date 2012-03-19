@@ -55,10 +55,6 @@
 	<div id="wikiDocumentPreview"></div>
 	<!--@end-->
 	
-	<div id="wikiSyntaxHelp">
-		{@ echo $lang->{$module_info->markup_type . '_help'};}
-	</div>
-	
 	<div class="tag">
 		{$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
 	</div>
