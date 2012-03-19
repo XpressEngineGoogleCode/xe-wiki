@@ -1,6 +1,20 @@
 <!--#include("header.html")-->
 
+<!--@if($module_info->markup_type == 'markdown')-->
 <script type="text/javascript" src="../../lib/pagedown/Markdown.Converter.js"></script> 
+<script type="text/javascript">
+	jQuery(function($) {
+		var $textarea = $('#wikiContentContainer textarea');
+		var $preview = $('#wikiDocumentPreview');
+		converter = new Markdown.Converter().makeHtml;
+
+		$textarea.keyup(function() {
+			$preview.html(converter($textarea.val()));
+		}).trigger('keyup');
+	});		
+</script>
+<!--@end-->
+
 <script type="text/javascript">
 	jQuery(document).ready(function($){
 		$("#title").change(function(){
@@ -10,16 +24,6 @@
 			}
 		});
 	});
-	
-	jQuery(function($) {
-		var $textarea = $('#wikiContentContainer textarea');
-		var $preview = $('#wikiDocumentPreview');
-		converter = new Markdown.Converter().makeHtml;
-
-		$textarea.keyup(function() {
-			$preview.html(converter($textarea.val()));
-		}).trigger('keyup');
-	});	
 </script>
 
 <form action="./" method="post" ruleset="insert" id="fo_write">
@@ -47,7 +51,13 @@
 
 	<div id="wikiContentContainer">{$oDocument->getEditor()}</div>
 
+	<!--@if($module_info->markup_type == 'markdown')-->
 	<div id="wikiDocumentPreview"></div>
+	<!--@end-->
+	
+	<div id="wikiSyntaxHelp">
+		{@ echo $lang->{$module_info->markup_type . '_help'};}
+	</div>
 	
 	<div class="tag">
 		{$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})

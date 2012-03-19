@@ -1,16 +1,8 @@
 <!--#include("header.html")-->
 
+<!--@if($module_info->markup_type == 'markdown')-->
 <script type="text/javascript" src="../../lib/pagedown/Markdown.Converter.js"></script> 
 <script type="text/javascript">
-	jQuery(document).ready(function($){
-		$("#title").change(function(){			
-			if($("#alias").val().is(":empty")) {
-				var alias = $("#title").val().replace(/[ ]/g, "_").toLowerCase();
-				$("#alias").val(alias);
-			}
-		});
-	});
-	
 	jQuery(function($) {
 		var $textarea = $('#wikiContentContainer textarea');
 		var $preview = $('#wikiDocumentPreview');
@@ -20,6 +12,18 @@
 			$preview.html(converter($textarea.val()));
 		}).trigger('keyup');
 	});		
+</script>
+<!--@end-->
+
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$("#title").change(function(){			
+			if($("#alias").val().is(":empty")) {
+				var alias = $("#title").val().replace(/[ ]/g, "_").toLowerCase();
+				$("#alias").val(alias);
+			}
+		});
+	});
 </script>
 
 
@@ -51,7 +55,9 @@
 			{$oDocument->getEditor()}
 	</div>
 	
+	<!--@if($module_info->markup_type == 'markdown')-->
 	<div id="wikiDocumentPreview"></div>
+	<!--@end-->
 	
     <div class="tag">
         {$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
