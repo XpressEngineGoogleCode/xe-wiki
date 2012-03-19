@@ -1,9 +1,4 @@
 @charset "utf-8";
-/* ----- NEW CSS ----- */
-/* 
-	author:	 Daniel Ionescu
-	email:	 daniel.ionescu@arnia.ro
-*/
 body {
 	margin: 0;
 }
@@ -951,6 +946,9 @@ div.tag, div.wikiNavigation {
 
 #wikiDocumentPreview {
 	padding:10px;
+	margin:10px	;
+	background-color:#eee;	
+	
 }
 
 .showHideTree {

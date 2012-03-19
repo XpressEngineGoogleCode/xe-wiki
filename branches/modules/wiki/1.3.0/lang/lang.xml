@@ -342,6 +342,69 @@
 	<item name="create_first_page_description">
 		<value xml:lang="en"><![CDATA[You don't have any documents yet. Go ahead and add your first page!]]></value>
 	</item>
+	<item name="create_first_page_markdown_help">
+		<value xml:lang="en"><![CDATA[
+You haven't created any pages yet so here's a few tips to get you started.
+
+You should now that XpressEngine Wiki now uses [Markdown](http://daringfireball.net/projects/markdown/) as its default syntax for adding content.  
+
+### What is Markdown? 
+
+Here's how it's presented on its website:
+
+> _Markdown is a text-to-HTML conversion tool for web writers. Markdown allows you to write using an easy-to-read, easy-to-write plain text format, then convert it to structurally valid XHTML (or HTML)._
+
+But what does this mean? Let's see some examples!
+
+### Markdown in action
+
+#### Styling and headers
+
+You can write in *italics* just by surrounding you words with stars like \*this\*. Make them \*\*double\*\* and you'll get **bold**.
+
+For headings, like the one above use
+
+\# Heading 1
+
+\## Heading 2 
+
+\#\#\# Heading 3
+
+or even simpler, divide content with many dashes:
+
+     ---------------------------
+
+#### Links
+
+Just add an url directly in you content and it will be directly linked: http://www.xpressengine.org.
+
+If you also want to add a description use a bracket combination, just like on [the official website](http://daringfireball.net/projects/markdown/syntax#link).
+
+You can also link to pages inside the same wiki, but instead of using an url you have to specify the document alias - \[some description\]\(page_alias\) and you're done!
+
+### Lists
+
+\- Use a minus sign for a bullet
+
+\+ Or plus sign
+
+\* Or an asterisk
+
+
+\1. Numbered lists are easy
+
+\2. Markdown keeps track of the numbers for you
+
+\7. So this will be item 3.
+
+### More info
+
+This page was just a quick intro to get you started. For more help, take a look at:
+
++ PHP Markdown extra - http://michelf.com/projects/php-markdown/extra/
++ Markdown's official reference - http://daringfireball.net/projects/markdown/syntax		
+		]]></value>
+	</item>
 	<item name="top_of_page">
 		<value xml:lang="en"><![CDATA[Go to top]]></value>
 	</item>	

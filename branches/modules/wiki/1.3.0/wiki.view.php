@@ -416,7 +416,15 @@ class WikiView extends Wiki
 			if($visitingAnEmptyWiki) 
 			{
 				$title = Context::getLang('create_first_page_title'); 
-				$content = Context::getLang('create_first_page_description'); 
+				if($this->module_info->markup_type == 'markdown') {
+					$content = Context::getLang('create_first_page_markdown_help'); 
+					$wiki_parser = $this->getWikiTextParser();	
+					$content = $wiki_parser->parse($content);
+				}
+				else {
+					$content = Context::getLang('create_first_page_description'); 
+				}	
+				
 				$oDocument->add('title', $title); 
 				$alias = $this->beautifyEntryName($title); 
 				$oDocument->add('alias', $alias); 
