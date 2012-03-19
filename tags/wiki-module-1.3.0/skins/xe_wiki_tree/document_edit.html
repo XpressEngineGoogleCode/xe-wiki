@@ -1,0 +1,78 @@
+<!--#include("header.html")-->
+
+<!--@if($module_info->markup_type == 'markdown')-->
+<script type="text/javascript" src="../../lib/pagedown/Markdown.Converter.js"></script> 
+<script type="text/javascript">
+	jQuery(function($) {
+		var $textarea = $('#wikiContentContainer textarea');
+		var $preview = $('#wikiDocumentPreview');
+		converter = new Markdown.Converter().makeHtml;
+
+		$textarea.keyup(function() {
+			$preview.html(converter($textarea.val()));
+		}).trigger('keyup');
+	});		
+</script>
+<!--@end-->
+
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$("#title").change(function(){
+			if($("#alias").val().is(":empty")) {
+				var alias = $("#title").val().replace(/[ ]/g, "_").toLowerCase();
+				$("#alias").val(alias);
+			}
+		});
+	});
+</script>
+
+<form action="./" method="post" ruleset="insert" id="fo_write">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="act" value="procWikiInsertDocument" />
+	<input type="hidden" name="module" value="wiki" />
+    <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl)}" />
+
+	<!--@if($history)-->
+	<input type="hidden" name="content" value="{htmlspecialchars($history->content)}" />
+	<!--@else-->
+	<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
+	<!--@end-->
+	<input type="hidden" name="document_srl" value="{$document_srl}" />
+
+	<div id="wikiTitleArea">
+		<em>{$lang->write_form_title}</em>
+		<input id="title" type="text" name="title" value="{$oDocument->get('title')}" class="inputTypeText" />
+			
+		<br />
+		<em>{$lang->write_form_alias}</em>
+		{getFullUrl()}
+		<input type="text" id="alias" name="alias" value="{$oDocument->get('alias')}" class="inputTypeText" />
+	</div>
+
+	<div id="wikiContentContainer">{$oDocument->getEditor()}</div>
+
+	<!--@if($module_info->markup_type == 'markdown')-->
+	<div id="wikiDocumentPreview"></div>
+	<!--@end-->
+	
+	<div id="wikiSyntaxHelp">
+		{@ echo $lang->{$module_info->markup_type . '_help'};}
+	</div>
+	
+	<div class="tag">
+		{$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
+	</div>
+
+	<!--@if(!$is_logged)-->
+	<input type="text" name="nick_name" class="inputText userName" value="{$lang->writer}" onfocus="this.value=''" />
+	<input type="password" name="password" class="inputText userPw" value="{$lang->password}" onfocus="this.value=''" />
+	<input type="text" name="email_address" class="inputText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
+	<input type="text" name="homepage" class="inputText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
+	<!--@end-->	
+	
+	<div class="wikiNavigation">
+		<span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
+	</div>
+
+</form>
+<!--#include("footer.html")-->
