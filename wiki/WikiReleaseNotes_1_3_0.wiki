@@ -32,3 +32,7 @@
 === Performance enhancements ===
  * Added document caching - content is now cached so that runtime parsing will not be done at each page load (Issue 23)
  * Retrieve comment editor via AJAX (in the new skin) (Issue 14)
+
+=== Requirements ===
+ * XE Core: XE 1.5 or higher (but 1.6 is recommended). 
+ * PHP 5
