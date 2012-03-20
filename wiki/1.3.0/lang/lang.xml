@@ -127,7 +127,7 @@
 		<value xml:lang="vi"><![CDATA[Nếu từ đầu bạn không tạo mục hoặc Alias cho những bài viết, thì không thể truy cập vào được Wiki. Lúc này tất cả mọi bài viết sẽ tự động được chuyển thành Alias.]]></value>
 	</item>
 	<item name="hide_tree">
-		<value xml:lang="ko"><![CDATA[Hide tree]]></value>
+		<value xml:lang="ko"><![CDATA[계층 숨기기]]></value>
 		<value xml:lang="en"><![CDATA[Hide tree]]></value>
 		<value xml:lang="jp"><![CDATA[Hide tree]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Hide tree]]></value>
@@ -136,7 +136,7 @@
 		<value xml:lang="vi"><![CDATA[Hide tree]]></value>
 	</item>
 	<item name="show_tree">
-		<value xml:lang="ko"><![CDATA[Show tree]]></value>
+		<value xml:lang="ko"><![CDATA[계층 보이기]]></value>
 		<value xml:lang="en"><![CDATA[Show tree]]></value>
 		<value xml:lang="jp"><![CDATA[Show tree]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Show tree]]></value>
@@ -145,7 +145,7 @@
 		<value xml:lang="vi"><![CDATA[Show tree]]></value>
 	</item>
 	<item name="content">
-		<value xml:lang="ko"><![CDATA[Document content]]></value>
+		<value xml:lang="ko"><![CDATA[문서 내용]]></value>
 		<value xml:lang="en"><![CDATA[Document content]]></value>
 		<value xml:lang="jp"><![CDATA[Document content]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Document content]]></value>
@@ -154,7 +154,7 @@
 		<value xml:lang="vi"><![CDATA[Document content]]></value>
 	</item>
 	<item name="diff">
-		<value xml:lang="ko"><![CDATA[Diff]]></value>
+		<value xml:lang="ko"><![CDATA[차이]]></value>
 		<value xml:lang="en"><![CDATA[Diff]]></value>
 		<value xml:lang="jp"><![CDATA[Diff]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Diff]]></value>
@@ -163,7 +163,7 @@
 		<value xml:lang="vi"><![CDATA[Diff]]></value>
 	</item>
 	<item name="markup_type">
-		<value xml:lang="ko"><![CDATA[Markup type]]></value>
+		<value xml:lang="ko"><![CDATA[마크업 유형]]></value>
 		<value xml:lang="en"><![CDATA[Markup type]]></value>
 		<value xml:lang="jp"><![CDATA[Markup type]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Markup type]]></value>
@@ -172,19 +172,23 @@
 		<value xml:lang="vi"><![CDATA[Markup type]]></value>
 	</item>
 	<item name="markdown">
+		<value xml:lang="ko"><![CDATA[Markdown 마크업]]></value>
 		<value xml:lang="en"><![CDATA[Markdown markup]]></value>
 	</item>	
 	<item name="googlecode_markup">
+		<value xml:lang="ko"><![CDATA[Google Code 위키 마크업]]></value>
 		<value xml:lang="en"><![CDATA[Google Code Wiki markup]]></value>
 	</item>
 	<item name="mediawiki_markup">
+		<value xml:lang="ko"><![CDATA[MediaWiki 마크업]]></value>
 		<value xml:lang="en"><![CDATA[MediaWiki markup]]></value>
 	</item>	
 	<item name="xe_wiki_markup">
+		<value xml:lang="ko"><![CDATA[XE Wiki 마크업]]></value>
 		<value xml:lang="en"><![CDATA[XE Wiki markup]]></value>
 	</item>
 	<item name="about_markup_type">
-		<value xml:lang="ko"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
+		<value xml:lang="ko"><![CDATA[내용추가를 위한 HTML 마크업은 XE Editor를 사용합니다. MediaWiki나 GoogleCode와 같은 <짧은 태그>형식의 위키 마크업은 간단한 text를 사용합니다.]]></value>
 		<value xml:lang="en"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
 		<value xml:lang="jp"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
@@ -193,7 +197,7 @@
 		<value xml:lang="vi"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
 	</item>
 	<item name="revision">
-		<value xml:lang="ko"><![CDATA[Revision]]></value>
+		<value xml:lang="ko"><![CDATA[리비젼]]></value>
 		<value xml:lang="en"><![CDATA[Revision]]></value>
 		<value xml:lang="jp"><![CDATA[Revision]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Revision]]></value>
@@ -202,7 +206,7 @@
 		<value xml:lang="vi"><![CDATA[Revision]]></value>
 	</item>
 	<item name="current">
-		<value xml:lang="ko"><![CDATA[current]]></value>
+		<value xml:lang="ko"><![CDATA[현재]]></value>
 		<value xml:lang="en"><![CDATA[current]]></value>
 		<value xml:lang="jp"><![CDATA[current]]></value>
 		<value xml:lang="zh-CN"><![CDATA[current]]></value>
@@ -211,7 +215,7 @@
 		<value xml:lang="vi"><![CDATA[current]]></value>
 	</item>
 	<item name="leave_comment">
-		<value xml:lang="ko"><![CDATA[Leave your comment]]></value>
+		<value xml:lang="ko"><![CDATA[코멘트 남기기]]></value>
 		<value xml:lang="en"><![CDATA[Leave your comment]]></value>
 		<value xml:lang="jp"><![CDATA[Leave your comment]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Leave your comment]]></value>
@@ -220,7 +224,7 @@
 		<value xml:lang="vi"><![CDATA[Leave your comment]]></value>
 	</item>
 	<item name="cancel">
-		<value xml:lang="ko"><![CDATA[Cancel]]></value>
+		<value xml:lang="ko"><![CDATA[취소]]></value>
 		<value xml:lang="en"><![CDATA[Cancel]]></value>
 		<value xml:lang="jp"><![CDATA[Cancel]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Cancel]]></value>
@@ -229,7 +233,7 @@
 		<value xml:lang="vi"><![CDATA[Cancel]]></value>
 	</item>
 	<item name="xewiki_no_results">
-		<value xml:lang="ko"><![CDATA[No results found for your query.]]></value>
+		<value xml:lang="ko"><![CDATA[검색에 대한 결과가 없습니다.]]></value>
 		<value xml:lang="en"><![CDATA[No results found for your query.]]></value>
 		<value xml:lang="jp"><![CDATA[No results found for your query.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[No results found for your query.]]></value>
@@ -238,7 +242,7 @@
 		<value xml:lang="vi"><![CDATA[No results found for your query.]]></value>
 	</item>
 	<item name="search_results">
-		<value xml:lang="ko"><![CDATA[Search results]]></value>
+		<value xml:lang="ko"><![CDATA[검색 결과]]></value>
 		<value xml:lang="en"><![CDATA[Search results]]></value>
 		<value xml:lang="jp"><![CDATA[Search results]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Search results]]></value>
@@ -247,7 +251,7 @@
 		<value xml:lang="vi"><![CDATA[Search results]]></value>
 	</item>
 	<item name="too_many_results">
-		<value xml:lang="ko"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+		<value xml:lang="ko"><![CDATA[검색결과가 많습니다. 검색어를 조금더 구체적으로 넣어주세요.]]></value>
 		<value xml:lang="en"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
 		<value xml:lang="jp"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
@@ -256,7 +260,7 @@
 		<value xml:lang="vi"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
 	</item>
 	<item name="results_number">
-		<value xml:lang="ko"><![CDATA[ results match your query.]]></value>
+		<value xml:lang="ko"><![CDATA[ 질의에 대한 검색 결과.]]></value>
 		<value xml:lang="en"><![CDATA[ results match your query.]]></value>
 		<value xml:lang="jp"><![CDATA[ results match your query.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[ results match your query.]]></value>
@@ -265,7 +269,7 @@
 		<value xml:lang="vi"><![CDATA[ results match your query.]]></value>
 	</item>
 	<item name="title_lang_bar">
-		<value xml:lang="ko"><![CDATA[Languages]]></value>
+		<value xml:lang="ko"><![CDATA[언어]]></value>
 		<value xml:lang="en"><![CDATA[Languages]]></value>
 		<value xml:lang="jp"><![CDATA[Languages]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Languages]]></value>
@@ -274,7 +278,7 @@
 		<value xml:lang="vi"><![CDATA[Languages]]></value>
 	</item>
 	<item name="title_breadcrumbs_bar">
-		<value xml:lang="ko"><![CDATA[Breadcrumbs]]></value>
+		<value xml:lang="ko"><![CDATA[빵부스러기]]></value>
 		<value xml:lang="en"><![CDATA[Breadcrumbs]]></value>
 		<value xml:lang="jp"><![CDATA[Breadcrumbs]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Breadcrumbs]]></value>
@@ -283,7 +287,7 @@
 		<value xml:lang="vi"><![CDATA[Breadcrumbs]]></value>
 	</item>
 	<item name="new_document">
-		<value xml:lang="ko"><![CDATA[New Document]]></value>
+		<value xml:lang="ko"><![CDATA[새 문서]]></value>
 		<value xml:lang="en"><![CDATA[New Document]]></value>
 		<value xml:lang="jp"><![CDATA[New Document]]></value>
 		<value xml:lang="zh-CN"><![CDATA[New Document]]></value>
@@ -292,7 +296,7 @@
 		<value xml:lang="vi"><![CDATA[New Document]]></value>
 	</item>
 	<item name="home_page">
-		<value xml:lang="ko"><![CDATA[Home page]]></value>
+		<value xml:lang="ko"><![CDATA[처음으로]]></value>
 		<value xml:lang="en"><![CDATA[Home page]]></value>
 		<value xml:lang="jp"><![CDATA[Home page]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Home page]]></value>
@@ -310,7 +314,7 @@
 		<value xml:lang="vi"><![CDATA[Histories]]></value>
 	</item>
 	<item name="wiki_search_title">
-		<value xml:lang="ko"><![CDATA[Wiki Search]]></value>
+		<value xml:lang="ko"><![CDATA[위키 검색]]></value>
 		<value xml:lang="en"><![CDATA[Wiki Search]]></value>
 		<value xml:lang="jp"><![CDATA[Wiki Search]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Wiki Search]]></value>
@@ -319,7 +323,7 @@
 		<value xml:lang="vi"><![CDATA[Wiki Search]]></value>
 	</item>
 	<item name="write_form_title">
-		<value xml:lang="ko"><![CDATA[Title:]]></value>
+		<value xml:lang="ko"><![CDATA[제목:]]></value>
 		<value xml:lang="en"><![CDATA[Title:]]></value>
 		<value xml:lang="jp"><![CDATA[Title:]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Title:]]></value>
@@ -328,7 +332,7 @@
 		<value xml:lang="vi"><![CDATA[Title:]]></value>
 	</item>
 	<item name="write_form_alias">
-		<value xml:lang="ko"><![CDATA[Alias:]]></value>
+		<value xml:lang="ko"><![CDATA[단축주소:]]></value>
 		<value xml:lang="en"><![CDATA[Alias:]]></value>
 		<value xml:lang="jp"><![CDATA[Alias:]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Alias:]]></value>
@@ -337,9 +341,11 @@
 		<value xml:lang="vi"><![CDATA[Alias:]]></value>
 	</item>
 	<item name="create_first_page_title">
+		<value xml:lang="ko"><![CDATA[XpressEngine 위키에 오신 것을 환영합니다!]]></value>
 		<value xml:lang="en"><![CDATA[Welcome to XpressEngine Wiki!]]></value>
 	</item>	
 	<item name="create_first_page_description">
+		<value xml:lang="ko"><![CDATA[생성된 문서가 없습니다. 새로운 페이지를 생성하세요.]]></value>
 		<value xml:lang="en"><![CDATA[You don't have any documents yet. Go ahead and add your first page!]]></value>
 	</item>
 	<item name="create_first_page_markdown_help">
@@ -406,19 +412,24 @@ This page was just a quick intro to get you started. For more help, take a look 
 		]]></value>
 	</item>
 	<item name="top_of_page">
+		<value xml:lang="ko"><![CDATA[상단으로]]></value>
 		<value xml:lang="en"><![CDATA[Go to top]]></value>
 	</item>	
 	<item name="comment">
+		<value xml:lang="ko"><![CDATA[댓글]]></value>
 		<value xml:lang="en"><![CDATA[Comments]]></value>
 	</item>		
 	<item name="translate_page_into">
-		<value xml:lang="en"><![CDATA[Translate page into]]></value>
+		<value xml:lang="ko"><![CDATA[페이지를 %s로 번역]]></value>
+		<value xml:lang="en"><![CDATA[Translate page into %s]]></value>
 	</item>			
 	<item name="you_are_viewing">
-		<value xml:lang="en"><![CDATA[You are currently viewing this page in]]></value>
+		<value xml:lang="ko"><![CDATA[현재 %s로 보고 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[You are currently viewing this page in %s]]></value>
 	</item>				
 	<item name="view_this_page_in">
-		<value xml:lang="en"><![CDATA[View this page in]]></value>
+		<value xml:lang="ko"><![CDATA[%s로 이페이지 보기]]></value>
+		<value xml:lang="en"><![CDATA[View this page in %s]]></value>
 	</item>					
 	<item name="pages_that_link_to_this">
 		<value xml:lang="en"><![CDATA[Pages that reference this entry:]]></value>
