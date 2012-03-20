@@ -1,5 +1,5 @@
 <?php
-require_once ("lib\WikiSite.interface.php");
+require_once ("lib/WikiSite.interface.php");
 
 /**
 * @class wiki
