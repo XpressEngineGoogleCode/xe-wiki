@@ -5,7 +5,7 @@ function viewHistory(history_srl) {
 }
 
 jQuery(document).ready(function(){
-	if (jQuery("input[name=title]").length && jQuery("input[name=title]").hasClass("inputTypeText"))
+	if (jQuery("input[name=title]").length && jQuery("input[name=title]").hasClass("iText"))
 	{
 		jQuery("input[name=title]").focus();
 	}

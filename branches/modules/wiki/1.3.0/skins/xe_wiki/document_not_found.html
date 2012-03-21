@@ -1,13 +1,13 @@
 <!--#include("header.html")-->
     <div class="wikiRead">
-        <div class="wikiReadHeader">
+        <div class="wkReadHeader">
 			<div class="authorArea"></div>
 		</div>
-		<div class="wikiReadBody">
+		<div class="wkReadBody">
 			<div class="xe_content">
 			{$oDocument->get('content')}
 			<div class="command">
-				<span class="buttonOfficial"><a href="{getUrl('act','dispWikiEditPage','entry',$oDocument->get('title'))}">{$lang->cmd_create}</a></span>
+				<span class="btn"><a href="{getUrl('act','dispWikiEditPage','entry',$oDocument->get('title'))}">{$lang->cmd_create}</a></span>
 			</div>
 			</div>
 		</div>

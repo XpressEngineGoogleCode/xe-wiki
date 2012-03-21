@@ -1,11 +1,11 @@
 <!--#include("header.html")-->
 
 <!--@if($oSourceComment->isExists())-->
-<div class="feedbackList">
+<div class="fbList">
     <div class="item itemOnly">
 	
 		<div class="itemAside">
-			<h4 class="header"><a href="#popup_menu_area" class="member_{$oSourceComment->getMemberSrl()}" onclick="return false">{$oSourceComment->getNickName()}</a></h4>
+			<h4 class="author"><a href="#popup_menu_area" class="member_{$oSourceComment->getMemberSrl()}" onclick="return false">{$oSourceComment->getNickName()}</a></h4>
 			<p class="meta">
 				{$oSourceComment->getRegdate("Y.m.d H:i")}
 				<!--@if($grant->manager)-->
@@ -14,7 +14,7 @@
 			</p>
 		</div>
 		
-		<div class="itemContent">
+		<div class="iContent">
 			{$oSourceComment->getContent(false)}
 		</div>
 
@@ -29,7 +29,7 @@
 	{@ $ruleset = "insert_comment"}
 	{@ $act_insert = "procWikiInsertComment"}
 <!--@end-->
-<form action="./" method="post" ruleset="{$ruleset}" class="wikiEditor" >
+<form action="./" method="post" ruleset="{$ruleset}" class="wkEditor" >
 	<input type="hidden" name="act" value="{$act_insert}" />
 	<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl,'document_srl',$oDocument->document_srl)}" />
 	<input type="hidden" name="module" value="wiki" />
@@ -39,16 +39,16 @@
 	<input type="hidden" name="content" value="{htmlspecialchars($oComment->get('content'))}" />
 	<input type="hidden" name="parent_srl" value="{$oComment->get('parent_srl')}" />
 
-	<div class="wikiWrite commentEditor">
+	<div class="wkWrite commentEditor">
 
 		<div class="editor">{$oComment->getEditor()}</div>
 
-		<div class="editorOption">
+		<div class="editOption">
 		<!--@if(!$is_logged)-->
-		<input type="text" name="nick_name" class="inputText userName" value="{$lang->writer}" onfocus="this.value=''" />
-		<input type="password" name="password" class="inputText userPw" value="{$lang->password}" onfocus="this.value=''" />
-		<input type="text" name="email_address" class="inputText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
-		<input type="text" name="homepage" class="inputText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
+		<input type="text" name="nick_name" class="iText userName" value="{$lang->writer}" onfocus="this.value=''" />
+		<input type="password" name="password" class="iText userPw" value="{$lang->password}" onfocus="this.value=''" />
+		<input type="text" name="email_address" class="iText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
+		<input type="text" name="homepage" class="iText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
 		<!--@end-->
 
 		<!--@if($is_logged)-->
@@ -59,8 +59,8 @@
 			<label for="is_secret">{$lang->secret}</label>
 		</div>
 
-		<div class="wikiNavigation">
-			<span class="buttonOfficial"><input type="submit" value="{$lang->cmd_comment_registration}" accesskey="s" /></span>
+		<div class="wkNav">
+			<span class="btn"><input type="submit" value="{$lang->cmd_comment_registration}" /></span>
 		</div>
 
 	</div>

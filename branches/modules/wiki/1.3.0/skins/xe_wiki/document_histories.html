@@ -1,6 +1,6 @@
 <!--#include("header.html")-->
 
-<table cellspacing="0" border="1" summary="List of Articles" class="wikiList">
+<table cellspacing="0" border="1" summary="List of Articles" class="wkList">
     <thead>
         <tr>
             <th scope="col" class="title">{$lang->title}</th>
@@ -20,9 +20,9 @@
         <!--@foreach($histories as $val)-->
         <tr>
             <td class="title">
-                <span class="buttonOfficial"><button type="button" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide');return false;">{$lang->cmd_view}</button></span>
-                <span class="buttonOfficial"><button type="button" onclick="location.href='{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}';return false;">{$lang->restore}</button></span>
-				<span class="buttonOfficial"><button type="button" onclick="getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl});">{$lang->diff}</button></span>
+                <span class="btn"><button type="button" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide');return false;">{$lang->cmd_view}</button></span>
+                <span class="btn"><button type="button" onclick="location.href='{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}';return false;">{$lang->restore}</button></span>
+				<span class="btn"><button type="button" onclick="getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl});">{$lang->diff}</button></span>
                 <div id="historyContent{$val->history_srl}" class="hide history_content">{nl2br($val->content)}</div>
 				<div id="diff{$val->history_srl}" name="diff{$val->history_srl}" class="hide diff">
 				</div>				
@@ -36,8 +36,8 @@
 
 
 <!--@if($page_navigation)-->
-    <div class="pagination a1">
-        <a href="{getUrl('page','')}" class="prevEnd">{$lang->first_page}</a> 
+    <div class="pagination">
+        <a href="{getUrl('page','')}" class="prevEnd">&lsaquo; {$lang->first_page}</a> 
         <!--@while($page_no = $page_navigation->getNextPage())-->
             <!--@if($page == $page_no)-->
                 <strong>{$page_no}</strong> 
@@ -45,7 +45,7 @@
                 <a href="{getUrl('page',$page_no)}">{$page_no}</a>
             <!--@end-->
         <!--@end-->
-        <a href="{getUrl('page',$page_navigation->last_page)}" class="nextEnd">{$lang->last_page}</a>
+        <a href="{getUrl('page',$page_navigation->last_page)}" class="nextEnd">{$lang->last_page} &rsaquo;</a>
     </div>
 <!--@endif-->
 
