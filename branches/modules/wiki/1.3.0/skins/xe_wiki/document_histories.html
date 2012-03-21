@@ -20,9 +20,9 @@
         <!--@foreach($histories as $val)-->
         <tr>
             <td class="title">
-                <span class="btn"><button type="button" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide');return false;">{$lang->cmd_view}</button></span>
-                <span class="btn"><button type="button" onclick="location.href='{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}';return false;">{$lang->restore}</button></span>
-				<span class="btn"><button type="button" onclick="getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl});">{$lang->diff}</button></span>
+				<button type="button" class="text" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide')">{$lang->cmd_view}</button>
+				<a href="{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}">{$lang->restore}</a>
+				<button type="button" class="text" onclick="getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl})">{$lang->diff}</button>
                 <div id="historyContent{$val->history_srl}" class="hide history_content">{nl2br($val->content)}</div>
 				<div id="diff{$val->history_srl}" name="diff{$val->history_srl}" class="hide diff">
 				</div>				

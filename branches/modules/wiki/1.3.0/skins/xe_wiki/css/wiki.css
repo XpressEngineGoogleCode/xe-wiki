@@ -62,10 +62,6 @@
 .wkInfo strong{color:#ff6600}
 /* Wiki List */
 .wkList{border:0;border-top:1px solid;width:100%;border-color:#bababa}
-.wkList a{text-decoration:none}
-.wkList a:hover,
-.wkList a:active,
-.wkList a:focus{text-decoration:underline} 
 .wkList .inputCheck{width:13px;height:13px}
 .wkList .jumpTo{float:left}
 .wkList .jumpTo *{vertical-align:middle;*vertical-align:top}
@@ -318,7 +314,7 @@
 .wiki a.exists{text-decoration:underline;color:green}
 .wiki a.notexist{text-decoration:none;border-bottom:1px dotted #EE0000;color:#EE0000}
 .diff, 
-.history_content{padding:10px;border:1px dashed #DDDDDD;width:100%;font-weight:normal}
+.history_content{margin:1em 0;padding:10px;border:1px dashed #DDDDDD;font-weight:normal}
 .wDiffHtmlInsert, 
 .wDiffHtmlInsert *{color:#009900}
 .wDiffHtmlDelete, 
