@@ -63,9 +63,9 @@
                 <!--@else-->
                     <!--@if(!$oDocument->getMemberSrl())-->
                         <!--@if($oDocument->isExistsHomepage())-->
-                            <a href="{$oDocument->getHomepageUrl()}" onclick="window.open(this.href);return false;" class="author">{$oDocument->getNickName()}</a>
+                            <a href="{$oDocument->getHomepageUrl()}" target="_blank" class="author">{$oDocument->getNickName()}</a>
                         <!--@else-->
-                            {$oDocument->getNickName()}
+                            <strong class="author">{$oDocument->getNickName()}</strong>
                         <!--@end-->
                     <!--@else-->
                         <a href="#popup_menu_area" class="member_{$oDocument->get('member_srl')} author" onclick="return false">{$oDocument->getNickName()}</a>
