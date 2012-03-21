@@ -571,5 +571,13 @@
 			if(!$output->toBool() || !$output->data) return array();
 			return $output->data;
 		}		
+
+		/** 
+		 * @brief return module name in sitemap
+		 **/
+		function triggerModuleListInSitemap(&$obj)
+		{
+			array_push($obj, 'wiki');
+		}
 	}
 ?>
