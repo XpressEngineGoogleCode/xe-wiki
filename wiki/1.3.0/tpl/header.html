@@ -2,7 +2,7 @@
 <h1 class="h1">{$lang->wiki} {$lang->cmd_management}</h1>
 <block cond="$module_info">
 	<h2 class="h2" cond="$module_info->mid">
-		{$module_info->mid} <block cond="$module_info->is_default=='Y'">({$lang->is_default})</block> | <a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid)}" onclick="window.open(this.href); return false;">View</a>
+		{$module_info->mid} <block cond="$module_info->is_default=='Y'">({$lang->is_default})</block> | <a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid)}">View</a>
 	</h2>
 	<div class="cnb">
 		<ul>
