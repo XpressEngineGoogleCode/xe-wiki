@@ -1,4 +1,4 @@
-<!--#include("header.html")-->
+<include target="header.html" />
 
 <!--@if($module_info->markup_type == 'markdown')-->
 <script type="text/javascript" src="../../lib/pagedown/Markdown.Converter.js"></script> 
@@ -40,34 +40,29 @@
 <!--@end-->
 <input type="hidden" name="document_srl" value="{$document_srl}" />
 
-<div class="wikiWriteHeader" id="wikiContentContainer">
+<div class="wkWrite" id="wikiContentContainer">
 	<div class="title">
-		<em>{$lang->write_form_title}</em>
-		<input type="text" name="title"  id="title" value="{$oDocument->get('title')}" class="inputTypeText" />
+		<label for="title">{$lang->write_form_title}</label>
+		<input type="text" name="title"  id="title" value="{$oDocument->get('title')}" class="iText" />
 	</div>
 	<div class="alias" >
-		<em>{$lang->write_form_alias}</em>
+		<label for="alias">{$lang->write_form_alias}</label>
 		{getFullUrl()}
-		<input type="text" name="alias" id="alias" value="{$oDocument->get('alias')}" class="inputTypeText" />
+		<input type="text" name="alias" id="alias" value="{$oDocument->get('alias')}" class="iText" />
 	</div>
 	
     <div class="editor">
-			{$oDocument->getEditor()}
+		{$oDocument->getEditor()}
 	</div>
 	
 	<!--@if($module_info->markup_type == 'markdown')-->
 	<div id="wikiDocumentPreview"></div>
 	<!--@end-->
 	
-    <div class="tag">
-        {$lang->tag} : <input type="text" name="tags" value="{htmlspecialchars($oDocument->get('tags'))}" class="inputText" title="Tag" /> ({$lang->about_tag})
-        <p />
-    </div>
-
-	<div class="wikiNavigation">
-        <span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
+	<div class="wkNav">
+        <span class="btn"><input type="submit" value="{$lang->cmd_registration}" /></span>
     </div>
 </div>
 
 </form>
-<!--#include("footer.html")-->
+<include target="footer.html" />

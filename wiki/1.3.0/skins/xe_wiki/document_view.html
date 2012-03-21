@@ -12,7 +12,7 @@
 <!--@end-->
 
 <div class="wikiRead">
-	<div class="wikiReadBody">
+	<div class="wkReadBody">
 		<!--@if($oDocument->isSecret() && !$oDocument->isGranted())-->
 			<form action="./" method="get" ruleset="input_password" class="secretMessage">
 				<input type="hidden" name="act" value="procWikiVerificationPassword" />
@@ -24,7 +24,7 @@
 				<p>&quot;{$lang->msg_is_secret}&quot;</p>
 				<dl>
 					<dt><label for="cpw">{$lang->password}</label> :</dt>
-					<dd><input type="password" name="password" id="cpw" class="inputText" /><span class="buttonOfficial"><input type="submit" value="{$lang->cmd_input}" /></span></dd>
+					<dd><input type="password" name="password" id="cpw" class="iText" /><span class="btn"><input type="submit" value="{$lang->cmd_input}" /></span></dd>
 				</dl>
 
 			</form>
@@ -36,45 +36,26 @@
             <!--@endif-->
 		<!--@end-->
 	</div>
-	<div class="wikiReadFooter">
-		<div class="wikiNavigation">
-		<!--@if($oDocumentPrev)-->
-			<a href="{$oDocumentPrev->getPermanentUrl()}" class="wikiPrev">&laquo; {$oDocumentPrev->getTitle()}</a>
-		<!--@end-->
-		<!--@if($oDocumentNext)-->
-			<a href="{$oDocumentNext->getPermanentUrl()}" class="wikiNext">{$oDocumentNext->getTitle()} &raquo;</a>
-		<!--@end-->
-		</div>
-
-		<div id="wikiLanguages">
-			{@ $current_lang = Context::getLangType(); }
-			<!--@foreach($langs as $key => $val)-->
-				<!--@if ($key == $current_lang) -->
-				<span class="currentLanguage" title="{sprintf($lang->you_are_viewing, $val)}">{strtoupper($key)}</span>
-				<!--@elseif (in_array($key, $translatedlangs))-->
-				<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{sprintf($lang->view_this_page_in, $val)}" class="languageTranslated">{strtoupper($key)}</a>
-				<!--@else-->
-					<!--@if($is_logged)-->
-					<a href="#" onclick="doChangeLangType('{$key}');return false;" title="{sprintf($lang->translate_page_into, $val)}" class="languageNotTranslated">{strtoupper($key)}</a>
-					<!--@end-->
-				<!--@end-->
-			<!--@endforeach-->
-		</div>				
-		
-		{@ $tag_list = $oDocument->get('tag_list') }
-		<!--@if(count($tag_list))-->
-		<dl class="tag">
-			<dt><img src="./img/common/iconTag.gif" width="27" height="11" alt="{$lang->tag}" /></dt>
-			<!--@for($i=0;$i<count($tag_list);$i++)-->
-				{@ $tag = $tag_list[$i]; }
-				<dd><a href="{getUrl('search_target','tag','search_keyword',$tag,'document_srl','')}" rel="tag">{htmlspecialchars($tag)}</a></dd>
-			<!--@end-->
+	<div class="wkReadFooter">
+        <!--@if(!$oDocument->getTrackbackCount())-->
+		<dl class="tbURL">
+			<dt>{$lang->trackback} : </dt>
+			<dd><a href="{$oDocument->getTrackbackUrl()}" onclick="return false;">{$oDocument->getTrackbackUrl()}</a></dd>
 		</dl>
-		<!--@end-->
-		
+        <!--@end-->
+        <!--@if($contributors)-->
+		<dl class="contributors">
+			<dt>{$lang->contributors} : </dt>
+			<dd><!--@foreach($contributors as $key => $val)--><a href="#" class="member_{$val->member_srl}" onclick="return false;">{$val->nick_name}</a><!--@if($key<count($contributors)-1)-->, <!--@end--><!--@end--></dd>
+		</dl>
+        <!--@end-->
+		<div class="wkNav" cond="$oDocumentPrev||$oDocumentNext">
+			<a cond="$oDocumentPrev" href="{$oDocumentPrev->getPermanentUrl()}" class="wikiPrev">&laquo; {$oDocumentPrev->getTitle()}</a>
+			<a cond="$oDocumentNext" href="{$oDocumentNext->getPermanentUrl()}" class="wikiNext">{$oDocumentNext->getTitle()} &raquo;</a>
+		</div>
 		<!--@if($oDocument->hasUploadedFiles())-->
         <dl class="attachedFile">
-            <dt><img src="./img/common/iconFiles.gif" width="27" height="11" alt="{$lang->uploaded_file}" /> <button type="button" class="fileToggle" onclick="jQuery(this).parents('dl.attachedFile').toggleClass('open');return false;">{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})</button></dt>
+            <dt><img src="./img/iconFiles.gif" width="27" height="11" alt="{$lang->uploaded_file}" /> <button type="button" class="fileToggle" onclick="jQuery(this).parents('dl.attachedFile').toggleClass('open');return false;">{$lang->uploaded_file} ({$oDocument->get('uploaded_count')})</button></dt>
             <dd>
                 <ul class="files">
                     {@ $uploaded_list = $oDocument->getUploadedFiles() }
@@ -86,19 +67,6 @@
         </dl>
 		<!--@end-->
         
-        <!--@if(!$oDocument->getTrackbackCount())-->
-		<dl class="trackbackURL">
-			<dt>{$lang->trackback} : </dt>
-			<dd><a href="{$oDocument->getTrackbackUrl()}" onclick="return false;">{$oDocument->getTrackbackUrl()}</a></dd>
-		</dl>
-        <!--@end-->
-		
-        <!--@if($contributors)-->
-		<dl class="contributors">
-			<dt>{$lang->contributors} : </dt>
-			<dd><!--@foreach($contributors as $key => $val)--><a href="#" class="member_{$val->member_srl}" onclick="return false;">{$val->nick_name}</a><!--@if($key<count($contributors)-1)-->, <!--@end--><!--@end--></dd>
-		</dl>
-        <!--@end-->
 	</div>
 
 </div>
@@ -118,7 +86,7 @@
 			{@ $ruleset = "insert_comment"}
 			{@ $act_insert = "procWikiInsertComment"}
 		<!--@end-->
-		<form action="./" method="post" ruleset="{$ruleset}" class="wikiEditor" >
+		<form action="./" method="post" ruleset="{$ruleset}" class="wkEditor" >
 			<input type="hidden" name="act" value="{$act_insert}" />
 			<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl,'document_srl',$oDocument->document_srl)}" />
 			<input type="hidden" name="module" value="wiki" />
@@ -126,15 +94,15 @@
 			<input type="hidden" name="document_srl" value="{$oDocument->document_srl}" />
 			<input type="hidden" name="comment_srl" value="" />
 			<input type="hidden" name="content" value="" />
-            <div class="wikiWrite commentEditor">
+            <div class="wkWrite commentEditor">
                 <div class="editor">{$oDocument->getCommentEditor()}</div>
 
-                <div class="editorOption">
+                <div class="editOption">
                 <!--@if(!$is_logged)-->
-                   <input type="text" name="nick_name" class="inputText userName" value="{$lang->writer}" onfocus="this.value=''" />
-				   <input type="password" name="password" class="inputText userPw" value="{$lang->password}" onfocus="this.value=''" />
-				   <input type="text" name="email_address" class="inputText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
-				   <input type="text" name="homepage" class="inputText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
+                   <input type="text" name="nick_name" class="iText userName" value="{$lang->writer}" onfocus="this.value=''" />
+				   <input type="password" name="password" class="iText userPw" value="{$lang->password}" onfocus="this.value=''" />
+				   <input type="text" name="email_address" class="iText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
+				   <input type="text" name="homepage" class="iText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
                 <!--@end-->
 
 				<!--@if($is_logged)-->
@@ -145,8 +113,8 @@
 					<label for="is_secret">{$lang->secret}</label>
                 </div>
         
-                <div class="wikiNavigation">
-                    <span class="buttonOfficial"><input type="submit" value="{$lang->cmd_comment_registration}" accesskey="s" /></span>
+                <div class="wkNav">
+                    <span class="btn"><input type="submit" value="{$lang->cmd_comment_registration}" /></span>
                 </div>
 
             </div>
