@@ -130,12 +130,15 @@ class Wiki extends ModuleObject implements WikiSite
 	 */
 	public function checkUpdate() 
 	{
+		$oModuleModel = &getModel('module');
 		$flag = FALSE; $flag = $this->_hasOldStyleAliases(); $oDB = DB::getInstance();
 		if(!$oDB->isIndexExists("wiki_links", "idx_link_doc_cur_doc"))
 		{
 			$flag = TRUE; 
 			return $flag;
 		}
+
+		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after')) return true;
 	}
 	
 	/**
@@ -146,6 +149,9 @@ class Wiki extends ModuleObject implements WikiSite
 	 */
 	public function moduleUpdate() 
 	{
+		$oModuleModel = &getModel('module');
+		$oModuleController = &getController('module');
+
 		if($this->_hasOldStyleAliases())
 		{
 			$this->_updateOldStyleAliases();
@@ -156,6 +162,12 @@ class Wiki extends ModuleObject implements WikiSite
 		if(!$oDB->isIndexExists("wiki_links", "idx_link_doc_cur_doc")) 
 		{
 			$oDB->addIndex("wiki_links", "idx_link_doc_cur_doc", array("link_doc_srl", "cur_doc_srl")); 			
+		}
+
+		// 2012. 03. 21 when add new menu in sitemap, custom menu add
+		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after'))
+		{
+			$oModuleController->insertTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after');
 		}
 		
 		return new Object(0, 'success_updated');
