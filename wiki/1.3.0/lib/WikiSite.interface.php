@@ -13,7 +13,7 @@ interface WikiSite
 	 * @param $document_name string
 	 * @returns string Document alias if exists, or false otherwise
 	 */
-	public function documentExists($document_name);
+	function documentExists($document_name);
 	
 	/**
 	 * @brief Checks if current user is logged in and has permission to add new pages to the wiki
@@ -21,7 +21,7 @@ interface WikiSite
 	 * @access public
 	 * @return bool
 	 */
-	public function currentUserCanCreateContent();
+	function currentUserCanCreateContent();
 	
 	/**
 	 * @brief Return full link - containg mid information
@@ -30,7 +30,7 @@ interface WikiSite
 	 * @param $document_name string Represents document title or alias
 	 * @return string
 	 */
-	public function getFullLink($document_name);
+	function getFullLink($document_name);
 	
 }
 /* End of file WikiSite.interface.php */

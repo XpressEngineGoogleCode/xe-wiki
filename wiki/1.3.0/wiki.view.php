@@ -15,7 +15,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return
 	*/
-	public function init() 
+	function init() 
 	{
 		/*
 		 * Set the path to skins folder
@@ -71,7 +71,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return	
 	*/
-	public function dispWikiContent() 
+	function dispWikiContent() 
 	{
 		$output = $this->dispWikiContentView();
 		if(!$output->toBool()) 
@@ -86,7 +86,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return 
 	*/
-	public function dispWikiHistory() 
+	function dispWikiHistory() 
 	{
 		$oDocumentModel = getModel('document'); 
 		$document_srl = Context::get('document_srl'); 
@@ -123,7 +123,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return 
 	*/
-	public function dispWikiEditPage() 
+	function dispWikiEditPage() 
 	{
 		if(!$this->grant->write_document) 
 		{
@@ -182,7 +182,7 @@ class WikiView extends Wiki
 	 * @param $msg_code string
 	 * @return 
 	 */
-	public function dispWikiMessage($msg_code) 
+	function dispWikiMessage($msg_code) 
 	{
 		$msg = Context::getLang($msg_code);
 		if(!$msg) 
@@ -200,7 +200,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return 
 	*/
-	public function dispWikiTitleIndex() 
+	function dispWikiTitleIndex() 
 	{
 		$page = Context::get('page'); 
 		$oDocumentModel = getModel('document'); 
@@ -241,7 +241,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function dispWikiTreeIndex() 
+	function dispWikiTreeIndex() 
 	{
 		$oWikiModel = getModel('wiki'); 
 		Context::set('document_tree', $oWikiModel->readWikiTreeCache($this->module_srl)); 
@@ -254,7 +254,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return
 	*/
-	public function dispWikiModifyTree() 
+	function dispWikiModifyTree() 
 	{
 		if(!$this->grant->write_document)
 		{
@@ -272,7 +272,7 @@ class WikiView extends Wiki
 	 * @param $entry Document alias
 	 * @return 
 	*/
-	private function addToVisitLog($entry) 
+	function addToVisitLog($entry) 
 	{
 		$module_srl = $this->module_info->module_srl;
 		if(!$_SESSION['wiki_visit_log']) 
@@ -306,7 +306,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return
 	*/
-	public function dispWikiContentView() 
+	function dispWikiContentView() 
 	{
 		$oWikiModel = getModel('wiki'); 
 		$oDocumentModel = getModel('document');
@@ -482,7 +482,7 @@ class WikiView extends Wiki
 	 * @access public	 
 	 * @return 
 	 */
-	public function dispWikiReplyComment() 
+	function dispWikiReplyComment() 
 	{
 		// Check permission
 		if(!$this->grant->write_comment) 
@@ -528,7 +528,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return 
 	 */
-	public function dispWikiModifyComment() 
+	function dispWikiModifyComment() 
 	{
 		// Check persmission
 		if(!$this->grant->write_comment) 
@@ -572,7 +572,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return 
 	 */
-	public function dispWikiDeleteComment() 
+	function dispWikiDeleteComment() 
 	{
 		// Check permission		
 		if(!$this->grant->write_comment) 
@@ -612,7 +612,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return Object
 	 */
-	public function dispCommentEditor() 
+	function dispCommentEditor() 
 	{
 		// allow only logged in users to comment.		
 		if(!Context::get('is_logged')) 
@@ -653,7 +653,7 @@ class WikiView extends Wiki
 	 * @param $oDocument
 	 * @return 
 	 */
-	private function _handleWithExistingDocument(&$oDocument) 
+	function _handleWithExistingDocument(&$oDocument) 
 	{
 		// Display error message if it is a different module than requested module
 		if($oDocument->get('module_srl') != $this->module_info->module_srl) 
@@ -717,7 +717,7 @@ class WikiView extends Wiki
 	 * @param $org_content original content
 	 * @return string $parsed_content
 	*/
-	private function _renderWikiContent($document_srl, $org_content) 
+	function _renderWikiContent($document_srl, $org_content) 
 	{
 		$oCacheHandler = & CacheHandler::getInstance('object', NULL, TRUE);
 		if($oCacheHandler->isSupport())
@@ -746,7 +746,7 @@ class WikiView extends Wiki
 	 * @param $document_srl
 	 * @return
 	 */
-	private function _loadSidebarTreeMenu($module_srl, $document_srl) 
+	function _loadSidebarTreeMenu($module_srl, $document_srl) 
 	{
 		if($document_srl) 
 		{
@@ -762,7 +762,7 @@ class WikiView extends Wiki
 	 * @access private
 	 * @return
 	 */
-	private function getLeftMenu() 
+	function getLeftMenu() 
 	{
 		$oWikiModel = getModel("wiki"); 
 		$oDocumentModel = getModel("document"); 
@@ -818,7 +818,7 @@ class WikiView extends Wiki
 	 * @param $document_srl
 	 * @return
 	 */
-	private function getBreadCrumbs($document_srl) 
+	function getBreadCrumbs($document_srl) 
 	{
 		// get Breadcrumbs menu
 		$oWikiModel = & getModel("wiki"); 
@@ -832,7 +832,7 @@ class WikiView extends Wiki
 	 * @access public
 	 * @return
 	*/
-	public function dispWikiSearchResults() 
+	function dispWikiSearchResults() 
 	{
 		$oWikiModel = getModel('wiki'); 
 		$oDocumentModel = getModel('document'); 
@@ -858,7 +858,7 @@ class WikiView extends Wiki
 	 * 
 	 * TODO See if can be removed and replaced with a query
 	 */
-	private function _sortArrayByKeyDesc($object_array, $key)
+	function _sortArrayByKeyDesc($object_array, $key)
 	{
 		$key_array = array();
 		if($object_array)
@@ -888,7 +888,7 @@ class WikiView extends Wiki
 	 * 
 	 * TODO See if it can be replaced / removed
 	 */
-	private function _resolveDocumentDetails($oModuleModel, $oDocumentModel, $doc) 
+	function _resolveDocumentDetails($oModuleModel, $oDocumentModel, $doc) 
 	{
 		$entry = $oDocumentModel->getAlias($doc->document_srl); 
 		$module_info = $oModuleModel->getModuleInfoByDocumentSrl($doc->document_srl); 
@@ -912,7 +912,7 @@ class WikiView extends Wiki
 	 * @param $is_keyword 
 	 * @return $output
 	*/
-	private function _searchKeyword($target_mid, $is_keyword) 
+	function _searchKeyword($target_mid, $is_keyword) 
 	{
 		$page = Context::get('page');
 		if(!isset($page)) 

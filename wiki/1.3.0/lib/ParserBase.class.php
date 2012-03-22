@@ -1,5 +1,5 @@
 <?php
-require_once ('SyntaxParser.interface.php'); 
+/* require_once ('SyntaxParser.interface.php'); // Commented for backwards compatibility with PHP4 
 
 /**
  * @brief Base class for syntax parsers
@@ -10,21 +10,21 @@ require_once ('SyntaxParser.interface.php');
  * 
  * Main tags and style for ParserBase were taken from Google Code
  */
-class ParserBase implements SyntaxParser
+class ParserBase /* implements SyntaxParser // Commented for backwards compatibility with PHP4 */
 {
 	// Number of blocks of text that will skip parsing;
 	// By temporarily saving them in this array, we can later insert them back in inital string
-	protected $escaped_blocks;
+	var $escaped_blocks;
 	// Number of text blocks injected back in initial text (after all other parsing is done)
-	protected $replaced_escaped_blocks;
+	var $replaced_escaped_blocks;
 	// Number of code block batches replaced
 	// Batch 1: all single line {{{ text }}}
 	// Batch 2: all multiline {{{ text }}} etc.
-	protected $batch_count;
+	var $batch_count;
 	// Text being parsed
-	protected $text; 
+	var $text; 
 	
-	protected $typeface_symbols = array("italic" => "_", "bold" => "\*"
+	var $typeface_symbols = array("italic" => "_", "bold" => "\*"
 									, "inline_code" => "`"
 									, "multiline_code_open" => "{{{"
 									, "multiline_code_close" => "}}}"
@@ -32,7 +32,7 @@ class ParserBase implements SyntaxParser
 									, "subscript" => ',,'
 									, "strikeout" => '~~'); 
 	
-	protected $internal_link_camel_case_regex = "/
+	var $internal_link_camel_case_regex = "/
 								(
 								(?<!			# Doesn't begin with ..
 									( 
@@ -48,7 +48,7 @@ class ParserBase implements SyntaxParser
 								)	
 								/x"; 
 	
-	protected $internal_link_with_brackets_regex = "/
+	var $internal_link_with_brackets_regex = "/
 									[[]				# Starts with [
 									([^#]+?)		# Followed by any word
 									([#](.*?))?		# Followed by an optional group that starts with #
@@ -57,7 +57,7 @@ class ParserBase implements SyntaxParser
 								/x";
 	
 	// Keeps a reference to a wiki instance, used to check if documents exist and such
-	protected $wiki_site = NULL; 
+	var $wiki_site = NULL; 
 	
 	/**
 	 * @brief Constructor
@@ -66,7 +66,7 @@ class ParserBase implements SyntaxParser
 	 * @param $wiki_site WikiSite
 	 * @return
 	 */
-	public function __construct($wiki_site = NULL) 
+	function __construct($wiki_site = NULL) 
 	{
 		$this->escaped_blocks = array(); 
 		$this->replaced_escaped_blocks = 0; 
@@ -82,7 +82,7 @@ class ParserBase implements SyntaxParser
 	 * @param $text string
 	 * @return string
 	 */
-	public function parse($text) 
+	function parse($text) 
 	{
 		$this->text = $text;
 		if(!empty($this->text)) 
@@ -100,7 +100,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function parseInit() 
+	function parseInit() 
 	{
 		// Convert Windows end of line (\r\n) to Linux (\n) end of line, otherwise preg_replace doesn't work
 		$this->text = str_replace(chr(13), '', $this->text); 
@@ -114,7 +114,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function parseText() 
+	function parseText() 
 	{
 		$this->parseHeadings(); 
 		$this->parseBoldUnderlineAndSuch(); 
@@ -132,7 +132,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function parseEnd() 
+	function parseEnd() 
 	{
 		$this->parseParagraphs(); 
 		$this->putBackEscapedBlocks();
@@ -145,7 +145,7 @@ class ParserBase implements SyntaxParser
 	 * @param $text string
 	 * @return array
 	 */
-	public function getLinkedDocuments($text) 
+	function getLinkedDocuments($text) 
 	{
 		$matches = array();
 		$aliases = array(); 
@@ -179,7 +179,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function escapeWhateverThereIsToEscape() 
+	function escapeWhateverThereIsToEscape() 
 	{
 	}
 	
@@ -189,7 +189,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function parseCodeBlocksAndEscapeThemFromParsing() 
+	function parseCodeBlocksAndEscapeThemFromParsing() 
 	{
 		// Replace code blocks
 		// We need to make sure text in code blocks is no longer parsed {{{ _italic_ }}} should skip the italic and leave text as is
@@ -224,7 +224,7 @@ class ParserBase implements SyntaxParser
 	 *  - reference will be later injected back in string, after all other parsing is done
 	 * The purpose of this function is to skip parsing text inside code blocks
 	 */
-	private function _parseInlineCodeBlock(&$matches) 
+	function _parseInlineCodeBlock(&$matches) 
 	{
 		$this->escaped_blocks[] = '<tt>' . htmlentities($matches[1]) . '</tt>'; 
 		return "%%%" . $this->batch_count . "%%%";
@@ -242,7 +242,7 @@ class ParserBase implements SyntaxParser
 	 *  - reference will be later injected back in string, after all other parsing is done
 	 * The purpose of this function is to skip parsing text inside code blocks
 	 */
-	private function _parseMultilineCodeBlock(&$matches) 
+	function _parseMultilineCodeBlock(&$matches) 
 	{
 		// $this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
 		$this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . htmlentities(stripslashes($matches[2])) . '</pre>'; 
@@ -255,7 +255,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected 
 	 * @return 
 	 */
-	protected function putBackEscapedBlocks() 
+	function putBackEscapedBlocks() 
 	{
 		for($i = 1; $i <= $this->batch_count; $i++) 
 		{
@@ -270,7 +270,7 @@ class ParserBase implements SyntaxParser
 	 * @param $matches array
 	 * @return string;
 	 */
-	private function _putBackEscapedBlock(&$matches) 
+	function _putBackEscapedBlock(&$matches) 
 	{
 		return $this->escaped_blocks[$this->replaced_escaped_blocks++];
 	}
@@ -283,7 +283,7 @@ class ParserBase implements SyntaxParser
 	 * 
 	 * TODO: Also add anchors (for local links)
 	 */
-	protected function parseHeadings() 
+	function parseHeadings() 
 	{
 		// Replace headings
 		// ====== Heading 6 ======
@@ -312,7 +312,7 @@ class ParserBase implements SyntaxParser
 	 * @access proected
 	 * @return
 	 */
-	protected function parseBoldUnderlineAndSuch() 
+	function parseBoldUnderlineAndSuch() 
 	{
 		// Replace bold
 		// * This be bold*
@@ -346,7 +346,7 @@ class ParserBase implements SyntaxParser
 	 * These lines are only processed if they appear at the top of the file.
 	 * Each pragma line begins with a pound-sign (#) and the pragma name, followed by a value.
 	 */
-	protected function parsePragmas() 
+	function parsePragmas() 
 	{
 		// Replace #summary
 		// #summary Summries are short descriptions of an article
@@ -373,7 +373,7 @@ class ParserBase implements SyntaxParser
 	 * 		- anything that starts with http, https, ftp and ends with png, gif, jpg, jpeg -> image
 	 * 		- [Url ImageUrl] -> image links
 	 */
-	protected function parseLinks() 
+	function parseLinks() 
 	{
 		// Find internal links given as CamelCase words
 		$this->text = preg_replace_callback($this->internal_link_camel_case_regex, array($this, "_handle_link"), $this->text);
@@ -414,7 +414,7 @@ class ParserBase implements SyntaxParser
 	 * @param $matches array
 	 * @return string
 	 */
-	private function _handle_link(&$matches) 
+	function _handle_link(&$matches) 
 	{
 		$url = $matches[1]; 
 		$local_anchor = $matches[2]; 
@@ -451,7 +451,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected 
 	 * @return 
 	 */
-	protected function parseLists() 
+	function parseLists() 
 	{
 		$this->text = $this->_parseLists($this->text);
 	}
@@ -463,7 +463,7 @@ class ParserBase implements SyntaxParser
 	 * @param $text string
 	 * @return string 
 	 */
-	private function _parseLists($text) 
+	function _parseLists($text) 
 	{
 		$lists = $this->_getLists($text); 
 		$offset_error = 0; // Length of final string changes during the function, so offset needs to be adjusted
@@ -490,7 +490,7 @@ class ParserBase implements SyntaxParser
 	 * @return string
 	 * Parses only first level list (in case we have nested lists)
 	 */
-	protected function _parseList($list) 
+	function _parseList($list) 
 	{
 		$list = str_replace(' ', '@', $list); 
 		$i = 0; 
@@ -532,7 +532,7 @@ class ParserBase implements SyntaxParser
 	 * @param $text string
 	 * @return string
 	 */
-	protected function _getLists($text) 
+	function _getLists($text) 
 	{
 		$matches = array(); 
 		$list_finder_regex = "/ (
@@ -554,7 +554,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function parseTables() 
+	function parseTables() 
 	{
 		// Tables
 		// || 1 ||  2  ||  3 ||
@@ -586,7 +586,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function parseQuotes() 
+	function parseQuotes() 
 	{
 		// Replace quotes
 		//	  Inferred by indentation
@@ -604,7 +604,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function parseHorizontalRules() 
+	function parseHorizontalRules() 
 	{
 		// Replace horizontal rule
 		// ----
@@ -617,7 +617,7 @@ class ParserBase implements SyntaxParser
 	 * @access protected
 	 * @return
 	 */
-	protected function parseParagraphs() 
+	function parseParagraphs() 
 	{
 		// Replace new lines with paragraphs
 		$this->text = preg_replace("/\n(.+)/", '<p>$1</p>', $this->text);

@@ -1,17 +1,18 @@
 <?php
-require_once('..\WikiSite.interface.php');
+/* require_once('..\WikiSite.interface.php'); // Commented for backwards compatibility with PHP4 */
 
-class MockWikiSite implements WikiSite {
+class MockWikiSite /* implements WikiSite // Commented for backwards compatibility with PHP4 */
+{
 	
-	public function currentUserCanCreateContent() {
+	function currentUserCanCreateContent() {
 			return true;
 		}
 		
-	public function documentExists($document_name) {
+	function documentExists($document_name) {
 			return $document_name;
 		}
 
-	public function getFullLink($document_name) {
+	function getFullLink($document_name) {
 		return $document_name;
 	}
 }

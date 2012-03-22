@@ -12,7 +12,7 @@ class WikiAdminView extends Wiki
 	 * @access public
 	 * @return 
 	 */
-	public function init() 
+	function init() 
 	{
 		// check if module_srl is already set
 		$module_srl = Context::get('module_srl');
@@ -55,7 +55,7 @@ class WikiAdminView extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function dispWikiAdminContent() 
+	function dispWikiAdminContent() 
 	{
 		$args->sort_index = "module_srl"; 
 		$args->page = Context::get('page'); 
@@ -81,7 +81,7 @@ class WikiAdminView extends Wiki
 	 * @access public
 	 * @return
 	 */	
-	public function dispWikiAdminInsertWiki() 
+	function dispWikiAdminInsertWiki() 
 	{
 		if(!in_array($this->module_info->module, array('admin', 'wiki'))) 
 		{
@@ -124,7 +124,7 @@ class WikiAdminView extends Wiki
 	 * @access public
 	 * @return
 	 */		
-	public function dispWikiAdminDeleteWiki() 
+	function dispWikiAdminDeleteWiki() 
 	{
 		if(!Context::get('module_srl')) 
 		{
@@ -148,7 +148,7 @@ class WikiAdminView extends Wiki
 	 * @access public
 	 * @return
 	 */			
-	public function dispWikiAdminWikiAdditionSetup() 
+	function dispWikiAdminWikiAdditionSetup() 
 	{
 		// content will be passsed by reference to all triggers
 		$content = '';
@@ -170,7 +170,7 @@ class WikiAdminView extends Wiki
 	 * @access public
 	 * @return
 	 */			
-	public function dispWikiAdminGrantInfo() 
+	function dispWikiAdminGrantInfo() 
 	{
 		// Call the common page for managing grants information
 		$oModuleAdminModel = getAdminModel('module'); 
@@ -185,7 +185,7 @@ class WikiAdminView extends Wiki
 	 * @access public
 	 * @return
 	 */		
-	public function dispWikiAdminSkinInfo() 
+	function dispWikiAdminSkinInfo() 
 	{
 		// Call the common page for managing skin information
 		$oModuleAdminModel = & getAdminModel('module'); 
@@ -200,7 +200,7 @@ class WikiAdminView extends Wiki
 	 * @access public
 	 * @return
 	 */			
-	public function dispWikiAdminArrange() 
+	function dispWikiAdminArrange() 
 	{
 		$this->setTemplateFile('arrange_list') ;
 	}

@@ -1,5 +1,5 @@
 <?php
-require_once ('SyntaxParser.interface.php'); 
+/* require_once ('SyntaxParser.interface.php'); // Commented for backwards compatibility with PHP4 */
 require_once ('ParserBase.class.php'); 
 
 /**
@@ -8,7 +8,7 @@ require_once ('ParserBase.class.php');
  */
 class MediaWikiParser extends ParserBase
 {
-	protected $typeface_symbols = array("italic" => "\'\'"
+	var $typeface_symbols = array("italic" => "\'\'"
 									, "bold" => "\'\'\'"
 									, "inline_code" => "`"
 									, "multiline_code_open" => "[\n][ ][<]nowiki[>]"
@@ -17,7 +17,7 @@ class MediaWikiParser extends ParserBase
 									, "subscript" => ',,'
 									, "strikeout" => '~~'); 
 	
-	protected $internal_links_regex = "/
+	var $internal_links_regex = "/
 									[[][[]				# Starts with [[
 									(([^#|]+?)[:])?		# Can start with something that ends in : [matches 1,2]
 									([^#|]+?)?		# Followed by any word	[matches 3]
@@ -34,7 +34,7 @@ class MediaWikiParser extends ParserBase
 	 * @param $wiki_site WikiSite
 	 * @return
 	 */
-	public function __construct($wiki_site) 
+	function __construct($wiki_site) 
 	{
 		parent::__construct($wiki_site);
 	}
@@ -46,7 +46,7 @@ class MediaWikiParser extends ParserBase
 	 * @access protected
 	 * @return
 	 */
-	protected function parseText() 
+	function parseText() 
 	{
 		parent::parseText(); 
 		$this->parseDefinitionLists(); 
@@ -60,7 +60,7 @@ class MediaWikiParser extends ParserBase
 	 * @param $text string
 	 * @return array()
 	 */
-	public function getLinkedDocuments($text) 
+	function getLinkedDocuments($text) 
 	{
 		$matches = array(); 
 		$aliases = array(); 
@@ -92,7 +92,7 @@ class MediaWikiParser extends ParserBase
 	 * Blocks are saved in a private member until parsing is done, 
 	 * and after that they are inserted back into the content.
 	 */
-	protected function escapeWhateverThereIsToEscape() 
+	function escapeWhateverThereIsToEscape() 
 	{
 		// Escape text between <nowiki> and </nowiki>
 		$this->batch_count++; 
@@ -115,7 +115,7 @@ class MediaWikiParser extends ParserBase
 	 * @param $matches array()
 	 * @return string
 	 */
-	private function _escapeBlock(&$matches) 
+	function _escapeBlock(&$matches) 
 	{
 		$this->escaped_blocks[] = $matches[1]; 
 		return "%%%" . $this->batch_count . "%%%";
@@ -127,7 +127,7 @@ class MediaWikiParser extends ParserBase
 	 * @access protected
 	 * @return 
 	 */
-	protected function parseLists() 
+	function parseLists() 
 	{
 		// Ordered list
 		// Find all ordered list blocks - at most 4 levels deep - and surround them with <ol></ol>
@@ -166,7 +166,7 @@ class MediaWikiParser extends ParserBase
 	 * 
 	 * Only allow one level lists - anything else is ignored
 	 */
-	protected function parseDefinitionLists() 
+	function parseDefinitionLists() 
 	{
 		// Wrap block with <dl> tags
 		$this->text = preg_replace("/	
@@ -188,7 +188,7 @@ class MediaWikiParser extends ParserBase
 	 * @override
 	 * @return
 	 */
-	protected function parseIndents() 
+	function parseIndents() 
 	{
 	}
 	
@@ -199,7 +199,7 @@ class MediaWikiParser extends ParserBase
 	 * @override
 	 * @return
 	 */
-	protected function parseQuotes() 
+	function parseQuotes() 
 	{
 	}
 	
@@ -209,7 +209,7 @@ class MediaWikiParser extends ParserBase
 	 * @access protected
 	 * @return
 	 */
-	protected function parsePreformattedText() 
+	function parsePreformattedText() 
 	{
 		$this->text = preg_replace("/(
 							(([\n])			# Start with newline
@@ -225,7 +225,7 @@ class MediaWikiParser extends ParserBase
 	 * @access protected
 	 * @return
 	 */
-	protected function parseLinks() 
+	function parseLinks() 
 	{
 		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets
 		$this->text = preg_replace("#
@@ -258,7 +258,7 @@ class MediaWikiParser extends ParserBase
 	 * @param $matches array()
 	 * @return string
 	 */
-	private function _handle_external_link(&$matches) 
+	function _handle_external_link(&$matches) 
 	{
 		$url = $matches[1]; 
 		$local_anchor = $matches[2]; 
@@ -291,7 +291,7 @@ class MediaWikiParser extends ParserBase
 	 *		}
 	 *
 	 */
-	private function _handle_internal_link(&$matches) 
+	function _handle_internal_link(&$matches) 
 	{
 		$namespace = $matches[2]; 
 		$content = $matches[3]; // Page name or external url
@@ -369,7 +369,7 @@ class MediaWikiParser extends ParserBase
 	 * @access protected
 	 * @return
 	 */
-	protected function parseTables() 
+	function parseTables() 
 	{
 		// Table rows: |-
 		// First row is default
@@ -409,7 +409,7 @@ class MediaWikiParser extends ParserBase
 	 * @param $matches array
 	 * @return string
 	 */
-	private function _handle_cell($matches) 
+	function _handle_cell($matches) 
 	{
 		$table_cells = preg_replace('/[\s]*[|][|][\s]*/', '</td><td>', $matches[0]); 
 		return $table_cells;

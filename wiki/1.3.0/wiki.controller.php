@@ -12,7 +12,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procWikiInsertDocument() 
+	function procWikiInsertDocument() 
 	{
 		// Create object model of document module
 		$oDocumentModel = getModel('document');
@@ -163,7 +163,7 @@ class WikiController extends Wiki
 	 * @param $document_srl 
 	 * @return type 
 	 */
-	public function deleteLinkedDocuments($document_srl) 
+	function deleteLinkedDocuments($document_srl) 
 	{
 		
 		$args->document_srl = $document_srl; 
@@ -180,7 +180,7 @@ class WikiController extends Wiki
 	 * @param $module_srl
 	 * @return $output 
 	 */
-	public function insertLinkedDocuments($document_srl, $alias_list, $module_srl) 
+	function insertLinkedDocuments($document_srl, $alias_list, $module_srl) 
 	{
 		$args->document_srl = $document_srl; 
 		$args->alias_list = implode(',', $alias_list); 
@@ -198,7 +198,7 @@ class WikiController extends Wiki
 	 * @param $module_srl
 	 * @return type 
 	 */
-	public function updateLinkedDocuments($document_srl, $alias_list, $module_srl) 
+	function updateLinkedDocuments($document_srl, $alias_list, $module_srl) 
 	{
 		$output = $this->deleteLinkedDocuments($document_srl);
 		if($output->toBool()) 
@@ -214,7 +214,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procWikiInsertCommentNotLogged() 
+	function procWikiInsertCommentNotLogged() 
 	{
 		$this->procWikiInsertComment();
 	}
@@ -225,7 +225,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procWikiInsertComment() 
+	function procWikiInsertComment() 
 	{
 		// Check permissions
 		if(!$this->grant->write_comment) 
@@ -324,7 +324,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procWikiDeleteDocument() 
+	function procWikiDeleteDocument() 
 	{
 		$oDocumentController = getController('document'); 
 		$oDocumentModel = getModel('document');
@@ -376,7 +376,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procWikiDeleteComment() 
+	function procWikiDeleteComment() 
 	{
 		// check the comment's sequence number
 		$comment_srl = Context::get('comment_srl');
@@ -405,7 +405,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return 
 	 */
-	public function procWikiMoveTree() 
+	function procWikiMoveTree() 
 	{
 		// Check permissions
 		if(!$this->grant->write_document)
@@ -492,7 +492,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procWikiRecompileTree() 
+	function procWikiRecompileTree() 
 	{
 		if(!$this->grant->write_document) 
 		{
@@ -508,7 +508,7 @@ class WikiController extends Wiki
 	 * @param $module_srl
 	 * @return
 	 */	
-	public function recompileTree($module_srl) 
+	function recompileTree($module_srl) 
 	{
 		$oWikiModel = getModel('wiki'); 
 		$list = $oWikiModel->loadWikiTreeList($module_srl); 
@@ -535,7 +535,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procWikiVerificationPassword() 
+	function procWikiVerificationPassword() 
 	{
 		$password = Context::get('password'); 
 		$comment_srl = Context::get('comment_srl'); 
@@ -563,14 +563,15 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procWikiContentDiff() 
+	function procWikiContentDiff() 
 	{
 		$document_srl = Context::get("document_srl"); 
 		$history_srl = Context::get("history_srl"); 
 		$oDocumentModel = getModel('document'); 
 		$oDocument = $oDocumentModel->getDocument($document_srl); 
 		$current_content = $oDocument->get('content'); 
-		$history_content = $oDocumentModel->getHistory($history_srl)->content; 
+		$history = $oDocumentModel->getHistory($history_srl);
+		$history_content = $history->content; 
 		$this->add('old', $history_content); 
 		$this->add('current', $current_content);
 	}
@@ -581,7 +582,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return
 	 */
-	public function procDispCommentEditor() 
+	function procDispCommentEditor() 
 	{
 		$document_srl = Context::get("document_srl"); 
 		$oDocumentModel = getModel('document'); 

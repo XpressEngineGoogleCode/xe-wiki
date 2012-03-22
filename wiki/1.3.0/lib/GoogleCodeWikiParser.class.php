@@ -1,5 +1,5 @@
 <?php
-require_once ('SyntaxParser.interface.php'); 
+/* require_once ('SyntaxParser.interface.php'); // Commented for backwards compatibility with PHP4 */
 require_once ('ParserBase.class.php'); 
 
 /**
@@ -15,7 +15,7 @@ class GoogleCodeWikiParser extends ParserBase
 	 * @param $wiki_site  WikiSite
 	 * @return
 	 */
-	public function __construct($wiki_site) 
+	function __construct($wiki_site) 
 	{
 		parent::__construct($wiki_site);
 	}
