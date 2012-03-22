@@ -787,7 +787,6 @@ class WikiView extends Wiki
 				{
 					$document_srl = $root->document_srl; 
 					$entry = $oDocumentModel->getAlias($document_srl); 
-					Context::set('entry', $entry);
 				}
 				else 
 				{
