@@ -13,7 +13,7 @@ interface SyntaxParser
 	 * @param $text string
 	 * @return string
 	 */
-	public function parse($text);
+	function parse($text);
 	
 	/**
 	 * @brief Finds all internal links in a text and returns document aliases
@@ -22,7 +22,7 @@ interface SyntaxParser
 	 * @param $text string
 	 * @return array Array of document aliases 
 	 */
-	public function getLinkedDocuments($text);
+	function getLinkedDocuments($text);
 }
 /* End of file SyntaxParser.interface.php */
 /* Location: SyntaxParser.interface.php */

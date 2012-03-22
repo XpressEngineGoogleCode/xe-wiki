@@ -51,7 +51,7 @@
 				<th scope="row">{$lang->markup_type}</th>
 				<td>
 					<select name="markup_type">
-						<option loop="$wiki_markup_list=>$markup" value="{$markup}" selected="selected"|cond="$module_info->markup_type==$markup"><!--@ echo $lang->{$markup}; --><!--@end--></option>
+						<option loop="$wiki_markup_list=>$markup" value="{$markup}" selected="selected"|cond="$module_info->markup_type==$markup"></option>
 					</select>
 					<p>{$lang->about_markup_type}</p>
 				</td>

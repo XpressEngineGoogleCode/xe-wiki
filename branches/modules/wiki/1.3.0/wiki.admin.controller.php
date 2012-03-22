@@ -14,7 +14,7 @@ class WikiAdminController extends Wiki
 	 * @param $args
 	 * @return 
 	 */
-	public function procWikiAdminInsertWiki($args = NULL) 
+	function procWikiAdminInsertWiki($args = NULL) 
 	{
 		$oModuleController = getController('module'); 
 		$oModuleModel = getModel('module'); 
@@ -67,7 +67,7 @@ class WikiAdminController extends Wiki
 	 * @access public
 	 * @return 
 	 */
-	public function procWikiAdminDeleteWiki() 
+	function procWikiAdminDeleteWiki() 
 	{
 		$module_srl = Context::get('module_srl'); 
 		$oModuleController = getController('module'); 
@@ -91,7 +91,7 @@ class WikiAdminController extends Wiki
 	 * @access public
 	 * @return 
 	 */	
-	public function procWikiAdminArrangeList() 
+	function procWikiAdminArrangeList() 
 	{
 		$oModuleModel = getModel('module'); 
 		$oDocumentController = getController('document');

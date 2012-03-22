@@ -1,6 +1,6 @@
 <?php
 
-require_once ('SyntaxParser.interface.php'); 
+/* require_once ('SyntaxParser.interface.php');  // Commented for backwards compatibility with PHP4 */
 
 /**
  * @brief Syntax parser for XE Wiki
@@ -9,10 +9,10 @@ require_once ('SyntaxParser.interface.php');
  * Contains the old parsing code of Wiki (before Markdown was made default)
  * Can only be ran in the context of an XE request (requires wiki class, ModuleObject class and Context)
  */
-class XEWikiParser implements SyntaxParser
+class XEWikiParser /* implements SyntaxParser // Commented for backwards compatibility with PHP4  */
 {
-	private $wiki_site = NULL; 
-	private $internal_links_regex = "!\[([^\]]+)\]!is"; 
+	var $wiki_site = NULL; 
+	var $internal_links_regex = "!\[([^\]]+)\]!is"; 
 	
 	/**
 	 * @brief Constructor
@@ -21,7 +21,7 @@ class XEWikiParser implements SyntaxParser
 	 * @param $wiki_site WikiSite
 	 * @return
 	 */
-	public function __construct($wiki_site = NULL) 
+	function __construct($wiki_site = NULL) 
 	{
 		$this->wiki_site = $wiki_site;
 	}
@@ -33,7 +33,7 @@ class XEWikiParser implements SyntaxParser
 	 * @param $org_content string
 	 * @return string
 	 */
-	public function parse($org_content) 
+	function parse($org_content) 
 	{
 		// Replace square brackets with link
 		$content = preg_replace_callback($this->internal_links_regex, array(&$this, 'callback_wikilink'), $org_content);
@@ -49,7 +49,7 @@ class XEWikiParser implements SyntaxParser
 	 * @param $text string
 	 * @return string
 	 */
-	public function getLinkedDocuments($text) 
+	function getLinkedDocuments($text) 
 	{
 		$matches = array(); 
 		$aliases = array(); 
@@ -72,7 +72,7 @@ class XEWikiParser implements SyntaxParser
 	 * @param $matches array
 	 * @return stdClass
 	 */
-	private function makeEntryName($matches) 
+	function makeEntryName($matches) 
 	{
 		// At first, we assume link does not have description
 		$answer->is_alias_link = FALSE; 
@@ -110,7 +110,7 @@ class XEWikiParser implements SyntaxParser
 	 * @param $matches array
 	 * @return string
 	 */
-	private function callback_wikilink($matches) 
+	function callback_wikilink($matches) 
 	{
 		if($matches[1]{0} == "!") 
 		{

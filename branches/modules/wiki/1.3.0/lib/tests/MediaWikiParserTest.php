@@ -11,19 +11,19 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 		$this->wikiParser = new MediaWikiParser(new MockWikiSite);
 	}
 	
-	private function escapeParserOutput($output){
+	function escapeParserOutput($output){
 		$output = str_replace(array(chr(13), chr(10), chr(9)), '', $output);
 		return str_replace(array('<p>', '</p>'), '', $output);
 	}
 	
-	private function escapeExpectedOutput($output){
+	function escapeExpectedOutput($output){
 		return str_replace(array(chr(13), chr(10), chr(9)), '', $output);
 	}	
 	
 	/**
 	 * #summary	 One-line summary of the page 
 	 */
-	public function testPragmasSummary()
+	function testPragmasSummary()
 	{
 		// When found at the beginning of the line, convert to italic
 		$output = $this->wikiParser->parse('#summary How you doing?');
@@ -38,21 +38,21 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * #labels	 Comma-separated list of labels (filled in automatically via the web UI) 
 	 */
-	public function testPragmasLabels(){
+	function testPragmasLabels(){
 		$this->markTestSkipped("Label support was not implemented");
 	}
 	
 	/**
 	 * #sidebar	 See Side navigation http://code.google.com/p/support/wiki/WikiSyntax#Side_navigation
 	 */
-	public function testPragmasSidebar(){
+	function testPragmasSidebar(){
 		$this->markTestSkipped("Sidebar support was not implemented");
 	}
 	
 	/**
 	 * Paragraphs - Use one or more blank lines to separate paragraphs.
 	 */
-	public function testParagraphs(){
+	function testParagraphs(){
 		$output = $this->wikiParser->parse("\nA paragraph");
 		$this->assertEquals("<p>A paragraph</p>", $output);
 	} 
@@ -60,7 +60,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * italic	_italic_ 
 	 */
-	public function testTypefaceItalic(){
+	function testTypefaceItalic(){
 		$output = $this->wikiParser->parse("''italic''");
 		$this->assertEquals("<em>italic</em>", $output);
 	}
@@ -68,7 +68,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * bold	*bold* 
 	 */
-	public function testTypefaceBold(){
+	function testTypefaceBold(){
 		$output = $this->wikiParser->parse("'''bold'''");
 		$this->assertEquals("<strong>bold</strong>", $output);
 	}
@@ -76,7 +76,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * bold	*bold* and italic 
 	 */
-	public function testTypefaceBoldAndItalic(){
+	function testTypefaceBoldAndItalic(){
 		$output = $this->wikiParser->parse("'''''bold & italic'''''");
 		$this->assertEquals("<strong><em>bold & italic</strong></em>", $output);
 	}
@@ -84,7 +84,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * code	`code`
 	 */
-	public function testTypefaceCodeInline(){
+	function testTypefaceCodeInline(){
 		$output = $this->wikiParser->parse("`code`");
 		$this->assertEquals("<tt>code</tt>", $output);
 	}	
@@ -93,7 +93,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * superscript	^super^script
 	 */
-	public function testTypefaceSuperscript(){
+	function testTypefaceSuperscript(){
 		$output = $this->wikiParser->parse("^super^script");
 		$this->assertEquals("<sup>super</sup>script", $output);
 	}			
@@ -101,7 +101,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * subscript	,,sub,,script
 	 */
-	public function testTypefaceSubscript(){
+	function testTypefaceSubscript(){
 		$output = $this->wikiParser->parse(",,sub,,script");
 		$this->assertEquals("<sub>sub</sub>script", $output);
 	}				
@@ -109,7 +109,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * strikeout ~~strikeout~~
 	 */
-	public function testTypefaceStrikeout(){
+	function testTypefaceStrikeout(){
 		$output = $this->wikiParser->parse("~~strikeout~~");
 		$this->assertEquals("<span style='text-decoration:line-through'>strikeout</span>", $output);
 	}					
@@ -117,7 +117,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Mixed typeface styles 
 	 */
-	public function testTypefaceCombinations(){
+	function testTypefaceCombinations(){
 		$output = $this->wikiParser->parse("'''''bold''' in italic''");
 		$this->assertEquals("<strong><em>bold</strong> in italic</em>", $output);
 		
@@ -128,7 +128,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Headings
 	 */
-	public function testHeadings(){
+	function testHeadings(){
 		$output = $this->wikiParser->parse("= Heading 1 =");
 		$this->assertEquals("<h1>Heading 1</h1>", $output);
 		
@@ -151,7 +151,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Dividers - four ore more dashes on a single line 
 	 */
-	public function testDividers(){
+	function testDividers(){
 		$output = $this->wikiParser->parse("----");
 		$this->assertEquals("<hr />", $output);
 		
@@ -165,7 +165,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Lists http://code.google.com/p/support/wiki/WikiSyntax#Lists 
 	 */
-	public function testLists(){
+	function testLists(){
 		$input_string = <<<HEREDOC
 
 * Start each line
@@ -263,7 +263,7 @@ HEREDOC;
 		$this->assertEquals($expected_output, $output);		
 	}
 	
-	public function testDefinitionList(){
+	function testDefinitionList(){
 		$input_string = <<<HEREDOC
 
 ;item 1
@@ -289,7 +289,7 @@ HEREDOC;
 		$this->assertEquals($expected_output, $output);
 	}
 	
-	public function testIndentText(){
+	function testIndentText(){
 		$input_string = <<<HEREDOC
 
 : Single indent
@@ -325,7 +325,7 @@ HEREDOC;
 		$this->assertEquals($expected_output, $output);		
 	}
 	
-	public function testMixtureOfLists(){
+	function testMixtureOfLists(){
 		$input_string = <<<HEREDOC
 # one
 # two
@@ -388,7 +388,7 @@ HEREDOC;
 		$this->assertEquals($expected_output, $output);				
 	}
 	
-	public function testPreformattedText(){
+	function testPreformattedText(){
 		$input_string = <<<HEREDOC
 
  Start each line with a space.
@@ -409,7 +409,7 @@ HEREDOC;
 		$this->assertEquals($expected_output, $output);			
 	}
 	
-	public function testPreformattedTextBlocks(){
+	function testPreformattedTextBlocks(){
 		$input_string = <<<HEREDOC
 
  <nowiki>Start with a space in the first column,
@@ -457,7 +457,7 @@ HEREDOC;
 	/**
 	 * Internal links
 	 */
-	public function testLinks_InternalSimple(){
+	function testLinks_InternalSimple(){
 		$input_string = "[[Main Page]]";
 		$expected_output = "<a href=\"Main_Page\" title=\"Main Page\" class=\"exist\">Main Page</a>";
 		
@@ -468,7 +468,7 @@ HEREDOC;
 	/**
 	 * Internal links
 	 */
-	public function testLinks_InternalPiped(){
+	function testLinks_InternalPiped(){
 		$input_string = "[[Main Page|different text]]";
 		$expected_output = "<a href=\"Main_Page\" title=\"Main Page\" class=\"exist\">different text</a>";
 		
@@ -480,7 +480,7 @@ HEREDOC;
 	 * Internal links
 	 * Short for [[Help:Contents|Contents]]
 	 */
-	public function testLinks_InternalNamespaceSimple(){
+	function testLinks_InternalNamespaceSimple(){
 		$input_string = "[[Help:Contents]]";
 		$expected_output = "<a href=\"Contents\" title=\"Contents\" class=\"exist\">Contents</a>";
 		
@@ -491,7 +491,7 @@ HEREDOC;
 	/**
 	 * Internal links
 	 */
-	public function testLinks_InternalWordEndings(){	
+	function testLinks_InternalWordEndings(){	
 		$output = $this->wikiParser->parse("[[Help]]s");
 		$this->assertEquals("<a href=\"Help\" title=\"Help\" class=\"exist\">Helps</a>",$output);
 		
@@ -505,7 +505,7 @@ HEREDOC;
 	/**
 	 * Internal links
 	 */
-	public function testLinks_InternalWordEndingsEscape(){	
+	function testLinks_InternalWordEndingsEscape(){	
 		$output = $this->wikiParser->parse("[[Help]]<nowiki />ful advice");
 		$this->assertEquals("<a href=\"Help\" title=\"Help\" class=\"exist\">Help</a>ful advice",$output);
 	}					
@@ -513,7 +513,7 @@ HEREDOC;
 	/**
 	 * Internal links
 	 */
-	public function testLinks_InternalToAnchor(){	
+	function testLinks_InternalToAnchor(){	
 		$output = $this->wikiParser->parse("[[#See also]]");
 		$this->assertEquals("<a href=\"#See_also\" class=\"exist\">#See also</a>",$output);
 	}						
@@ -521,7 +521,7 @@ HEREDOC;
 	/**
 	 * Internal links
 	 */
-	public function testLinks_InternalToAnchorWithDescription(){	
+	function testLinks_InternalToAnchorWithDescription(){	
 		$output = $this->wikiParser->parse("[[#See also|different text]]");
 		$this->assertEquals("<a href=\"#See_also\" class=\"exist\">different text</a>",$output);
 	}							
@@ -529,7 +529,7 @@ HEREDOC;
 	/**
 	 * Internal links
 	 */
-	public function testLinks_InternalToAnchorOnAnotherPage(){	
+	function testLinks_InternalToAnchorOnAnotherPage(){	
 		$output = $this->wikiParser->parse("[[Help:Images#See also]]");
 		$this->assertEquals("<a href=\"Images#See_also\" title=\"Images\" class=\"exist\">Images#See also</a>",$output);
 	}							
@@ -537,7 +537,7 @@ HEREDOC;
 	/**
 	 * External links
 	 */
-	public function testLinks_ExternalWithoutTag(){	
+	function testLinks_ExternalWithoutTag(){	
 		$output = $this->wikiParser->parse("http://mediawiki.org");
 		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">http://mediawiki.org</a>",$output);
 	}								
@@ -545,7 +545,7 @@ HEREDOC;
 	/**
 	 * External links
 	 */
-	public function testLinks_ExternalSimple(){	
+	function testLinks_ExternalSimple(){	
 		$output = $this->wikiParser->parse("[http://mediawiki.org MediaWiki]");
 		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">MediaWiki</a>",$output);
 	}									
@@ -555,7 +555,7 @@ HEREDOC;
 	 * not supported
 	 */
 	/*
-	public function testLinks_ExternalNumbered(){	
+	function testLinks_ExternalNumbered(){	
 		$output = $this->wikiParser->parse("[http://mediawiki.org]");
 		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external autonumber\">[1]</a>",$output);
 		
@@ -567,12 +567,12 @@ HEREDOC;
 	/**
 	 * External links
 	 */
-	public function testLinks_ExternalWithFileIcons(){	
+	function testLinks_ExternalWithFileIcons(){	
 		$output = $this->wikiParser->parse("[http://mediawiki.org MediaWiki]");
 		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">MediaWiki</a>",$output);
 	}					
 	
-	public function testAgrregate1(){
+	function testAgrregate1(){
 		$input_string = <<<HEREDOC
 === Heading ===
 Some content
@@ -744,7 +744,7 @@ HEREDOC;
 	/**
 	 * Tables
 	 */
-	public function testTables1(){	
+	function testTables1(){	
 		$input_string = <<<HEREDOC
 {|
 |Orange
@@ -784,7 +784,7 @@ HEREDOC;
 	/**
 	 * Tables
 	 */
-	public function testTables2(){	
+	function testTables2(){	
 		$input_string = <<<HEREDOC
 {|
 |Orange||Apple||more

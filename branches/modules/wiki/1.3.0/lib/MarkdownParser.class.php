@@ -1,16 +1,16 @@
 <?php
-require_once ('SyntaxParser.interface.php'); 
+/* require_once ('SyntaxParser.interface.php'); // Commented for backwards compatibility with PHP4 */
 require_once ('markdown.php'); 
 
 /**
  * @brief Converts Markdown syntax into HTML using external Markdown library
  * @developer Corina Udrescu (xe_dev@arnia.ro)
  */
-class MarkdownParser implements SyntaxParser
+class MarkdownParser /* implements SyntaxParser // Commented for backwards compatibility with PHP4 */
 {
-	private $wiki_site = NULL; 
+	var $wiki_site = NULL; 
 	
-	protected $internal_links_regex = "/
+	var $internal_links_regex = "/
 										([<]a		# Starts with 'a' HTML tag
 										.*			# Followed by any number of chars
 										href[=]		# Then by href=
@@ -29,7 +29,7 @@ class MarkdownParser implements SyntaxParser
 	 * @param $wiki_site WikiSite
 	 * @return
 	 */
-	public function __construct($wiki_site) 
+	function __construct($wiki_site) 
 	{
 		$this->wiki_site = $wiki_site;
 	}
@@ -41,7 +41,7 @@ class MarkdownParser implements SyntaxParser
 	 * @param $text string
 	 * @return string
 	 */
-	public function parse($text) 
+	function parse($text) 
 	{
 		$new_text = Markdown($text); 
 		$new_text = $this->parseLinks($new_text); 
@@ -55,7 +55,7 @@ class MarkdownParser implements SyntaxParser
 	 * @param $text string
 	 * @return array 
 	 */
-	public function getLinkedDocuments($text) 
+	function getLinkedDocuments($text) 
 	{
 		$new_text = Markdown($text); 
 		
@@ -88,7 +88,7 @@ class MarkdownParser implements SyntaxParser
 	 * @param $text string
 	 * @return string
 	 */
-	private function parseLinks($text) 
+	function parseLinks($text) 
 	{
 		$text = preg_replace_callback($this->internal_links_regex, array($this, "_handle_link"), $text); 
 		return $text;
@@ -101,7 +101,7 @@ class MarkdownParser implements SyntaxParser
 	 * @param $matches array
 	 * @return string 
 	 */
-	private function _handle_link($matches) 
+	function _handle_link($matches) 
 	{
 		$url = $matches[2];
 		

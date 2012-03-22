@@ -13,7 +13,7 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * #summary	 One-line summary of the page 
 	 */
-	public function testPragmasSummary()
+	function testPragmasSummary()
 	{
 		// When found at the beginning of the line, convert to italic
 		$output = $this->wikiParser->parse('#summary How you doing?');
@@ -28,21 +28,21 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * #labels	 Comma-separated list of labels (filled in automatically via the web UI) 
 	 */
-	public function testPragmasLabels(){
+	function testPragmasLabels(){
 		$this->markTestSkipped("Label support was not implemented");
 	}
 	
 	/**
 	 * #sidebar	 See Side navigation http://code.google.com/p/support/wiki/WikiSyntax#Side_navigation
 	 */
-	public function testPragmasSidebar(){
+	function testPragmasSidebar(){
 		$this->markTestSkipped("Sidebar support was not implemented");
 	}
 	
 	/**
 	 * Paragraphs - Use one or more blank lines to separate paragraphs.
 	 */
-	public function testParagraphs(){
+	function testParagraphs(){
 		$output = $this->wikiParser->parse("\nA paragraph");
 		$this->assertEquals("<p>A paragraph</p>", $output);
 	} 
@@ -50,7 +50,7 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * italic	_italic_ 
 	 */
-	public function testTypefaceItalic(){
+	function testTypefaceItalic(){
 		$output = $this->wikiParser->parse("_italic_");
 		$this->assertEquals("<em>italic</em>", $output);
 	}
@@ -58,7 +58,7 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * bold	*bold* 
 	 */
-	public function testTypefaceBold(){
+	function testTypefaceBold(){
 		$output = $this->wikiParser->parse("*bold*");
 		$this->assertEquals("<strong>bold</strong>", $output);
 	}
@@ -66,7 +66,7 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * code	`code`
 	 */
-	public function testTypefaceCodeInline(){
+	function testTypefaceCodeInline(){
 		$output = $this->wikiParser->parse("`code`");
 		$this->assertEquals("<tt>code</tt>", $output);
 	}	
@@ -75,7 +75,7 @@ class GoogleCodeWikiParserTest extends PHPUnit_Framework_TestCase
 	/**
 	 * code	{{{{code}}}
 	 */
-	public function testTypefaceCodeMultiline(){
+	function testTypefaceCodeMultiline(){
 		$output = $this->wikiParser->parse("{{{code}}}");
 		$this->assertEquals("<tt>code</tt>", $output);
 		
@@ -106,7 +106,7 @@ EXPECTED;
 	/**
 	 * superscript	^super^script
 	 */
-	public function testTypefaceSuperscript(){
+	function testTypefaceSuperscript(){
 		$output = $this->wikiParser->parse("^super^script");
 		$this->assertEquals("<sup>super</sup>script", $output);
 	}			
@@ -114,7 +114,7 @@ EXPECTED;
 	/**
 	 * subscript	,,sub,,script
 	 */
-	public function testTypefaceSubscript(){
+	function testTypefaceSubscript(){
 		$output = $this->wikiParser->parse(",,sub,,script");
 		$this->assertEquals("<sub>sub</sub>script", $output);
 	}				
@@ -122,7 +122,7 @@ EXPECTED;
 	/**
 	 * strikeout ~~strikeout~~
 	 */
-	public function testTypefaceStrikeout(){
+	function testTypefaceStrikeout(){
 		$output = $this->wikiParser->parse("~~strikeout~~");
 		$this->assertEquals("<span style='text-decoration:line-through'>strikeout</span>", $output);
 	}					
@@ -130,7 +130,7 @@ EXPECTED;
 	/**
 	 * Mixed typeface styles 
 	 */
-	public function testTypefaceCombinations(){
+	function testTypefaceCombinations(){
 		$output = $this->wikiParser->parse("_*bold* in italics_");
 		$this->assertEquals("<em><strong>bold</strong> in italics</em>", $output);
 		
@@ -147,7 +147,7 @@ EXPECTED;
 	/**
 	 * Headings
 	 */
-	public function testHeadings(){
+	function testHeadings(){
 		$output = $this->wikiParser->parse("= Heading 1 =");
 		$this->assertEquals("<h1>Heading 1</h1>", $output);
 		
@@ -170,7 +170,7 @@ EXPECTED;
 	/**
 	 * Dividers - four ore more dashes on a single line 
 	 */
-	public function testDividers(){
+	function testDividers(){
 		$output = $this->wikiParser->parse("----");
 		$this->assertEquals("<hr />", $output);
 		
@@ -184,7 +184,7 @@ EXPECTED;
 	/**
 	 * Lists http://code.google.com/p/support/wiki/WikiSyntax#Lists 
 	 */
-	public function testLists(){
+	function testLists(){
 		$input_string = <<<HEREDOC
 The following is:
   * A list
@@ -236,7 +236,7 @@ HEREDOC;
 	/**
 	 * Block quotes are created by indenting a paragraph by at least one space 
 	 */
-	public function testBlockQuotes(){
+	function testBlockQuotes(){
 		$input_string = <<<HEREDOC
 
 Someone once said:
@@ -257,7 +257,7 @@ HEREDOC;
 	/**
 	 * Internal link, automatically convert camel case words to links 
 	 */
-	public function testLinks_InternalCamelCase(){
+	function testLinks_InternalCamelCase(){
 		// Test CamelCase links
 		$output = $this->wikiParser->parse("WikiSyntax is identified and linked automatically.");
 		$this->assertEquals("<a href=WikiSyntax>WikiSyntax</a> is identified and linked automatically.", $output);
@@ -266,7 +266,7 @@ HEREDOC;
 	/**
 	 * Internal links, denoted by square brackets
 	 */
-	public function testLinks_InternalBracketsSimple(){
+	function testLinks_InternalBracketsSimple(){
 		// TODO Check (if possible) that brackets are replaced with links only if user is logged in. Otherwise, escape brackets.
 		$output = $this->wikiParser->parse("Wikipage is not identified, so if you have a page named [Wikipage] you need to link it explicitly.");
 		$this->assertEquals("Wikipage is not identified, so if you have a page named <a href=Wikipage>Wikipage</a> you need to link it explicitly.",$output);
@@ -275,7 +275,7 @@ HEREDOC;
 	/**
 	 * Internal links, denoted by square brackets. Contain description given through a space.
 	 */
-	public function testLinks_InternalBracketsWithDescription(){
+	function testLinks_InternalBracketsWithDescription(){
 		$input_string = "If the WikiSyntax page is actually about reindeers, you can provide a
 						description, so that people know you are actually linking to a page on
 						[WikiSyntax reindeer flotillas].";
@@ -293,7 +293,7 @@ HEREDOC;
 	/**
 	 * Internal links - escpae words in CamelCase
 	 */
-	public function testLinks_InternalEscapedCamelCase(){
+	function testLinks_InternalEscapedCamelCase(){
 		$input_string = "If you want to mention !WikiSyntax without it being autolinked, use an exclamation mark to prevent linking.";
 		$expected_output = "If you want to mention WikiSyntax without it being autolinked, use an exclamation mark to prevent linking.";
 		
@@ -305,7 +305,7 @@ HEREDOC;
 	 * Internal link to page anchor 
 	 * TODO Make sure local anchors are automatically generated for headings
 	 */
-	public function testLinks_InternalLocalAnchor(){
+	function testLinks_InternalLocalAnchor(){
 		$output = $this->wikiParser->parse("[WikiSyntax#Wiki-style_markup]");
 		$this->assertEquals("<a href=WikiSyntax#Wiki-style_markup>WikiSyntax</a>", $output);
 		
@@ -317,14 +317,14 @@ HEREDOC;
 	 * Links to issues and revisions
 	 * TODO: Setup a field in module admin where you can link wiki to GoogleCode projects, so that issues / revision links will still work 
 	 */
-	public function testLinks_IssuesAndRevisions(){
+	function testLinks_IssuesAndRevisions(){
 		$this->markTestSkipped("Work in progress.");
 	}
 	
 	/**
 	 * External urls - plain links
 	 */
-	public function testLinks_ExternalsPlain(){
+	function testLinks_ExternalsPlain(){
 		$output = $this->wikiParser->parse("Plain URLs such as http://www.google.com/ or ftp://ftp.kernel.org/ are automatically made into links.");
 		$this->assertEquals("Plain URLs such as <a href=http://www.google.com/>http://www.google.com/</a> or <a href=ftp://ftp.kernel.org/>ftp://ftp.kernel.org/</a> are automatically made into links.",$output);
 	}
@@ -332,7 +332,7 @@ HEREDOC;
 	/**
 	 * External urls - bracket with description 
 	 */
-	public function testLinks_ExternalBracketsWithDescription(){
+	function testLinks_ExternalBracketsWithDescription(){
 		$output = $this->wikiParser->parse("You can also provide some descriptive text. For example, the following link points to the [http://www.google.com Google home page].");
 		$this->assertEquals("You can also provide some descriptive text. For example, the following link points to the <a href=http://www.google.com>Google home page</a>.", $output);
 		
@@ -341,7 +341,7 @@ HEREDOC;
 	/**
 	 * External urls - links that point to images 
 	 */
-	public function testImg_PlainURL(){
+	function testImg_PlainURL(){
 		$output = $this->wikiParser->parse("If your link points to an image, it will get inserted as an image tag into the page: http://code.google.com/images/code_sm.png");
 		$this->assertEquals("If your link points to an image, it will get inserted as an image tag into the page: <img src=http://code.google.com/images/code_sm.png />", $output);
 		
@@ -352,7 +352,7 @@ HEREDOC;
 	/**
 	 * Image links 
 	 */
-	public function testImg_WithLink(){
+	function testImg_WithLink(){
 		$output = $this->wikiParser->parse("[http://code.google.com/ http://code.google.com/images/code_sm.png]");
 		$this->assertEquals("<a href=http://code.google.com/><img src=http://code.google.com/images/code_sm.png /></a>", $output);
 	}
@@ -360,7 +360,7 @@ HEREDOC;
 	/**
 	 * Tables 
 	 */
-	public function testTables(){
+	function testTables(){
 		$input_string = <<<HEREDOC
 || *Year* || *Temperature (low)* || *Temperature (high)* ||
 || 1900 || -10 || 25 ||
@@ -379,7 +379,7 @@ HEREDOC;
 	/**
 	 * Escaping special HTML tags 
 	 */
-	public function testHTMLTagEscaping(){
+	function testHTMLTagEscaping(){
 		$output = $this->wikiParser->parse("`<hr>`");
 		$this->assertEquals("<tt>&lt;hr&gt;</tt>", $output);
 		

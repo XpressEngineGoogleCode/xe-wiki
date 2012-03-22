@@ -1,15 +1,15 @@
 <?php
-require_once ("lib/WikiSite.interface.php");
+/* require_once ("lib/WikiSite.interface.php"); // Commented for backwards compatibility with PHP4 */
 
 /**
 * @class wiki
 * @developer NHN (developers@xpressengine.com)
 * @brief  wiki module high class
 */
-class Wiki extends ModuleObject implements WikiSite
+class Wiki extends ModuleObject /* implements WikiSite // Commented for backwards compatibility with PHP4 */
 {
-	static $omitting_characters = array('/&/', '/\//', '/,/', '/ /'); 
-	static $replacing_characters = array('', '', '', '_');
+	var $omitting_characters = array('/&/', '/\//', '/,/', '/ /'); 
+	var $replacing_characters = array('', '', '', '_');
 	
 	/**
 	 * @brief Returns current wiki instance syntax parser
@@ -17,7 +17,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @access public
 	 * @return interface SyntaxParser
 	 */
-	public function getWikiTextParser() 
+	function getWikiTextParser() 
 	{
 		if($this->module_info->markup_type == 'markdown') 
 		{
@@ -51,11 +51,11 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @param $entry_name string
 	 * @return string 
 	 */
-	public static function beautifyEntryName($entry_name) 
+	function beautifyEntryName($entry_name) 
 	{
 		$entry_name = strip_tags($entry_name); 
 		$entry_name = html_entity_decode($entry_name); 
-		$entry_name = preg_replace(wiki::$omitting_characters, wiki::$replacing_characters, $entry_name); 
+		$entry_name = preg_replace($this->omitting_characters, $this->replacing_characters, $entry_name); 
 		$entry_name = preg_replace('/[_]+/', '_', $entry_name); 
 		$entry_name = strtolower($entry_name); 
 		return $entry_name;
@@ -69,7 +69,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @param $document_name string
 	 * @return string
 	 */
-	public function documentExists($document_name) 
+	function documentExists($document_name) 
 	{
 		$oDocumentModel = & getModel('document');
 		// Search for document by alias
@@ -94,7 +94,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @access public
 	 * @return boolean
 	 */
-	public function currentUserCanCreateContent() 
+	function currentUserCanCreateContent() 
 	{
 		return $this->grant->write_document;
 	}
@@ -106,7 +106,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @param $document_name string
 	 * @return string
 	 */
-	public function getFullLink($document_name) 
+	function getFullLink($document_name) 
 	{
 		return getUrl('', 'mid', $this->module_info->mid, 'entry', $document_name);
 	}
@@ -117,7 +117,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @developer NHN (developers@xpressengine.com)
 	 * @return Object 
 	 */
-	public function moduleInstall() 
+	function moduleInstall() 
 	{
 		return new Object();
 	}
@@ -128,7 +128,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @access public
 	 * @return boolean
 	 */
-	public function checkUpdate() 
+	function checkUpdate() 
 	{
 		$oModuleModel = &getModel('module');
 		$flag = FALSE; $flag = $this->_hasOldStyleAliases(); $oDB = DB::getInstance();
@@ -147,7 +147,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @access public
 	 * @return Object
 	 */
-	public function moduleUpdate() 
+	function moduleUpdate() 
 	{
 		$oModuleModel = &getModel('module');
 		$oModuleController = &getController('module');
@@ -179,7 +179,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @access public
 	 * @return Object
 	 */
-	public function moduleUninstall() 
+	function moduleUninstall() 
 	{
 		return new Object();
 	}
@@ -190,7 +190,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @access public
 	 * @return Object
 	 */
-	public function recompileCache() 
+	function recompileCache() 
 	{
 		$oCacheHandler = & CacheHandler::getInstance('object', NULL, TRUE);
 		if($oCacheHandler->isSupport()) 
@@ -206,7 +206,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @access private
 	 * @return boolean
 	 */
-	private function _hasOldStyleAliases() 
+	function _hasOldStyleAliases() 
 	{
 		// Get all Wiki module_srl.
 		$output = executeQueryArray('wiki.getAllWikiList', NULL); $wiki_srls = array();
@@ -243,7 +243,7 @@ class Wiki extends ModuleObject implements WikiSite
 	 * @access private
 	 * @return 
 	 */
-	private function _updateOldStyleAliases() 
+	function _updateOldStyleAliases() 
 	{
 		// Get all Wiki module_srl
 		$output = executeQueryArray('wiki.getAllWikiList', NULL); $wiki_srls = array();

@@ -433,7 +433,8 @@
             $params->query = '('.$params->query.')'.$params->subquery;
             $params->displayFields = array("id");
 
-            $encodedParams = $this->getService()->encode($params);
+			$service = $this->getService();
+            $encodedParams = $service->encode($params);
             $searchResult = FileHandler::getRemoteResource($searchUrl."searchByMap", $encodedParams, 3, "POST", "application/json; charset=UTF-8", array(), array());
 
             // Validate the results
