@@ -257,17 +257,19 @@
 				$node_srl_iterator = $documents_tree[$node_srl_iterator]->parent_srl;
 			}
 			$oDocumentModel = &getModel("document");
-			foreach($documents_tree as $node){
-				//$node->href = getSiteUrl('','mid',$mid,'entry',$node->alias, 'document_srl', $node->document_srl);
+			
+			$documents_tree_copy = $documents_tree;
+			foreach($documents_tree_copy as $key => $value){
+				$node = &$documents_tree[$key];
 				$node->href = getSiteUrl('','mid',$mid,'entry',$oDocumentModel->getAlias($node->document_srl));
 				if(!isset($documents_tree[$node->document_srl]->type)){
-				if($node->parent_srl == 0)
-					$documents_tree[$node->document_srl]->type = 'root';
-				else if($node->parent_srl == $current_node->parent_srl)
-					$documents_tree[$node->document_srl]->type = 'sibling';
-				else if($node->parent_srl == $current_node->document_srl)
-					$documents_tree[$node->document_srl]->type = 'child';
-				else unset($documents_tree[$node->document_srl]);
+					if($node->parent_srl == 0)
+						$documents_tree[$node->document_srl]->type = 'root';
+					else if($node->parent_srl == $current_node->parent_srl)
+						$documents_tree[$node->document_srl]->type = 'sibling';
+					else if($node->parent_srl == $current_node->document_srl)
+						$documents_tree[$node->document_srl]->type = 'child';
+					else unset($documents_tree[$node->document_srl]);
 				}
 			}
 
