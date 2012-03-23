@@ -44,9 +44,15 @@ class WikiAdminView extends Wiki
 		$module_category = $oModuleModel->getModuleCategories(); 
 		Context::set('module_category', $module_category);
 		
+		// Initialize default markup type
+		if(!$this->module_info->markup_type) 
+		{
+			$this->module_info->markup_type = 'markdown'; 
+		}		
+		
 		// Specify template path
 		$template_path = sprintf("%stpl/", $this->module_path); 
-		$this->setTemplatePath($template_path);
+		$this->setTemplatePath($template_path);	
 	}
 	
 	/**
@@ -82,7 +88,7 @@ class WikiAdminView extends Wiki
 	 * @return
 	 */	
 	function dispWikiAdminInsertWiki() 
-	{
+	{	
 		if(!in_array($this->module_info->module, array('admin', 'wiki'))) 
 		{
 			return $this->alertMessage('msg_invalid_request');
@@ -101,11 +107,7 @@ class WikiAdminView extends Wiki
 		$mobile_layout_list = $oLayoutModel->getLayoutList(0, "M"); 
 		Context::set('mlayout_list', $mobile_layout_list); 
 		
-		$wiki_markup_list = array("googlecode_markup", "xe_wiki_markup", "mediawiki_markup", "markdown");
-		if(!$this->module_info->markup_type) 
-		{
-			$this->module_info->markup_type = 'markdown'; 
-		}
+		$wiki_markup_list = array("googlecode_markup", "xe_wiki_markup", "mediawiki_markup", "markdown");		
 		Context::set('wiki_markup_list', $wiki_markup_list); 
 		
 		$security = new Security(); 
