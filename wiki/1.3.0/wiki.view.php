@@ -867,7 +867,8 @@ class WikiView extends Wiki
 				$key_array[$obj->{$key}] = $obj;
 			}
 		}
-		krsort($key_array); $result = array();
+		krsort($key_array); 
+		$result = array();
 		foreach($key_array as $rank => $obj) 
 		{
 			$result[] = $obj;
@@ -901,6 +902,7 @@ class WikiView extends Wiki
 		{
 			$doc->entry = "bugbug";
 		}
+		return $doc;
 	}
 
 	/**
@@ -933,12 +935,14 @@ class WikiView extends Wiki
 		$output = $oWikiModel->search($is_keyword, $target_mid, $search_target, $page, 10);
 		if($output->data)
 		{
-			foreach($output->data as $doc) 
+			$data = $output->data;
+			foreach($output->data as $key => $value) 
 			{
-				$this->_resolveDocumentDetails($oModuleModel, $oDocumentModel, $doc);
+				$doc = $this->_resolveDocumentDetails($oModuleModel, $oDocumentModel, $value);
+				$data[$key] = $doc;
 			}
 		}
-		Context::set('document_list', $output->data); 
+		Context::set('document_list', $data); 
 		Context::set('total_count', $output->total_count); 
 		Context::set('total_page', $output->total_page); 
 		Context::set('page', $page); 
