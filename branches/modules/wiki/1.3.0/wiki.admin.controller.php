@@ -16,8 +16,8 @@ class WikiAdminController extends Wiki
 	 */
 	function procWikiAdminInsertWiki($args = NULL) 
 	{
-		$oModuleController = getController('module'); 
-		$oModuleModel = getModel('module'); 
+		$oModuleController = &getController('module'); 
+		$oModuleModel = &getModel('module'); 
 		
 		$args = Context::getRequestVars();
 		$args->module = 'wiki';
@@ -70,7 +70,7 @@ class WikiAdminController extends Wiki
 	function procWikiAdminDeleteWiki() 
 	{
 		$module_srl = Context::get('module_srl'); 
-		$oModuleController = getController('module'); 
+		$oModuleController = &getController('module'); 
 		$output = $oModuleController->deleteModule($module_srl);
 		if(!$output->toBool()) 
 		{
@@ -93,8 +93,8 @@ class WikiAdminController extends Wiki
 	 */	
 	function procWikiAdminArrangeList() 
 	{
-		$oModuleModel = getModel('module'); 
-		$oDocumentController = getController('document');
+		$oModuleModel = &getModgetControllerel('module'); 
+		$oDocumentController = &getController('document');
 		
 		// Verification target Wiki
 		$module_srl = Context::get('module_srl'); 
