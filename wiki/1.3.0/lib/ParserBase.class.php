@@ -119,8 +119,8 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 		$this->parseHeadings(); 
 		$this->parseBoldUnderlineAndSuch(); 
 		$this->parsePragmas(); 
-		$this->parseLinks(); 
 		$this->parseLists(); 
+		$this->parseLinks(); 
 		$this->parseTables(); 
 		$this->parseQuotes(); 
 		$this->parseHorizontalRules();
