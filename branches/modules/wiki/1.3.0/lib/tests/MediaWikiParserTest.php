@@ -823,4 +823,43 @@ HEREDOC;
 		$this->assertEquals($expected_output,$output);
 	}				
 	
+	function testMultipleLists(){
+		$input_string = <<<HEREDOC
+== Some heading  ==
+
+* Link 1
+* Link 2
+* Link 3
+
+== Another heading  ==
+
+* Link 1
+* Link 2
+* Link 3
+* Link 4 - http://www.xpressengine.org
+
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$output = $this->escapeParserOutput($output);
+		
+		$expected_output = <<<HEREDOC
+<h2>Some heading </h2>
+	<ul>
+		<li>Link 1</li>
+		<li>Link 2</li>
+		<li>Link 3</li>
+	</ul>
+
+<h2>Another heading </h2>
+	<ul>
+		<li>Link 1</li>
+		<li>Link 2</li>
+		<li>Link 3</li>
+		<li>Link 4 - <a href="http://www.xpressengine.org" title="http://www.xpressengine.org" class="external">http://www.xpressengine.org</a></li>
+	</ul>
+HEREDOC;
+		$expected_output = $this->escapeExpectedOutput($expected_output);
+		$this->assertEquals($expected_output, $output);		
+	}
+	
 }
