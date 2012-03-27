@@ -132,11 +132,7 @@
             <!--@else-->
                 {@ $document_content = $oDocument->getContent()}
             <!--@end-->
-			<!--@if ($markup_type != 'xe_wiki_markup')-->
-				{$document_content}
-			<!--@else-->
-				{nl2br($document_content)}
-			<!--@end-->
+			{$document_content}
 		<!--@end-->
 	</div>
 
