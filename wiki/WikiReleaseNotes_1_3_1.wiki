@@ -1,0 +1,19 @@
+#summary XE Wiki module 1.3.1 Release notes
+
+== Enhancements == 
+ * Added Korean language support (r198)
+ * Added Chinese language support (r205)
+ * Updated all code to support PHP4 - Issue 39
+ * Made it possible to add wiki module to website menu (sitemap) - Issue 32
+ * Updated wiki admin interface to integrate with the new changes in XE 1.5 admin - Issue 33
+ * Improvements to xe_wiki default skin - Issue 34
+ * Updated language bar tooltips - Issue 37
+
+== Bug fixes ==
+ * Fixed a bug in xe_wiki_tree skin that caused Edit view to always open front page - Issue 35
+ * Fixed a bug related to the way files are included in windows vs linux - Issue 36
+ * Fixed a bug that caused the "Show/hide" button to be displaced - Issue 38
+ * Fixed a bug with alias autocomplete - Issue 40
+ * Fixed a bug with history view pagination - Issue 41
+ * Fixed a bug related to !MediaWiki syntax that would casuse lists to look scrambled - Issue 42
+ * Fixed a bug with XE markup that caused extra `<br />` to show up - Issue 43
