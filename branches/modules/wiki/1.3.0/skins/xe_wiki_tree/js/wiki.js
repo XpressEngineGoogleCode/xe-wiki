@@ -87,30 +87,27 @@ function Tree(){
 
 function resizeDiv(docHeight)
 {
+	// Make sure left side column has full height, no matter what content is in the main area
+	var windowHeight = jQuery(window).height()-140; // What does 140 stand for?
+	var tree = jQuery("#leftSideTreeList");
 	
-	if (docHeight < (jQuery(window).height()-140))
+	if (docHeight < windowHeight)
     {
-		docHeight = jQuery(window).height()-140;
+		docHeight = windowHeight;
     }
-    jQuery("#leftSideTreeList").height(docHeight);
-	leftWidth = jQuery("#leftSideTreeList").width();
-	
-	if (jQuery("#columnRight").length > 0)
+    tree.height(docHeight);
+
+	// Position show/hide arrow in page
+	var treeWidth = tree.width();
+	var toggleButton = jQuery("#showHideTree");
+
+	if(tree.is(":visible"))
 	{
-		jQuery("#wiki").css("min-width",jQuery("#columnRight").width());
-		//leftWidth += jQuery("#columnRight").position().left;
+		toggleButton.css("left", treeWidth - 13);
 	}
-	else
+	else 
 	{
-		rightWidth = jQuery(document).width()-leftWidth-marginRight;
-	}
-	leftWidth += jQuery("#wiki").position().left;
-	rightWidth = jQuery("#wiki").width()-jQuery("#leftSideTreeList").width()-marginRight;
-    // jQuery("#wikiDocument").width(rightWidth);
-	 
-	if( jQuery("#leftSideTreeList").width() > 1 )
-	{
-		jQuery("#showHideTree").css("left",(leftWidth-13)+"px");
+		toggleButton.css("left", 0);
 	}
 }
 
@@ -128,7 +125,7 @@ function getDiff(elem,document_srl,history_srl)
     var diffDiv = jQuery("#"+elem);
     if (!diffDiv.hasClass("hide"))
     {
-	diffDiv.addClass("hide");
+		diffDiv.addClass("hide");
     }
     else
     {
@@ -166,75 +163,82 @@ function getDiff(elem,document_srl,history_srl)
 }
 
 jQuery(document).ready(function(){
+	
+	// Initialize tree view, if a classic tree is used (instead of MSDN style)
+	// TODO Only load this when classic view is used
     jQuery("#navigation").treeview({
 	    animated: "fast",
 	    collapsed: false,
 	    unique: false,
 	    persist: "cookie"
     });
-	if (jQuery("#columnRight").length > 0)
-	{
-		jQuery("#wiki").css("min-width",jQuery("#columnRight").width());
-	}
-	leftWidth = jQuery("#leftSideTreeList").width();
-	slideWidth = jQuery("#leftSideTreeList").width()
 	
+	// Define show/hide tree behaviour
     jQuery("#showHideTree").click(function()
     {
-		var leftTree = jQuery("#leftSideTreeList");
+		var tree = jQuery("#leftSideTreeList");
+		var treeWidth = tree.width();
 		var toggleButton = jQuery("#showHideTree");
+		var wikiBody = jQuery("#wikiBody");	
 		
-		leftTree.animate({
-			width: 'toggle'
-			}, 500, function() {
-			resizeDiv(docHeight);
-		});
+		tree.animate({
+							width: 'toggle'
+						 }
+						 , 500
+						 , function() {
+								resizeDiv(docHeight);
+						   }
+						);		
 		
-		var wikiBody = jQuery("#wikiBody");
-		
-		if( leftTree.width() == 1 )
+		var treeIsVisible = tree.width() > 1;
+		if(treeIsVisible)
 		{
-			jQuery("#leftSideTreeList *").hide();
-			wikiBody.animate({
-				'padding-left': '250px'
-			}, 500);				
-			toggleButton.animate({
-				left: '+='+(slideWidth-13)
-			}, 500, function() {
-					jQuery("#leftSideTreeList *").show();		
-					toggleButton.css('background-position', "0px 0px");
-					toggleButton.attr("title",titleDivShowHideTree[0]);
-				});
-				
-		}
-		else
-		{
-			jQuery("#leftSideTreeList *").hide();
+			// Hide left tree elements during slide
+			tree.children().hide();
+			
+			// Remove body left padding - the one used for the left sidebar
 			wikiBody.animate({
 				'padding-left': '0'
 			}, 500);			
+			
+			// Position toggle button
 			toggleButton.animate({
-				left: '-='+(slideWidth-13)
-				}, 500, function() {
-					jQuery("#leftSideTreeList *").show();
-				//jQuery("#wikiDocument").width(jQuery("#wiki").width()-marginRight);
-				
-				toggleButton.css('background-position', "-13px 0px");
-				toggleButton.attr("title",titleDivShowHideTree[1]);
-			});
+									left: '-='+(treeWidth-13)
+								}, 500
+								, function() {
+									tree.children().show();
+									toggleButton.css('background-position', "-13px 0px");
+									toggleButton.attr("title",titleDivShowHideTree[1]);
+								});
+		}
+		else
+		{
+			// Hide left tree elements, otherwise they look funny during the resize
+			tree.children().hide();
+			
+			// Re-add the body padding
+			wikiBody.animate({
+				'padding-left': '250px'
+			}, 500);	
+			
+			// Position toggle button
+			toggleButton.animate({
+								  left: '+='+(treeWidth-13)
+								}, 500
+								, function() {
+									tree.children().show();		
+									toggleButton.css('background-position', "0px 0px");
+									toggleButton.attr("title",titleDivShowHideTree[0]);
+								});								
 		}
     });
-	
-	if (jQuery("input[name=title]").length && jQuery("input[name=title]").hasClass("inputTypeText"))
-	{
-		jQuery("input[name=title]").focus();
-	}
-	jQuery("div.sitemap").addClass("hide");
 });
 
 jQuery(window).load(function() {
     docHeight = jQuery("#wikiBody").height();
     resizeDiv(docHeight);
+	
+	// Prepare tooltip for Show/Hide toggle button
     if (jQuery("#showHideTree").length > 0)
     {
 		titleDivShowHideTree = jQuery("#showHideTree").attr("title").split("/");
@@ -242,20 +246,6 @@ jQuery(window).load(function() {
     }
 });
 
-jQuery(function() {
-	/*
-    jQuery("#leftSideTreeList").resizable({
-	maxHeight: docHeight,
-	maxWidth: 350,
-	minHeight: docHeight,
-	minWidth: 200,
-	resize: function() {
-	    resizeDiv(docHeight);
-	}
-    });
-	*/
-    
-});
 jQuery(window).resize(function(){
     docHeight = jQuery("#wikiBody").height();
     resizeDiv(docHeight);
