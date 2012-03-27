@@ -156,12 +156,7 @@ class WikiView extends Wiki
 		
 		$oDocument = $oDocumentModel->getDocument(0, $this->grant->manager); 
 		$oDocument->setDocument($document_srl);
-		
-		if(!Mobile::isFromMobilePhone() && $this->module_info->markup_type == 'xe_wiki_markup') 
-		{
-			$oDocument->variables['content'] = nl2br($oDocument->get('content')); 
-		}
-		
+				
 		$oDocument->add('module_srl', $this->module_srl);
 		
 		if($oDocument->isExists()) 
