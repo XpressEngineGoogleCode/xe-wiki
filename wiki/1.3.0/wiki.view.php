@@ -91,16 +91,30 @@ class WikiView extends Wiki
 		$oDocumentModel = &getModel('document'); 
 		$document_srl = Context::get('document_srl'); 
 		$page = Context::get('page'); 
+		$entry = Context::get('entry');
+		
+		if(!$document_srl) 
+		{
+			if(!$entry) 
+			{
+				$root = $oWikiModel->getRootDocument($this->module_info->module_srl);
+				$document_srl = $root->document_srl; 
+				$entry = $oDocumentModel->getAlias($document_srl); 
+				Context::set('entry', $entry);
+			}
+			$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
+			if(!$document_srl) 
+			{
+				$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
+			}
+		}		
 		
 		$oDocument = $oDocumentModel->getDocument($document_srl);
 		if(!$oDocument->isExists())
 		{
 			return $this->stop('msg_invalid_request'); 
 		}
-		
-		$entry = $oDocument->getTitleText(); 
-		Context::set('entry', $entry); 
-		
+				
 		$output = $oDocumentModel->getHistories($document_srl, 10, $page);
 		if(!$output->toBool() || !$output->data) 
 		{
