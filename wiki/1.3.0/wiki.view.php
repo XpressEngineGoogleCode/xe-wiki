@@ -354,7 +354,7 @@ class WikiView extends Wiki
 			$oDocument = $oDocumentModel->getDocument($document_srl);
 			if($oDocument->isExists()) 
 			{
-				$this->_handleWithExistingDocument($oDocument); 
+				// Load next and previous documents before parsing content, otherwise extra_vars are overriden
 				list($prev_document_srl, $next_document_srl) = $oWikiModel->getPrevNextDocument($this->module_srl, $document_srl);
 				if($prev_document_srl) 
 				{
@@ -365,6 +365,8 @@ class WikiView extends Wiki
 					Context::set('oDocumentNext', $oDocumentModel->getDocument($next_document_srl)); 
 				}
 				$this->addToVisitLog($entry);
+				
+				$this->_handleWithExistingDocument($oDocument); 
 			}
 			else 
 			{
@@ -687,7 +689,8 @@ class WikiView extends Wiki
 			}
 		}
 		
-		$content = $oDocument->getContent(FALSE, FALSE, FALSE, FALSE); $content = $this->_renderWikiContent($oDocument->document_srl, $content);
+		$content = $oDocument->getContent(FALSE, FALSE, FALSE, FALSE); 
+		$content = $this->_renderWikiContent($oDocument->document_srl, $content);
 		// Retrieve documents that link here and that this doc links to
 		$oWikiModel = &getModel('wiki'); 
 		$inbound_links = $oWikiModel->getInboundLinks($oDocument->document_srl); 
