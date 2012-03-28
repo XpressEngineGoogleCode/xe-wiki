@@ -7,7 +7,7 @@
 <!--@end-->
 <form action="./" method="post" ruleset="{$ruleset}" class="wikiEditor" >
 	<input type="hidden" name="act" value="{$act_insert}" />
-	<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent','mid',$mid,'entry',$entry)}" />
+	<input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent','mid',$mid,'entry',$entry, 'document_srl', '')}" />
 	<input type="hidden" name="module" value="wiki" />
 	<input type="hidden" name="mid" value="{$mid}" />
 	<!--@if($oComment) -->

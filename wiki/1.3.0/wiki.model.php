@@ -261,7 +261,7 @@
 			$documents_tree_copy = $documents_tree;
 			foreach($documents_tree_copy as $key => $value){
 				$node = &$documents_tree[$key];
-				$node->href = getSiteUrl('','mid',$mid,'entry',$oDocumentModel->getAlias($node->document_srl));
+				$node->href = getSiteUrl('','mid',$mid,'entry',$oDocumentModel->getAlias($node->document_srl), 'document_srl', '');
 				if(!isset($documents_tree[$node->document_srl]->type)){
 					if($node->parent_srl == 0)
 						$documents_tree[$node->document_srl]->type = 'root';

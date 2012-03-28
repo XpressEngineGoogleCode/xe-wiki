@@ -16,7 +16,7 @@
     <!--@foreach($document_list as $val)-->
         <tr>
             <td class="title">
-                <a href="{urldecode(getUrl('','mid',$mid,'entry',$val->get('alias')))}">{$val->getTitle()}</a>
+                <a href="{urldecode(getUrl('','mid',$mid,'entry',$val->get('alias'), 'document_srl', ''))}">{$val->getTitle()}</a>
             </td>
             <td class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$val->getNickName()}</a></td>
             <td class="date">{$val->getRegdate("Y.m.d H:i")}</td>

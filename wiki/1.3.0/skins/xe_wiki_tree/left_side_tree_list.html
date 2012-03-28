@@ -31,9 +31,9 @@
 		<!--@if($val->childs)-->
 		<!--@end-->
 		<!--@if(isset($oDocument) && ($val->document_srl == $oDocument->document_srl || $val->title == $oDocument->get('title') || $entry == $oDocumentModel->getAlias($val->document_srl) || $alias == $oDocumentModel->getAlias($val->document_srl)))-->
-			<a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'entry',$oDocumentModel->getAlias($val->document_srl))}"><b>{$val->title}</b></a>
+			<a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'entry',$oDocumentModel->getAlias($val->document_srl), 'document_srl', '')}"><b>{$val->title}</b></a>
 		<!--@else-->
-		    <a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'entry',$oDocumentModel->getAlias($val->document_srl))}">{$val->title}</a>
+		    <a href="{getSiteUrl($site_module_info->domain, '','mid',$mid,'entry',$oDocumentModel->getAlias($val->document_srl), 'document_srl', '')}">{$val->title}</a>
 		<!--@end-->
 		<!--@if($val->childs)-->
 		{@$_pDepth++}
