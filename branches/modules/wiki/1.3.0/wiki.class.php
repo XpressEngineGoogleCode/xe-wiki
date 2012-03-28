@@ -108,7 +108,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	 */
 	function getFullLink($document_name) 
 	{
-		return getUrl('', 'mid', $this->module_info->mid, 'entry', $document_name);
+		return getUrl('', 'mid', $this->module_info->mid, 'entry', $document_name, 'document_srl', '');
 	}
 	
 	/**

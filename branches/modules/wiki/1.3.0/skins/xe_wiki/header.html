@@ -74,7 +74,7 @@
                 <span class="ipAddress" cond="$grant->manager || $module_info->display_ip_address!='N'">{$oDocument->getIpaddress()}</span>
                 <!--@if(!$history && ($oDocument->isExists()||$use_history != 'N'))-->
                 <div class="command">
-					<a cond="$oDocument->isExists()&& $act!='dispWikiEditPage' && $grant->write_document" href="{getUrl('act','dispWikiEditPage','entry',$entry)}">{$lang->cmd_edit}</a>
+					<a cond="$oDocument->isExists()&& $act!='dispWikiEditPage' && $grant->write_document" href="{getUrl('act','dispWikiEditPage','entry',$entry, 'document_srl', '')}">{$lang->cmd_edit}</a>
 					<button cond="$oDocument->isExists() && $grant->delete_document" type="button" class="text" onclick="if(confirm('{$lang->confirm_delete}')) { doDeleteWiki('{$oDocument->document_srl}'); }">{$lang->cmd_delete}</button>
 					<a cond="$use_history != 'N'" href="{getUrl('act','dispWikiHistory','document_srl',$oDocument->document_srl,'history_srl','')}">{$lang->histories}</a>
                 </div>
@@ -99,7 +99,7 @@
     <div class="visitLog" cond="$visit_log">
         {@ $bFirst = true; }
         <!--@foreach($visit_log as $_entry)-->
-            <!--@if(!$bFirst)--> > <!--@else-->{@ $bFirst = false; }<!--@end--> <a href="{getUrl('entry',$_entry)}">{$_entry}</a>
+            <!--@if(!$bFirst)--> > <!--@else-->{@ $bFirst = false; }<!--@end--> <a href="{getUrl('entry',$_entry, 'document_srl', '')}">{$_entry}</a>
         <!--@end-->
     </div>
     <!--@end-->

@@ -474,11 +474,11 @@ class WikiView extends Wiki
 			$site_module_info = Context::get('site_module_info');
 			if($document_srl) 
 			{
-				$url = getSiteUrl($site_module_info->document, '', 'mid', $this->module_info->mid, 'entry', $oDocument->get('alias'));
+				$url = getSiteUrl($site_module_info->document, '', 'mid', $this->module_info->mid, 'entry', $oDocument->get('alias'), 'document_srl', '');
 			}
 			else 
 			{
-				$url = getSiteUrl($site_module_info->document, '', 'mid', $this->module_info->mid, 'entry', $entry); 
+				$url = getSiteUrl($site_module_info->document, '', 'mid', $this->module_info->mid, 'entry', $entry, 'document_srl', ''); 
 			}
 			$this->setRedirectUrl($url);
 		}
@@ -696,7 +696,7 @@ class WikiView extends Wiki
 		$inbound_links_html = '';
 		foreach($inbound_links as $link) 
 		{
-			$inbound_links_html .= '<p><a href="' . getUrl('mid', $this->module_info->mid, 'entry', $link->alias) . '">' . $link->title . '</a> </p>';
+			$inbound_links_html .= '<p><a href="' . getUrl('mid', $this->module_info->mid, 'entry', $link->alias, 'document_srl', '') . '">' . $link->title . '</a> </p>';
 		}
 		if($inbound_links_html != '')
 		{
@@ -706,7 +706,7 @@ class WikiView extends Wiki
 		$outbound_links_html = '';
 		foreach($outbound_links as $link)
 		{
-			$outbound_links_html .= '<p><a href="' . getUrl('mid', $this->module_info->mid, 'entry', $link->alias) . '">' . $link->title . '</a></p>';
+			$outbound_links_html .= '<p><a href="' . getUrl('mid', $this->module_info->mid, 'entry', $link->alias, 'document_srl', '') . '">' . $link->title . '</a></p>';
 		}
 		if($outbound_links_html != '') 
 		{
