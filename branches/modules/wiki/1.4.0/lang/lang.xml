@@ -38,7 +38,7 @@
 	</item>
 	<item name="cmd_view_info">
 		<value xml:lang="ko"><![CDATA[위키 정보]]></value>
-		<value xml:lang="en"><![CDATA[Wiki Information]]></value>
+		<value xml:lang="en"><![CDATA[Setup]]></value>
 		<value xml:lang="jp"><![CDATA[wiki情報]]></value>
 		<value xml:lang="zh-CN"><![CDATA[维基信息]]></value>
 		<value xml:lang="zh-TW"><![CDATA[維基資訊]]></value>
