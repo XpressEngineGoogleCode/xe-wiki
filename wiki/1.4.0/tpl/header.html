@@ -1,22 +1,43 @@
 <load target="js/wiki_admin.js" />
-<h1 class="h1">{$lang->wiki} {$lang->cmd_management}</h1>
-<block cond="$module_info">
-	<h2 class="h2" cond="$module_info->mid">
-		{$module_info->mid} <block cond="$module_info->is_default=='Y'">({$lang->is_default})</block> | <a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid)}">View</a>
-	</h2>
-	<div class="cnb">
-		<ul>
-			<li cond="$module=='admin'" class="active"|cond="$act=='dispWikiAdminContent'"><a href="{getUrl('act','dispWikiAdminContent','module_srl','')}">{$lang->cmd_wiki_list}</a></li>
-			<li cond="$module!='admin'"><a href="{getUrl('act','')}">{$lang->cmd_back}</a></li>
-			<li class="active"|cond="$act=='dispWikiAdminWikiInfo'||$act=='dispWikiAdminInsertWiki'"><a href="{getUrl('act','dispWikiAdminInsertWiki')}">{$lang->cmd_view_info}</a></li>
-			<li class="active"|cond="$act=='dispWikiAdminArrange'"><a href="{getUrl('act','dispWikiAdminArrange')}">{$lang->arrange_list}</a></li>
-			<li class="active"|cond="$act=='dispWikiAdminGrantInfo'"><a href="{getUrl('act','dispWikiAdminGrantInfo')}">{$lang->cmd_manage_grant}</a></li>
-			<li class="active"|cond="$act=='dispWikiAdminWikiAdditionSetup'"><a href="{getUrl('act','dispWikiAdminWikiAdditionSetup')}">{$lang->cmd_addition_setup}</a></li>
-			<li class="active"|cond="$act=='dispWikiAdminSkinInfo'"><a href="{getUrl('act','dispWikiAdminSkinInfo')}">{$lang->cmd_manage_skin}</a></li>
-		</ul>
-	</div>
-</block>
-<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
-	<p>{$XE_VALIDATOR_MESSAGE}</p>
+<h1 class="cleared">
+	<!--@if($module_info->mid)-->
+		{$module_info->mid}
+		<!--@if($module_info->is_default=='Y')-->
+			({$lang->is_default})
+		<!--@end-->
+	<!--@else-->
+		{$lang->wiki} {$lang->cmd_management}
+	<!--@end-->
+	<span class="xe-ui-nav">
+		<!--@if($module_info->mid)-->
+			<!--@if($module=='admin')--><a href="{getUrl('act','dispWikiAdminContent','module_srl','')}" class="xe-ui-button-gray <!--@if($act=='dispWikiAdminContent')-->disabled<!--@end-->">{$lang->cmd_back}</a><!--@end-->
+			<!--<!--@if($module=='admin')--><a href="{getUrl('act','')}" class="xe-ui-button-gray">{$lang->cmd_back}</a><!--@end-->-->
+			<a href="{getUrl('act','dispWikiAdminInsertWiki')}" class="xe-ui-button-gray <!--@if($act=='dispWikiAdminWikiInfo'||$act=='dispWikiAdminInsertWiki')-->disabled<!--@end-->">{$lang->cmd_view_info}</a>
+			<a href="{getUrl('act','dispWikiAdminWikiAdditionSetup','module_srl',$module_info->module_srl)}" class="xe-ui-button-gray <!--@if($act=='dispWikiAdminWikiAdditionSetup')-->disabled<!--@end-->">{$lang->cmd_addition_setup}</a>
+			<!--<a href="{getUrl('act','dispWikiAdminArrange')}" class="xe-ui-button-gray <!--@if($act=='dispWikiAdminArrange')-->disabled<!--@end-->">{$lang->arrange_list}</a>-->
+			<a href="{getUrl('act','dispWikiAdminGrantInfo','module_srl',$module_info->module_srl)}" class="xe-ui-button-gray <!--@if($act=='dispWikiAdminGrantInfo')-->disabled<!--@end-->">{$lang->cmd_manage_grant}</a>
+			<a href="{getUrl('act','dispWikiAdminSkinInfo','module_srl',$module_info->module_srl)}" class="xe-ui-button-gray <!--@if($act=='dispWikiAdminSkinInfo')-->disabled<!--@end-->">{$lang->cmd_manage_skin}</a>
+		<!--@end-->
+	</span>
+</h1>
+<div class="xe-ui-title-separator">
+    <hr />
 </div>
-
+<div id="content" class="cleared">
+		<div cond="$XE_VALIDATOR_MESSAGE" class="xe-ui-message {$XE_VALIDATOR_MESSAGE_TYPE} gradient cleared">
+	        <a href="#" style="float: right;" onclick="jQuery(this).parent().remove();return false;" class="xe-ui-button-gray gradient">Dismiss</a>
+	        <p>{$XE_VALIDATOR_MESSAGE}</p>
+	    </div>
+	    <!--
+	    <!--@if($module_info->mid)-->
+	    <h2>
+			{$module_info->mid}
+			<!--@if($module_info->is_default=='Y')-->
+				({$lang->is_default})
+			<!--@end-->
+		</h2>
+		<span class="f-right">
+			<a href="{getSiteUrl($module_info->domain,'','mid',$module_info->mid)}" class="xe-ui-button-gray">{$lang->view}</a>
+		</span>
+		<!--@end-->
+		-->

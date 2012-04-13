@@ -1,70 +1,108 @@
 <include target="./header.html" />
-<form action="./" method="get" onsubmit="return doChangeCategory(this);" id="fo_list">
-<div class="table">
-	<table cellspacing="0">
-		<caption>Total {number_format($total_count)}, Page {number_format($page)}/{number_format($total_page)}</caption>
-		<thead>
-			<tr>
-				<th scope="col" class="nowr">{$lang->no}</th>
-				<th scope="col" class="nowr">
-					<input type="hidden" name="module" value="{$module}" />
+
+    <div class="xe-ui-panel">
+        <div class="xe-ui-panel-content cleared">
+        	<form action="./" method="get" onsubmit="return doChangeCategory(this);" id="fo_list">
+        		<p>
+        			<input type="hidden" name="module" value="{$module}" />
 					<input type="hidden" name="act" value="{$act}" />
-					<select name="module_category_srl">
+					<label>{$lang->select} {$lang->module_category}: </label>
+					<select name="module_category_srl" onchange="jQuery('#fo_list').submit();" class="xe-ui-panel-select">
 						<option value="">{$lang->module_category}</option>
 						<option value="0" selected="selected"|cond="$module_category_srl==='0'">{$lang->not_exists}</option>
 						<option loop="$module_category=>$key,$val" value="{$key}" selected="selected"|cond="$module_category_srl==$key">{$val->title}</option>
 						<option value="">---------</option>
 						<option value="-1">{$lang->cmd_management}</option>
 					</select>
-					<input type="submit" name="go_button" id="go_button" value="GO" />
-				</th>
-				<th scope="col" class="nowr">{$lang->mid}</th>
-				<th scope="col" class="title">{$lang->browser_title}</th>
-				<th scope="col" class="nowr">{$lang->regdate}</th>
-				<th scope="col" class="nowr">&nbsp;</th>
-				<th scope="col"><input type="checkbox" onclick="XE.checkboxToggleAll()" /></th>
-			</tr>
-		</thead>
-		<tbody>
-			<!--@foreach($wiki_list as $no => $val)-->
-			<tr>
-				<td class="nowr">{$no}</td>
-				<td class="nowr">
-					<!--@if(!$val->module_category_srl)-->
-						<!--@if($val->site_srl)-->
-						{$lang->virtual_site}
-						<!--@else-->
-						{$lang->not_exists}
-						<!--@end-->
-					<!--@else-->
-						{$module_category[$val->module_category_srl]->title}
-					<!--@end-->
-				</td>
-				<td class="nowr">{htmlspecialchars($val->mid)}</td>
-				<td class="title"><a href="{getSiteUrl($val->domain,'','mid',$val->mid)}" onclick="window.open(this.href); return false;">{$val->browser_title}</a></td>
-				<td class="nowr">{zdate($val->regdate,"Y-m-d")}</td>
-				<td class="nowr">
-					<a href="{getUrl('act','dispWikiAdminInsertWiki','module_srl',$val->module_srl)}">{$lang->cmd_setup}</a>
-					<a href="./?module=module&amp;act=dispModuleAdminCopyModule&amp;module_srl={$val->module_srl}" onclick="popopen(this.href);return false;">{$lang->cmd_copy}</a>
-					<a href="{getUrl('act','dispWikiAdminDeleteWiki','module_srl', $val->module_srl)}" class="buttonSet buttonDelete">{$lang->cmd_delete}</a>
-				</td>
-				<td><input type="checkbox" name="cart" value="{$val->module_srl}" /></td>
-			</tr>
-			<!--@end-->
-		</tbody>
-	</table>
+				</p>
+				<table cellpadding="0" cellspacing="0" class="xe-ui-form-table">
+					<tbody>
+					    <tr>
+						    <td>
+								<table cellpadding="0" cellspacing="0" class='xe-ui-table'>
+									<!--<caption>Total {number_format($total_count)}, Page {number_format($page)}/{number_format($total_page)}</caption>-->
+									<thead>
+										<tr>
+											<th scope="col" class="nowr">{$lang->no}</th>
+											<th scope="col" class="nowr">
+											   {$lang->module_category}	
+											</th>
+											<th scope="col">{$lang->mid}</th>
+											<th scope="col" class="title">{$lang->browser_title}</th>
+											<th scope="col">{$lang->regdate}</th>
+											<th scope="col">{$lang->cmd_setup}</th>
+											<th scope="col">{$lang->cmd_copy}</th>
+											<th scope="col">{$lang->cmd_delete}</th>
+											<th scope="col"><input type="checkbox" onclick="checkAllPrettyCheckboxes(jQuery(this),jQuery(this).closest('table').find('tbody'))" /></th>
+										</tr>
+									</thead>
+									<tbody>
+										<!--@foreach($wiki_list as $no => $val)-->
+										<tr>
+											<td class="nowr">{$no}</td>
+											<td class="nowr">
+												<!--@if(!$val->module_category_srl)-->
+													<!--@if($val->site_srl)-->
+													{$lang->virtual_site}
+													<!--@else-->
+													{$lang->not_exists}
+													<!--@end-->
+												<!--@else-->
+													{$module_category[$val->module_category_srl]->title}
+												<!--@end-->
+											</td>
+											<td class="nowr">{htmlspecialchars($val->mid)}</td>
+											<td class="title"><a href="{getSiteUrl($val->domain,'','mid',$val->mid)}" onclick="window.open(this.href); return false;">{$val->browser_title}</a></td>
+											<td class="nowr">{zdate($val->regdate,"Y-m-d")}</td>
+											<td class="center"><a class="xe-ui-button-gray" href="{getUrl('act','dispWikiAdminInsertWiki','module_srl',$val->module_srl)}">{$lang->cmd_setup}</a></td>
+											<td class="center"><a class="xe-ui-button-gray" href="./?module=module&amp;act=dispModuleAdminCopyModule&amp;module_srl={$val->module_srl}" onclick="popopen(this.href);return false;">{$lang->cmd_copy}</a></td>
+											<td class="center"><a class="buttonDelete xe-ui-button-gray" href="{getUrl('act','dispWikiAdminDeleteWiki','module_srl', $val->module_srl)}">{$lang->cmd_delete}</a></td>
+											<td class="center"><input type="checkbox" id="cart_{$val->module_srl}" name="cart" value="{$val->module_srl}" /></td>
+										</tr>
+										<!--@end-->
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+			<p class="f-left">
+				<a class="xe-ui-button-green" href="{getUrl('act','dispWikiAdminInsertWiki','module_srl','')}">{$lang->cmd_make}...</a>
+			</p>
+		    <p class="f-right">
+				<a class="xe-ui-button-gray" href="{getUrl('','module','module','act','dispModuleAdminModuleSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_setup}...</a>
+				<a class="xe-ui-button-gray" href="{getUrl('','module','module','act','dispModuleAdminModuleAdditionSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_addition_setup}...</a>
+				<a class="xe-ui-button-gray" href="{getUrl('','module','module','act','dispModuleAdminModuleGrantSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_manage_grant}...</a>
+				
+			</p>
+		</div>
+		<div class="xe-ui-panel-controller">
+            <hr />
+            <p class="center">
+                <a href="{getUrl('page', '')}" class="xe-ui-button-gray pagination first"><img src="{getFullUrl()}common/img/pagination_left.png"/></a>
+	            <block cond="$page_navigation->first_page + $page_navigation->page_count > $page_navigation->last_page && $page_navigation->page_count != $page_navigation->total_page">
+	                {@$isGoTo = true}
+	                <a href="{getUrl('page', '')}" class="xe-ui-button-gray pagination">1</a>
+	                <a href="#goTo" class="tgAnchor" title="{$lang->cmd_go_to_page}">...</a>
+	            </block>
+	            <!--@while($page_no = $page_navigation->getNextPage())-->
+	            {@$last_page = $page_no}
+	            <a href="#" cond="$page_no == $page" class="xe-ui-button-gray pagination disabled">{$page_no}</a>
+	            <a cond="$page_no != $page" href="{getUrl('page', $page_no)}" class="xe-ui-button-gray pagination">{$page_no}</a>
+	            <!--@end-->
+	            <block cond="$last_page != $page_navigation->last_page">
+	                {@$isGoTo = true}
+	                <a href="#goTo" class="tgAnchor" title="{$lang->cmd_go_to_page}">...</a>
+	                <a href="{getUrl('page', $page_navigation->last_page)}" class="xe-ui-button-gray pagination">{$page_navigation->last_page}</a>
+	            </block>
+	            <a href="{getUrl('page', $page_navigation->last_page)}" class="xe-ui-button-gray pagination last"><img src="{getFullUrl()}common/img/pagination_right.png"/></a>
+            </p>
+        </div>
+	</div>
 </div>
-</form>
 
-<div class="btnArea">
-	<span class="btn"><a href="{getUrl('','module','module','act','dispModuleAdminModuleSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_setup}...</a></span>
-	<span class="btn"><a href="{getUrl('','module','module','act','dispModuleAdminModuleAdditionSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_addition_setup}...</a></span>
-	<span class="btn"><a href="{getUrl('','module','module','act','dispModuleAdminModuleGrantSetup')}" onclick="doCartSetup(this.href); return false;">{$lang->cmd_manage_grant}...</a></span>
-	<span class="etc">
-		<span class="btn"><a href="{getUrl('act','dispWikiAdminInsertWiki','module_srl','')}">{$lang->cmd_make}...</a></span>
-	</span>
-</div>
-
+<!--
 <div class="pagination">
 	<a href="{getUrl('page','','module_srl','')}" class="direction">&laquo; {$lang->first_page}</a> 
 	<!--@while($page_no = $page_navigation->getNextPage())-->
@@ -73,3 +111,4 @@
 	<!--@end-->
 	<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="direction">{$lang->last_page} &raquo;</a>
 </div>
+-->
