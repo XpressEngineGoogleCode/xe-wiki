@@ -42,6 +42,14 @@ class WikiAdminController extends Wiki
 		{
 			$output = $oModuleController->insertModule($args); 
 			$msg_code = 'success_registed';
+			
+			if($output->toBool())
+			{
+				// If insert was succesful, enable document history
+				$document_config->use_history = 'Y'; 
+				$oModuleController = &getController('module'); 
+				$oModuleController->insertModulePartConfig('document', $output->get('module_srl'), $document_config);
+			}
 		}
 		else 
 		{
