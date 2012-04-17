@@ -41,9 +41,11 @@ class WikiView extends Wiki
 		Context::addJsFile($this->module_path . 'tpl/js/wiki.js'); 
 		Context::set('grant', $this->grant); 
 		Context::set('langs', Context::loadLangSupported());
-		$editor_config = $oModuleModel->getModulePartConfig('editor', $this->module_info->module_srl);		
 		
-		if(!$editor_config && $this->module_info->markup_type != 'xe_wiki_markup') 
+		// Force simple textarea if markup is Markdown, Google Code or MediaWiki 
+		$editor_config = $oModuleModel->getModulePartConfig('editor', $this->module_info->module_srl);		
+		if($this->module_info->markup_type != 'xe_wiki_markup' 
+				&& (!$editor_config || $editor_config->sel_editor_colorset != 'white_text_usehtml'))
 		{
 			$editor_config->editor_skin = 'xpresseditor'; 
 			$editor_config->sel_editor_colorset = 'white_text_usehtml'; 
