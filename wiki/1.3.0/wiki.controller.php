@@ -78,6 +78,21 @@ class WikiController extends Wiki
 		// Modified if it already exists
 		if($oDocument->isExists() && $oDocument->document_srl == $obj->document_srl) 
 		{
+			// Check if no one edited the document in the meantime, not to override their changes
+			$output = $oDocumentModel->getHistories($oDocument->document_srl, 1, 1);
+			if($output->toBool() && $output->data) // If we did find previous edits
+			{
+				$history = array_pop($output->data);
+				$latest_doc_edit = $history->history_srl;
+				$previous_doc_edit = Context::get('latest_doc_edit');
+				if((!$previous_doc_edit && $latest_doc_edit) 
+						|| ($previous_doc_edit < $latest_doc_edit))
+				{
+					return new Object(-1, "Your document was edited someplace else!");
+				}
+				
+			}
+			
 			$output = $oDocumentController->updateDocument($oDocument, $obj);
 			
 			// Have been successfully modified the hierarchy/ alias change

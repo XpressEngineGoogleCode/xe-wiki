@@ -164,6 +164,13 @@ class WikiView extends Wiki
 		if($oDocument->isExists()) 
 		{
 			$oDocument->add('alias', $oDocumentModel->getAlias($document_srl));
+			$output = $oDocumentModel->getHistories($document_srl, 1, 1);
+			if($output->toBool() && $output->data)
+			{
+				$history = array_pop($output->data);
+				$latest_doc_edit = $history->history_srl;
+				Context::set('latest_doc_edit', $latest_doc_edit);
+			}
 		}
 		else 
 		{

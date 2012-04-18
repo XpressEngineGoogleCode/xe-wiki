@@ -31,7 +31,8 @@
 	<input type="hidden" name="act" value="procWikiInsertDocument" />
 	<input type="hidden" name="module" value="wiki" />
     <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl)}" />
-
+	<input type="hidden" name="latest_doc_edit" value="{$latest_doc_edit}" />
+	
 	<!--@if($history)-->
 	<input type="hidden" name="content" value="{htmlspecialchars($history->content)}" />
 	<!--@else-->
