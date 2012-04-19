@@ -511,5 +511,7 @@ XpressEngine 维基系统使用 [Markdown](http://daringfireball.net/projects/ma
 		<value xml:lang="en"><![CDATA[Links in this page:]]></value>
 		<value xml:lang="zh-CN"><![CDATA[页面中的链接:]]></value>
 	</item>					
-
+	<item name="confirm_document_override">
+		<value xml:lang="en"><![CDATA[The document has been updated by someone else. Do you still want to save your changes?]]></value>
+	</item>					
 </lang>

@@ -77,22 +77,7 @@ class WikiController extends Wiki
 		
 		// Modified if it already exists
 		if($oDocument->isExists() && $oDocument->document_srl == $obj->document_srl) 
-		{
-			// Check if no one edited the document in the meantime, not to override their changes
-			$output = $oDocumentModel->getHistories($oDocument->document_srl, 1, 1);
-			if($output->toBool() && $output->data) // If we did find previous edits
-			{
-				$history = array_pop($output->data);
-				$latest_doc_edit = $history->history_srl;
-				$previous_doc_edit = Context::get('latest_doc_edit');
-				if((!$previous_doc_edit && $latest_doc_edit) 
-						|| ($previous_doc_edit < $latest_doc_edit))
-				{
-					return new Object(-1, "Your document was edited someplace else!");
-				}
-				
-			}
-			
+		{			
 			$output = $oDocumentController->updateDocument($oDocument, $obj);
 			
 			// Have been successfully modified the hierarchy/ alias change
@@ -171,6 +156,47 @@ class WikiController extends Wiki
 		$this->setRedirectUrl($url);
 	}
 
+	/**
+	 * @brief Checks to see if document was edited by someone else, so that we won't override their changes on save
+	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @access public
+	 * @return
+	 * 
+	 * Called through AJAX, returns JSON
+	 */
+	function procWikiCheckIfDocumentWasUpdated()
+	{
+		// Force json response
+		Context::setRequestMethod('JSON');
+		
+		$document_srl = Context::get('document_srl');
+		if(!$document_srl) 
+		{
+			$this->add('updated', false);
+			return;
+		}
+		
+		$previous_doc_edit = Context::get('latest_doc_edit');
+		
+		$oDocumentModel = &getModel('document');
+		$output = $oDocumentModel->getHistories($document_srl, 1, 1);
+		if($output->toBool() && $output->data) // If we did find previous edits
+		{
+			$history = array_pop($output->data);
+			$latest_doc_edit = $history->history_srl;
+			if((!$previous_doc_edit && $latest_doc_edit) 
+					|| ($previous_doc_edit < $latest_doc_edit))
+			{
+				$this->add('updated', true);
+				return;				
+			}
+
+		}		
+		
+		$this->add('updated', false);
+		return;		
+	}
+	
 	/**
 	 * @brief Delete database references to links in current document
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
