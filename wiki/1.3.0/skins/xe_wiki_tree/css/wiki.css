@@ -963,3 +963,13 @@ div.tag, div.wikiNavigation {
     top: 155px;
     z-index: 2;
 }
+
+#toggleWikiHelp {
+	margin:10px;
+}
+
+#wikiHelp {
+	margin:10px;
+	padding:10px;
+	background-color:#EFF5FB;
+}
