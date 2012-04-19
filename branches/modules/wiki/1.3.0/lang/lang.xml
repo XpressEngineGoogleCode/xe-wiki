@@ -513,5 +513,111 @@ XpressEngine 维基系统使用 [Markdown](http://daringfireball.net/projects/ma
 	</item>					
 	<item name="confirm_document_override">
 		<value xml:lang="en"><![CDATA[The document has been updated by someone else. Do you still want to save your changes?]]></value>
-	</item>					
+	</item>			
+	<item name="wiki_language_help">
+		<value xml:lang="en"><![CDATA[Wiki language help]]></value>
+	</item>				
+	<item name="markdown_help">
+		<value xml:lang="en"><![CDATA[
+		# Heading 1 #
+		## Heading 2 ##
+		### Heading 3 ##############
+		
+		*italic*, **bold**
+		escape \*
+		
+		- Use a minus sign for a bullet list
+		+ Or plus sign
+		* Or an asterisk
+		1. Numbered lists are easy
+		2. Markdown keeps track of the numbers for you
+		7. So this will be item 3.
+		
+		Links:
+		&nbsp;&nbsp;  http://site/page
+		&nbsp;&nbsp;  Add description: [Page description](http://site/page)
+		&nbsp;&nbsp;  Link to pages in the same wiki: [Page description](page_alias)
+		Smart links:
+		&nbsp;&nbsp;  Add a name or id to your link: [Here's a nice link][1]
+		&nbsp;&nbsp;  And then detail it in the page footer for clarity: [1]: www.google.com
+		
+		For more help, take a look at:
+		<ul>
+		<li> PHP Markdown extra - <a href=http://michelf.com/projects/php-markdown/extra/ target=_blank>http://michelf.com/projects/php-markdown/extra/</a>
+		<li> Markdown's official reference - <a href=http://daringfireball.net/projects/markdown/syntax target=_blank>http://daringfireball.net/projects/markdown/syntax</a>
+		</ul>
+		]]></value>
+	</item>		
+	<item name="googlecode_markup_help">
+		<value xml:lang="en"><![CDATA[
+		=Heading1=
+		==Heading2==
+		===Heading3===
+
+		*bold*     _italic_
+		`inline code`
+		escape: `*`
+
+		Indent lists 2 spaces:
+		* bullet item
+		# numbered list
+
+		{{{
+		verbatim code block
+		}}}
+
+		Horizontal rule
+		---- 
+
+		WikiWordLink
+		[http://domain/page label]
+		http://domain/page
+
+		|| table || cells ||		
+		
+		For more help, take a look at <a href=http://code.google.com/p/support/wiki/WikiSyntax target=_blank>http://code.google.com/p/support/wiki/WikiSyntax</a>
+		]]></value>
+	</item>		
+<item name="mediawiki_markup_help">
+		<value xml:lang="en"><![CDATA[
+		== Heading2 ==
+		=== Heading3 ===
+
+		'''bold'''     ''italic''
+		&lt;nowiki&gt;Escape wiki markup&lt;/nowiki&gt;
+
+		Lists
+		* bullet item
+		** deeper level	
+		# numbered list
+
+		Horizontal rule
+		---- 
+
+		Links
+		[[Internal_link]]
+		[[Internal_link | You should use page alias]]
+		
+		http://domain/page
+		[http://domain/page label]
+		
+		Table:
+		{|
+		|Orange
+		|Apple
+		|-
+		|Bread
+		|Pie
+		|-
+		|Butter
+		|Ice cream 
+		|}
+		
+		For more help, take a look at <a href=http://www.mediawiki.org/wiki/Help:Formatting target=_blank>http://www.mediawiki.org/wiki/Help:Formatting</a>
+		]]></value>
+	</item>		
+		
+	
+	
+	
 </lang>
