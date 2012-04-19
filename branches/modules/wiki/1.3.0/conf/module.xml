@@ -66,5 +66,6 @@
 		<action name="procWikiVerificationPassword" type="controller" standalone="true" ruleset="input_password" />
 		<action name="procWikiContentDiff" type="controller" standalone="true" />
 		<action name="procDispCommentEditor" type="controller" standalone="true" />
+		<action name="procWikiCheckIfDocumentWasUpdated" type="controller" standalone="true" />
     </actions>
 </module>
