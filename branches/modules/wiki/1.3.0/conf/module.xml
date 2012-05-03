@@ -38,6 +38,7 @@
         <action name="dispWikiContent" type="view" index="true" />
         <action name="dispWikiEditPage" type="view" />
         <action name="dispWikiHistory" type="view" />
+        <action name="dispWikiHistoryCompare" type="view" />
         <action name="dispWikiTitleIndex" type="view" />
         <action name="dispWikiTreeIndex" type="view" />
         <action name="dispWikiModifyTree" type="view" />

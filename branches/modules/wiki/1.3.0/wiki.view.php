@@ -132,6 +132,61 @@ class WikiView extends Wiki
 		
 		$this->setTemplateFile('document_histories');
 	}
+
+    // /index.php?mid=wiki1&act=dispWikiHistoryCompare&history_srl=123&old_history_srl=120
+    function dispWikiHistoryCompare()
+    {
+        $old_history_srl = Context::get('old_history_srl');
+        $history_srl = Context::get('history_srl');
+        $document_srl = Context::get('document_srl');
+
+        if(!$old_history_srl || !$document_srl)
+        {
+            return new Object(-1, 'msg_invalid_request');
+        }
+
+        $oDocumentModel = &getModel('document');
+
+        $oDocument = $oDocumentModel->getDocument($document_srl);
+        Context::set('oDocument', $oDocument);
+
+        $old_output = $oDocumentModel->getHistory($old_history_srl);
+        if(!$history_srl || $history_srl == $document_srl)
+        {
+            $output = $oDocument;
+            $output->content = $oDocument->get('content');
+        }
+        else
+        {
+            $output = $oDocumentModel->getHistory($history_srl);
+        }
+
+        // Include the diff class
+        require_once dirname(__FILE__).'/lib/Diff.php';
+
+        // Options for generating the diff
+        $options = array(
+            // 'ignoreNewLines' => true,
+            // 'ignoreWhitespace' => true,
+            // 'ignoreCase' => true,
+        );
+
+        // Initialize the diff class
+        $a = explode("\n", str_replace("\r", '', $old_output->content));
+        $b = explode("\n", str_replace("\r", '', $output->content));
+        $diff = new Diff($a, $b, $options);
+
+        // Generate a side by side diff
+        require_once dirname(__FILE__).'/lib/Diff/Renderer/Html/SideBySide.php';
+        $renderer = new Diff_Renderer_Html_SideBySide;
+        $diff_html = $diff->Render($renderer);
+
+        Context::set('old_output', $old_output);
+        Context::set('output', $output);
+        Context::set('diff_html', $diff_html);
+
+        $this->setTemplateFile('document_compare');
+    }
 	
 	/**
 	 * @brief Document editing screen
