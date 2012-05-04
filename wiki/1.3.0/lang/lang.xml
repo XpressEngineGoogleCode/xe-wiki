@@ -625,7 +625,9 @@ XpressEngine 维基系统使用 [Markdown](http://daringfireball.net/projects/ma
     <item name="diff_new_version">
         <value xml:lang="en"><![CDATA[New version]]></value>
     </item>
-	
+    <item name="compare">
+        <value xml:lang="en"><![CDATA[Compare]]></value>
+    </item>
 	
 	
 </lang>
