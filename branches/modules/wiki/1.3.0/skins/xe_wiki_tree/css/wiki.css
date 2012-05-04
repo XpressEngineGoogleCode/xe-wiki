@@ -973,3 +973,6 @@ div.tag, div.wikiNavigation {
 	padding:10px;
 	background-color:#EFF5FB;
 }
+#wikiDiff {
+    padding: 10px;
+}
