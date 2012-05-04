@@ -48,6 +48,28 @@ class wikiMobile extends wikiView {
 	}
 	$this->setTemplatePath($template_path);
     }
+
+	function displayWikiCommentList(){
+		$document_srl = Context::get('document_srl');
+		$oDocumentModel = &getModel('document');
+
+		$oDocument  = $oDocumentModel->getDocument($document_srl);
+
+		$_comment_list = $oDocument->getComments();
+		Context::set('oDocument', $oDocument);
+		Context::set('_comment_list', $_comment_list);
+
+		$this->setTemplateFile('comment');
+	}
+
+	function dispWikiAddComment() {
+		$document_srl = Context::get('document_srl');
+		$oDocumentModel = &getModel('document');
+
+		$oDocument  = $oDocumentModel->getDocument($document_srl);
+		Context::set('oDocument', $oDocument);
+		$this->setTemplateFile('comment_form');
+	}
 }
 
 ?>
