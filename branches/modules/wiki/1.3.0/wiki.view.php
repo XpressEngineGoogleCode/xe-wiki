@@ -99,10 +99,12 @@ class WikiView extends Wiki
 		{
 			if(!$entry) 
 			{
+				$oWikiModel = &getModel('wiki');
 				$root = $oWikiModel->getRootDocument($this->module_info->module_srl);
 				$document_srl = $root->document_srl; 
 				$entry = $oDocumentModel->getAlias($document_srl); 
 				Context::set('entry', $entry);
+				Context::set('document_srl', $document_srl);
 			}
 			$document_srl = $oDocumentModel->getDocumentSrlByAlias($this->module_info->mid, $entry);
 			if(!$document_srl) 
@@ -133,7 +135,9 @@ class WikiView extends Wiki
 		$this->setTemplateFile('document_histories');
 	}
 
-    // /index.php?mid=wiki1&act=dispWikiHistoryCompare&history_srl=123&old_history_srl=120
+    /**
+     * @return Object
+     */
     function dispWikiHistoryCompare()
     {
         $old_history_srl = Context::get('old_history_srl');
@@ -149,40 +153,61 @@ class WikiView extends Wiki
 
         $oDocument = $oDocumentModel->getDocument($document_srl);
         Context::set('oDocument', $oDocument);
+		$entry = $oDocumentModel->getAlias($document_srl);
+		Context::set('entry', $entry);
 
-        $old_output = $oDocumentModel->getHistory($old_history_srl);
+		// Set up old version
+        $output = $oDocumentModel->getHistory($old_history_srl);
+		$old_version = new stdClass;
+		$old_version->content = $output->content;
+		$old_version->regdate = $output->regdate;
+
+		// Set up new version (can be either history or document itself)
+		$new_version = new stdClass;
         if(!$history_srl || $history_srl == $document_srl)
         {
-            $output = $oDocument;
-            $output->content = $oDocument->get('content');
+            $new_version->content = $oDocument->get('content');
+			$new_version->regdate = $oDocument->get('last_update');
         }
         else
         {
             $output = $oDocumentModel->getHistory($history_srl);
+			$new_version->content = $output->content;
+			$new_version->regdate = $output->regdate;
         }
 
         // Include the diff class
         require_once dirname(__FILE__).'/lib/Diff.php';
 
-        // Options for generating the diff
-        $options = array(
-            // 'ignoreNewLines' => true,
-            // 'ignoreWhitespace' => true,
-            // 'ignoreCase' => true,
-        );
-
         // Initialize the diff class
-        $a = explode("\n", str_replace("\r", '', $old_output->content));
-        $b = explode("\n", str_replace("\r", '', $output->content));
-        $diff = new Diff($a, $b, $options);
+        $a = explode("\n", str_replace("\r", '', $old_version->content));
+        $b = explode("\n", str_replace("\r", '', $new_version->content));
+        $diff = new Diff($a, $b, array());
 
         // Generate a side by side diff
         require_once dirname(__FILE__).'/lib/Diff/Renderer/Html/SideBySide.php';
         $renderer = new Diff_Renderer_Html_SideBySide;
         $diff_html = $diff->Render($renderer);
+		if($diff_html == "")
+		{
+			$diff_html = Context::getLang('diff_no_differences');
+		}
+		else
+		{
+			// Table header is hardcoded in the Renderer class, so we need to customize it
+			$old_version_header = Context::getLang('diff_old_version');
+			$old_version_header .= '<br />';
+			$old_version_header .= zdate($old_version->regdate, 'Y.m.d H:i:s');
+			$diff_html = str_replace("Old Version", $old_version_header, $diff_html);
 
-        Context::set('old_output', $old_output);
-        Context::set('output', $output);
+			$new_version_header = Context::getLang('diff_new_version');
+			$new_version_header .= '<br />';
+			$new_version_header .= zdate($new_version->regdate, 'Y.m.d H:i:s');
+			$diff_html = str_replace("New Version", $new_version_header, $diff_html);
+		}
+
+        Context::set('old_version', $old_version);
+        Context::set('new_version', $new_version);
         Context::set('diff_html', $diff_html);
 
         $this->setTemplateFile('document_compare');
