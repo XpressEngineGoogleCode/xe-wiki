@@ -66,5 +66,7 @@
 		<action name="procWikiVerificationPassword" type="controller" standalone="true" ruleset="input_password" />
 		<action name="procWikiContentDiff" type="controller" standalone="true" />
 		<action name="procDispCommentEditor" type="controller" standalone="true" />
+		<action name="displayWikiCommentList" type="view" standalone="true"/>
+		<action name="dispWikiAddComment" type="view" standalone="true"/>
     </actions>
 </module>
