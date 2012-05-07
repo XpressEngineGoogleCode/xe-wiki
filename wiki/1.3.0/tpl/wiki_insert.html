@@ -50,10 +50,10 @@
 			<tr>
 				<th scope="row">{$lang->markup_type}</th>
 				<td>
-					<select name="markup_type">
+					<select name="markup_type" <!--@if($module_info->module_srl)-->disabled="disabled"<!--@end-->>
 						<option loop="$wiki_markup_list=>$markup" value="{$markup}" selected="selected"|cond="$module_info->markup_type==$markup"><!--@ echo $lang->{$markup}; --><!--@end--></option>
 					</select>
-					<p>{$lang->about_markup_type}</p>
+					<p>{sprintf($lang->about_markup_type, '<a href="' . getUrl('','module', 'admin', 'act', 'dispWikiAdminMarkupExamples') . '" target="_blank">', '<a/>')}</p>
 				</td>
 			</tr>
 			<tr>

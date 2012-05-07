@@ -193,7 +193,7 @@
 	</item>
 	<item name="about_markup_type">
 		<value xml:lang="ko"><![CDATA[내용추가를 위한 HTML 마크업은 XE Editor를 사용합니다. MediaWiki나 GoogleCode와 같은 <짧은 태그>형식의 위키 마크업은 간단한 text를 사용합니다.]]></value>
-		<value xml:lang="en"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
+		<value xml:lang="en"><![CDATA[XE Wiki markup uses XE Editor and HTML for adding content. Markdown, MediaWiki and GoogleCode markup use a simpler syntax, much more appropriate for wikis. %sSee some examples%s]]></value>
 		<value xml:lang="jp"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[HTML标记通过XE编辑器添加内容，Wiki 标记（例如 MediaWiki 或者 GoogleCode）通过简单的文本以及wiki的标签添加内容。]]></value>
 		<value xml:lang="zh-TW"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
@@ -616,6 +616,11 @@ XpressEngine 维基系统使用 [Markdown](http://daringfireball.net/projects/ma
 		For more help, take a look at <a href=http://www.mediawiki.org/wiki/Help:Formatting target=_blank>http://www.mediawiki.org/wiki/Help:Formatting</a>
 		]]></value>
 	</item>
+    <item name="xe_wiki_markup_help">
+        <value xml:lang="en"><![CDATA[
+        XE Wiki markup uses XE Editor to add content. This is the way documents were added in older versions of XE Wiki.
+        ]]></value>
+    </item>
     <item name="diff_no_differences">
         <value xml:lang="en"><![CDATA[There are no differences between the two versions.]]></value>
     </item>
