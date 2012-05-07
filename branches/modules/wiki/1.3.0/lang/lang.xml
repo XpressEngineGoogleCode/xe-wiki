@@ -633,6 +633,9 @@ XpressEngine 维基系统使用 [Markdown](http://daringfireball.net/projects/ma
     <item name="compare">
         <value xml:lang="en"><![CDATA[Compare]]></value>
     </item>
-	
-	
+    <item name="about_use_status">
+        <value xml:lang="ko"><![CDATA[글 작성 시 선택할 수 있는 상태를 지정해주세요.]]></value>
+        <value xml:lang="en"><![CDATA[Please select status that can be selected when writing an article.]]></value>
+        <value xml:lang="jp"><![CDATA[記事作成時に選択することができる状態を指定してください。]]></value>
+    </item>
 </lang>

@@ -976,3 +976,6 @@ div.tag, div.wikiNavigation {
 #wikiDiff {
     padding: 10px;
 }
+#wikiDocumentStatus {
+    padding: 0 10px;
+}
