@@ -39,7 +39,8 @@ class WikiAdminView extends Wiki
 			else 
 			{
 				ModuleModel::syncModuleToSite($module_info); 
-				$this->module_info = $module_info; 
+				$this->module_info = $module_info;
+				$this->module_info->use_status = explode('|@|', $module_info->use_status);
 				Context::set('module_info', $module_info);
 			}
 		}
@@ -110,8 +111,13 @@ class WikiAdminView extends Wiki
 		Context::set('mlayout_list', $mobile_layout_list); 
 		
 		$wiki_markup_list = $this->wiki_markup_list;
-		Context::set('wiki_markup_list', $wiki_markup_list); 
-		
+		Context::set('wiki_markup_list', $wiki_markup_list);
+
+		// get document status list
+		$oDocumentModel = &getModel('document');
+		$documentStatusList = $oDocumentModel->getStatusNameList();
+		Context::set('document_status_list', $documentStatusList);
+
 		$security = new Security(); 
 		$security->encodeHTML('wiki_list..browser_title', 'wiki_list..mid'); 
 		$security->encodeHTML('skin_list..title', 'mskin_list..title'); 

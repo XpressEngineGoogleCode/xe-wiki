@@ -260,7 +260,11 @@ class WikiView extends Wiki
 		}
 		Context::set('document_srl', $document_srl); 
 		Context::set('oDocument', $oDocument); 
-		
+
+		// Document status list
+		$statusNameList = $this->_getStatusNameList();
+		if(count($statusNameList) > 0) Context::set('status_list', $statusNameList);
+
 		$history_srl = Context::get('history_srl');
 		if($history_srl) 
 		{
@@ -1050,6 +1054,32 @@ class WikiView extends Wiki
 		Context::set('page_navigation', $output->page_navigation); 
 		
 		return $output;
+	}
+
+	 /**
+	  * @brief Returns a list of document statuses
+	  * @developer NHN (developers@xpressengine.com)
+	  * @access private
+	  * @return array
+	  */
+	function _getStatusNameList()
+	{
+		$oDocumentModel = &getModel('document');
+		$resultList = array();
+		if(!empty($this->module_info->use_status))
+		{
+			$statusNameList = $oDocumentModel->getStatusNameList();
+			$statusList = explode('|@|', $this->module_info->use_status);
+
+			if(is_array($statusList))
+			{
+				foreach($statusList AS $key=>$value)
+				{
+					$resultList[$value] = $statusNameList[$value];
+				}
+			}
+		}
+		return $resultList;
 	}
 }
 /* End of file wiki.view.php */

@@ -29,6 +29,10 @@ class WikiAdminController extends Wiki
 		{
 			$args->use_comment_validation = 'Y';
 		}
+		if(is_array($args->use_status))
+		{
+			$args->use_status = implode('|@|', $args->use_status);
+		}
 		
 		if($args->module_srl) 
 		{

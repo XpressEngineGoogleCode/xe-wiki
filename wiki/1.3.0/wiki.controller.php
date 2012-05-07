@@ -578,7 +578,8 @@ class WikiController extends Wiki
 	 */
 	function procWikiVerificationPassword() 
 	{
-		$password = Context::get('password'); 
+		$password = Context::get('password');
+		$document_srl = Context::get('document_srl');
 		$comment_srl = Context::get('comment_srl'); 
 		
 		$oMemberModel = &getModel('member');
@@ -595,6 +596,16 @@ class WikiController extends Wiki
 					return new Object(-1, 'msg_invalid_password'); 
 			}
 			$oComment->setGrant();
+		} else {
+			// get the document information
+			$oDocumentModel = &getModel('document');
+			$oDocument = $oDocumentModel->getDocument($document_srl);
+			if(!$oDocument->isExists()) return new Object(-1, 'msg_invalid_request');
+
+			// compare the document password and the user input password
+			if(!$oMemberModel->isValidPassword($oDocument->get('password'),$password)) return new Object(-1, 'msg_invalid_password');
+
+			$oDocument->setGrant();
 		}
 	}
 	

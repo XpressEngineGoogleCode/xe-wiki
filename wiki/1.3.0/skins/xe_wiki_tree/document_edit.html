@@ -112,8 +112,17 @@
 	<input type="password" name="password" class="inputText userPw" value="{$lang->password}" onfocus="this.value=''" />
 	<input type="text" name="email_address" class="inputText emailAddress" value="{$lang->email_address}" onfocus="this.value=''" />
 	<input type="text" name="homepage" class="inputText homePage" value="{$lang->homepage}" onfocus="this.value=''" />
-	<!--@end-->	
-	
+	<!--@end-->
+
+	<div id="wikiDocumentStatus">
+	<!--@if(is_array($status_list))-->
+		<!--@foreach($status_list AS $key=>$value)-->
+			<input type="radio" name="status" value="{$key}" id="{$key}" <!--@if($oDocument->get('status') == $key || ($key == 'PUBLIC' && !$document_srl))-->checked="checked"<!--@end--> />
+			<label for="{$key}">{$value}</label>
+		<!--@end-->
+	<!--@end-->
+	</div>
+
 	<div class="wikiNavigation">
 		<span class="button black strong"><input type="submit" value="{$lang->cmd_registration}" accesskey="s" /></span>
 	</div>
