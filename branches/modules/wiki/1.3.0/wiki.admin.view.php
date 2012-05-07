@@ -6,6 +6,8 @@
 */
 class WikiAdminView extends Wiki
 {
+	var $wiki_markup_list = array("markdown", "mediawiki_markup", "googlecode_markup", "xe_wiki_markup" );
+
 	/**
 	 * @brief Admin view initialisation
 	 * @developer NHN (developers@xpressengine.com)
@@ -107,7 +109,7 @@ class WikiAdminView extends Wiki
 		$mobile_layout_list = $oLayoutModel->getLayoutList(0, "M"); 
 		Context::set('mlayout_list', $mobile_layout_list); 
 		
-		$wiki_markup_list = array("googlecode_markup", "xe_wiki_markup", "mediawiki_markup", "markdown");		
+		$wiki_markup_list = $this->wiki_markup_list;
 		Context::set('wiki_markup_list', $wiki_markup_list); 
 		
 		$security = new Security(); 
@@ -118,6 +120,20 @@ class WikiAdminView extends Wiki
 		
 		// Specify the template file
 		$this->setTemplateFile('wiki_insert');
+	}
+
+	/**
+	 * @brief Help page for wiki markup type
+	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @access public
+	 * @return
+	 */
+	function dispWikiAdminMarkupExamples()
+	{
+		$wiki_markup_list = $this->wiki_markup_list;
+		Context::set('wiki_markup_list', $wiki_markup_list);
+
+		$this->setTemplateFile('markup_examples');
 	}
 	
 	/**
