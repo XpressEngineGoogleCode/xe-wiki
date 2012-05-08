@@ -606,6 +606,10 @@ class WikiController extends Wiki
 			if(!$oMemberModel->isValidPassword($oDocument->get('password'),$password)) return new Object(-1, 'msg_invalid_password');
 
 			$oDocument->setGrant();
+
+			$succes_return_url = Context::get('success_return_url');
+			$this->setRedirectUrl($succes_return_url);
+
 		}
 	}
 	
