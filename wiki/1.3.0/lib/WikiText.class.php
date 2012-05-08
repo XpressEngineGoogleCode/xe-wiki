@@ -25,7 +25,7 @@ class WTNode
         if ($i === false) return false;
 
         $text = $this->getContent();
-        $regex = '/^' . $delimiter . '[^=][\s]?(.+?)[\s]?[^=]?' . $delimiter . '$/m';
+        $regex = '/^' . $delimiter . '[^=]?[\s]?(.+?)[\s]?[^=]?' . $delimiter . '$/m';
         $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
         preg_match_all($regex, $text, $titles, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
@@ -84,8 +84,6 @@ class WTNode
 
     function getContent()
     {
-//        if (!$parent = $this->getParent()) return $this->content;
-//        $rootContent = $this->getRoot()->content;
         return $this->content;
     }
 
@@ -187,7 +185,7 @@ sasjfskd hfjk hsdrjkghfjkrsd hjgkdrjhkfg
 saj gsjahk gsh gahgsh
 EOF;
 
-$n = new WTNode($text);
+/*$n = new WTNode($text);
 $nodes = $n->split('==');
 echo "<ul>";
 function showNode($node) {
@@ -198,4 +196,39 @@ foreach ($nodes as $node)
 {
     showNode($node);
 }
-echo "</ul>";
+echo "</ul>";*/
+
+function split2($text)
+{
+    $paragraphs = preg_split('/^(={1,6})(?!=)(?P<content>.+?)(?<!=)\1$/m', $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
+    $nodes = array();
+    foreach ($paragraphs as $p) {
+        if (substr($p[0], 0, 1) === '=') { //we have a title, start building
+            $title['wrapper'] = $p[0];
+            $title['offset'] = $p[1];
+            continue;
+        }
+        elseif (!isset($title)) {
+            $item['wrapper'] = null;
+            $item['offset'] = $p[1];
+            $item['title'] = null;
+            $item['paragraph'] = $p[0];
+            $nodes[] = $item;
+            unset($item);
+        }
+        if (isset($title['content'])) {
+            $item = $title;
+            $item['paragraph'] = $p[0];
+            $nodes[] = $item;
+            unset($title, $item);
+            continue;
+        }
+        if (isset($title['wrapper'])) {
+            $title['content'] = $p[0];
+            continue;
+        }
+    }
+    return $nodes;
+}
+
+print_r(split2($text));
