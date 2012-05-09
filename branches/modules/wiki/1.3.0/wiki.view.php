@@ -229,7 +229,8 @@ class WikiView extends Wiki
 		$oDocumentModel = & getModel('document'); 
 		$document_srl = Context::get('document_srl'); 
 		$entry = Context::get('entry');
-		
+		$section = Context::get('section');
+
 		if(!$document_srl) 
 		{
 			$mid = Context::get('mid'); 
@@ -415,6 +416,7 @@ class WikiView extends Wiki
 		
 		// The requested order parameter values
 		$document_srl = Context::get('document_srl'); 
+
 		$entry = Context::get('entry');
 		if(!$document_srl) 
 		{
@@ -831,9 +833,9 @@ class WikiView extends Wiki
 			$cache_key = $oCacheHandler->getGroupKey('wikiContent', $object_key);
 			$content = $oCacheHandler->get($cache_key);				
 		}
-		if(!$content) 
+		if(true || !$content)
 		{
-			$wiki_syntax_parser = $this->getWikiTextParser(); 
+			$wiki_syntax_parser = $this->getWikiTextParser();
 			$content = $wiki_syntax_parser->parse($org_content);
 			if($oCacheHandler->isSupport())
 			{

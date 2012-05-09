@@ -1,6 +1,7 @@
 <?php
 /* require_once ('SyntaxParser.interface.php'); // Commented for backwards compatibility with PHP4 */
 require_once ('ParserBase.class.php'); 
+require_once ('WikiText.class.php');
 
 /**
  * @brief Converts a limited subset of MediaWiki syntax into HTML
@@ -52,8 +53,61 @@ class MediaWikiParser extends ParserBase
 		$this->parseDefinitionLists(); 
 		$this->parsePreformattedText();
 	}
-	
-	/**
+
+    /**
+     * @brief Overrides parseHeadings in base
+     * @developer Florin Ercus (xe_dev@arnia.ro)
+     * @override
+     * @access protected
+     * @return
+     */
+    function parseHeadings()
+    {
+        $this->addEditLinksToParagraphs();
+        $this->insertTOC();
+        $this->text = preg_replace('/^(={1})(?!=)(.+?)(?<!=)\1$/m', "<h1>$2</h1>", $this->text);
+        $this->text = preg_replace('/^(={2})(?!=)(.+?)(?<!=)\1$/m', "<h2>$2</h2>", $this->text);
+        $this->text = preg_replace('/^(={3})(?!=)(.+?)(?<!=)\1$/m', "<h3>$2</h3>", $this->text);
+        $this->text = preg_replace('/^(={4})(?!=)(.+?)(?<!=)\1$/m', "<h4>$2</h4>", $this->text);
+        $this->text = preg_replace('/^(={5})(?!=)(.+?)(?<!=)\1$/m', "<h5>$2</h5>", $this->text);
+        $this->text = preg_replace('/^(={6})(?!=)(.+?)(?<!=)\1$/m', "<h6>$2</h6>", $this->text);
+    }
+
+    /**
+     * @brief Does what the name says
+     * @developer Florin Ercus (xe_dev@arnia.ro)
+     * @access protected
+     * @return
+     */
+    function addEditLinksToParagraphs()
+    {
+        $wt = new WTParser($this->text);
+        $i = 0;
+        while (isset($wt->array[$i]) && $paragraph = $wt->array[$i]) {
+            if (is_null($paragraph['title'])) {
+                $i++;
+                continue;
+            }
+            $link = "<span class='edit_link'><a href='" . $this->wiki_site->getEditPageUrlForCurrentDocument($i) . "'>edit</a></span>";
+            $this->text = substr_replace($this->text, $link, $paragraph['offset'] + $paragraph['length'] - strlen($paragraph['paragraph'] + strlen($paragraph['wrapper'])), 0);
+            $wt->setText($this->text);
+            $i++;
+        }
+    }
+
+    /**
+     * @brief Handle Table Of Contents
+     * @developer Florin Ercus (xe_dev@arnia.ro)
+     * @access protected
+     * @return
+     */
+    function insertTOC()
+    {
+        $wt = new WTParser($this->text);
+        $this->text = substr_replace($this->text, $wt->toc(), $wt->getTocOffset(), 0);
+    }
+
+    /**
 	 * @brief Returns a list of all documents this page links to, given by alias
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
@@ -401,7 +455,7 @@ class MediaWikiParser extends ParserBase
 										[\s]
 										$/mx", '<td>$1</td>', $this->text);
 	}
-	
+
 	/**
 	 * @brief Callback for parseTables
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
