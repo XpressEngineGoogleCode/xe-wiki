@@ -63,8 +63,8 @@ class MediaWikiParser extends ParserBase
      */
     function parseHeadings()
     {
+		$this->insertTOC();
         $this->addEditLinksToParagraphs();
-        $this->insertTOC();
         $this->text = preg_replace('/^(={1})(?!=)(.+?)(?<!=)\1$/m', "<h1>$2</h1>", $this->text);
         $this->text = preg_replace('/^(={2})(?!=)(.+?)(?<!=)\1$/m', "<h2>$2</h2>", $this->text);
         $this->text = preg_replace('/^(={3})(?!=)(.+?)(?<!=)\1$/m', "<h3>$2</h3>", $this->text);
@@ -88,8 +88,8 @@ class MediaWikiParser extends ParserBase
                 $i++;
                 continue;
             }
-            $link = "<span class='edit_link'><a href='" . $this->wiki_site->getEditPageUrlForCurrentDocument($i) . "'>edit</a></span>";
-            $this->text = substr_replace($this->text, $link, $paragraph['offset'] + $paragraph['length'] - strlen($paragraph['paragraph'] + strlen($paragraph['wrapper'])), 0);
+            $link = " <span class='edit_link'><a href='" . $this->wiki_site->getEditPageUrlForCurrentDocument($i) . "'>edit</a></span> ";
+            $this->text = substr_replace($this->text, $link, $paragraph['offset'] + strlen($paragraph['wrapper']), 0);
             $wt->setText($this->text);
             $i++;
         }
@@ -104,7 +104,7 @@ class MediaWikiParser extends ParserBase
     function insertTOC()
     {
         $wt = new WTParser($this->text);
-        $this->text = substr_replace($this->text, $wt->toc(), $wt->getTocOffset(), 0);
+        $this->text = substr_replace($this->text, '<div id="wikiToc"><span id="wikiTocTitle">Contents</span>' . $wt->toc() . "</div>\n", $wt->getTocOffset(), 0);
     }
 
     /**
@@ -281,10 +281,10 @@ class MediaWikiParser extends ParserBase
 	 */
 	function parseLinks() 
 	{
-		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets
+		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets; skip the ones that are already inside a link - start with "
 		$this->text = preg_replace("#
 									(?<!
-										[[]
+										([[\"'])
 									)
 									((https?|ftp|file)
 									://

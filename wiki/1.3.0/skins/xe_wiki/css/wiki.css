@@ -321,3 +321,19 @@
 .wDiffHtmlDelete *{color:#990000;text-decoration:line-through}
 #wikiDocumentPreview{margin:1em 0;padding:10px;background-color:#eee}
 #wikiHelp{margin:1em 0;padding:10px;background-color:#EFF5FB}
+#wikiToc { border: 1px solid #AAAAAA; margin: 10px; background-color: #F9F9F9; display: table;}
+#wikiToc span#wikiTocTitle {font-weight: bold; padding: 10px 0 0 20px; display: block;}
+#wikiToc ul li { list-style-type: none; }
+#wikiToc ul { padding: 0 20px;  }
+.xe_content { line-height: 1.5em !important; }
+div.wiki div.xe_content h1,
+div.wiki div.xe_content h2,
+div.wiki div.xe_content h3,
+div.wiki div.xe_content h4,
+div.wiki div.xe_content h5,
+div.wiki div.xe_content h6 { border-bottom: 1px solid black;}
+div.wiki div.xe_content h3,
+div.wiki div.xe_content h4,
+div.wiki div.xe_content h5,
+div.wiki div.xe_content h6 { border-bottom: none; font-weight: bold;}
+span.edit_link{ float:right; font-size: 12px; font-weight: normal; line-height: 1.3em}
