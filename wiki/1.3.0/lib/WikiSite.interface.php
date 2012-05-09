@@ -31,7 +31,10 @@ interface WikiSite
 	 * @return string
 	 */
 	function getFullLink($document_name);
-	
+
+    function getEditPageUrlForCurrentDocument();
+
+
 }
 /* End of file WikiSite.interface.php */
 /* Location: WikiSite.interface.php */

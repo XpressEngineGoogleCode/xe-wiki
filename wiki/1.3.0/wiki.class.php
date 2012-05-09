@@ -110,7 +110,21 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	{
 		return getUrl('', 'mid', $this->module_info->mid, 'entry', $document_name, 'document_srl', '');
 	}
-	
+
+	/**
+     * @brief Returns qualified internal link, given an alias or doc title
+     * @developer Corina Udrescu (xe_dev@arnia.ro)
+     * @access public
+     * @param $document_name string
+     * @return string
+     * @TODO: check case when document is accessed just by document_srl
+     */
+	function getEditPageUrlForCurrentDocument($section=null)
+    {
+        if (is_null($section)) return getUrl('', 'mid', $this->module_info->mid, 'entry', Context::get('entry'), 'act', 'dispWikiEditPage');
+        return getUrl('', 'mid', $this->module_info->mid, 'entry', Context::get('entry'), 'act', 'dispWikiEditPage', 'section', $section);
+    }
+
 	/**
 	 * @brief Creates tables, indexes and adds any other logic needed for module upon installation
 	 * @access public

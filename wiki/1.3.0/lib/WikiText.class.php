@@ -1,234 +1,181 @@
 <?php
-class WTNode
+class WTParser
 {
-    #region vars, constructor
-    var
-        $parent,
-        $content,
-        $title,
-        $offset,
-        $children,
-        $delimiter,
-        $delimiters = array('==','===','====','=====','======');
+    var $text, $array = array();
 
-    function WTNode($content=null, $title=null, $offset=null)
+    function WTParser($text)
     {
-        if (isset($offset)) $this->setOffset($offset);
-        if (isset($title)) $this->setTitle($title);
-        if (isset($content)) $this->setContent($content);
+        $this->setText($text);
     }
-    #endregion
 
-    function split($delimiter = '==', $recursive = true)
+    function setText($text, $paragraph=null)
     {
-        $i = array_search($delimiter, $this->delimiters);
-        if ($i === false) return false;
+        if (is_int($paragraph)) {
+            if (!isset($this->array[$paragraph])) return false;
+            $item = $this->array[$paragraph];
+            $text = substr_replace($this->getText(), $text . "\n", $item['offset'], $item['length']);
+        }
+        $this->text = $text;
+        $this->array = $this->split($text);
+    }
 
-        $text = $this->getContent();
-        $regex = '/^' . $delimiter . '[^=]?[\s]?(.+?)[\s]?[^=]?' . $delimiter . '$/m';
-        $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
-        preg_match_all($regex, $text, $titles, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+    function getText($paragraph=null)
+    {
+        if (!is_int($paragraph)) return $this->text;
+        if (!isset($this->array[$paragraph])) return false;
+        if (!isset($this->array[$paragraph+1])) return substr($this->text, $this->array[$paragraph]['offset'], $this->array[$paragraph]['length']);
+        $item = $this->array[$paragraph];
+        $startPosition = $item['offset'];
+        $rank = strlen($item['wrapper']);
+        while (isset($this->array[++$paragraph])) {
+            $slaveRank = strlen($this->array[$paragraph]['wrapper']);
+            if ($slaveRank > $rank) {
+                $item = $this->array[$paragraph];
+            }
+        }
+        return substr($this->text, $startPosition, $item['length'] + $item['offset'] - $startPosition);
+    }
 
-        if (count($paragraphs) == 1 && $paragraphs[0][0] == $text) return null; //not splittable by $delimiter
+    /**
+     * Returns an array of child items for item with $idm keeping the keys.
+     * @param $id
+     * @param null $array
+     * @param bool $justCheck
+     * @return array|bool
+     */
+    function getChildren($id, $array=null, $justCheck=false)
+    {
+        if (!isset($this->array[$id])) return false;
+        $tmp = $array ? $array : $this->array;
+        while (key($tmp) !== $id) next($tmp);
+        $root = current($tmp);
+        $possibles = array();
+        while ( ($item = next($tmp)) && strlen($item['wrapper']) > strlen($root['wrapper']) ) {
+            if ($justCheck) return true;
+            $possibles[key($tmp)] = $item;
+        }
+        if ($justCheck) return false;
+        $rez = $possibles;
+        foreach ($possibles as $i=>$possible) {
+            $deepers = $this->getChildren($i, $possibles);
+            $rez = array_diff_key($rez, $deepers);
+        }
+        return $rez;
+    }
 
-        //make WTNodes from the 2 arrays
+    /**
+     * Returns the table of contents as unordered list
+     * @param int $id Defaults to 0 (root)
+     * @return string
+     */
+    function toc($id=0)
+    {
+        $children = $this->getChildren($id);
+        $str = '<ul class="toc">';
+        foreach ($children as $i=>$item)
+        {
+            $deeperChildren = $this->getChildren($i);
+            $number = $i+1;
+            $liContent = "<a href='#{$item['slug']}'><span class='toc_number'>$number</span> {$item['title']}</a>";
+            if (!empty($deeperChildren)) $liContent .= $this->toc($i);
+            $str .= "<li>$liContent</li>";
+        }
+        $str .= "</ul>\n";
+        return $str;
+    }
+
+    function getTocOffset()
+    {
+        if (!isset($this->array[0])) return false;
+        return is_null($this->array[0]['title']) ? $this->array[0]['length'] : 0;
+    }
+
+    /**
+     * Returns a slug for $title
+     * @param $title
+     * @param string $space Character to replace spaces with
+     * @param bool $toLower convert to lowercase ?
+     * @return string
+     */
+    function slugify($title, $space='_', $toLower=false)
+    {
+        if (empty($title)) return 'n-a';
+        $title = preg_replace('~[^\\pL\d]+~u', $space, $title);
+        $title = trim($title, $space);
+        if (function_exists('iconv')) $title = iconv('utf-8', 'us-ascii//TRANSLIT', $title);
+        if ($toLower) $title = strtolower($title);
+        $title = preg_replace('~[^-\w]+~', '', $title);
+        return $title;
+    }
+
+    /**
+     * Splits $text into an array of items containing headings, paragraphs, offsets and lengths
+     * @param $text
+     * @return array
+     */
+    function split($text)
+    {
+        $paragraphs = preg_split('/^(={1,6})(?!=)(?P<content>.+?)(?<!=)\1$/m', $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
         $nodes = array();
         foreach ($paragraphs as $p) {
-            $titleOffset = false;
-            foreach ($titles as $t) {
-                if ($p[1] == $t[1][1]) {
-                    $node = new WTNode(null, $t[1][0], $titleOffset = $p[1]);
-                    break;
-                }
+            if (substr($p[0], 0, 1) === '=') { //we have a title, start building
+                $title['wrapper'] = $p[0];
+                $title['offset'] = $p[1];
+                continue;
             }
-            if (!$titleOffset) { //not title, but content paragraph.
-                if (!isset($node)) { //for a node with no title (offset 0)
-                    $node = new WTNode();
-                    $node->setOffset($p[1]);
-                }
-                $node->setContent($p[0]);
-                $node->setParent($this);
-                $node->delimiter = $delimiter;
-                //save the node
-                $nodes[] = $node;
-
-                if ($recursive) //go deeper
-                {
-                    $aux = $i;
-                    $pieces = false;
-                    while (isset($this->delimiters[++$aux]) && !$pieces)
-                    {
-                        $d = $this->delimiters[$aux];
-                        $pieces = $node->split($d);
-                    }
-                    if ($pieces) $nodes = array_merge($nodes, $pieces);
-                }
-
+            elseif (!isset($title)) {
+                $item['wrapper'] = null;
+                $item['offset'] = $p[1];
+                $item['title'] = $item['slug'] = null;
+                $item['paragraph'] = $p[0];
+                $item['length'] = strlen($item['paragraph']);
+                $nodes[] = $item;
+                unset($item);
+                continue;
+            }
+            if (isset($title['content'])) {
+                $item = $title;
+                $item['title'] = $item['content']; unset($item['content']);
+                $item['slug'] = $this->slugify($item['title']);
+                $item['paragraph'] = $p[0];
+                $item['length'] = 2 * strlen($item['wrapper']) + strlen($item['title']) + strlen($item['paragraph']);
+                $nodes[] = $item;
+                unset($title, $item);
+                continue;
+            }
+            if (isset($title['wrapper'])) {
+                $title['content'] = $p[0];
+                continue;
             }
         }
         return $nodes;
     }
 
-    #region getters/setters
-    function getRoot()
-    {
-        $root = $this;
-        while ($parent = $this->getParent()) $root = $parent;
-        return $root;
-    }
-
-    function setContent($content)
-    {
-        $this->content = $content;
-    }
-
-    function getContent()
-    {
-        return $this->content;
-    }
-
-    function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    function getTitle()
-    {
-        return $this->title;
-    }
-
-    function getLevel()
-    {
-        if (isset($this->parent)) return $this->parent->getLevel() + 1;
-        else return 0;
-    }
-
-    function setOffset($offset)
-    {
-        $this->offset = $offset;
-    }
-
-    function getOffset($real=false)
-    {
-        if ($real) {
-            if ($parent = $this->getParent()) {
-                return $this->offset + $parent->getOffset($real);
-            }
-            return 0;
-        }
-        return $this->offset;
-    }
-
-    function setParent(&$parent)
-    {
-        $this->parent =& $parent;
-    }
-
-    function getParent()
-    {
-        return isset($this->parent) ? $this->parent : false;
-    }
-    #endregion
-
-    function __toString()
-    {
-        $title = ( $this->getTitle() !== null ? $this->getTitle() : 'none' );
-        $content = ( $this->getContent() !== null ? $this->getContent() : 'none' );
-        $strlen = strlen($content);
-        $offset = array($this->getOffset(), $this->getOffset(true));
-        $str = <<<TOSTR
-<b><big>$title</big></b><BR>
-<small>
-<b>delimiter</b>: {$this->delimiter}<br>
-<b>level</b>: {$this->getLevel()}<br>
-<b>offset</b>: relative {$offset[0]}; absolute {$offset[1]};<BR>
-<b>content</b> <small>(strlen $strlen)</small>: <pre>$content</pre>
-</small>
-TOSTR;
-        return $str;
-    }
 }
-
-class WTTree
-{
-    var $raw, $structured;
-    function WTTree($nodes_vector) {
-        if (!is_array($nodes_vector)) return false;
-        if (count($nodes_vector) == 1) return $nodes_vector[0];
-
-        $this->raw = $nodes_vector;
-        $root = $nodes_vector[0]->getRoot();
-        foreach($nodes_vector as $node) {
-
-        }
-    }
-}
-
-
+/*
 $text = <<<EOF
-inceput inceput inceput
-inceput
-=== h3 inceput ===
-ghdjasg jgd gasd guys gfiuy gdiy gfidyf
-fdhsij gfihd gfih gdifg
-== zazazazaza==
 sasasasa
-====zzz====
-s as
-sas grs gtr g
-rfsd grs ghrs hgesr
-=== aaaa ===
-hfejdsh fjk hrjskhgfjr hgijkrgh
-sasasas
-==mmmms sa ==
-sasjfskd hfjk hsdrjkghfjkrsd hjgkdrjhkfg
-saj gsjahk gsh gahgsh
+==Level 2==
+===Level 3===
+====Level 4====
+=====Level 5=====
+===Level 3===
+======Level 6======
+==hehe==
 EOF;
-
-/*$n = new WTNode($text);
-$nodes = $n->split('==');
-echo "<ul>";
-function showNode($node) {
-    $s = $node->__toString();
-    echo "<li>$s</li>";
-}
-foreach ($nodes as $node)
-{
-    showNode($node);
-}
-echo "</ul>";*/
-
-function split2($text)
-{
-    $paragraphs = preg_split('/^(={1,6})(?!=)(?P<content>.+?)(?<!=)\1$/m', $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
-    $nodes = array();
-    foreach ($paragraphs as $p) {
-        if (substr($p[0], 0, 1) === '=') { //we have a title, start building
-            $title['wrapper'] = $p[0];
-            $title['offset'] = $p[1];
-            continue;
-        }
-        elseif (!isset($title)) {
-            $item['wrapper'] = null;
-            $item['offset'] = $p[1];
-            $item['title'] = null;
-            $item['paragraph'] = $p[0];
-            $nodes[] = $item;
-            unset($item);
-        }
-        if (isset($title['content'])) {
-            $item = $title;
-            $item['paragraph'] = $p[0];
-            $nodes[] = $item;
-            unset($title, $item);
-            continue;
-        }
-        if (isset($title['wrapper'])) {
-            $title['content'] = $p[0];
-            continue;
-        }
-    }
-    return $nodes;
+$text = preg_replace('/^(={1})(?!=)(.+?)(?<!=)\1$/m', "<h1>$2</h1>", $text);
+$text = preg_replace('/^(={2})(?!=)(.+?)(?<!=)\1$/m', "<h2>$2</h2>", $text);
+$text = preg_replace('/^(={3})(?!=)(.+?)(?<!=)\1$/m', "<h3>$2</h3>", $text);
+$text = preg_replace('/^(={4})(?!=)(.+?)(?<!=)\1$/m', "<h4>$2</h4>", $text);
+$text = preg_replace('/^(={5})(?!=)(.+?)(?<!=)\1$/m', "<h5>$2</h5>", $text);
+$text = preg_replace('/^(={6})(?!=)(.+?)(?<!=)\1$/m', "<h6>$2</h6>", $text);
+die($text);
+$content = new WTParser($text);
+echo $content->toc();
+foreach ($content->array as $piece) {
+    $h = strlen($piece['wrapper']);
+    if ($piece['title'] !== null) echo "<h$h><a name='{$piece['slug']}'>{$piece['title']}</a></h$h>";
+    echo "<p>{$piece['paragraph']}</p>";
 }
 
-print_r(split2($text));
+echo $content->getText(2);*/
