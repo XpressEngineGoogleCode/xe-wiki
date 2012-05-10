@@ -116,7 +116,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 */
 	function parseText() 
 	{
-		$this->parseHeadings();
+		//$this->parseHeadings();
 		$this->parseBoldUnderlineAndSuch(); 
 		$this->parsePragmas(); 
 		$this->parseLists(); 

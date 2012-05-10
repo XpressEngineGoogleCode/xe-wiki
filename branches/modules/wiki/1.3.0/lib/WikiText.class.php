@@ -107,7 +107,7 @@ class WTParser
         do {
             $section = key($arr);
             if (!is_null($item['title']) && $toc && !$tocIsInserted) {
-                $text .= $this->toc();
+                $text .= "<div id='wikiToc'><span id='wikiTocTitle'>Contents</span>{$this->toc()}</div>";
                 $tocIsInserted = true;
             }
             $hAttributes = array('title="' . trim($item['title']) . '"');
@@ -122,21 +122,6 @@ class WTParser
 
         return $text;
 
-    }
-
-    function addEditLinksToParagraphs()
-    {
-        $i = 0;
-        while (isset($this->array[$i]) && $paragraph = $this->array[$i]) {
-            if (is_null($paragraph['title'])) {
-                $i++;
-                continue;
-            }
-            $link = " <span class='edit_link'><a href='" . $this->wiki_site->getEditPageUrlForCurrentDocument($i) . "'>edit</a></span> ";
-            $this->text = substr_replace($this->text, $link, $paragraph['offset'] + strlen($paragraph['wrapper']), 0);
-            $this->setText($this->text);
-            $i++;
-        }
     }
 
     /**
