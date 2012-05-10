@@ -113,7 +113,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 
 	/**
      * @brief Returns qualified internal link, given an alias or doc title
-     * @developer Corina Udrescu (xe_dev@arnia.ro)
+     * @developer Florin Ercus (xe_dev@arnia.ro)
      * @access public
      * @param $document_name string
      * @return string
