@@ -77,7 +77,21 @@ class WikiController extends Wiki
 		
 		// Modified if it already exists
 		if($oDocument->isExists() && $oDocument->document_srl == $obj->document_srl) 
-		{			
+		{
+			// If we have section, update content: retrieve full text and insert new section in it
+			$section = Context::get('section');
+			if(isset($section))
+			{
+				$full_content = $oDocument->get('content');
+				$section_content = $obj->content;
+
+				$wt = new WTParser($full_content);
+				$wt->setText($section_content, (int)$section);
+				$new_content = $wt->getText();
+
+				$obj->content = $new_content;
+			}
+
 			$output = $oDocumentController->updateDocument($oDocument, $obj);
 			
 			// Have been successfully modified the hierarchy/ alias change

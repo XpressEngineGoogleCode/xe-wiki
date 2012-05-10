@@ -10,6 +10,7 @@ class WTParser
 
     function setText($text, $paragraph=null)
     {
+		$text = str_replace(chr(13), '', $text);
         if (is_int($paragraph)) {
             if (!isset($this->array[$paragraph])) return false;
             $item = $this->array[$paragraph];
@@ -19,6 +20,12 @@ class WTParser
         $this->array = $this->split($text);
     }
 
+	/**
+	 * @brief Returns all content corresponding to a section;
+	 * If a section with h1 also has subheadings (h2, h3 etc), their sections are included too;
+	 * @param null $paragraph
+	 * @return bool|string
+	 */
     function getText($paragraph=null)
     {
         if (!is_int($paragraph)) return $this->text;
@@ -29,6 +36,9 @@ class WTParser
         $rank = strlen($item['wrapper']);
         while (isset($this->array[++$paragraph])) {
             $slaveRank = strlen($this->array[$paragraph]['wrapper']);
+			// If a heading of equal rank is encountered, stop looking for children
+			if($slaveRank == $rank) break;
+			// If a subheading was found, include it and its corresponding content
             if ($slaveRank > $rank) {
                 $item = $this->array[$paragraph];
             }

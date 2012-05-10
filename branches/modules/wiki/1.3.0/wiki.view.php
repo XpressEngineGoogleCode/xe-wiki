@@ -8,13 +8,13 @@ class WikiView extends Wiki
 {
 	var $list;
 	var $search_option = array('title', 'content', 'title_content', 'comment', 'user_name', 'nick_name', 'user_id', 'tag');
-	
+
 	/**
 	 * @brief Class initialization
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
-	*/
+	 * @return void
+	 */
 	function init() 
 	{
 		/*
@@ -86,7 +86,7 @@ class WikiView extends Wiki
 	 * @brief Displays the history of the particular wiki page
 	 * @developer NHN (developers@xpressengine.com) 
 	 * @access public
-	 * @return 
+	 * @return Object
 	*/
 	function dispWikiHistory() 
 	{
@@ -133,6 +133,8 @@ class WikiView extends Wiki
 		Context::set('oDocument', $oDocument); 
 		
 		$this->setTemplateFile('document_histories');
+
+		return new Object(0, 'success');
 	}
 
     /**
@@ -211,13 +213,15 @@ class WikiView extends Wiki
         Context::set('diff_html', $diff_html);
 
         $this->setTemplateFile('document_compare');
+
+		return new Object(0, 'success');
     }
 	
 	/**
 	 * @brief Document editing screen
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return 
+	 * @return Object
 	*/
 	function dispWikiEditPage() 
 	{
@@ -244,13 +248,30 @@ class WikiView extends Wiki
 		
 		if($oDocument->isExists()) 
 		{
+			// Set up document alias
 			$oDocument->add('alias', $oDocumentModel->getAlias($document_srl));
+
+			// Prepare doc_srl of latest edit made to this document - used for
+			// preventing content override when more than one user edits a the same document
 			$output = $oDocumentModel->getHistories($document_srl, 1, 1);
 			if($output->toBool() && $output->data)
 			{
 				$history = array_pop($output->data);
 				$latest_doc_edit = $history->history_srl;
 				Context::set('latest_doc_edit', $latest_doc_edit);
+			}
+
+			// Update content, when paragraph edit is used
+			if(isset($section))
+			{
+				include($this->module_path . 'lib/WikiText.class.php');
+				$content = $oDocument->get('content');
+				$wt = new WTParser($content);
+				$paragraph = $wt->getText((int)$section);
+				if(isset($paragraph))
+				{
+					$oDocument->add('content', $paragraph);
+				}
 			}
 		}
 		else 
@@ -270,12 +291,14 @@ class WikiView extends Wiki
 		if($history_srl) 
 		{
 			$output = $oDocumentModel->getHistory($history_srl);
-			if($output && $output->content != NULL) 
+			if($output && $output->content != NULL)
 			{
 				Context::set('history', $output);
 			}
 		}
 		$this->setTemplateFile('document_edit');
+
+		return new Object(0, 'success');
 	}
 	
 	/**
@@ -283,7 +306,7 @@ class WikiView extends Wiki
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $msg_code string
-	 * @return 
+	 * @return Object
 	 */
 	function dispWikiMessage($msg_code) 
 	{
@@ -295,13 +318,15 @@ class WikiView extends Wiki
 		
 		Context::set('message', $msg); 
 		$this->setTemplateFile('message');
+
+		return new Object(0, 'success');
 	}
 	
 	/**
 	 * @brief View a list of wiki's articles
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return 
+	 * @return Object
 	*/
 	function dispWikiTitleIndex() 
 	{
@@ -336,26 +361,30 @@ class WikiView extends Wiki
 		
 		Context::set('search_option', $search_option); 
 		$this->setTemplateFile('title_index');
+
+		return new Object(0, 'success');
 	}
 	
 	/**
 	 * @brief hierarchical view of the appropriate wiki
 	 * @developer NHN (developers@xpressengine.com) 
 	 * @access public
-	 * @return
+	 * @return Object
 	 */
 	function dispWikiTreeIndex() 
 	{
 		$oWikiModel = &getModel('wiki'); 
 		Context::set('document_tree', $oWikiModel->readWikiTreeCache($this->module_srl)); 
 		$this->setTemplateFile('tree_list');
+
+		return new Object(0, 'success');
 	}
 	
 	/**
 	 * @brief Display screen for changing the hierarchy
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
+	 * @return Object
 	*/
 	function dispWikiModifyTree() 
 	{
@@ -366,6 +395,8 @@ class WikiView extends Wiki
 		
 		Context::set('isManageGranted', $this->grant->write_document ? 'true' : 'false'); 
 		$this->setTemplateFile('modify_tree');
+
+		return new Object(0, 'success');
 	}
 	
 	/**
@@ -373,7 +404,7 @@ class WikiView extends Wiki
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access private
 	 * @param $entry Document alias
-	 * @return 
+	 * @return void
 	*/
 	function addToVisitLog($entry) 
 	{
@@ -407,7 +438,7 @@ class WikiView extends Wiki
 	 * @brief Wiki document view
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
+	 * @return Object
 	*/
 	function dispWikiContentView() 
 	{
@@ -465,7 +496,7 @@ class WikiView extends Wiki
 			}
 			else 
 			{
-				Context::set('document_srl', '', TRUE); 
+				Context::set('document_srl', '', TRUE);
 				return new Object(-1, 'msg_not_founded');
 			}
 		} // generate an empty document object if you do not have a document_srl for requested document
@@ -579,14 +610,14 @@ class WikiView extends Wiki
 			}
 			$this->setRedirectUrl($url);
 		}
-		return new Object();
+		return new Object(0, 'success');
 	}
 	
 	/**
 	 * @brief Display screen for posting a comment
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public	 
-	 * @return 
+	 * @return Object
 	 */
 	function dispWikiReplyComment() 
 	{
@@ -626,13 +657,15 @@ class WikiView extends Wiki
 		Context::set('oSourceComment', $oSourceComment); 
 		Context::set('oComment', $oComment); 
 		$this->setTemplateFile('comment_edit');
+
+		return new Object(0, 'success');
 	}
 	
 	/**
 	 * @brief Modify comment page
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return 
+	 * @return Object
 	 */
 	function dispWikiModifyComment() 
 	{
@@ -670,13 +703,15 @@ class WikiView extends Wiki
 		Context::set('oComment', $oComment); 
 		
 		$this->setTemplateFile('comment_edit');
+
+		return new Object(0, 'success');
 	}
 	
 	/**
 	 * @brief Delete comment form
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return 
+	 * @return Object
 	 */
 	function dispWikiDeleteComment() 
 	{
@@ -710,6 +745,8 @@ class WikiView extends Wiki
 		
 		Context::set('oComment', $oComment); 
 		$this->setTemplateFile('delete_comment_form');
+
+		return new Object(0, 'success');
 	}
 	
 	/**
@@ -750,6 +787,8 @@ class WikiView extends Wiki
 		}
 		$oTemplateHandler = TemplateHandler::getInstance(); 
 		$this->add('html', $oTemplateHandler->compile($skin_path, 'comment_edit.html'));
+
+		return new Object(0, 'success');
 	}
 	
 	/**
@@ -757,14 +796,15 @@ class WikiView extends Wiki
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access private
 	 * @param $oDocument
-	 * @return 
+	 * @return void
 	 */
 	function _handleWithExistingDocument(&$oDocument) 
 	{
 		// Display error message if it is a different module than requested module
 		if($oDocument->get('module_srl') != $this->module_info->module_srl) 
 		{
-			return $this->stop('msg_invalid_request');
+			$this->stop('msg_invalid_request');
+			return;
 		}
 		
 		// Check if you have administrative authority to grant
@@ -778,13 +818,13 @@ class WikiView extends Wiki
 		if($history_srl) 
 		{
 			$oDocumentModel = & getModel('document'); $output = $oDocumentModel->getHistory($history_srl);
-			if($output && $output->content != NULL) 
+			if($output && $output->content != NULL)
 			{
 				Context::set('history', $output);
 			}
 		}
 		
-		$content = $oDocument->getContent(FALSE, FALSE, FALSE, FALSE); 
+		$content = $oDocument->getContent(FALSE, FALSE, FALSE, FALSE);
 		$content = $this->_renderWikiContent($oDocument->document_srl, $content);
 		// Retrieve documents that link here and that this doc links to
 		$oWikiModel = &getModel('wiki'); 
@@ -851,7 +891,7 @@ class WikiView extends Wiki
 	 * @access private
 	 * @param $module_srl
 	 * @param $document_srl
-	 * @return
+	 * @return void
 	 */
 	function _loadSidebarTreeMenu($module_srl, $document_srl) 
 	{
@@ -867,7 +907,7 @@ class WikiView extends Wiki
 	 * @brief Generate Left menu according with settings from admin panel
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access private
-	 * @return
+	 * @return void
 	 */
 	function getLeftMenu() 
 	{
@@ -922,7 +962,7 @@ class WikiView extends Wiki
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $document_srl
-	 * @return
+	 * @return void
 	 */
 	function getBreadCrumbs($document_srl) 
 	{
@@ -936,7 +976,7 @@ class WikiView extends Wiki
 	 * @brief View for displaying search results
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
-	 * @return
+	 * @return Object
 	*/
 	function dispWikiSearchResults() 
 	{
@@ -944,7 +984,7 @@ class WikiView extends Wiki
 		$oDocumentModel = &getModel('document'); 
 		$oModuleModel = &getModel('module'); 
 		
-		$moduleList = $oWikiModel->getModuleList(TRUE); 
+		$moduleList = $oWikiModel->getModuleList(TRUE);
 		$moduleList = $this->_sortArrayByKeyDesc($moduleList, 'search_rank'); 
 		Context::set('module_list', $moduleList); 
 		$target_mid = $this->module_info->module_srl; 
@@ -952,16 +992,18 @@ class WikiView extends Wiki
 		$this->_searchKeyword($target_mid, $is_keyword); 
 		
 		$this->setTemplateFile('document_search');
+
+		return new Object(0, 'success');
 	}
-	
+
 	/**
 	 * @brief Sorts array descending by key
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access private
-	 * @param $object_array 
+	 * @param $object_array
 	 * @param $key
-	 * @return
-	 * 
+	 * @return array
+	 *
 	 * TODO See if can be removed and replaced with a query
 	 */
 	function _sortArrayByKeyDesc($object_array, $key)
@@ -988,10 +1030,10 @@ class WikiView extends Wiki
 	 * for pretty displaying in search results	
 	 * @access private
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
-	 * @return 
 	 * @param $oModuleModel 
 	 * @param $oDocumentModel 
-	 * @param $doc 
+	 * @param $doc
+	 * @return stdClass
 	 * 
 	 * TODO See if it can be replaced / removed
 	 */
