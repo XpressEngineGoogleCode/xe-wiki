@@ -49,12 +49,12 @@ class MediaWikiParser extends ParserBase
 	 */
 	function parseText() 
 	{
-		//parent::parseText();
+        parent::parseText();
         $parser = new WTParser($this->text);
         $this->text = $parser->toString(true, $this->wiki_site->getEditPageUrlForCurrentDocument());
 		$this->parseDefinitionLists();
 		$this->parsePreformattedText();
-	}
+    }
 
     /**
 	 * @brief Returns a list of all documents this page links to, given by alias
