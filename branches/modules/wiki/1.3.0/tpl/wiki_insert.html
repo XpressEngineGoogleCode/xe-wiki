@@ -7,6 +7,7 @@
 	<input type="hidden" name="module_srl" value="{$module_info->module_srl}" />
 	<input type="hidden" name="act" value="procWikiAdminInsertWiki" />
 	<input type="hidden" name="module" value="wiki" />
+	<input type="hidden" name="markup_type" value="{$module_info->markup_type}" cond="$module_info->module_srl" />
     <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiAdminInsertWiki', 'module_srl', $module_info->module_srl)}" cond="$module_info->module_srl" />
     <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiAdminContent')}" cond="!$module_info->module_srl" />	
 	<div class="table">
