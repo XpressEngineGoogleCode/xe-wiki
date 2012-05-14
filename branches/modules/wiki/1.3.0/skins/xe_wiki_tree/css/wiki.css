@@ -1004,9 +1004,20 @@ div.tag, div.wikiNavigation {
 #wiki div.xe_content h3,
 #wiki div.xe_content h4,
 #wiki div.xe_content h5,
-#wiki div.xe_content h6 { border-bottom: 1px solid black;}
+#wiki div.xe_content h6 {
+    border-bottom: 1px solid black;
+    padding: 3px 0;
+}
 #wiki div.xe_content h3,
 #wiki div.xe_content h4,
 #wiki div.xe_content h5,
-#wiki div.xe_content h6 { border-bottom: none; font-weight: bold;}
-span.edit_link{ float:right; font-size: 12px; font-weight: normal; line-height: 1.3em}
+#wiki div.xe_content h6 {
+    border-bottom: none;
+    font-weight: bold;
+}
+span.edit_link{
+    float:right;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.5em
+}
