@@ -66,7 +66,7 @@ jQuery(document).ready(function($){
             <td class="title">
                 <a class="wikiBodyButton" onclick="jQuery('#historyContent{$val->history_srl}').toggleClass('hide');return false;"><span><span>{$lang->cmd_view}</span></span></a>
                 <a class="wikiBodyButton" onclick="location.href='{getUrl('act','dispWikiEditPage','history_srl',$val->history_srl)}';return false;"><span><span>{$lang->restore}</span></span></a>
-                <a class="wikiBodyButton" onclick="getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl});"><span><span>{$lang->diff}</span></span></a>
+                <a class="wikiBodyButton" onclick="jQuery(this).parents('tr').find('td:first input[type=radio]').click(); getDiff('diff{$val->history_srl}',{$oDocument->document_srl},{$val->history_srl});"><span><span>{$lang->diff}</span></span></a>
             </td>
             <td class="author"><a href="#" onclick="return false;" class="member_{$val->member_srl}">{$val->nick_name}</a></td>
         </tr>
