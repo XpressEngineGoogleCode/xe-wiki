@@ -116,7 +116,6 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 */
 	function parseText() 
 	{
-		//$this->parseHeadings();
 		$this->parseBoldUnderlineAndSuch(); 
 		$this->parsePragmas(); 
 		$this->parseLists(); 
@@ -274,38 +273,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	{
 		return $this->escaped_blocks[$this->replaced_escaped_blocks++];
 	}
-	
-	/**
-	 * @brief Parses headings
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
-	 * @access protected
-	 * @return
-	 * 
-	 * TODO: Also add anchors (for local links)
-	 */
-	function parseHeadings() 
-	{
-		// Replace headings
-		// ====== Heading 6 ======
-		$this->text = preg_replace("/^====== (.+?) ======( *)$/m", "<h6>$1</h6>", $this->text);
-		// ===== Heading 5 =====
-		$this->text = preg_replace("/^===== (.+?) =====( *)$/m", "<h5>$1</h5>", $this->text);
-		// ==== Heading 4 ====
-		$this->text = preg_replace("/^==== (.+?) ====( *)$/m", "<h4>$1</h4>", $this->text);
-		// === Heading 3 ===
-		$this->text = preg_replace("/
-								^===\s     # Line starts with three equal signs, followed by a space
-								(.+?)      # One or more characters (of any type except line breaks)
-								\s===      # Followed by another space and three equal signs
-								(\s*)$     # The line can end directly, or there can be spaces  
-								/mx", "<h3>$1</h3>", $this->text); // The m modifier specifies that matches are per line, instead of per document
-		// == Heading 2 ==
-		$this->text = preg_replace("/^== (.+?) ==( *)$/m", "<h2>$1</h2>", $this->text);
-		// = Heading 1 =
-		$this->text = preg_replace("/^= (.+?) =( *)$/m", "<h1>$1</h1>", $this->text);
-	}
-	
-	
+
 	/**
 	 * @brief Parse bold, italic, underline etc.
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
