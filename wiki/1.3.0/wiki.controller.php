@@ -460,7 +460,7 @@ class WikiController extends Wiki
 	 * @access public
 	 * @return 
 	 */
-	function procWikiMoveTree() 
+	function procWikiMoveTree()
 	{
 		// Check permissions
 		if(!$this->grant->write_document)
@@ -485,7 +485,7 @@ class WikiController extends Wiki
 		}
 		
 		// target without parent list_order must have a minimum list_order
-		if(!$args->target_srl) 
+		if(!$args->target_srl)
 		{
 			$list_order->parent_srl = $args->parent_srl; 
 			$output = executeQuery('wiki.getTreeMinListorder', $list_order);
@@ -500,15 +500,24 @@ class WikiController extends Wiki
 			$output = executeQuery('wiki.getTreeNode', $t_args); 
 			$target = $output->data;
 
-			$update_args->module_srl = $target->module_srl; 
-			$update_args->parent_srl = $target->parent_srl; 
-			$update_args->list_order = $target->list_order;
-			if(!$update_args->parent_srl) 
+			if(!$target->parent_srl)
 			{
-				$update_args->parent_srl = 0; 
+				$delete_args = new stdClass;
+				$delete_args->document_srl = $args->target_srl;
+				$delete_args->module_srl = $target->module_srl;
+
+				$output = executeQuery('wiki.deleteTreeNode', $delete_args);
 			}
-			
-			$output = executeQuery('wiki.updateTreeListOrder', $update_args);
+			else
+			{
+				$update_args = new stdClass;
+				$update_args->module_srl = $target->module_srl;
+				$update_args->parent_srl = $target->parent_srl;
+				$update_args->list_order = $target->list_order;
+
+				$output = executeQuery('wiki.updateTreeListOrder', $update_args);
+			}
+
 			if(!$output->toBool()) 
 			{
 				return $output;
