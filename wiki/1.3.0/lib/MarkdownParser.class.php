@@ -1,6 +1,7 @@
 <?php
 /* require_once ('SyntaxParser.interface.php'); // Commented for backwards compatibility with PHP4 */
-require_once ('markdown.php'); 
+require_once ('markdown.php');
+require_once ('WikiText.class.php');
 
 /**
  * @brief Converts Markdown syntax into HTML using external Markdown library
@@ -43,9 +44,9 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	 */
 	function parse($text) 
 	{
-		$new_text = Markdown($text); 
-		$new_text = $this->parseLinks($new_text); 
-		return $new_text;
+        $parser = new WTParser($text, 'markdown', $this->wiki_site);
+        $text = $parser->toString(true);
+		return $text;
 	}
 	
 	/**
@@ -55,9 +56,9 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	 * @param $text string
 	 * @return array 
 	 */
-	function getLinkedDocuments($text) 
+	function getLinkedDocuments($text)
 	{
-		$new_text = Markdown($text); 
+		$new_text = Markdown($text);
 		
 		$matches = array(); 
 		$aliases = array(); 

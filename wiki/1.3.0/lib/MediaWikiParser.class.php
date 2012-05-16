@@ -47,7 +47,7 @@ class MediaWikiParser extends ParserBase
 	 * @access protected
 	 * @return
 	 */
-	function parseText() 
+	function parseText()
 	{
         parent::parseText();
         $parser = new WTParser($this->text);
