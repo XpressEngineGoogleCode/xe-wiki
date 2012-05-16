@@ -266,12 +266,12 @@ class WikiView extends Wiki
 			{
 				include($this->module_path . 'lib/WikiText.class.php');
 				$content = $oDocument->get('content');
-				$wt = new WTParser($content);
+                $lang = $this->origin_module_info->markup_type;
+                if ($lang == 'mediawiki_markup') $lang = 'wikitext';
+                if ($lang == 'googlecode_markup') $lang = 'googlecode';
+				$wt = new WTParser($content, $lang);
 				$paragraph = $wt->getText((int)$section);
-				if(isset($paragraph))
-				{
-					$oDocument->add('content', $paragraph);
-				}
+                $oDocument->add('content', $paragraph);
 			}
 		}
 		else 
@@ -873,7 +873,8 @@ class WikiView extends Wiki
 			$cache_key = $oCacheHandler->getGroupKey('wikiContent', $object_key);
 			$content = $oCacheHandler->get($cache_key);				
 		}
-		if(true || !$content)
+        //disable cache here: (true || ...)
+		if(!$content)
 		{
 			$wiki_syntax_parser = $this->getWikiTextParser();
 			$content = $wiki_syntax_parser->parse($org_content);

@@ -322,7 +322,7 @@
 #wikiDocumentPreview{margin:1em 0;padding:10px;background-color:#eee}
 #wikiHelp{margin:1em 0;padding:10px;background-color:#EFF5FB}
 #wikiToc { border: 1px solid #AAAAAA; margin: 10px; background-color: #F9F9F9; display: table;}
-#wikiToc span#wikiTocTitle {font-weight: bold; padding: 10px 0 0 20px; display: block;}
+#wikiToc span#wikiTocTitle {font-weight: bold; padding: 10px 20px; display: block;}
 #wikiToc ul li { list-style-type: none; }
 #wikiToc ul { padding: 0 20px;  }
 .xe_content { line-height: 1.5em !important; }

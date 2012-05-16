@@ -1,6 +1,7 @@
 <?php
 /* require_once ('SyntaxParser.interface.php'); // Commented for backwards compatibility with PHP4 */
 require_once ('ParserBase.class.php'); 
+require_once ('WikiText.class.php');
 
 /**
  * @brief Converts Google Wiki Syntax to HTML
@@ -29,8 +30,9 @@ class GoogleCodeWikiParser extends ParserBase
 	 */
 	function parseText()
 	{
-		$this->parseHeadings();
 		parent::parseText();
+        $parser = new WTParser($this->text, 'googlecode', $this->wiki_site);
+        $this->text = $parser->toString(true);
 	}
 
 	/**

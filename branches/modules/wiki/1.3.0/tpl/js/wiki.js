@@ -46,3 +46,19 @@ function doRecompileTree() {
     params['mid'] = current_mid;
     exec_xml('wiki','procWikiRecompileTree', params);
 }
+
+jQuery(document).ready(function($){
+    $('<span style="cursor: pointer; margin-left: 10px">[hide]</span>')
+        .click(function(){
+            var subject = $(this).parents('#wikiToc').children('ul').not(':animated');
+            if (subject.is(':visible')) {
+                subject.slideUp();
+                $(this).text('[show]');
+            }
+            else {
+                subject.slideDown();
+                $(this).text('[hide]');
+            }
+        })
+        .appendTo('#wikiTocTitle');
+});

@@ -1,11 +1,13 @@
 <?php
 class WTParser
 {
-    var $text, $array = array();
+    var $text, $mode, $array = array();
 
-    function WTParser($text)
+    function WTParser($text, $mode='wikitext', $wiki_site=null)
     {
+        $this->mode = $mode;
         $this->setText($text);
+        $this->wiki_site = $wiki_site;
     }
 
     function setText($text, $paragraph=null)
@@ -83,7 +85,7 @@ class WTParser
     function toc($id=0, $chapter='')
     {
         $children = $this->getChildren($id);
-        $str = '<ul class="toc">';
+        $str = "<ul>";
         $innerCount = 1;
         foreach ($children as $i=>$item)
         {
@@ -91,14 +93,15 @@ class WTParser
             $chapterAux = ( $chapter ? $chapter . '.' : '' ) . $innerCount++;
             $liContent = "<a href='#{$item['slug']}'><span class='toc_number'>$chapterAux</span> {$item['title']}</a>";
             if (!empty($deeperChildren)) $liContent .= $this->toc($i, $chapterAux);
-            $str .= "<li>$liContent</li>";
+            $str .= "\n<li>$liContent</li>";
         }
-        $str .= "</ul>\n";
+        $str .= "</ul>";
         return $str;
     }
 
     function toString($toc=true, $baseEditLink=false)
     {
+        if (!$baseEditLink && $this->wiki_site) $baseEditLink = $this->wiki_site->getEditPageUrlForCurrentDocument();
         if (empty($this->array)) return false;
         $arr = $this->array;
         $item = current($arr);
@@ -116,8 +119,22 @@ class WTParser
             $edit = $baseEditLink ? "<span class='edit_link'><a href='$baseEditLink&section=$section'>edit</a></span>" : null;
             $depth = strlen($item['wrapper']);
             $text .= ( is_null($item['title']) ? '' : "<h$depth $hAttributes>$edit{$item['title']}</h$depth>" );
-            $p = trim($item['paragraph']);
-            $text .= "<p>$p</p>\n";
+            if ($p = trim($item['paragraph']))
+            {
+                if ($this->mode == 'markdown') {
+                    require_once ('markdown.php');
+                    $p = Markdown($p);
+                    $p = $this->markDownParseLinks($p);
+                    $text .= "$p\n";
+                }
+                elseif ($this->mode == 'googlecode') {
+                    $p = "<p>$p</p>";
+                }
+                elseif ($this->mode == 'wikitext') {
+                    $p = "<p>$p</p>";
+                }
+                $text .= "$p\n";
+            }
         } while ($item = next($arr));
 
         return $text;
@@ -169,15 +186,19 @@ class WTParser
 
     /**
      * Splits $text into an array of items containing headings, paragraphs, offsets and lengths
-     * @param $text
+     * @param $text text to be splitted
      * @return array
      */
     function split($text)
     {
-        $paragraphs = preg_split('/^[\s?]*(={1,6})(?!=)(?P<content>.+?)(?<!=)\1[\s?]*$/m', $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
+        if ($this->mode == 'wikitext') $regex = '/^[\s?]*(={1,6})(?!=)(?P<content>.+?)(?<!=)\1[\s?]*$/m';
+        elseif ($this->mode == 'markdown') $regex = '/^[\s?]*([#=]{1,6})(?![#=])(?P<content>.+?)(?<![#=])\1[\s?]*$/m';
+        elseif ($this->mode == 'googlecode') $regex = '/^[\s?]*(={1,6})(?!=)(?P<content>.+?)(?<!=)\1[\s?]*$/m';
+        else return false;
+        $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
         $nodes = array();
         foreach ($paragraphs as $i=>$p) {
-            if (substr($p[0], 0, 1) === '=') { //we have a title, start building
+            if (substr($p[0], 0, 1) === ($this->mode == 'wikitext' || $this->mode == 'googlecode' ? '=' : '#')) { //we have a title, start building
                 $title['wrapper'] = $p[0];
                 $title['offset'] = $p[1];
                 continue;
@@ -208,6 +229,53 @@ class WTParser
             }
         }
         return $nodes;
+    }
+
+    function markDownParseLinks($text)
+    {
+        $r =  preg_replace_callback("/
+                ([<]a		# Starts with 'a' HTML tag
+                .*			# Followed by any number of chars
+                href[=]		# Then by href=
+                [\"']?		# Optional quotes
+                (.*?)		# The alias (backreference 1)
+                [\"']?		# Optional quotes
+                [ >])		# Ends with space or close tag
+                (.*?)		# Anchor value
+                [<][\/][a][>]	# Ends with a close tag
+                /ix"
+            , array($this, "_handle_markdown_link")
+            , $text
+        );
+        return $r;
+    }
+
+    function _handle_markdown_link($matches)
+    {
+        $url = $matches[2];
+        // If external URL, just return it as is
+        if(preg_match("/^(https?|ftp|file)/", $url))
+        {
+            // return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
+            return $matches[0];
+        }
+        // If local document that  exists, return expected link and exit
+        if($alias = $this->wiki_site->documentExists($url))
+        {
+            $full_url = $this->wiki_site->getFullLink($alias);
+            $anchor = str_replace($url, $full_url, $matches[0]);
+            return $anchor;
+        }
+        // Else, if document does not exist
+        //   If user is not allowed to create content, return plain text
+        if(!$this->wiki_site->currentUserCanCreateContent())
+        {
+            return $url;
+        }
+        //   Else return link to create new page
+        $full_url = $this->wiki_site->getFullLink($url);
+        $description = $matches[3];
+        return "<a href=$full_url class='notexist'>" . $description . "</a>";
     }
 
 }
