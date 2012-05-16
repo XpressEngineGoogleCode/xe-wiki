@@ -238,7 +238,7 @@ class MediaWikiParser extends ParserBase
 									((https?|ftp|file)
 									://
 									[^ <]*)
-									#x", "<a href=\"$1\" title=\"$1\" class=\"external\">$1</a>", $this->text);
+									#x", "<a href=\"$2\" title=\"$2\" class=\"external\">$2</a>", $this->text);
 		// Find internal links given between [[double brackets]]
 		//	- can contain piped description [my link|description that can have many words]
 		//	- can link to local content [my link#local_anchor|and some description maybe]
