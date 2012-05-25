@@ -283,9 +283,14 @@ class WTParser
     function split($text)
     {
         if ($this->mode == 'wikitext' || $this->mode == 'googlecode') $delimiter = '=';
-        elseif ($this->mode == 'markdown') $delimiter = '[#=-]';
+        elseif ($this->mode == 'markdown') $delimiter = '[#]';
         elseif ($this->mode == 'xewiki') return $this->splitXeWiki($text);
-        $regex = '/^[\s?]*((' . $delimiter . '){1,6})(?![\2])(.+?)(?<![\2])\1[\s?]*$/m';
+		/*$regex = '/
+		^[\s?]*([#]{1,6})(?![\2])(.+?)(?<![\2])\1[\s?]*$         # Match headings that start with #
+		|
+		^(.+?)[ ]*\n(=+|-+)[ ]*\n+                     # Match heading underlined by = or -
+		/mx';*/
+		$regex = '/^[\s?]*(' . $delimiter . '{1,6})(?![\2])(.+?)(?<![\2])\1[\s?]*$|^(.+?)[ ]*\n(=+|-+)[ ]*\n+/m';
         $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
         $nodes = array();
         $itemOffset = 0; $title = $wrapper = null;
@@ -293,8 +298,8 @@ class WTParser
             $group = $p[0];
             $offset = $p[1];
             //if (!$group && !$offset) continue;
-            $mod = $i % 4;
-            if ($mod == 0) {
+            $mod = $i % 3;
+            if ($mod == 0) { // Content match
                 $item = new WTItem();
                 $item->offset = $itemOffset;
                 $item->wrapper = $wrapper;
@@ -303,11 +308,11 @@ class WTParser
                 if ($title) $item->slug = $this->slugify($title, $i);
                 $nodes[] = $item;
             }
-            elseif ($mod == 1) {
+            elseif ($mod == 1) { // Delimiter match
                 $wrapper = $group;
                 $itemOffset = $offset;
             }
-            elseif ($mod == 3) {
+            elseif ($mod == 2) { // Title match
                 $title = $group;
             }
         }
@@ -357,19 +362,41 @@ class WTParser
 }
 
 //$text = "a<h2>b</h2>c<h3>d</h3>e<h2>eee</h2><h1>hohoho</h1>";
-/*$text = <<<EOF
-a
-==b==
-c
-===d===
-e
-=f=
-g
-EOF;*/
-//$content = new WTParser($text, 'xewiki');
+/*
+$text = <<<EOF
+skdvbgakbsvcwa
+ew
+dewdwebcxquwbxyubxuewq
+
+
+denuxnyqwinxyewgvcewubdyuhwedewduhewudiwe
+
+
+wfcwednuyewhbwe
+
+dnewiuneiqdwedweqdq
+
+# Heading 1 #
+ksjdfhjkshdfkjsahchdjkdshcasd
+
+sdcjksanbcjksdbncksa
+
+Another heading 1
+======================
+
+sdkjsadfjkshdfjasdkjfhsdkjfhajksd
+
+asfajskdfjdfhgsjda
+
+And a little subheading
+---------------------------------------
+
+sadkjfsahdjkfhsjakdccdsacsad
+EOF;
+$content = new WTParser($text, 'markdown');
 //echo "<pre>$text</pre><hr>";
 //echo $content->toc();
-//echo $content->toString();
+echo $content->toString();
 //echo $content->getText(1);*/
 //$content->setText('bla', 4);
 //echo $content->toString(false);
