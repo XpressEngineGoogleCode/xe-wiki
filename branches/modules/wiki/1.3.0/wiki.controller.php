@@ -80,12 +80,16 @@ class WikiController extends Wiki
 		{
 			// If we have section, update content: retrieve full text and insert new section in it
 			$section = Context::get('section');
-			if(isset($section))
+			if (isset($section))
 			{
 				$full_content = $oDocument->get('content');
 				$section_content = $obj->content;
 
-				$wt = new WTParser($full_content);
+                $lang = $this->module_info->markup_type;
+                if ($lang == 'mediawiki_markup') $lang = 'wikitext';
+                elseif ($lang == 'googlecode_markup') $lang = 'googlecode';
+                elseif ($lang == 'xe_wiki_markup') $lang = 'xewiki';
+                $wt = new WTParser($full_content, $lang);
 				$wt->setText($section_content, (int)$section);
 				$new_content = $wt->getText();
 

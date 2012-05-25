@@ -2,6 +2,8 @@
 
 /* require_once ('SyntaxParser.interface.php');  // Commented for backwards compatibility with PHP4 */
 
+require_once ('WikiText.class.php');
+
 /**
  * @brief Syntax parser for XE Wiki
  * @developer Corina Udrescu (xe_dev@arnia.ro)
@@ -35,6 +37,9 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	 */
 	function parse($org_content) 
 	{
+        $parser = new WTParser($org_content, 'xewiki', $this->wiki_site);
+        $org_content = $parser->toString(true);
+
 		// Replace square brackets with link
 		$content = preg_replace_callback($this->internal_links_regex, array(&$this, 'callback_wikilink'), $org_content);
 		// No idea what this does :)
