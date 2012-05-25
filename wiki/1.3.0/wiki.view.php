@@ -472,6 +472,11 @@ class WikiView extends Wiki
 				$document_srl = $oDocumentModel->getDocumentSrlByTitle($this->module_info->module_srl, $entry);
 			}
 		}
+		else if(!$entry)
+		{
+			$entry = $oDocumentModel->getAlias($document_srl);
+			Context::set('entry', $entry);
+		}
 		
 		/*
 		 * Check if exists document_srl for requested document
