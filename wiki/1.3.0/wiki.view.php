@@ -264,12 +264,13 @@ class WikiView extends Wiki
 			// Update content, when paragraph edit is used
 			if (isset($section))
 			{
-				include($this->module_path . 'lib/WikiText.class.php');
+				require_once $this->module_path . 'lib/WikiText.class.php';
 				$content = $oDocument->get('content');
                 $lang = $this->module_info->markup_type;
                 if ($lang == 'mediawiki_markup') $lang = 'wikitext';
                 elseif ($lang == 'googlecode_markup') $lang = 'googlecode';
-				elseif ($lang == 'xe_wiki_markup') $lang = 'xewiki';
+                //markdown stays markdown
+                elseif ($lang == 'xe_wiki_markup') $lang = 'xewiki';
                 $wt = new WTParser($content, $lang);
 				$paragraph = $wt->getText((int)$section);
                 $oDocument->add('content', $paragraph);

@@ -17,13 +17,21 @@ class WTItem
 
     function length()
     {
-        if (is_array($this->wrapper)) return
-            strlen($this->wrapper['left']) +
-            strlen($this->title) +
-            strlen($this->wrapper['right']) +
-            strlen($this->content);
+        if (is_array($this->wrapper)) {
+            if (isset($this->wrapper['underline'])) return
+                strlen($this->title) +
+                strlen($this->wrapper['underline']) +
+                strlen($this->content)
+                + 1;
+            return
+                strlen($this->wrapper['left']) +
+                strlen($this->title) +
+                strlen($this->wrapper['right']) +
+                strlen($this->content);
+        }
         return 2 * strlen($this->wrapper) + strlen($this->title) + strlen($this->content);
     }
+
     function rank()
     {
         if (is_array($this->wrapper)) return $this->wrapper['h'];
@@ -283,30 +291,23 @@ class WTParser
     function split($text)
     {
         if ($this->mode == 'wikitext' || $this->mode == 'googlecode') $delimiter = '=';
-        elseif ($this->mode == 'markdown') $delimiter = '[#]';
+        elseif ($this->mode == 'markdown') return $this->splitMarkdown($text);
         elseif ($this->mode == 'xewiki') return $this->splitXeWiki($text);
-		/*$regex = '/
-		^[\s?]*([#]{1,6})(?![\2])(.+?)(?<![\2])\1[\s?]*$         # Match headings that start with #
-		|
-		^(.+?)[ ]*\n(=+|-+)[ ]*\n+                     # Match heading underlined by = or -
-		/mx';*/
-		$regex = '/^[\s?]*(' . $delimiter . '{1,6})(?![\2])(.+?)(?<![\2])\1[\s?]*$|^(.+?)[ ]*\n(=+|-+)[ ]*\n+/m';
+		$regex = '/^[\s?]*(={1,6})(.+?)\1[\s?]*$/m';
         $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
         $nodes = array();
         $itemOffset = 0; $title = $wrapper = null;
         foreach ($paragraphs as $i=>$p) {
             $group = $p[0];
             $offset = $p[1];
-            //if (!$group && !$offset) continue;
             $mod = $i % 3;
-            if ($mod == 0) { // Content match
+            if ($mod == 0) {
                 $item = new WTItem();
                 $item->offset = $itemOffset;
                 $item->wrapper = $wrapper;
                 $item->title = $title;
                 $item->content = $group;
-                if ($title) $item->slug = $this->slugify($title, $i);
-                $nodes[] = $item;
+                $this->saveItem($nodes, $item);
             }
             elseif ($mod == 1) { // Delimiter match
                 $wrapper = $group;
@@ -339,8 +340,7 @@ class WTParser
                     ) : null;
                 $item->title = $title;
                 $item->content = $group;
-                if ($title) $item->slug = $this->slugify($title, $i);
-                $nodes[] = $item;
+                $this->saveItem($nodes, $item);
             }
             elseif ($mod == 1) {
                 $titleLeft = $group;
@@ -359,44 +359,111 @@ class WTParser
         return $nodes;
     }
 
+    function splitMarkdown($text)
+    {
+        $text = "\n" . $text; // add "root element" for toc
+        $regex = '/^[\s?]*(#{1,6})(.+?)\1[\s?]*$/m';
+        $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
+        $nodes = array();
+        $itemOffset = 0; $title = $wrapper = null;
+        foreach ($paragraphs as $i=>$p) {
+            $group = $p[0];
+            $offset = $p[1] - 1; //the \n from the beginning
+            //if (!$group && !$offset) continue;
+            $mod = $i % 3;
+            if ($mod == 0) // Content match
+            {
+                //look for headings underlined with ===== or ---- lines
+                $smaller = preg_split('{ ^(.+?)[ ]*\n(=+|-+)[ ]*\n*$ }mx', $group, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
+                if (count($smaller) > 1) //we have underlined headings
+                {
+                    $o = $offset;
+                    $t = $w = $underline = null;
+                    foreach ($smaller as $j=>$s) {
+                        if ($j == 0) {
+                            if ($s[0]) {
+                                $item = new WTItem();
+                                $item->offset = $itemOffset;
+                                $item->wrapper = $wrapper;
+                                $item->title = $title;
+                                $item->content = $s[0];
+                                $this->saveItem($nodes, $item);
+                            }
+                            continue;
+                        }
+                        $m = $j % 3;
+                        if ($m == 0) {
+                            $it = new WTItem();
+                            $it->offset = $o;
+                            $it->title = $t;
+                            $it->content = $s[0];
+                            $rank = (substr($underline, 0, 1) == '=' ? 1 : 2);
+                            $it->wrapper = array(
+                                'h' => $rank,
+                                'left' => "<h$rank>",
+                                'right' => "</h$rank>",
+                                'underline' => $underline
+                            );
+                            $this->saveItem($nodes, $it);
+                        }
+                        elseif ($m == 1) { //title
+                            $t = $s[0];
+                            $o = $offset + $s[1];
+                        }
+                        elseif ($m == 2) $underline = $s[0];
+                    }
+                }
+                else {
+                    $item = new WTItem();
+                    $item->offset = $itemOffset;
+                    $item->wrapper = $wrapper;
+                    $item->title = $title;
+                    $item->content = $group;
+                    $this->saveItem($nodes, $item);
+                }
+            }
+            elseif ($mod == 1) { // Delimiter match
+                $wrapper = $group;
+                $itemOffset = $offset;
+            }
+            elseif ($mod == 2) { // Title match
+                $title = $group;
+            }
+        }
+        return $nodes;
+    }
+
+    /**
+     * Adds a WTItem to an array ($nodes) without affecting the array's internal pointer. Returns inserted key.
+     * @param $nodes
+     * @param WTItem $item
+     */
+    function saveItem(&$nodes, $item) {
+        $original = key($nodes);
+        $nodes[] = $item;
+        end($nodes);
+        $ret = key($nodes);
+        if ($item->title) $nodes[$ret]->slug = $this->slugify($item->title, $ret);
+        //don't affect $nodes internal pointer
+        reset($nodes);
+        while (key($nodes) != $original) next($nodes);
+        return $ret;
+    }
+
 }
 
 //$text = "a<h2>b</h2>c<h3>d</h3>e<h2>eee</h2><h1>hohoho</h1>";
-/*
-$text = <<<EOF
-skdvbgakbsvcwa
-ew
-dewdwebcxquwbxyubxuewq
 
-
-denuxnyqwinxyewgvcewubdyuhwedewduhewudiwe
-
-
-wfcwednuyewhbwe
-
-dnewiuneiqdwedweqdq
-
-# Heading 1 #
-ksjdfhjkshdfkjsahchdjkdshcasd
-
-sdcjksanbcjksdbncksa
-
-Another heading 1
-======================
-
-sdkjsadfjkshdfjasdkjfhsdkjfhajksd
-
-asfajskdfjdfhgsjda
-
-And a little subheading
----------------------------------------
-
-sadkjfsahdjkfhsjakdccdsacsad
+/*$text = <<<EOF
+tra
+-
+lala
+##lel##
+heave
+bla
+===
 EOF;
-$content = new WTParser($text, 'markdown');
+$content = new WTParser($text, 'markdown');*/
 //echo "<pre>$text</pre><hr>";
 //echo $content->toc();
-echo $content->toString();
-//echo $content->getText(1);*/
-//$content->setText('bla', 4);
-//echo $content->toString(false);
+//echo $content->toString();
