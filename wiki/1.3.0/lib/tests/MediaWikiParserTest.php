@@ -23,7 +23,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	/* Return the parsed text without the paragraph tags */
 	function parseForTests($text)
 	{
-		$output = $this->wikiParser->parse($text);
+		$output = $this->wikiParser->parse($text, false);
 		$output = $this->escapeParserOutput($output);
 		return $output;
 	}
@@ -62,6 +62,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 */
 	function testParagraphs(){
 		$output = $this->wikiParser->parse("\nA paragraph");
+		$output = str_replace(array(chr(13), chr(10), chr(9)), '', $output);
 		$this->assertEquals("<p>A paragraph</p>", $output);
 	} 
 	
@@ -138,22 +139,22 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 */
 	function testHeadings(){
 		$output = $this->parseForTests("= Heading 1 =");
-		$this->assertEquals("<h1>Heading 1</h1>", $output);
+		$this->assertEquals("<h1 title=\"Heading 1\"> Heading 1 </h1>", $output);
 		
 		$output = $this->parseForTests("== Heading 2 ==");
-		$this->assertEquals("<h2>Heading 2</h2>", $output);
+		$this->assertEquals("<h2 title=\"Heading 2\"> Heading 2 </h2>", $output);
 		
 		$output = $this->parseForTests("=== Heading 3 ===");
-		$this->assertEquals("<h3>Heading 3</h3>", $output);
+		$this->assertEquals("<h3 title=\"Heading 3\"> Heading 3 </h3>", $output);
 		
 		$output = $this->parseForTests("==== Heading 4 ====");
-		$this->assertEquals("<h4>Heading 4</h4>", $output);
+		$this->assertEquals("<h4 title=\"Heading 4\"> Heading 4 </h4>", $output);
 		
 		$output = $this->parseForTests("===== Heading 5 =====");
-		$this->assertEquals("<h5>Heading 5</h5>", $output);		
+		$this->assertEquals("<h5 title=\"Heading 5\"> Heading 5 </h5>", $output);
 		
 		$output = $this->parseForTests("====== Heading 6 ======");
-		$this->assertEquals("<h6>Heading 6</h6>", $output);		
+		$this->assertEquals("<h6 title=\"Heading 6\"> Heading 6 </h6>", $output);
 	}
 	
 	/**
@@ -577,7 +578,7 @@ HEREDOC;
 	
 	function testAgrregate1(){
 		$input_string = <<<HEREDOC
-=== Heading ===
+== Heading ==
 Some content
 I would like to add another line
 
@@ -639,11 +640,11 @@ And a hr thingy here
 *** dolphin
 **** monkey
 HEREDOC;
-		$output = $this->wikiParser->parse($input_string);
+		$output = $this->wikiParser->parse($input_string, false);
 		$output = $this->escapeParserOutput($output);
 		
 		$expected_output = <<<HEREDOC
-<h2>Heading</h2>
+<h2 title="Heading"> Heading </h2>
 Some content<br/>
 I would like to add another line<br/>
 
