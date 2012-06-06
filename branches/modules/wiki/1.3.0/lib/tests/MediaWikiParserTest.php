@@ -864,5 +864,28 @@ HEREDOC;
 		$expected_output = $this->escapeExpectedOutput($expected_output);
 		$this->assertEquals($expected_output, $output);		
 	}
+
+	function testMultipleLinks(){
+		$input_string = <<<HEREDOC
+Links
+[[Internal_link]]
+[[Internal_link | You should use page alias]]
+http://domain/page
+[http://domain/page label]
+
+HEREDOC;
+		$output = $this->wikiParser->parse($input_string);
+		$output = $this->escapeParserOutput($output);
+
+		$expected_output = <<<HEREDOC
+Links
+<a href="Internal_link" title="Internal_link" class="exist">Internal_link</a>
+<a href="Internal_link_" title="Internal_link " class="exist"> You should use page alias</a>
+<a href="http://domain/page" title="http://domain/page" class="external">http://domain/page</a>
+<a href="http://domain/page" title="http://domain/page" class="external">label</a>
+HEREDOC;
+		$expected_output = $this->escapeExpectedOutput($expected_output);
+		$this->assertEquals($expected_output, $output);
+	}
 	
 }

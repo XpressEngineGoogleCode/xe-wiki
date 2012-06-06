@@ -25,7 +25,7 @@ class MediaWikiParser extends ParserBase
 									([#](.*?))?		# Followed by an optional group that starts with # [matches 4,5]
 									([|](.*?))?		# Followed by an optional group that starts with a pipe [matches 6,7]
 									[]][]]				# Ends with ]]
-									([^ ]*)?		# Optional tail for brackets - take all characters until first space  [matches 8]
+									([^ \n]*)?		# Optional tail for brackets - take all characters until first space or newline  [matches 8]
 								/x"; 
 	
 	/**
@@ -231,15 +231,17 @@ class MediaWikiParser extends ParserBase
 	 */
 	function parseLinks() 
 	{
-		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets; skip the ones that are already inside a link - start with "
-		$this->text = preg_replace("#
-									(?<!
-										([[\"'])
+		// Replace external urls that just start with http, https, ftp etc.;
+		// skip the ones in square brackets;
+		// skip the ones that are already inside a link - start with "
+		$this->text = preg_replace("~
+									(?<!  				# does not start with ..
+										([[\"'])        # [ followed by \" or '
 									)
-									((https?|ftp|file)
-									://
-									[^ <]*)
-									#x", "<a href=\"$2\" title=\"$2\" class=\"external\">$2</a>", $this->text);
+									((https?|ftp|file)    # starts with http, https, ftp or file
+									://                   # followed by ://
+									[^ <\n]*)               # followed by any number of characters except space, < and \n
+									~x", "<a href=\"$2\" title=\"$2\" class=\"external\">$2</a>", $this->text);
 		// Find internal links given between [[double brackets]]
 		//	- can contain piped description [my link|description that can have many words]
 		//	- can link to local content [my link#local_anchor|and some description maybe]
