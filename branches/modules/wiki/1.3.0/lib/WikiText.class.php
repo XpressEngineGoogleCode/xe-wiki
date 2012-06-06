@@ -45,6 +45,7 @@ class WTParser
 
     function WTParser($text, $mode='wikitext', $wiki_site=null)
     {
+        if (!in_array($mode, array('wikitext', 'markdown', 'googlecode', 'xewiki'))) return false;
         $this->mode = $mode;
         $this->setText($text);
         $this->wiki_site = $wiki_site;
@@ -52,7 +53,7 @@ class WTParser
 
     function setText($text, $paragraph=null)
     {
-		$text = str_replace(chr(13), '', $text);
+        $text = str_replace(chr(13), '', $text);
         if (is_numeric($paragraph)) {
             if (!isset($this->array[$paragraph])) return false;
             $item = $this->array[$paragraph];
@@ -178,7 +179,7 @@ class WTParser
             {
                 if ($this->mode == 'markdown') {
                     require_once ('markdown.php');
-                    $p = Markdown($p, true);
+                    $p = Markdown($p);
                     $p = $this->markDownParseLinks($p);
                 }
                 elseif ($this->mode == 'googlecode') {
@@ -236,53 +237,6 @@ class WTParser
         }
     }
 
-    function markDownParseLinks($text)
-    {
-        $r =  preg_replace_callback("/
-                ([<]a		# Starts with 'a' HTML tag
-                .*			# Followed by any number of chars
-                href[=]		# Then by href=
-                [\"']?		# Optional quotes
-                (.*?)		# The alias (backreference 1)
-                [\"']?		# Optional quotes
-                [ >])		# Ends with space or close tag
-                (.*?)		# Anchor value
-                [<][\/][a][>]	# Ends with a close tag
-                /ix"
-            , array($this, "_handle_markdown_link")
-            , $text
-        );
-        return $r;
-    }
-
-    function _handle_markdown_link($matches)
-    {
-        $url = $matches[2];
-        // If external URL, just return it as is
-        if(preg_match("/^(https?|ftp|file)/", $url))
-        {
-            // return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
-            return $matches[0];
-        }
-        // If local document that  exists, return expected link and exit
-        if($alias = $this->wiki_site->documentExists($url))
-        {
-            $full_url = $this->wiki_site->getFullLink($alias);
-            $anchor = str_replace($url, $full_url, $matches[0]);
-            return $anchor;
-        }
-        // Else, if document does not exist
-        //   If user is not allowed to create content, return plain text
-        if(!$this->wiki_site->currentUserCanCreateContent())
-        {
-            return $url;
-        }
-        //   Else return link to create new page
-        $full_url = $this->wiki_site->getFullLink($url);
-        $description = $matches[3];
-        return "<a href=$full_url class='notexist'>" . $description . "</a>";
-    }
-
     /**
      * Splits $text into an array of items containing headings, paragraphs, offsets and lengths
      * @param $text text to be splitted
@@ -290,8 +244,7 @@ class WTParser
      */
     function split($text)
     {
-        if ($this->mode == 'wikitext' || $this->mode == 'googlecode') $delimiter = '=';
-        elseif ($this->mode == 'markdown') return $this->splitMarkdown($text);
+        if ($this->mode == 'markdown') return $this->splitMarkdown($text);
         elseif ($this->mode == 'xewiki') return $this->splitXeWiki($text);
 		$regex = '/^[\s?]*(={1,6})(.+?)\1[\s?]*$/m';
         $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
@@ -433,6 +386,53 @@ class WTParser
         return $nodes;
     }
 
+    function markDownParseLinks($text)
+    {
+        $r =  preg_replace_callback("/
+                ([<]a		# Starts with 'a' HTML tag
+                .*			# Followed by any number of chars
+                href[=]		# Then by href=
+                [\"']?		# Optional quotes
+                (.*?)		# The alias (backreference 1)
+                [\"']?		# Optional quotes
+                [ >])		# Ends with space or close tag
+                (.*?)		# Anchor value
+                [<][\/][a][>]	# Ends with a close tag
+                /ix"
+            , array($this, "_handle_markdown_link")
+            , $text
+        );
+        return $r;
+    }
+
+    function _handle_markdown_link($matches)
+    {
+        $url = $matches[2];
+        // If external URL, just return it as is
+        if(preg_match("/^(https?|ftp|file)/", $url))
+        {
+            // return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
+            return $matches[0];
+        }
+        // If local document that  exists, return expected link and exit
+        if($alias = $this->wiki_site->documentExists($url))
+        {
+            $full_url = $this->wiki_site->getFullLink($alias);
+            $anchor = str_replace($url, $full_url, $matches[0]);
+            return $anchor;
+        }
+        // Else, if document does not exist
+        //   If user is not allowed to create content, return plain text
+        if(!$this->wiki_site->currentUserCanCreateContent())
+        {
+            return $url;
+        }
+        //   Else return link to create new page
+        $full_url = $this->wiki_site->getFullLink($url);
+        $description = $matches[3];
+        return "<a href=$full_url class='notexist'>" . $description . "</a>";
+    }
+
     /**
      * Adds a WTItem to an array ($nodes) without affecting the array's internal pointer. Returns inserted key.
      * @param $nodes
@@ -463,7 +463,29 @@ heave
 bla
 ===
 EOF;
-$content = new WTParser($text, 'markdown');*/
+$content = new WTParser($text, 'markdowna');
+die;*/
 //echo "<pre>$text</pre><hr>";
 //echo $content->toc();
 //echo $content->toString();
+
+/*$text = <<<ZZZ
+==flo==
+sasasasa
+ce facem aici?
+* plm *
+* zzz *
+** zzz
+{|
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream
+|}
+ZZZ;
+$content = new WTParser($text, 'wikitext');
+echo $content->toString(false);*/

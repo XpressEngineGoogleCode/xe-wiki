@@ -1,7 +1,7 @@
 <include target="header.html" />
 
 <!--@if($module_info->markup_type == 'markdown')-->
-<script type="text/javascript" src="../../lib/pagedown/Markdown.Converter.js"></script> 
+<script type="text/javascript" src="../../lib/pagedown/Markdown.Converter.js"></script>
 <script type="text/javascript">
 	jQuery(function($) {
 		var $textarea = $('#wikiContentContainer textarea');
@@ -11,7 +11,58 @@
 		$textarea.keyup(function() {
 			$preview.html(converter($textarea.val()));
 		}).trigger('keyup');
-	});		
+	});
+</script>
+<!--@elseif ($module_info->markup_type == 'googlecode_markup')-->
+<script type="text/javascript" src="../../lib/js/GoogleCodeWikiParser.js"></script>
+<script type="text/javascript">
+    jQuery(function($) {
+        setInterval(function() {
+            var wikitext = editorGetContent( jQuery('form[editor_sequence]').attr('editor_sequence') );
+            var g = new GoogleCodeWikiParser();
+            var html = g.parse( wikitext );
+            jQuery('#wikiDocumentPreview').html(html);
+        }, 500);
+    });
+</script>
+<!--@elseif ($module_info->markup_type == 'mediawiki_markup')-->
+<script type="text/javascript">
+//ajax:
+jQuery.fn.syncPreviewWithEditor = function(options) {
+    var form = (
+        typeof(options) != 'undefined' && options.sequence && !isNaN(options.sequence) ?
+            jQuery('form[editor_sequence=' + options.sequence + ']') :
+            jQuery('form[editor_sequence]:eq(0)')
+        );
+    if (!form.length) return false;
+    //defaults:
+    var settings = jQuery.extend({
+        sequence: form.attr('editor_sequence'),
+        interval: 2000
+    }, options);
+    form = jQuery('form[editor_sequence=' + settings.sequence + ']');
+    if (!form.length) return false;
+    var editorContent = editorGetContent(settings.sequence);
+    return this.each(function() {
+        var $this = jQuery(this);
+        setInterval(function(){
+            var newContent = editorGetContent( settings.sequence );
+            if (editorContent != newContent || ( !$this.html() && newContent)) {
+                editorContent = newContent;
+                var ajaxData = {act: 'procWikiTextParse', content: newContent, markup: form.data('markup')};
+                jQuery.getJSON('index.php', ajaxData, function(data){
+                    $this.html(data.content);
+                });
+            }
+        }, settings.interval);
+    });
+
+}
+jQuery(function($) {
+    setTimeout(function(){
+        jQuery('#wikiDocumentPreview').syncPreviewWithEditor();
+    }, 1000);
+});
 </script>
 <!--@end-->
 
@@ -62,7 +113,7 @@
 </script>
 
 
-<form action="./" method="post" ruleset="insert" id="fo_write">
+<form action="./" method="post" ruleset="insert" id="fo_write" data-markup="{$module_info->markup_type}">
 	<input type="hidden" name="mid" value="{$mid}" />
 	<input type="hidden" name="act" value="procWikiInsertDocument" />
 	<input type="hidden" name="module" value="wiki" />
@@ -104,7 +155,7 @@
 	<!--@end-->
 	
 	
-	<!--@if($module_info->markup_type == 'markdown')-->
+	<!--@if($module_info->markup_type != 'xe_wiki_markup')-->
 	<div id="wikiDocumentPreview"></div>
 	<!--@end-->
 

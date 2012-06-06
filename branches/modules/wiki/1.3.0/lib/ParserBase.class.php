@@ -82,13 +82,13 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 * @param $text string
 	 * @return string
 	 */
-	function parse($text) 
+	function parse($text, $toc=true)
 	{
 		$this->text = $text;
 		if(!empty($this->text)) 
 		{
 			$this->parseInit(); 
-			$this->parseText(); 
+			$this->parseText($toc);
 			$this->parseEnd();
 		}
 		return $this->text;
