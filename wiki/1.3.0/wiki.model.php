@@ -582,5 +582,27 @@
 		{
 			array_push($obj, 'wiki');
 		}
+
+		function getDefaultServicePrefix(){
+			$oModuleModel = &getModel('module');
+			$config = $oModuleModel->getModuleConfig('lucene');
+			return $config->service_name_prefix;
+		}
+
+		/* lucene search related */
+		var $json_service = null;
+
+		function getService(){
+			require_once(_XE_PATH_.'modules/lucene/lib/jsonphp.php');
+			if( !isset($this->json_service) ){
+				//debug_syslog(1, "creating new json_service\n");
+				$this->json_service = new Services_JSON(0);
+			}else{
+				//debug_syslog(1, "reusing json_service\n");
+			}
+			return $this->json_service;
+
+		}
+
 	}
 ?>
