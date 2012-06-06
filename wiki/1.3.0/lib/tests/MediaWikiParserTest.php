@@ -18,7 +18,15 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	
 	function escapeExpectedOutput($output){
 		return str_replace(array(chr(13), chr(10), chr(9)), '', $output);
-	}	
+	}
+
+	/* Return the parsed text without the paragraph tags */
+	function parseForTests($text)
+	{
+		$output = $this->wikiParser->parse($text);
+		$output = $this->escapeParserOutput($output);
+		return $output;
+	}
 	
 	/**
 	 * #summary	 One-line summary of the page 
@@ -26,13 +34,13 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	function testPragmasSummary()
 	{
 		// When found at the beginning of the line, convert to italic
-		$output = $this->wikiParser->parse('#summary How you doing?');
+		$output = $this->parseForTests('#summary How you doing?');
 		$this->assertEquals('<i>How you doing?</i>', $output);
 		
 		// When found inside document text, parsing should skip it
 		// Also, it should not be converted to a list either 
-		$output = $this->wikiParser->parse('Some text before should make it invalid #summary How you doing?');
-		$this->assertEquals('Some text before should make it invalid #summary How you doing?', $output);		
+		$output = $this->parseForTests('Some text before should make it invalid #summary How you doing?');
+		$this->assertEquals('Some text before should make it invalid #summary How you doing?', $output);
 	}
 	
 	/**
@@ -61,7 +69,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * italic	_italic_ 
 	 */
 	function testTypefaceItalic(){
-		$output = $this->wikiParser->parse("''italic''");
+		$output = $this->parseForTests("''italic''");
 		$this->assertEquals("<em>italic</em>", $output);
 	}
 	
@@ -69,7 +77,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * bold	*bold* 
 	 */
 	function testTypefaceBold(){
-		$output = $this->wikiParser->parse("'''bold'''");
+		$output = $this->parseForTests("'''bold'''");
 		$this->assertEquals("<strong>bold</strong>", $output);
 	}
 	
@@ -77,7 +85,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * bold	*bold* and italic 
 	 */
 	function testTypefaceBoldAndItalic(){
-		$output = $this->wikiParser->parse("'''''bold & italic'''''");
+		$output = $this->parseForTests("'''''bold & italic'''''");
 		$this->assertEquals("<strong><em>bold & italic</strong></em>", $output);
 	}
 	
@@ -85,7 +93,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * code	`code`
 	 */
 	function testTypefaceCodeInline(){
-		$output = $this->wikiParser->parse("`code`");
+		$output = $this->parseForTests("`code`");
 		$this->assertEquals("<tt>code</tt>", $output);
 	}	
 	
@@ -94,7 +102,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * superscript	^super^script
 	 */
 	function testTypefaceSuperscript(){
-		$output = $this->wikiParser->parse("^super^script");
+		$output = $this->parseForTests("^super^script");
 		$this->assertEquals("<sup>super</sup>script", $output);
 	}			
 	
@@ -102,7 +110,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * subscript	,,sub,,script
 	 */
 	function testTypefaceSubscript(){
-		$output = $this->wikiParser->parse(",,sub,,script");
+		$output = $this->parseForTests(",,sub,,script");
 		$this->assertEquals("<sub>sub</sub>script", $output);
 	}				
 	
@@ -110,7 +118,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * strikeout ~~strikeout~~
 	 */
 	function testTypefaceStrikeout(){
-		$output = $this->wikiParser->parse("~~strikeout~~");
+		$output = $this->parseForTests("~~strikeout~~");
 		$this->assertEquals("<span style='text-decoration:line-through'>strikeout</span>", $output);
 	}					
 	
@@ -118,10 +126,10 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * Mixed typeface styles 
 	 */
 	function testTypefaceCombinations(){
-		$output = $this->wikiParser->parse("'''''bold''' in italic''");
+		$output = $this->parseForTests("'''''bold''' in italic''");
 		$this->assertEquals("<strong><em>bold</strong> in italic</em>", $output);
 		
-		$output = $this->wikiParser->parse("'''''italic'' in bold'''");
+		$output = $this->parseForTests("'''''italic'' in bold'''");
 		$this->assertEquals("<strong><em>italic</em> in bold</strong>", $output);
 	}
 	
@@ -129,22 +137,22 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * Headings
 	 */
 	function testHeadings(){
-		$output = $this->wikiParser->parse("= Heading 1 =");
+		$output = $this->parseForTests("= Heading 1 =");
 		$this->assertEquals("<h1>Heading 1</h1>", $output);
 		
-		$output = $this->wikiParser->parse("== Heading 2 ==");
+		$output = $this->parseForTests("== Heading 2 ==");
 		$this->assertEquals("<h2>Heading 2</h2>", $output);
 		
-		$output = $this->wikiParser->parse("=== Heading 3 ===");
+		$output = $this->parseForTests("=== Heading 3 ===");
 		$this->assertEquals("<h3>Heading 3</h3>", $output);
 		
-		$output = $this->wikiParser->parse("==== Heading 4 ====");
+		$output = $this->parseForTests("==== Heading 4 ====");
 		$this->assertEquals("<h4>Heading 4</h4>", $output);
 		
-		$output = $this->wikiParser->parse("===== Heading 5 =====");
+		$output = $this->parseForTests("===== Heading 5 =====");
 		$this->assertEquals("<h5>Heading 5</h5>", $output);		
 		
-		$output = $this->wikiParser->parse("====== Heading 6 ======");
+		$output = $this->parseForTests("====== Heading 6 ======");
 		$this->assertEquals("<h6>Heading 6</h6>", $output);		
 	}
 	
@@ -152,19 +160,16 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	 * Dividers - four ore more dashes on a single line 
 	 */
 	function testDividers(){
-		$output = $this->wikiParser->parse("----");
+		$output = $this->parseForTests("----");
 		$this->assertEquals("<hr />", $output);
 		
-		$output = $this->wikiParser->parse("Random words and ---");
+		$output = $this->parseForTests("Random words and ---");
 		$this->assertEquals("Random words and ---", $output);
 		
-		$output = $this->wikiParser->parse("----------------------------------------");
+		$output = $this->parseForTests("----------------------------------------");
 		$this->assertEquals("<hr />", $output);		
 	}
 	
-	/**
-	 * Lists http://code.google.com/p/support/wiki/WikiSyntax#Lists 
-	 */
 	function testLists(){
 		$input_string = <<<HEREDOC
 
@@ -176,9 +181,8 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 *** But jumping levels creates empty space.
 Any other start ends the list.
 HEREDOC;
-		$output = $this->wikiParser->parse($input_string);
-		$output = $this->escapeParserOutput($output);
-		
+		$output = $this->parseForTests($input_string);
+
 		$expected_output = <<<HEREDOC
 <ul>
 	<li>
@@ -208,7 +212,7 @@ HEREDOC;
 		$expected_output = $this->escapeExpectedOutput($output);
 		$this->assertEquals($expected_output, $output);
 
-		$output = $this->wikiParser->parse('How about * list in the middle of text');
+		$output = $this->parseForTests('How about * list in the middle of text');
 		$this->assertEquals("How about * list in the middle of text", $output);		
 		
 		$input_string = <<<HEREDOC
@@ -226,9 +230,8 @@ HEREDOC;
 Any other start also
 ends the list.
 HEREDOC;
-		$output = $this->wikiParser->parse($input_string);
-		$output = $this->escapeParserOutput($output);
-		
+		$output = $this->parseForTests($input_string);
+
 		$expected_output = <<<HEREDOC
 <ol>
 <li>Start each line</li>
@@ -461,7 +464,7 @@ HEREDOC;
 		$input_string = "[[Main Page]]";
 		$expected_output = "<a href=\"Main_Page\" title=\"Main Page\" class=\"exist\">Main Page</a>";
 		
-		$output = $this->wikiParser->parse($input_string);
+		$output = $this->parseForTests($input_string);
 		$this->assertEquals($expected_output,$output);
 	}		
 	
@@ -472,7 +475,7 @@ HEREDOC;
 		$input_string = "[[Main Page|different text]]";
 		$expected_output = "<a href=\"Main_Page\" title=\"Main Page\" class=\"exist\">different text</a>";
 		
-		$output = $this->wikiParser->parse($input_string);
+		$output = $this->parseForTests($input_string);
 		$this->assertEquals($expected_output,$output);
 	}			
 	
@@ -484,7 +487,7 @@ HEREDOC;
 		$input_string = "[[Help:Contents]]";
 		$expected_output = "<a href=\"Contents\" title=\"Contents\" class=\"exist\">Contents</a>";
 		
-		$output = $this->wikiParser->parse($input_string);
+		$output = $this->parseForTests($input_string);
 		$this->assertEquals($expected_output,$output);
 	}			
 	
@@ -492,13 +495,13 @@ HEREDOC;
 	 * Internal links
 	 */
 	function testLinks_InternalWordEndings(){	
-		$output = $this->wikiParser->parse("[[Help]]s");
+		$output = $this->parseForTests("[[Help]]s");
 		$this->assertEquals("<a href=\"Help\" title=\"Help\" class=\"exist\">Helps</a>",$output);
 		
-		$output = $this->wikiParser->parse("[[Help]]ing");
+		$output = $this->parseForTests("[[Help]]ing");
 		$this->assertEquals("<a href=\"Help\" title=\"Help\" class=\"exist\">Helping</a>",$output);		
 		 
-		$output = $this->wikiParser->parse("[[Help]]anylettersyoulikehere");
+		$output = $this->parseForTests("[[Help]]anylettersyoulikehere");
 		$this->assertEquals("<a href=\"Help\" title=\"Help\" class=\"exist\">Helpanylettersyoulikehere</a>",$output);			
 	}				
 	
@@ -506,7 +509,7 @@ HEREDOC;
 	 * Internal links
 	 */
 	function testLinks_InternalWordEndingsEscape(){	
-		$output = $this->wikiParser->parse("[[Help]]<nowiki />ful advice");
+		$output = $this->parseForTests("[[Help]]<nowiki />ful advice");
 		$this->assertEquals("<a href=\"Help\" title=\"Help\" class=\"exist\">Help</a>ful advice",$output);
 	}					
 	
@@ -514,7 +517,7 @@ HEREDOC;
 	 * Internal links
 	 */
 	function testLinks_InternalToAnchor(){	
-		$output = $this->wikiParser->parse("[[#See also]]");
+		$output = $this->parseForTests("[[#See also]]");
 		$this->assertEquals("<a href=\"#See_also\" class=\"exist\">#See also</a>",$output);
 	}						
 	
@@ -522,7 +525,7 @@ HEREDOC;
 	 * Internal links
 	 */
 	function testLinks_InternalToAnchorWithDescription(){	
-		$output = $this->wikiParser->parse("[[#See also|different text]]");
+		$output = $this->parseForTests("[[#See also|different text]]");
 		$this->assertEquals("<a href=\"#See_also\" class=\"exist\">different text</a>",$output);
 	}							
 
@@ -530,7 +533,7 @@ HEREDOC;
 	 * Internal links
 	 */
 	function testLinks_InternalToAnchorOnAnotherPage(){	
-		$output = $this->wikiParser->parse("[[Help:Images#See also]]");
+		$output = $this->parseForTests("[[Help:Images#See also]]");
 		$this->assertEquals("<a href=\"Images#See_also\" title=\"Images\" class=\"exist\">Images#See also</a>",$output);
 	}							
 	
@@ -538,7 +541,7 @@ HEREDOC;
 	 * External links
 	 */
 	function testLinks_ExternalWithoutTag(){	
-		$output = $this->wikiParser->parse("http://mediawiki.org");
+		$output = $this->parseForTests("http://mediawiki.org");
 		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">http://mediawiki.org</a>",$output);
 	}								
 	
@@ -546,7 +549,7 @@ HEREDOC;
 	 * External links
 	 */
 	function testLinks_ExternalSimple(){	
-		$output = $this->wikiParser->parse("[http://mediawiki.org MediaWiki]");
+		$output = $this->parseForTests("[http://mediawiki.org MediaWiki]");
 		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">MediaWiki</a>",$output);
 	}									
 	
@@ -568,7 +571,7 @@ HEREDOC;
 	 * External links
 	 */
 	function testLinks_ExternalWithFileIcons(){	
-		$output = $this->wikiParser->parse("[http://mediawiki.org MediaWiki]");
+		$output = $this->parseForTests("[http://mediawiki.org MediaWiki]");
 		$this->assertEquals("<a href=\"http://mediawiki.org\" title=\"http://mediawiki.org\" class=\"external\">MediaWiki</a>",$output);
 	}					
 	
