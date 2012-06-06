@@ -15,4 +15,9 @@ class MockWikiSite /* implements WikiSite // Commented for backwards compatibili
 	function getFullLink($document_name) {
 		return $document_name;
 	}
+
+	function getEditPageUrlForCurrentDocument($section=null)
+	{
+		return 'edit'.$section;
+	}
 }
