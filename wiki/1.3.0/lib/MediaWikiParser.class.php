@@ -43,15 +43,16 @@ class MediaWikiParser extends ParserBase
 	/**
 	 * @brief Overrides parseText in base
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
-	 * @override
+     * @param bool $toc do not display toc and edit links if in preview mode (ajax)
+     * @override
 	 * @access protected
 	 * @return
 	 */
-	function parseText()
+    function parseText($toc=true)
 	{
         parent::parseText();
         $parser = new WTParser($this->text);
-        $this->text = $parser->toString(true, $this->wiki_site->getEditPageUrlForCurrentDocument());
+        $this->text = $parser->toString($toc, $toc ? $this->wiki_site->getEditPageUrlForCurrentDocument() : null);
 		$this->parseDefinitionLists();
 		$this->parsePreformattedText();
     }
@@ -397,11 +398,11 @@ class MediaWikiParser extends ParserBase
 										$/mx", array($this, '_handle_cell'), $this->text);
 		// Table cells on new line: |
 		$this->text = preg_replace("/^
-										[ ]*		# Any number of whitespace
+										[\s]*		# Any number of whitespace
 										[|]			# |
 										[\s]*
 										(.*)
-										[\s]
+										[\s]*
 										$/mx", '<td>$1</td>', $this->text);
 	}
 
@@ -414,7 +415,7 @@ class MediaWikiParser extends ParserBase
 	 */
 	function _handle_cell($matches) 
 	{
-		$table_cells = preg_replace('/[\s]*[|][|][\s]*/', '</td><td>', $matches[0]); 
+		$table_cells = preg_replace('/[\s]*[|][|][\s]*/', '</td><td>', $matches[0]);
 		return $table_cells;
 	}
 }

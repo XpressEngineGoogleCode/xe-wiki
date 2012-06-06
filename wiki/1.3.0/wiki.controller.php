@@ -175,6 +175,28 @@ class WikiController extends Wiki
 	}
 
 	/**
+     * @brief Preview for wikitext
+     * @developer Florin Ercus (xe_dev@arnia.ro)
+     * @access public
+     * @return
+     *
+     * Called through AJAX, returns JSON
+     */
+    function procWikiTextParse()
+    {
+        require_once "lib/WikiText.class.php";
+        $content = Context::get('content');
+        $lang = Context::get('markup');
+        $this->module_info->markup_type = $lang;
+        $parser = $this->getWikiTextParser();
+        $content = $parser->parse($content, false);
+        $rez = array('content'=>$content);
+        //@TODO: avoid this by using the default ajax mechanism
+        echo json_encode($rez);
+        die;
+    }
+
+	/**
 	 * @brief Checks to see if document was edited by someone else, so that we won't override their changes on save
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
