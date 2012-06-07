@@ -8,3 +8,6 @@
 
 == img tag test ==
 <img class="full" src="http://naradesign.net/wp/wp-content/uploads/2012/05/img04.jpg" width="600" height="399" alt="">
+
+== link text test ==
+[http://code.google.com/p/support/wiki/WikiSyntax#HTML_support HTML support]
