@@ -3,6 +3,7 @@
 == Camel case link test ==
 
 [http://example.com/ Pascalcaselink] <-- This is a pascal case link text. {{{[http://example.com/ Pascalcaselink]}}}
+
 [http://example.com/ CamelCaseLink] <-- This is a broken camel case link text. {{{[http://example.com/ CamelCaseLink]}}}
 
 == img tag test ==
