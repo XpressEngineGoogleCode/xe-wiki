@@ -4,3 +4,5 @@
 
 [http://example.com/ Pascalcaselink]
 [http://example.com/ CamelCaseLink]
+
+<img class="full" src="http://naradesign.net/wp/wp-content/uploads/2012/05/img04.jpg" width="600" height="399" alt="">
