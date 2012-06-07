@@ -2,5 +2,5 @@
 
 = Introduction =
 
-[http://example.com/ Pascalcase]
-[http://example.com/ CamelCase]
+[http://example.com/ Pascalcaselink]
+[http://example.com/ CamelCaseLink]
