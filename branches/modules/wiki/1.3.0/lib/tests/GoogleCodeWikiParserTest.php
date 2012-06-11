@@ -329,7 +329,7 @@ HEREDOC;
 	 */
 	function testLinks_ExternalsPlain(){
 		$output = $this->wikiParser->parse("Plain URLs such as http://www.google.com/ or ftp://ftp.kernel.org/ are automatically made into links.");
-		$this->assertEquals("Plain URLs such as <a href=http://www.google.com/>http://www.google.com/</a> or <a href=ftp://ftp.kernel.org/>ftp://ftp.kernel.org/</a> are automatically made into links.",$output);
+		$this->assertEquals("Plain URLs such as <a href=\"http://www.google.com/\">http://www.google.com/</a> or <a href=\"ftp://ftp.kernel.org/\">ftp://ftp.kernel.org/</a> are automatically made into links.",$output);
 	}
 	
 	/**
@@ -389,6 +389,64 @@ HEREDOC;
 		$output = $this->wikiParser->parse("{{{<hr>}}}");
 		$this->assertEquals("<tt>&lt;hr&gt;</tt>", $output);		
 	}
-	
-	
+
+	/**
+	 * Issue 77: Google wiki syntax does not support 'img' tag
+	 * http://code.google.com/p/xe-wiki/issues/detail?id=77
+	 */
+	function testImgTags()
+	{
+		$output = $this->wikiParser->parse("<img src=\"http://naradesign.net/photo/DSCN0687.JPG\" alt=\"\" />");
+		$this->assertEquals("<img src=\"http://naradesign.net/photo/DSCN0687.JPG\" alt=\"\" />", $output);
+	}
+
+	/**
+	 * Issue 78: Google wiki syntax does not support 'CamelCase' link text.
+	 * http://code.google.com/p/xe-wiki/issues/detail?id=78
+	 */
+	function testCamelCaseLink()
+	{
+		$output = $this->wikiParser->parse("[http://example.com/ CamelCaseLink]");
+		$this->assertEquals("<a href=http://example.com/>CamelCaseLink</a>", $output);
+	}
+
+	/**
+	 * Issue 81: Google wiki syntax breaks link text of including capital character.
+	 * http://code.google.com/p/xe-wiki/issues/detail?id=81
+	 */
+	function testNormalCaseExternalLink()
+	{
+		$output = $this->wikiParser->parse("http://example.com/normalcase#anchor");
+		$this->assertEquals("<a href=\"http://example.com/normalcase#anchor\">http://example.com/normalcase#anchor</a>", $output);
+	}
+
+	/**
+	 * Issue 81: Google wiki syntax breaks link text of including capital character.
+	 * http://code.google.com/p/xe-wiki/issues/detail?id=81
+	 */
+	function testNormalCaseCapitalLetterExternalLink()
+	{
+		$output = $this->wikiParser->parse("http://example.com/Normalcase#anchor");
+		$this->assertEquals("<a href=\"http://example.com/Normalcase#anchor\">http://example.com/Normalcase#anchor</a>", $output);
+	}
+
+	/**
+	 * Issue 81: Google wiki syntax breaks link text of including capital character.
+	 * http://code.google.com/p/xe-wiki/issues/detail?id=81
+	 */
+	function testPascalCaseExternalLink()
+	{
+		$output = $this->wikiParser->parse("http://example.com/PascalCase#anchor");
+		$this->assertEquals("<a href=\"http://example.com/PascalCase#anchor\">http://example.com/PascalCase#anchor</a>", $output);
+	}
+
+	/**
+	 * Issue 81: Google wiki syntax breaks link text of including capital character.
+	 * http://code.google.com/p/xe-wiki/issues/detail?id=81
+	 */
+	function testCamelCaseExternalLink()
+	{
+		$output = $this->wikiParser->parse("http://example.com/camelCase#anchor");
+		$this->assertEquals("<a href=\"http://example.com/camelCase#anchor\">http://example.com/camelCase#anchor</a>", $output);
+	}
 }

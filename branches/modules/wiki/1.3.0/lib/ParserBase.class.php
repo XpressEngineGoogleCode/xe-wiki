@@ -40,12 +40,12 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 									|			#   or
 									[[]			#   .. a [ (these will be treated later)
 									)
-								)	
+								)
 								(				# Sequence of letters that ..
 									[A-Z]	    # Start with an uppercase letter
 									[a-z0-9]+	# Followed by at least one lowercase letter
 								){2,}			# Repeated at least two times
-								)	
+								)
 								/x"; 
 	
 	var $internal_link_with_brackets_regex = "/
@@ -225,8 +225,9 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 */
 	function _parseInlineCodeBlock(&$matches) 
 	{
-		$this->escaped_blocks[] = '<tt>' . htmlentities($matches[1]) . '</tt>'; 
-		return "%%%" . $this->batch_count . "%%%";
+		$replacement = "%%%" . $this->batch_count . "%%%";
+		$this->escaped_blocks[$replacement] = '<tt>' . htmlentities($matches[1]) . '</tt>';
+		return $replacement;
 	}
 	
 	/**
@@ -243,9 +244,10 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 */
 	function _parseMultilineCodeBlock(&$matches) 
 	{
+		$replacement = "%%%" . $this->batch_count . "%%%";
 		// $this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
-		$this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . htmlentities(stripslashes($matches[2])) . '</pre>'; 
-		return "%%%" . $this->batch_count . "%%%";
+		$this->escaped_blocks[$replacement] = '<pre class=\'prettyprint\'>' . htmlentities(stripslashes($matches[2])) . '</pre>';
+		return $replacement;
 	}
 	
 	/**
@@ -271,7 +273,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 */
 	function _putBackEscapedBlock(&$matches) 
 	{
-		return $this->escaped_blocks[$this->replaced_escaped_blocks++];
+		return $this->escaped_blocks[$matches[0]];
 	}
 
 	/**
@@ -395,7 +397,6 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 			return "<a href=$url$local_anchor>" . ($description ? $description : $url) . "</a>";
 		}
 		// If local document that  exists, return expected link and exit
-		
 		if($alias = $this->wiki_site->documentExists($url)) 
 		{
 			$url = $this->wiki_site->getFullLink($alias); 
@@ -403,7 +404,6 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 		}
 		// Else, if document does not exist
 		//   If user is not allowed to create content, return plain text
-		
 		if(!$this->wiki_site->currentUserCanCreateContent()) 
 		{
 			return $description ? $description : $url;

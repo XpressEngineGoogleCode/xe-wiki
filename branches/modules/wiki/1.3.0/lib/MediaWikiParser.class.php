@@ -121,8 +121,9 @@ class MediaWikiParser extends ParserBase
 	 */
 	function _escapeBlock(&$matches) 
 	{
-		$this->escaped_blocks[] = $matches[1]; 
-		return "%%%" . $this->batch_count . "%%%";
+		$replacement = "%%%" . $this->batch_count . "%%%";
+		$this->escaped_blocks[$replacement] = $matches[1];
+		return $replacement;
 	}
 	
 	/**
