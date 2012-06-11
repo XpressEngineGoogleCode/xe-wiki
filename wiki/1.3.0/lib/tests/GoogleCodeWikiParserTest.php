@@ -450,9 +450,22 @@ HEREDOC;
 		$this->assertEquals("<a href=\"http://example.com/camelCase#anchor\">http://example.com/camelCase#anchor</a>", $output);
 	}
 
+	/**
+	 * Issue 73: Not using UTF-8 format chararcter in Code (to Google Markup Setting)
+	 * http://code.google.com/p/xe-wiki/issues/detail?id=73
+	 */
 	function testUTF8inCodeBlocks()
 	{
 		$output = $this->wikiParser->parse("{{{ 무제 문서 }}}");
 		$this->assertEquals("<tt> 무제 문서 </tt>", $output);
+	}
+
+	function testAnchorTagsEscaping()
+	{
+		$output = $this->wikiParser->parse("<a href=\"xpressengine.org\">XE</a>");
+		$this->assertEquals("<a href=\"xpressengine.org\">XE</a>", $output);
+
+		$output = $this->wikiParser->parse("<a href=\"http://www.xpressengine.org\">XE</a>");
+		$this->assertEquals("<a href=\"http://www.xpressengine.org\">XE</a>", $output);
 	}
 }
