@@ -35,7 +35,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	var $internal_link_camel_case_regex = "/
 								(
 								(?<!			# Doesn't begin with ..
-									( 
+									(
 									[!]			#   .. a ! (these need to be escaped)
 									|			#   or
 									[[]			#   .. a [ (these will be treated later)
@@ -341,7 +341,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 * 		- anything that starts with http, https, ftp and ends with png, gif, jpg, jpeg -> image
 	 * 		- [Url ImageUrl] -> image links
 	 */
-	function parseLinks() 
+	function parseLinks()
 	{
 		// Find internal links given as CamelCase words
 		$this->text = preg_replace_callback($this->internal_link_camel_case_regex, array($this, "_handle_link"), $this->text);
@@ -355,7 +355,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 									(.gif|.png|.jpe?g)
 									#x", "<img src=$0 />", $this->text);
 		// Replace external urls that just start with http, https, ftp etc.; skip the ones in square brackets
-		$this->text = preg_replace("#
+		/*$this->text = preg_replace("#
 									(?<!
 										(
 										[[]
@@ -366,7 +366,8 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 									((https?|ftp|file)
 									://
 									[^ ]*)
-									#x", "<a href=$2>$2</a>", $this->text);
+									#x", "<a href=$2>$2</a>", $this->text);*/
+        $this->text = preg_replace("#(?<!([\[=]))((https?|ftp|file)://[^\s]*)#", "<a href=\"$2\">$2</a>", $this->text);
 		// Find internal links given between [brackets]
 		//	- can contain description [myLink description that can have many words]
 		//	- can link to local content [myLink#local_anchor and some description maybe]
