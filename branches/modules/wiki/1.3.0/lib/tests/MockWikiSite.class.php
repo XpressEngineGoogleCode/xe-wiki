@@ -16,8 +16,7 @@ class MockWikiSite /* implements WikiSite // Commented for backwards compatibili
 		return $document_name;
 	}
 
-	function getEditPageUrlForCurrentDocument($section=null)
-	{
-		return 'edit'.$section;
-	}
+    function getEditPageUrlForCurrentDocument($section=null) {
+        return 'http://edit.com?section='.$section;
+    }
 }

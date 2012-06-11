@@ -183,12 +183,12 @@ class WTParser
                     $p = $this->markDownParseLinks($p);
                 }
                 elseif ($this->mode == 'googlecode') {
-                    $p = "<p>$p</p>";
+                    //$p = "<p>$p</p>";
                 }
                 elseif ($this->mode == 'wikitext') {
-                    $p = "<p>$p</p>";
+                    //$p = "<p>$p</p>";
                 }
-                $text .= "$p\n";
+                $text .= $p;
             }
         } while ($item = next($this->array));
         return $text;
@@ -455,16 +455,11 @@ class WTParser
 //$text = "a<h2>b</h2>c<h3>d</h3>e<h2>eee</h2><h1>hohoho</h1>";
 
 /*$text = <<<EOF
-tra
--
-lala
-##lel##
-heave
-bla
-===
+http://cacaca.com
 EOF;
-$content = new WTParser($text, 'markdowna');
-die;*/
+$content = new WTParser($text, 'googlecode');
+echo $content->toString();*/
+
 //echo "<pre>$text</pre><hr>";
 //echo $content->toc();
 //echo $content->toString();

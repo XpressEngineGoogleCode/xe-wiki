@@ -26,7 +26,7 @@ class MediaWikiParser extends ParserBase
 									([|](.*?))?		# Followed by an optional group that starts with a pipe [matches 6,7]
 									[]][]]				# Ends with ]]
 									([^ \n]*)?		# Optional tail for brackets - take all characters until first space or newline  [matches 8]
-								/x"; 
+								/x";
 	
 	/**
 	 * @brief Constructor
@@ -309,7 +309,7 @@ class MediaWikiParser extends ParserBase
 		
 		if(strpos($matches[8], '%%%') === 0) 
 		{
-			$external_tail = $tail; 
+			$external_tail = $tail;
 			$tail = '';
 		}
 		// Building href
