@@ -226,7 +226,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	function _parseInlineCodeBlock(&$matches) 
 	{
 		$replacement = "%%%" . $this->batch_count . "%%%";
-		$this->escaped_blocks[$replacement] = '<tt>' . htmlentities($matches[1]) . '</tt>';
+		$this->escaped_blocks[$replacement] = '<tt>' . htmlentities($matches[1], ENT_COMPAT, 'UTF-8') . '</tt>';
 		return $replacement;
 	}
 	
@@ -246,7 +246,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	{
 		$replacement = "%%%" . $this->batch_count . "%%%";
 		// $this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
-		$this->escaped_blocks[$replacement] = '<pre class=\'prettyprint\'>' . htmlentities(stripslashes($matches[2])) . '</pre>';
+		$this->escaped_blocks[$replacement] = '<pre class=\'prettyprint\'>' . htmlentities(stripslashes($matches[2]), ENT_COMPAT, 'UTF-8') . '</pre>';
 		return $replacement;
 	}
 	

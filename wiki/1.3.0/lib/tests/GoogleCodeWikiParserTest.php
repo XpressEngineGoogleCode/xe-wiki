@@ -449,4 +449,10 @@ HEREDOC;
 		$output = $this->wikiParser->parse("http://example.com/camelCase#anchor");
 		$this->assertEquals("<a href=\"http://example.com/camelCase#anchor\">http://example.com/camelCase#anchor</a>", $output);
 	}
+
+	function testUTF8inCodeBlocks()
+	{
+		$output = $this->wikiParser->parse("{{{ 무제 문서 }}}");
+		$this->assertEquals("<tt> 무제 문서 </tt>", $output);
+	}
 }
