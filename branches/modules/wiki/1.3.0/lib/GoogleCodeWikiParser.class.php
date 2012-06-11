@@ -80,6 +80,13 @@ class GoogleCodeWikiParser extends ParserBase
 												[/][>])
 											~x", array($this, "_escapeBlock"), $this->text);
 
+		// Escape <a> tags
+		$this->text = preg_replace_callback("~
+												([<]a
+												.*
+												[<][/]a[>])
+											~x", array($this, "_escapeBlock"), $this->text);
+
 		// Escape CamelCase text square brackets' description
 		$this->text = preg_replace_callback("~
 												[\[]			# Starts with opening square bracket [
