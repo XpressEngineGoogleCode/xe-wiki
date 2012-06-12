@@ -103,9 +103,9 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	function parseInit() 
 	{
 		// Convert Windows end of line (\r\n) to Linux (\n) end of line, otherwise preg_replace doesn't work
-		$this->text = str_replace(chr(13), '', $this->text); 
-		$this->escapeWhateverThereIsToEscape(); 
+		$this->text = str_replace(chr(13), '', $this->text);
 		$this->parseCodeBlocksAndEscapeThemFromParsing();
+		$this->escapeWhateverThereIsToEscape();
 	}
 	
 	/**
