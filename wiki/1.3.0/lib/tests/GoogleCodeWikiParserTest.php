@@ -398,6 +398,10 @@ HEREDOC;
 	{
 		$output = $this->wikiParser->parse("<img src=\"http://naradesign.net/photo/DSCN0687.JPG\" alt=\"\" />");
 		$this->assertEquals("<img src=\"http://naradesign.net/photo/DSCN0687.JPG\" alt=\"\" />", $output);
+
+		$output = $this->wikiParser->parse("<img class=\"full\" src=\"http://naradesign.net/wp/wp-content/uploads/2012/05/img04.jpg\" width=\"600\" height=\"399\" alt=\"\">");
+		$this->assertEquals("<img class=\"full\" src=\"http://naradesign.net/wp/wp-content/uploads/2012/05/img04.jpg\" width=\"600\" height=\"399\" alt=\"\">", $output);
+
 	}
 
 	/**
