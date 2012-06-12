@@ -77,7 +77,7 @@ class GoogleCodeWikiParser extends ParserBase
 		$this->text = preg_replace_callback("~
 												([<]img
 												.*
-												[/][>])
+												[/]?[>])
 											~x", array($this, "_escapeBlock"), $this->text);
 
 		// Escape <a> tags
