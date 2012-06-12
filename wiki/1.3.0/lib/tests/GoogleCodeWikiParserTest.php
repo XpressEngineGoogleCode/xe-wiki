@@ -472,4 +472,10 @@ HEREDOC;
 		$output = $this->wikiParser->parse("<a href=\"http://www.xpressengine.org\">XE</a>");
 		$this->assertEquals("<a href=\"http://www.xpressengine.org\">XE</a>", $output);
 	}
+
+	function testCodeBlocksWithCamelCaseLinks()
+	{
+		$output = $this->wikiParser->parse("[http://example.com/ CamelCaseLink] <-- This is a broken camel case link text. {{{[http://example.com/ CamelCaseLink]}}}");
+		$this->assertEquals("<a href=http://example.com/>CamelCaseLink</a> <-- This is a broken camel case link text. <tt>[http://example.com/ CamelCaseLink]</tt>", $output);
+	}
 }
