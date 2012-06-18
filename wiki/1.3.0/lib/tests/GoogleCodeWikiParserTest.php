@@ -391,6 +391,20 @@ HEREDOC;
 	}
 
 	/**
+	 * Escaping multiple HTML tags
+	 */
+	function testMultipleHTMLTagEscaping(){
+		$output = $this->wikiParser->parse("
+{{{<hr>}}}
+One two three
+{{{<img/>}}}
+Four five
+{{{And some other escaped text}}}
+		");
+		$this->assertEquals("<tt>&lt;hr&gt;</tt><p>One two three</p><p><tt>&lt;img/&gt;</tt></p><p>Four five</p><p><tt>And some other escaped text</tt></p>", $output);
+	}
+
+	/**
 	 * Issue 77: Google wiki syntax does not support 'img' tag
 	 * http://code.google.com/p/xe-wiki/issues/detail?id=77
 	 */
