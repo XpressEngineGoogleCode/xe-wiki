@@ -195,10 +195,8 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 		// For this, we use preg_replace_callback to save code blocks in an array that we will later inject back in the original string
 		// {{{ This is some code }}}
 		// $text = preg_replace("/[^`]{{{(.+?)}}}/me"    , "'<span class=\'inline_code\'>' . htmlentities('$1') . '</span>'", $text);
-		$this->batch_count++; 
-		$regex_find_singleline_multiline_code = "/(?<![`])" . $this->typeface_symbols["multiline_code_open"] . "(.+?)" . $this->typeface_symbols["multiline_code_close"] . "/m"; 
+		$regex_find_singleline_multiline_code = "/(?<![`])" . $this->typeface_symbols["multiline_code_open"] . "(.+?)" . $this->typeface_symbols["multiline_code_close"] . "/m";
 		$this->text = preg_replace_callback($regex_find_singleline_multiline_code, array($this, "_parseInlineCodeBlock"), $this->text); 
-		$this->batch_count++; 
 		$this->text = preg_replace_callback("/
 								(?<![" . $this->typeface_symbols["inline_code"] . "])" . $this->typeface_symbols["multiline_code_open"] . "	# Starts with three braces, not preceded by single line code symbol
 								([\n]*)		# Followed by one or more newlines
@@ -207,7 +205,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 								" . $this->typeface_symbols["multiline_code_close"] . "			# And ends with another three braces
 								/sx", array($this, "_parseMultilineCodeBlock"), $this->text);
 		// `This is a short snippet of code`
-		$this->batch_count++; $regex_find_inline_code = "/" . $this->typeface_symbols["inline_code"] . "(.+?)" . $this->typeface_symbols["inline_code"] . "/m"; 
+		$regex_find_inline_code = "/" . $this->typeface_symbols["inline_code"] . "(.+?)" . $this->typeface_symbols["inline_code"] . "/m";
 		$this->text = preg_replace_callback($regex_find_inline_code, array($this, "_parseInlineCodeBlock"), $this->text);
 	}
 	
@@ -225,6 +223,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 */
 	function _parseInlineCodeBlock(&$matches) 
 	{
+		$this->batch_count++;
 		$replacement = "%%%" . $this->batch_count . "%%%";
 		$this->escaped_blocks[$replacement] = '<tt>' . htmlentities($matches[1], ENT_COMPAT, 'UTF-8') . '</tt>';
 		return $replacement;
@@ -244,6 +243,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 */
 	function _parseMultilineCodeBlock(&$matches) 
 	{
+		$this->batch_count++;
 		$replacement = "%%%" . $this->batch_count . "%%%";
 		// $this->escaped_blocks[] = '<pre class=\'prettyprint\'>' . nl2br(htmlentities(stripslashes($matches[2]))) . '</pre>';
 		$this->escaped_blocks[$replacement] = '<pre class=\'prettyprint\'>' . htmlentities(stripslashes($matches[2]), ENT_COMPAT, 'UTF-8') . '</pre>';

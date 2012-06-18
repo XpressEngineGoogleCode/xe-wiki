@@ -99,14 +99,13 @@ class MediaWikiParser extends ParserBase
 	function escapeWhateverThereIsToEscape() 
 	{
 		// Escape text between <nowiki> and </nowiki>
-		$this->batch_count++; 
 		$this->text = preg_replace_callback("~
 												[<]nowiki[>]
 												(.*)
 												[<][/]nowiki[>]
 											~x", array($this, "_escapeBlock"), $this->text);
 		// Escape text right after <nowiki/>
-		$this->batch_count++; $this->text = preg_replace_callback("~
+		$this->text = preg_replace_callback("~
 												[<]nowiki[ ]?[/][>]
 												([^ ]*)
 											~x", array($this, "_escapeBlock"), $this->text);
@@ -121,6 +120,7 @@ class MediaWikiParser extends ParserBase
 	 */
 	function _escapeBlock(&$matches) 
 	{
+		$this->batch_count++;
 		$replacement = "%%%" . $this->batch_count . "%%%";
 		$this->escaped_blocks[$replacement] = $matches[1];
 		return $replacement;
