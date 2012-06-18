@@ -32,6 +32,21 @@ class WTItem
         return 2 * strlen($this->wrapper) + strlen($this->title) + strlen($this->content);
     }
 
+    function titleLength()
+    {
+        if (is_array($this->wrapper)) {
+            if (isset($this->wrapper['underline'])) return
+                strlen($this->title) +
+                strlen($this->wrapper['underline'])
+                + 1;
+            return
+                strlen($this->wrapper['left']) +
+                strlen($this->title) +
+                strlen($this->wrapper['right']);
+        }
+        return 2 * strlen($this->wrapper) + strlen($this->title);
+    }
+
     function rank()
     {
         if (is_array($this->wrapper)) return $this->wrapper['h'];
@@ -255,12 +270,32 @@ class WTParser
             $offset = $p[1];
             $mod = $i % 3;
             if ($mod == 0) {
-                $item = new WTItem();
-                $item->offset = $itemOffset;
-                $item->wrapper = $wrapper;
-                $item->title = $title;
-                $item->content = $group;
-                $this->saveItem($nodes, $item);
+                //check if html headings are present inside node content
+                $subs = $this->splitXeWiki($group);
+                if (count($subs) > 1) {
+                    //add item with existing data
+                    $it0 = new WTItem();
+                    $it0->offset = $itemOffset;
+                    $it0->wrapper = $wrapper;
+                    $it0->title = $title;
+                    $it0->content = $subs[0]->content;
+                    $this->saveItems($nodes, $it0);
+                    //unset it
+                    unset($subs[0]);
+                    //then continue with the rest
+                    foreach ($subs as &$sub) {
+                        $sub->offset += $itemOffset + $it0->titleLength();
+                    }
+                    $this->saveItems($nodes, $subs);
+                }
+                else {
+                    $item = new WTItem();
+                    $item->offset = $itemOffset;
+                    $item->wrapper = $wrapper;
+                    $item->title = $title;
+                    $item->content = $group;
+                    $this->saveItems($nodes, $item);
+                }
             }
             elseif ($mod == 1) { // Delimiter match
                 $wrapper = $group;
@@ -293,7 +328,7 @@ class WTParser
                     ) : null;
                 $item->title = $title;
                 $item->content = $group;
-                $this->saveItem($nodes, $item);
+                $this->saveItems($nodes, $item);
             }
             elseif ($mod == 1) {
                 $titleLeft = $group;
@@ -340,7 +375,7 @@ class WTParser
                                 $item->wrapper = $wrapper;
                                 $item->title = $title;
                                 $item->content = $s[0];
-                                $this->saveItem($nodes, $item);
+                                $this->saveItems($nodes, $item);
                             }
                             continue;
                         }
@@ -357,7 +392,7 @@ class WTParser
                                 'right' => "</h$rank>",
                                 'underline' => $underline
                             );
-                            $this->saveItem($nodes, $it);
+                            $this->saveItems($nodes, $it);
                         }
                         elseif ($m == 1) { //title
                             $t = $s[0];
@@ -372,7 +407,7 @@ class WTParser
                     $item->wrapper = $wrapper;
                     $item->title = $title;
                     $item->content = $group;
-                    $this->saveItem($nodes, $item);
+                    $this->saveItems($nodes, $item);
                 }
             }
             elseif ($mod == 1) { // Delimiter match
@@ -436,15 +471,18 @@ class WTParser
     /**
      * Adds a WTItem to an array ($nodes) without affecting the array's internal pointer. Returns inserted key.
      * @param $nodes
-     * @param WTItem $item
+     * @param WTItem|array $items
      */
-    function saveItem(&$nodes, $item) {
+    function saveItems(&$nodes, $items) {
         $original = key($nodes);
-        $nodes[] = $item;
-        end($nodes);
-        $ret = key($nodes);
-        if ($item->title) $nodes[$ret]->slug = $this->slugify($item->title, $ret);
-        //don't affect $nodes internal pointer
+        if (!is_array($items)) $items = array($items);
+        foreach ($items as $it) {
+            $nodes[] = $it;
+            end($nodes);
+            $ret = key($nodes);
+            if ($it->title) $nodes[$ret]->slug = $this->slugify($it->title, $ret);
+        }
+        //restore $nodes internal pointer
         reset($nodes);
         while (key($nodes) != $original) next($nodes);
         return $ret;

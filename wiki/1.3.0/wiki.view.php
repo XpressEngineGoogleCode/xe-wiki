@@ -881,7 +881,7 @@ class WikiView extends Wiki
 			$content = $oCacheHandler->get($cache_key);				
 		}
         //disable cache here: (true || ...)
-		if(!$content)
+		if(true || !$content)
 		{
 			$wiki_syntax_parser = $this->getWikiTextParser();
 			$content = $wiki_syntax_parser->parse($org_content);
@@ -903,7 +903,7 @@ class WikiView extends Wiki
 	 */
 	function _loadSidebarTreeMenu($module_srl, $document_srl) 
 	{
-		if($document_srl) 
+		if($document_srl)
 		{
 			$oWikiModel = &getModel('wiki'); 
 			$this->list = $oWikiModel->getMenuTree($module_srl, $document_srl, $this->module_info->mid);
