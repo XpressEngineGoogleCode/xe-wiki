@@ -3,18 +3,6 @@ class WTItem
 {
     var $title, $content, $offset, $wrapper, $slug;
 
-    function toArray()
-    {
-        return array(
-            'title' => $this->title,
-            'wrapper' => $this->wrapper,
-            'paragraph' => $this->content,
-            'offset' => $this->offset,
-            'slug' => $this->slug,
-            'length' => $this->length()
-        );
-    }
-
     function length()
     {
         if (is_array($this->wrapper)) {
@@ -117,20 +105,6 @@ class WTParser
     {
         $tmp = ( $array ? $array : $this->array );
         reset($tmp);
-        /*if (!is_numeric($id)) { //get first level
-            $min = current($tmp);
-            if (!$min->wrapper) $min = next($tmp);
-            $rez = array(key($tmp) => $min);
-            while ($item = next($tmp)) {
-                if ($item->rank() < $min->rank()) {
-                    $min = $item;
-                    $rez = array(key($tmp) => $item);
-                }
-                elseif ($item->rank() == $min->rank()) $rez[key($tmp)] = $item;
-            }
-            return $rez;
-        }
-        else {*/
         if (!isset($tmp[$id])) return false;
         while (key($tmp) !== $id) next($tmp);
         $root = current($tmp);
@@ -146,7 +120,6 @@ class WTParser
             $rez = array_diff_key($rez, $deepers);
         }
         return $rez;
-        //}
     }
 
     /**
@@ -196,12 +169,6 @@ class WTParser
                     require_once ('markdown.php');
                     $p = Markdown($p);
                     $p = $this->markDownParseLinks($p);
-                }
-                elseif ($this->mode == 'googlecode') {
-                    //$p = "<p>$p</p>";
-                }
-                elseif ($this->mode == 'wikitext') {
-                    //$p = "<p>$p</p>";
                 }
                 $text .= $p;
             }
@@ -284,7 +251,7 @@ class WTParser
                     unset($subs[0]);
                     //then continue with the rest
                     foreach ($subs as &$sub) {
-                        $sub->offset += $itemOffset + $it0->titleLength();
+                        $sub->offset += ($itemOffset ? $itemOffset : $offset);
                     }
                     $this->saveItems($nodes, $subs);
                 }
@@ -490,35 +457,75 @@ class WTParser
 
 }
 
-//$text = "a<h2>b</h2>c<h3>d</h3>e<h2>eee</h2><h1>hohoho</h1>";
+//only for cli
+if (php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR'])) {
 
-/*$text = <<<EOF
-http://cacaca.com
-EOF;
-$content = new WTParser($text, 'googlecode');
-echo $content->toString();*/
-
-//echo "<pre>$text</pre><hr>";
-//echo $content->toc();
-//echo $content->toString();
-
-/*$text = <<<ZZZ
-==flo==
-sasasasa
-ce facem aici?
-* plm *
-* zzz *
-** zzz
-{|
-|Orange
-|Apple
-|-
-|Bread
-|Pie
-|-
-|Butter
-|Ice cream
-|}
+    $text = <<< ZZZ
+    == HTML support test ==
+    <a href="#">a</a>
+    <b>b</b>
+    br br br<br /><br /><br />
+    <blockquote>blockquote</blockquote>
+    <code>code</code>
+    <em>em</em>
+    <font>font</font>
+    <h1>h1</h1>
+    <h2>h2</h2>
+    <h3>h3</h3>
+    <h4>h4</h4>
+    <h5>h5</h5>
+    <i>i</i>
+    img <img src="http://www.xpressengine.com/opages/xe_v3_sub/intro/cubrid.png" alt="alt text" />
+    <ul>
+        <li>ul > li</li>
+        <li>ul > li</li>
+    </ul>
+    <ol>
+        <li>ol > li</li>
+        <li>ol > li</li>
+    </ol>
+    <dl>
+        <dt>dl &gt; dt</dt>
+        <dd>dl &gt; dd</dd>
+    </dl>
+    <p>p</p>
+    <pre>
+                p	r	e
+    </pre>
+    <q>q</q>
+    <s>s</s>
+    <span>span</span>
+    <strike>strike</strike>
+    <strong>strong</strong>
+    sub<sub>sub</sub>
+    sup<sup>sup</sup>
+    <table border="1" cellspacing="0">
+        <thead>
+            <tr>
+                <th scope="col">&nbsp;</th>
+                <th scope="col">&nbsp;</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th scope="row">&nbsp;</th>
+                <td>&nbsp;</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr>
+                <th scope="row">&nbsp;</th>
+                <td>&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+    <tt>tt</tt>
+    <u>u</u>
+    <var>var</var>
 ZZZ;
-$content = new WTParser($text, 'wikitext');
-echo $content->toString(false);*/
+
+    $parser = new WTParser($text, 'googlecode');
+    $section = $parser->getText(6);
+    die;
+
+}
