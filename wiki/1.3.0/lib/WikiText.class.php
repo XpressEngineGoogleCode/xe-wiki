@@ -317,7 +317,7 @@ class WTParser
     function splitMarkdown($text)
     {
         $text = "\n" . $text; // add "root element" for toc
-        $regex = '/^[\s?]*(#{1,6})(.+?)\1[\s?]*$/m';
+        $regex = '/^[\s?]*(#{1,6})(.+?)\1?[\s?]*$/m';
         $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
         $nodes = array();
         $itemOffset = 0; $title = $wrapper = null;
