@@ -240,18 +240,13 @@ class WTParser
                 //check if html headings are present inside node content
                 $subs = $this->splitXeWiki($group);
                 if (count($subs) > 1) {
-                    //add item with existing data
-                    $it0 = new WTItem();
-                    $it0->offset = $itemOffset;
-                    $it0->wrapper = $wrapper;
-                    $it0->title = $title;
-                    $it0->content = $subs[0]->content;
-                    $this->saveItems($nodes, $it0);
-                    //unset it
-                    unset($subs[0]);
-                    //then continue with the rest
-                    foreach ($subs as &$sub) {
-                        $sub->offset += ($itemOffset ? $itemOffset : $offset);
+                    $subs[0]->title = $title;
+                    $subs[0]->offset = $itemOffset;
+                    $subs[0]->wrapper = $wrapper;
+                    foreach ($subs as $z=>&$sub) {
+                        if (!$z) continue;
+                        //$sub->offset += ($itemOffset ? $itemOffset : $offset) + $subs[0]->titleLength();
+                        $sub->offset += $offset;
                     }
                     $this->saveItems($nodes, $subs);
                 }
@@ -461,71 +456,88 @@ class WTParser
 if (php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR'])) {
 
     $text = <<< ZZZ
-    == HTML support test ==
-    <a href="#">a</a>
-    <b>b</b>
-    br br br<br /><br /><br />
-    <blockquote>blockquote</blockquote>
-    <code>code</code>
-    <em>em</em>
-    <font>font</font>
-    <h1>h1</h1>
-    <h2>h2</h2>
-    <h3>h3</h3>
-    <h4>h4</h4>
-    <h5>h5</h5>
-    <i>i</i>
-    img <img src="http://www.xpressengine.com/opages/xe_v3_sub/intro/cubrid.png" alt="alt text" />
-    <ul>
-        <li>ul > li</li>
-        <li>ul > li</li>
-    </ul>
-    <ol>
-        <li>ol > li</li>
-        <li>ol > li</li>
-    </ol>
-    <dl>
-        <dt>dl &gt; dt</dt>
-        <dd>dl &gt; dd</dd>
-    </dl>
-    <p>p</p>
-    <pre>
-                p	r	e
-    </pre>
-    <q>q</q>
-    <s>s</s>
-    <span>span</span>
-    <strike>strike</strike>
-    <strong>strong</strong>
-    sub<sub>sub</sub>
-    sup<sup>sup</sup>
-    <table border="1" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col">&nbsp;</th>
-                <th scope="col">&nbsp;</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th scope="row">&nbsp;</th>
-                <td>&nbsp;</td>
-            </tr>
-        </tfoot>
-        <tbody>
-            <tr>
-                <th scope="row">&nbsp;</th>
-                <td>&nbsp;</td>
-            </tr>
-        </tbody>
-    </table>
-    <tt>tt</tt>
-    <u>u</u>
-    <var>var</var>
+== HTML support test ==
+
+<a href="#">a</a>
+<b>b</b>
+br br br<br /><br /><br />
+<blockquote>blockquote</blockquote>
+<code>code</code>
+<em>em</em>
+<font>font</font>
+<h1>h1</h1>
+<h2>h2</h2>
+<h3>h3</h3>
+<h4>h4</h4>
+<h5>h5</h5>
+<i>i</i>
+img <img src="http://www.xpressengine.com/opages/xe_v3_sub/intro/cubrid.png" alt="alt text" />
+<ul>
+	<li>ul > li</li>
+	<li>ul > li</li>
+</ul>
+<ol>
+	<li>ol > li</li>
+	<li>ol > li</li>
+</ol>
+<dl>
+	<dt>dl &gt; dt</dt>
+	<dd>dl &gt; dd</dd>
+</dl>
+<p>p</p>
+<pre>
+			p	r	e
+</pre>
+<q>q</q>
+<s>s</s>
+<span>span</span>
+<strike>strike</strike>
+<strong>strong</strong>
+sub<sub>sub</sub>
+sup<sup>sup</sup>
+<table border="1" cellspacing="0">
+	<thead>
+		<tr>
+			<th scope="col">&nbsp;</th>
+			<th scope="col">&nbsp;</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<th scope="row">&nbsp;</th>
+			<td>&nbsp;</td>
+		</tr>
+	</tfoot>
+	<tbody>
+		<tr>
+			<th scope="row">&nbsp;</th>
+			<td>&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+<tt>tt</tt>
+<u>u</u>
+<var>var</var>
 ZZZ;
 
+    $tmp = <<<TMP
+==2==
+
+
+
+
+<h1>1</h1>
+sasasasa
+<h2>2</h2>
+<h3>3</h3>
+sasa
+<h4>4</h4>
+ioioioio
+TMP;
+
     $parser = new WTParser($text, 'googlecode');
-    $section = $parser->getText(6);
+    $section = $parser->getText(1);
+    echo $section;
     die;
 
 }
