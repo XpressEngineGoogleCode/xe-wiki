@@ -22,7 +22,7 @@
 			<span class="btn"><a href="{getUrl('act','dispWikiContent','entry','','document_srl','')}">{$lang->home_page}</a></span>
             <span class="btn"><a href="{getUrl('act','dispWikiTitleIndex','entry','','document_srl','')}">{$lang->cmd_view_document_list}</a></span>
             <span class="btn"><a href="{getUrl('act','dispWikiTreeIndex','entry','','document_srl','')}">{$lang->cmd_view_document_tree}</a></span>
-			<span class="btn"><a href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}...</a></span>
+			<span class="btn"><a href="{getUrl('','act','dispWikiEditPage','entry','','document_srl','','mid',$mid,'vid',$vid)}">{$lang->new_document}</a></span>
         </div>
         <form action="{getUrl()}" method="post" class="wkSearch">
             <input type="hidden" name="mid" value="{$mid}" />
@@ -30,7 +30,7 @@
 			<input type="hidden" name="act" value="dispWikiContent" />
             <input type="text" class="iText" name="entry" />
             <span class="btn"><input type="submit" value="{$lang->cmd_move}" /></span>
-            <span class="btn" cond="$grant->manager"><a href="{getUrl('act','dispWikiAdminInsertWiki')}">{$lang->cmd_setup}...</a></span>
+            <span class="btn" cond="$grant->manager"><a href="{getUrl('act','dispWikiAdminInsertWiki')}">{$lang->cmd_setup}</a></span>
         </form>
     </div>
     <!--@if($oDocument && $oDocument->isExists())-->
