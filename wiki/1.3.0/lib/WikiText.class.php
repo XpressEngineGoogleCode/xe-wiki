@@ -520,21 +520,6 @@ sup<sup>sup</sup>
 <var>var</var>
 ZZZ;
 
-    $tmp = <<<TMP
-==2==
-
-
-
-
-<h1>1</h1>
-sasasasa
-<h2>2</h2>
-<h3>3</h3>
-sasa
-<h4>4</h4>
-ioioioio
-TMP;
-
     $parser = new WTParser($text, 'googlecode');
     $section = $parser->getText(1);
     echo $section;
