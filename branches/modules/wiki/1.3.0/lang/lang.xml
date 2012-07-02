@@ -540,6 +540,13 @@ XpressEngine 维基系统使用 [Markdown](http://daringfireball.net/projects/ma
 		Smart links:
 		&nbsp;&nbsp;  Add a name or id to your link: [Here's a nice link][1]
 		&nbsp;&nbsp;  And then detail it in the page footer for clarity: [1]: www.google.com
+
+		Images:
+		![Image description](url_to_image)
+
+        Line breaks
+        - Add an empty line
+		- Add two spaces the end of a line
 		
 		For more help, take a look at:
 		<ul>
