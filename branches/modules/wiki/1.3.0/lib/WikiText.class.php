@@ -453,6 +453,7 @@ class WTParser
 }
 
 //only for cli
+/*
 if (php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR'])) {
 
     $text = <<< ZZZ
@@ -526,3 +527,4 @@ ZZZ;
     die;
 
 }
+*/

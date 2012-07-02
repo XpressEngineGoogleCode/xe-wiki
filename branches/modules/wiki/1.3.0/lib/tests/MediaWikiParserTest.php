@@ -63,7 +63,7 @@ class MediaWikiParserTest extends PHPUnit_Framework_TestCase
 	function testParagraphs(){
 		$output = $this->wikiParser->parse("\nA paragraph");
 		$output = str_replace(array(chr(13), chr(10), chr(9)), '', $output);
-		$this->assertEquals("<p>A paragraph</p>", $output);
+		$this->assertEquals("A paragraph", $output);
 	} 
 	
 	/**
@@ -394,7 +394,6 @@ HEREDOC;
 	
 	function testPreformattedText(){
 		$input_string = <<<HEREDOC
-
  Start each line with a space.
  Text is '''preformatted''' and
  ''markups'' '''''can''''' be done.

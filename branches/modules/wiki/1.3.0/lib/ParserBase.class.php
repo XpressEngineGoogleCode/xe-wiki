@@ -589,7 +589,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	function parseParagraphs() 
 	{
 		// Replace new lines with paragraphs
-		$this->text = preg_replace("/\n(.+)/", '<p>$1</p>', $this->text);
+		$this->text = preg_replace("/\n\n(.+)/", '<p>$1</p>', $this->text);
 	}
 }
 /* End of file ParserBase.class.php */
