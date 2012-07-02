@@ -1,0 +1,21 @@
+#summary XE Wiki module 1.3.3 Release notes
+
+= Enhancements =
+
+ * Added support for paragraph editing - Issue 52
+ * Added support for side by side diff - Issue 53
+ * Table of contents is automatically added when using headings - Issue 54
+ * Added document status to wiki content (public / secret) - Issue 55
+ * Added real-time previews to all wiki markups - Issue 74
+ * Add a submit button above the Preview area too, not to scroll a lot when submitting - Issue 92
+ * Wiki Markup can no longer be changed after the wiki was created - Issue 51
+
+= Bug fixes =
+
+ * Fixed issue with tree hierarchy edit - Issue 62
+ * Edit page does not work when document is accessed by document_srl - Issue 70
+ * Fixed bug with using UTF-8 characters in Code content (Google wiki syntax) - Issue 73
+ * Mediawiki syntax links parsing bug - Issue 75
+ * Google wiki syntax does not support 'img' tag - Issue 77
+ * Google wiki syntax does not support 'CamelCase' link text - Issue 78
+ * Google wiki syntax breaks link text of including capital character - Issue 81
