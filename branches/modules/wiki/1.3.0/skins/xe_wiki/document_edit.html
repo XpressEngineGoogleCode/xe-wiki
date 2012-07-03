@@ -9,7 +9,12 @@
 		converter = new Markdown.Converter().makeHtml;
 
 		$textarea.keyup(function() {
-			$preview.html(converter($textarea.val()));
+            var val = $textarea.val()
+                    .replace(/<\s*script.*>(.*?)<\s*\/\s*script\s*>/g, function (a, s) {
+                        return s;
+                    })
+                    .replace(/javascript\s*:\s*(['"])(.*?)\1]/g, '');
+			$preview.html(converter(val));
 		}).trigger('keyup');
 	});
 </script>

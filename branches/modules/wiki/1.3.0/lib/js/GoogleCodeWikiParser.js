@@ -509,7 +509,7 @@ GoogleCodeWikiParser.prototype.parseInlined = function(text) {
     //alert('typeof text == '+(typeof text));
     var old = text;
     text = text.replace( x[0], x[1] );
-    
+
     // special case for #summary, #labels, #whatever: treat all content as unparseable. (fixes issue #10)
     if( /^#/.test( old ) ) {
       buf += text;
@@ -967,6 +967,8 @@ GoogleCodeWikiParser.prototype.parse = function(text) {
       break;
     }
   }
+//  return out.join(this.options.outputSeparator);
+    console.log(out);
   return out.join(this.options.outputSeparator);
 };
 /**
