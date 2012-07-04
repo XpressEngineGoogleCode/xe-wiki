@@ -103,11 +103,26 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	function parseInit() 
 	{
 		// Convert Windows end of line (\r\n) to Linux (\n) end of line, otherwise preg_replace doesn't work
+		$this->sanitize($this->text);
 		$this->text = str_replace(chr(13), '', $this->text);
 		$this->parseCodeBlocksAndEscapeThemFromParsing();
 		$this->escapeWhateverThereIsToEscape();
 	}
-	
+
+	/**
+	 * XSS sanitizes $text
+	 * @param $text
+	 */
+	function sanitize(&$text) {
+		require_once 'htmlpurifier/library/HTMLPurifier.auto.php';
+		$pPath = _XE_PATH_ . 'files/html_purifier';
+		$config = HTMLPurifier_Config::createDefault();
+		$config->set('Cache.SerializerPath', $pPath);
+		$purifier = new HTMLPurifier($config);
+		if (!is_dir($pPath)) mkdir($pPath);
+		$text = $purifier->purify($text);
+	}
+
 	/**
 	 * @brief Handles all common transformations
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
