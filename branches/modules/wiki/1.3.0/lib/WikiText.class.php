@@ -160,7 +160,7 @@ class WTParser
             $hAttributes = array('title="' . trim($item->title) . '"');
             if ($toc) $hAttributes[] = 'id="' . $item->slug . '"';
             $hAttributes = implode(' ', $hAttributes);
-            $edit = $baseEditLink ? "<span class='edit_link'><a href='$baseEditLink&section=$section'>edit</a></span>" : null;
+            $edit = $baseEditLink ? "<span class='edit_link'><a href='$baseEditLink&section=$section&section_title={$item->slug}'>edit</a></span>" : null;
             $depth = $item->rank();
             $text .= ( is_null($item->title) ? '' : "<h$depth $hAttributes>$edit{$item->title}</h$depth>" );
             if ($p = trim($item->content))

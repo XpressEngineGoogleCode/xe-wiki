@@ -171,6 +171,11 @@ class WikiController extends Wiki
 		{
 			$url = getSiteUrl($site_module_info->document, '', 'document_srl', $output->get('document_srl'));
 		}
+		if($section)
+		{
+			$section_title = Context::get('section_title');
+			$url .= '#' . $section_title;
+		}
 		$this->setRedirectUrl($url);
 	}
 
