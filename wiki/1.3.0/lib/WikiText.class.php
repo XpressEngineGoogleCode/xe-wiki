@@ -1,7 +1,7 @@
 <?php
 class WTItem
 {
-    var $title, $content, $offset, $wrapper, $slug;
+    var $title, $content, $offset, $wrapper, $slug, $secondDelimiter;
 
     function length()
     {
@@ -17,7 +17,7 @@ class WTItem
                 strlen($this->wrapper['right']) +
                 strlen($this->content);
         }
-        return 2 * strlen($this->wrapper) + strlen($this->title) + strlen($this->content);
+        return ($this->secondDelimiter ? 2 : 1) * strlen($this->wrapper) + strlen($this->title) + strlen($this->content);
     }
 
     function titleLength()
@@ -313,15 +313,15 @@ class WTParser
     function splitMarkdown($text)
     {
         $text = "\n" . $text; // add "root element" for toc
-        $regex = '/^[\s?]*(#{1,6})(.+?)\1?[\s?]*$/m';
+        $regex = '/^[\s?]*(#{1,6})(.+?)(\1?)[\s?]*$/m';
         $paragraphs = preg_split($regex, $text, -1, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
         $nodes = array();
-        $itemOffset = 0; $title = $wrapper = null;
+        $itemOffset = 0; $title = $wrapper = null; $secondDelimiter = false;
         foreach ($paragraphs as $i=>$p) {
             $group = $p[0];
             $offset = $p[1] - 1; //the \n from the beginning
             //if (!$group && !$offset) continue;
-            $mod = $i % 3;
+            $mod = $i % 4;
             if ($mod == 0) // Content match
             {
                 //look for headings underlined with ===== or ---- lines
@@ -370,6 +370,7 @@ class WTParser
                     $item->wrapper = $wrapper;
                     $item->title = $title;
                     $item->content = $group;
+                    $item->secondDelimiter = $secondDelimiter;
                     $this->saveItems($nodes, $item);
                 }
             }
@@ -379,6 +380,9 @@ class WTParser
             }
             elseif ($mod == 2) { // Title match
                 $title = $group;
+            }
+            elseif ($mod == 3) { // Second delimiter match
+                $secondDelimiter = ( $group ? true : false );
             }
         }
         return $nodes;
@@ -452,80 +456,57 @@ class WTParser
     }
 
 }
-
-//only for cli
 /*
+//only for cli
 if (php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR'])) {
 
-    $text = <<< ZZZ
-== HTML support test ==
 
-<a href="#">a</a>
-<b>b</b>
-br br br<br /><br /><br />
-<blockquote>blockquote</blockquote>
-<code>code</code>
-<em>em</em>
-<font>font</font>
-<h1>h1</h1>
-<h2>h2</h2>
-<h3>h3</h3>
-<h4>h4</h4>
-<h5>h5</h5>
-<i>i</i>
-img <img src="http://www.xpressengine.com/opages/xe_v3_sub/intro/cubrid.png" alt="alt text" />
-<ul>
-	<li>ul > li</li>
-	<li>ul > li</li>
-</ul>
-<ol>
-	<li>ol > li</li>
-	<li>ol > li</li>
-</ol>
-<dl>
-	<dt>dl &gt; dt</dt>
-	<dd>dl &gt; dd</dd>
-</dl>
-<p>p</p>
-<pre>
-			p	r	e
-</pre>
-<q>q</q>
-<s>s</s>
-<span>span</span>
-<strike>strike</strike>
-<strong>strong</strong>
-sub<sub>sub</sub>
-sup<sup>sup</sup>
-<table border="1" cellspacing="0">
-	<thead>
-		<tr>
-			<th scope="col">&nbsp;</th>
-			<th scope="col">&nbsp;</th>
-		</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			<th scope="row">&nbsp;</th>
-			<td>&nbsp;</td>
-		</tr>
-	</tfoot>
-	<tbody>
-		<tr>
-			<th scope="row">&nbsp;</th>
-			<td>&nbsp;</td>
-		</tr>
-	</tbody>
-</table>
-<tt>tt</tt>
-<u>u</u>
-<var>var</var>
+    $text = <<< ZZZ
+XE Board is a module that helps you create discussion forums, galleries or announcement pages. It's actually the most popular XE module!
+Here's some examples of what you can do with a board (some of them are in Korean):
+
+### Board list view
+
+#### 1. Oficial xpressengine.com developer board
+
+http://www.xpressengine.com/devForum
+
+Here you can see the most classic board look - the "list" view. With XE Board you can make certain articles "sticky" (as is the one in bold in the picture below). Also, notice how every user has a score next to its name - that's the number of points they have earned by asking questions and adding comments.
+
+![Developer board](http://www.xpressengine.org/files/attach/filebox/648/054/54648.png)
+
+The article view is where you can see the notice content and the comments that were posted. This skin also shows users' profile picture:
+
+![Developer board article](http://www.xpressengine.org/files/attach/filebox/658/054/54658.png)
+
+#### 2. Oficial xpressengine.com Q & A page
+
+http://www.xpressengine.com/qna
+
+This is a board a bit more complex. As you can see, is uses categories to group content (the tabs at the top). The columns are different from the developer board above, and that's because the module allows you to choose what columns to show/hide. Some of the columns are also sortable - if you want to see posts ordered by number of votes or by the date when they were created.
+
+![Q&A xe.com](http://www.xpressengine.org/files/attach/filebox/649/054/54649.png)
+
+Here's how the article view looks like:
+
+![Q&A question](http://www.xpressengine.org/files/attach/filebox/659/054/54659.png)
+
+### Board magazine view
+
+Apartment listing website: http://apartmentinseoul.com/
+
+The "magazine" view shows articles with a thumbnail next to them:
+
+![Apartments in Seoul](http://www.xpressengine.org/files/attach/filebox/651/054/54651.png)
+
+### Board gallery view
+
+http://overpackage.com/vote
 ZZZ;
 
-    $parser = new WTParser($text, 'googlecode');
-    $section = $parser->getText(1);
+    $parser = new WTParser($text, 'markdown');
+    $section = $parser->getText(4);
     echo $section;
     die;
 
-}
-*/
+}*/
