@@ -19,3 +19,7 @@
  * Google wiki syntax does not support 'img' tag - Issue 77
  * Google wiki syntax does not support 'CamelCase' link text - Issue 78
  * Google wiki syntax breaks link text of including capital character - Issue 81
+
+= Other info =
+
+For a complete issue list, please see [http://code.google.com/p/xe-wiki/issues/list?can=1&q=Milestone%3DRelease1.3.3+&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary+Closed&cells=tiles issues labeled Milestone-1.3.3]
