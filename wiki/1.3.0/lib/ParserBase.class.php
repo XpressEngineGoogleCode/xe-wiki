@@ -114,14 +114,14 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	 * @param $text
 	 */
 	function sanitize(&$text) {
-		require_once 'htmlpurifier/library/HTMLPurifier.auto.php';
-		$pPath = _XE_PATH_ . 'files/html_purifier';
-		$config = HTMLPurifier_Config::createDefault();
-		$config->set('Cache.SerializerPath', $pPath);
-		$purifier = new HTMLPurifier($config);
-		if (!is_dir($pPath)) mkdir($pPath);
-		$text = $purifier->purify($text);
-	}
+        require_once 'htmlpurifier/library/HTMLPurifier.auto.php';
+        $pPath = _XE_PATH_ . 'files/html_purifier';
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Cache', 'SerializerPath', $pPath);
+        $purifier = new HTMLPurifier($config);
+        if (!is_dir($pPath)) mkdir($pPath);
+        $text = $purifier->purify($text);
+    }
 
 	/**
 	 * @brief Handles all common transformations
