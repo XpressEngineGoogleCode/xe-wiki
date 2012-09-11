@@ -133,6 +133,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	 */
 	function moduleInstall() 
 	{
+		$oModuleController = &getController('module');
+		$oModuleController->insertTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after');
 		return new Object();
 	}
 	
@@ -152,6 +154,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 			return $flag;
 		}
 
+		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after')) return true;
+		// 2012. 09. 11 when add new menu in sitemap, custom menu add
 		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after')) return true;
 	}
 	
@@ -183,6 +187,9 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 		{
 			$oModuleController->insertTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after');
 		}
+		// 2012. 09. 11 when add new menu in sitemap, custom menu add
+		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'kin', 'model', 'triggerModuleListInSitemap', 'after'))
+			$oModuleController->insertTrigger('menu.getModuleListInSitemap', 'kin', 'model', 'triggerModuleListInSitemap', 'after');
 		
 		return new Object(0, 'success_updated');
 	}
