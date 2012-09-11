@@ -24,7 +24,7 @@
 		<value xml:lang="jp"><![CDATA[新規作成]]></value>
 		<value xml:lang="zh-CN"><![CDATA[新建文档]]></value>
 		<value xml:lang="zh-TW"><![CDATA[檔案建立]]></value>
-		<value xml:lang="tr"><![CDATA[Belge oluştur.]]></value>
+		<value xml:lang="tr"><![CDATA[Belge Oluştur.]]></value>
 		<value xml:lang="vi"><![CDATA[Gửi bài mới]]></value>
 	</item>
 	<item name="cmd_wiki_list">
@@ -38,7 +38,7 @@
 	</item>
 	<item name="cmd_view_info">
 		<value xml:lang="ko"><![CDATA[위키 정보]]></value>
-		<value xml:lang="en"><![CDATA[Wiki Information]]></value>
+		<value xml:lang="en"><![CDATA[Setup]]></value>
 		<value xml:lang="jp"><![CDATA[wiki情報]]></value>
 		<value xml:lang="zh-CN"><![CDATA[维基信息]]></value>
 		<value xml:lang="zh-TW"><![CDATA[維基資訊]]></value>
@@ -51,7 +51,7 @@
 		<value xml:lang="jp"><![CDATA[アンケート調査]]></value>
 		<value xml:lang="zh-CN"><![CDATA[使用评论]]></value>
 		<value xml:lang="zh-TW"><![CDATA[使用評論]]></value>
-		<value xml:lang="tr"><![CDATA[Yorumları kullan]]></value>
+		<value xml:lang="tr"><![CDATA[Yorumları Kullan]]></value>
 		<value xml:lang="vi"><![CDATA[Sử dụng bình luận]]></value>
 	</item>
 	<item name="cmd_view_document_list">
@@ -132,7 +132,7 @@
 		<value xml:lang="jp"><![CDATA[Hide tree]]></value>
 		<value xml:lang="zh-CN"><![CDATA[隐藏树状列表]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Hide tree]]></value>
-		<value xml:lang="tr"><![CDATA[Hide tree]]></value>
+		<value xml:lang="tr"><![CDATA[Ağacı Sakla]]></value>
 		<value xml:lang="vi"><![CDATA[Hide tree]]></value>
 	</item>
 	<item name="show_tree">
@@ -141,7 +141,7 @@
 		<value xml:lang="jp"><![CDATA[Show tree]]></value>
 		<value xml:lang="zh-CN"><![CDATA[显示树状列表]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Show tree]]></value>
-		<value xml:lang="tr"><![CDATA[Show tree]]></value>
+		<value xml:lang="tr"><![CDATA[Ağacı Göster]]></value>
 		<value xml:lang="vi"><![CDATA[Show tree]]></value>
 	</item>
 	<item name="content">
@@ -150,7 +150,7 @@
 		<value xml:lang="jp"><![CDATA[Document content]]></value>
 		<value xml:lang="zh-CN"><![CDATA[文档内容]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Document content]]></value>
-		<value xml:lang="tr"><![CDATA[Document content]]></value>
+		<value xml:lang="tr"><![CDATA[Döküman İçeriği]]></value>
 		<value xml:lang="vi"><![CDATA[Document content]]></value>
 	</item>
 	<item name="diff">
@@ -159,7 +159,7 @@
 		<value xml:lang="jp"><![CDATA[Diff]]></value>
 		<value xml:lang="zh-CN"><![CDATA[区别]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Diff]]></value>
-		<value xml:lang="tr"><![CDATA[Diff]]></value>
+		<value xml:lang="tr"><![CDATA[Fark]]></value>
 		<value xml:lang="vi"><![CDATA[Diff]]></value>
 	</item>
 	<item name="markup_type">
@@ -168,14 +168,14 @@
 		<value xml:lang="jp"><![CDATA[Markup type]]></value>
 		<value xml:lang="zh-CN"><![CDATA[标记类型]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Markup type]]></value>
-		<value xml:lang="tr"><![CDATA[Markup type]]></value>
+		<value xml:lang="tr"><![CDATA[Markup Türü]]></value>
 		<value xml:lang="vi"><![CDATA[Markup type]]></value>
 	</item>
 	<item name="markdown">
 		<value xml:lang="ko"><![CDATA[Markdown 마크업]]></value>
 		<value xml:lang="en"><![CDATA[Markdown markup]]></value>
 		<value xml:lang="zh-CN"><![CDATA[Markdown 标记]]></value>
-	</item>	
+	</item> 
 	<item name="googlecode_markup">
 		<value xml:lang="ko"><![CDATA[Google Code 위키 마크업]]></value>
 		<value xml:lang="en"><![CDATA[Google Code Wiki markup]]></value>
@@ -185,7 +185,7 @@
 		<value xml:lang="ko"><![CDATA[MediaWiki 마크업]]></value>
 		<value xml:lang="en"><![CDATA[MediaWiki markup]]></value>
 		<value xml:lang="zh-CN"><![CDATA[MediaWiki 标记]]></value>
-	</item>	
+	</item> 
 	<item name="xe_wiki_markup">
 		<value xml:lang="ko"><![CDATA[XE Wiki 마크업]]></value>
 		<value xml:lang="en"><![CDATA[XE Wiki markup]]></value>
@@ -193,11 +193,11 @@
 	</item>
 	<item name="about_markup_type">
 		<value xml:lang="ko"><![CDATA[내용추가를 위한 HTML 마크업은 XE Editor를 사용합니다. MediaWiki나 GoogleCode와 같은 <짧은 태그>형식의 위키 마크업은 간단한 text를 사용합니다.]]></value>
-		<value xml:lang="en"><![CDATA[XE Wiki markup uses XE Editor and HTML for adding content. Markdown, MediaWiki and GoogleCode markup use a simpler syntax, much more appropriate for wikis. %sSee some examples%s]]></value>
+		<value xml:lang="en"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
 		<value xml:lang="jp"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[HTML标记通过XE编辑器添加内容，Wiki 标记（例如 MediaWiki 或者 GoogleCode）通过简单的文本以及wiki的标签添加内容。]]></value>
 		<value xml:lang="zh-TW"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
-		<value xml:lang="tr"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
+		<value xml:lang="tr"><![CDATA[Wiki markup'ı MediaWikide ve GoogleCode'da olduğu gibi basit metinleri wiki tagları(kısa kod)ile kullanırken HTML markup içerik eklemek için XE Editörünü kullanır.]]></value>
 		<value xml:lang="vi"><![CDATA[HTML markup uses the XE Editor for adding content, while Wiki markup uses simple text with wiki tags (shortcode) just like the ones in MediaWiki or GoogleCode.]]></value>
 	</item>
 	<item name="revision">
@@ -206,7 +206,7 @@
 		<value xml:lang="jp"><![CDATA[Revision]]></value>
 		<value xml:lang="zh-CN"><![CDATA[调整]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Revision]]></value>
-		<value xml:lang="tr"><![CDATA[Revision]]></value>
+		<value xml:lang="tr"><![CDATA[Revizyon]]></value>
 		<value xml:lang="vi"><![CDATA[Revision]]></value>
 	</item>
 	<item name="current">
@@ -215,7 +215,7 @@
 		<value xml:lang="jp"><![CDATA[current]]></value>
 		<value xml:lang="zh-CN"><![CDATA[现在]]></value>
 		<value xml:lang="zh-TW"><![CDATA[current]]></value>
-		<value xml:lang="tr"><![CDATA[current]]></value>
+		<value xml:lang="tr"><![CDATA[Güncel]]></value>
 		<value xml:lang="vi"><![CDATA[current]]></value>
 	</item>
 	<item name="leave_comment">
@@ -224,7 +224,7 @@
 		<value xml:lang="jp"><![CDATA[Leave your comment]]></value>
 		<value xml:lang="zh-CN"><![CDATA[留下你的评论]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Leave your comment]]></value>
-		<value xml:lang="tr"><![CDATA[Leave your comment]]></value>
+		<value xml:lang="tr"><![CDATA[Görüşünü Bırak]]></value>
 		<value xml:lang="vi"><![CDATA[Leave your comment]]></value>
 	</item>
 	<item name="cancel">
@@ -233,7 +233,7 @@
 		<value xml:lang="jp"><![CDATA[Cancel]]></value>
 		<value xml:lang="zh-CN"><![CDATA[取消]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Cancel]]></value>
-		<value xml:lang="tr"><![CDATA[Cancel]]></value>
+		<value xml:lang="tr"><![CDATA[İptal]]></value>
 		<value xml:lang="vi"><![CDATA[Cancel]]></value>
 	</item>
 	<item name="xewiki_no_results">
@@ -242,7 +242,7 @@
 		<value xml:lang="jp"><![CDATA[No results found for your query.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[找不到查询的结果。]]></value>
 		<value xml:lang="zh-TW"><![CDATA[No results found for your query.]]></value>
-		<value xml:lang="tr"><![CDATA[No results found for your query.]]></value>
+		<value xml:lang="tr"><![CDATA[Arama Kelimeniz ile alakalı bir sonuç bulunamadı.]]></value>
 		<value xml:lang="vi"><![CDATA[No results found for your query.]]></value>
 	</item>
 	<item name="search_results">
@@ -251,7 +251,7 @@
 		<value xml:lang="jp"><![CDATA[Search results]]></value>
 		<value xml:lang="zh-CN"><![CDATA[搜索结果]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Search results]]></value>
-		<value xml:lang="tr"><![CDATA[Search results]]></value>
+		<value xml:lang="tr"><![CDATA[Sonuçları Ara]]></value>
 		<value xml:lang="vi"><![CDATA[Search results]]></value>
 	</item>
 	<item name="too_many_results">
@@ -260,7 +260,7 @@
 		<value xml:lang="jp"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[搜索到很多结果，请搜索更具体的关键字。]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
-		<value xml:lang="tr"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
+		<value xml:lang="tr"><![CDATA[Yüksek sayıda sonuçlar bulunduğundan, aramanızı daha spesifik bir şekilde yapmayı düşünün.]]></value>
 		<value xml:lang="vi"><![CDATA[Consider making your search more speciffic as there are a lot of results.]]></value>
 	</item>
 	<item name="results_number">
@@ -269,7 +269,7 @@
 		<value xml:lang="jp"><![CDATA[ results match your query.]]></value>
 		<value xml:lang="zh-CN"><![CDATA[ 符合查询条件的结果.]]></value>
 		<value xml:lang="zh-TW"><![CDATA[ results match your query.]]></value>
-		<value xml:lang="tr"><![CDATA[ results match your query.]]></value>
+		<value xml:lang="tr"><![CDATA[ Arama kelimeniz ile ilgili sonuçlar.]]></value>
 		<value xml:lang="vi"><![CDATA[ results match your query.]]></value>
 	</item>
 	<item name="title_lang_bar">
@@ -278,7 +278,7 @@
 		<value xml:lang="jp"><![CDATA[Languages]]></value>
 		<value xml:lang="zh-CN"><![CDATA[语言]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Languages]]></value>
-		<value xml:lang="tr"><![CDATA[Languages]]></value>
+		<value xml:lang="tr"><![CDATA[Diller]]></value>
 		<value xml:lang="vi"><![CDATA[Languages]]></value>
 	</item>
 	<item name="title_breadcrumbs_bar">
@@ -287,7 +287,7 @@
 		<value xml:lang="jp"><![CDATA[Breadcrumbs]]></value>
 		<value xml:lang="zh-CN"><![CDATA[面包屑导航]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Breadcrumbs]]></value>
-		<value xml:lang="tr"><![CDATA[Breadcrumbs]]></value>
+		<value xml:lang="tr"><![CDATA[Kırıntılar]]></value>
 		<value xml:lang="vi"><![CDATA[Breadcrumbs]]></value>
 	</item>
 	<item name="new_document">
@@ -296,7 +296,7 @@
 		<value xml:lang="jp"><![CDATA[New Document]]></value>
 		<value xml:lang="zh-CN"><![CDATA[新的文章]]></value>
 		<value xml:lang="zh-TW"><![CDATA[New Document]]></value>
-		<value xml:lang="tr"><![CDATA[New Document]]></value>
+		<value xml:lang="tr"><![CDATA[Yeni Dökümanlar]]></value>
 		<value xml:lang="vi"><![CDATA[New Document]]></value>
 	</item>
 	<item name="home_page">
@@ -305,7 +305,7 @@
 		<value xml:lang="jp"><![CDATA[Home page]]></value>
 		<value xml:lang="zh-CN"><![CDATA[首页]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Home page]]></value>
-		<value xml:lang="tr"><![CDATA[Home page]]></value>
+		<value xml:lang="tr"><![CDATA[Ana Sayfa]]></value>
 		<value xml:lang="vi"><![CDATA[Home page]]></value>
 	</item>
 	<item name="histories">
@@ -314,7 +314,7 @@
 		<value xml:lang="jp"><![CDATA[Histories]]></value>
 		<value xml:lang="zh-CN"><![CDATA[历史记录]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Histories]]></value>
-		<value xml:lang="tr"><![CDATA[Histories]]></value>
+		<value xml:lang="tr"><![CDATA[Tarihler]]></value>
 		<value xml:lang="vi"><![CDATA[Histories]]></value>
 	</item>
 	<item name="wiki_search_title">
@@ -323,7 +323,7 @@
 		<value xml:lang="jp"><![CDATA[Wiki Search]]></value>
 		<value xml:lang="zh-CN"><![CDATA[维基 搜索]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Wiki Search]]></value>
-		<value xml:lang="tr"><![CDATA[Wiki Search]]></value>
+		<value xml:lang="tr"><![CDATA[Wiki Araması]]></value>
 		<value xml:lang="vi"><![CDATA[Wiki Search]]></value>
 	</item>
 	<item name="write_form_title">
@@ -332,7 +332,7 @@
 		<value xml:lang="jp"><![CDATA[Title:]]></value>
 		<value xml:lang="zh-CN"><![CDATA[标题:]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Title:]]></value>
-		<value xml:lang="tr"><![CDATA[Title:]]></value>
+		<value xml:lang="tr"><![CDATA[Başlık:]]></value>
 		<value xml:lang="vi"><![CDATA[Title:]]></value>
 	</item>
 	<item name="write_form_alias">
@@ -341,18 +341,20 @@
 		<value xml:lang="jp"><![CDATA[Alias:]]></value>
 		<value xml:lang="zh-CN"><![CDATA[别名:]]></value>
 		<value xml:lang="zh-TW"><![CDATA[Alias:]]></value>
-		<value xml:lang="tr"><![CDATA[Alias:]]></value>
+		<value xml:lang="tr"><![CDATA[Diğer Adlar:]]></value>
 		<value xml:lang="vi"><![CDATA[Alias:]]></value>
 	</item>
 	<item name="create_first_page_title">
 		<value xml:lang="ko"><![CDATA[XpressEngine 위키에 오신 것을 환영합니다!]]></value>
 		<value xml:lang="en"><![CDATA[Welcome to XpressEngine Wiki!]]></value>
 		<value xml:lang="zh-CN"><![CDATA[欢迎来到 XpressEngine 维基系统!]]></value>
-	</item>	
+		<value xml:lang="tr"><![CDATA[XpressEngine Wiki Hoşgeldiniz!]]></value>
+	</item> 
 	<item name="create_first_page_description">
 		<value xml:lang="ko"><![CDATA[생성된 문서가 없습니다. 새로운 페이지를 생성하세요.]]></value>
 		<value xml:lang="en"><![CDATA[You don't have any documents yet. Go ahead and add your first page!]]></value>
 		<value xml:lang="zh-CN"><![CDATA[你暂时还没有任何文章，添加第一个页面吧!]]></value>
+		<value xml:lang="tr"><![CDATA[Henüz herhangi bir belge yok. Devam edin ve ilk sayfa ekleyin!]]></value>
 	</item>
 	<item name="create_first_page_markdown_help">
 		<value xml:lang="en"><![CDATA[
@@ -414,7 +416,7 @@ You can also link to pages inside the same wiki, but instead of using an url you
 This page was just a quick intro to get you started. For more help, take a look at:
 
 + PHP Markdown extra - http://michelf.com/projects/php-markdown/extra/
-+ Markdown's official reference - http://daringfireball.net/projects/markdown/syntax		
++ Markdown's official reference - http://daringfireball.net/projects/markdown/syntax	    
 		]]></value>
 		<value xml:lang="zh-CN"><![CDATA[
 你还没有建立任何页面，这里提供一些帮助提示。
@@ -475,174 +477,49 @@ XpressEngine 维基系统使用 [Markdown](http://daringfireball.net/projects/ma
 这个页面简单地介绍了怎样使用Markdown。请点击以下链接获得更多帮助
 
 + PHP Markdown extra - http://michelf.com/projects/php-markdown/extra/
-+ Markdown's 官方参考 - http://daringfireball.net/projects/markdown/syntax		
++ Markdown's 官方参考 - http://daringfireball.net/projects/markdown/syntax	  
 		]]></value>
 	</item>
 	<item name="top_of_page">
 		<value xml:lang="ko"><![CDATA[상단으로]]></value>
 		<value xml:lang="en"><![CDATA[Go to top]]></value>
 		<value xml:lang="zh-CN"><![CDATA[去顶端]]></value>
-	</item>	
+		<value xml:lang="tr"><![CDATA[Üste git]]></value>
+	</item> 
 	<item name="comment">
 		<value xml:lang="ko"><![CDATA[댓글]]></value>
 		<value xml:lang="en"><![CDATA[Comments]]></value>
 		<value xml:lang="zh-CN"><![CDATA[评论]]></value>
-	</item>		
+		<value xml:lang="tr"><![CDATA[Yorumlar]]></value>
+	</item>	 
 	<item name="translate_page_into">
 		<value xml:lang="ko"><![CDATA[페이지를 %s로 번역]]></value>
 		<value xml:lang="en"><![CDATA[Translate page into %s]]></value>
 		<value xml:lang="zh-CN"><![CDATA[翻译页面到%s]]></value>
-	</item>			
+		<value xml:lang="tr"><![CDATA[%s Sayfayı şu dile çevir.]]></value>
+	</item>		 
 	<item name="you_are_viewing">
 		<value xml:lang="ko"><![CDATA[현재 %s로 보고 있습니다.]]></value>
 		<value xml:lang="en"><![CDATA[You are currently viewing this page in %s]]></value>
 		<value xml:lang="zh-CN"><![CDATA[你正在浏览此%s页面]]></value>
-	</item>				
+		<value xml:lang="tr"><![CDATA[Şu anda %s Bu sayfayı görmektesiniz.]]></value>
+	</item>			 
 	<item name="view_this_page_in">
 		<value xml:lang="ko"><![CDATA[%s로 이페이지 보기]]></value>
 		<value xml:lang="en"><![CDATA[View this page in %s]]></value>
 		<value xml:lang="zh-CN"><![CDATA[浏览此页面的%s版本]]></value>
-	</item>					
+		<value xml:lang="tr"><![CDATA[%s View this page.]]></value>
+	</item>				 
 	<item name="pages_that_link_to_this">
+		<value xml:lang="ko"><![CDATA[이 항목을 참조하는 페이지:]]></value>
 		<value xml:lang="en"><![CDATA[Pages that reference this entry:]]></value>
 		<value xml:lang="zh-CN"><![CDATA[链接到此的页面:]]></value>
-	</item>				
+		<value xml:lang="tr"><![CDATA[Bu giriş referans veren sayfalar:]]></value>
+	</item>			 
 	<item name="links_in_this_page">
+		<value xml:lang="ko"><![CDATA[이 페이지의 링크:]]></value>
 		<value xml:lang="en"><![CDATA[Links in this page:]]></value>
 		<value xml:lang="zh-CN"><![CDATA[页面中的链接:]]></value>
-	</item>					
-	<item name="confirm_document_override">
-		<value xml:lang="en"><![CDATA[The document has been updated by someone else. Do you still want to save your changes?]]></value>
-	</item>			
-	<item name="wiki_language_help">
-		<value xml:lang="en"><![CDATA[Wiki language help]]></value>
-	</item>				
-	<item name="markdown_help">
-		<value xml:lang="en"><![CDATA[
-		# Heading 1 #
-		## Heading 2 ##
-		### Heading 3 ##############
-		
-		*italic*, **bold**
-		escape \*
-		
-		- Use a minus sign for a bullet list
-		+ Or plus sign
-		* Or an asterisk
-		1. Numbered lists are easy
-		2. Markdown keeps track of the numbers for you
-		7. So this will be item 3.
-		
-		Links:
-		&nbsp;&nbsp;  http://site/page
-		&nbsp;&nbsp;  Add description: [Page description](http://site/page)
-		&nbsp;&nbsp;  Link to pages in the same wiki: [Page description](page_alias)
-		Smart links:
-		&nbsp;&nbsp;  Add a name or id to your link: [Here's a nice link][1]
-		&nbsp;&nbsp;  And then detail it in the page footer for clarity: [1]: www.google.com
-
-		Images:
-		![Image description](url_to_image)
-
-        Line breaks
-        - Add an empty line
-		- Add two spaces the end of a line
-		
-		For more help, take a look at:
-		<ul>
-		<li> PHP Markdown extra - <a href=http://michelf.com/projects/php-markdown/extra/ target=_blank>http://michelf.com/projects/php-markdown/extra/</a>
-		<li> Markdown's official reference - <a href=http://daringfireball.net/projects/markdown/syntax target=_blank>http://daringfireball.net/projects/markdown/syntax</a>
-		</ul>
-		]]></value>
-	</item>		
-	<item name="googlecode_markup_help">
-		<value xml:lang="en"><![CDATA[
-		=Heading1=
-		==Heading2==
-		===Heading3===
-
-		*bold*     _italic_
-		`inline code`
-		escape: `*`
-
-		Indent lists 2 spaces:
-		* bullet item
-		# numbered list
-
-		{{{
-		verbatim code block
-		}}}
-
-		Horizontal rule
-		---- 
-
-		WikiWordLink
-		[http://domain/page label]
-		http://domain/page
-
-		|| table || cells ||		
-		
-		For more help, take a look at <a href=http://code.google.com/p/support/wiki/WikiSyntax target=_blank>http://code.google.com/p/support/wiki/WikiSyntax</a>
-		]]></value>
-	</item>		
-<item name="mediawiki_markup_help">
-		<value xml:lang="en"><![CDATA[
-		== Heading2 ==
-		=== Heading3 ===
-
-		'''bold'''     ''italic''
-		&lt;nowiki&gt;Escape wiki markup&lt;/nowiki&gt;
-
-		Lists
-		* bullet item
-		** deeper level	
-		# numbered list
-
-		Horizontal rule
-		---- 
-
-		Links
-		[[Internal_link]]
-		[[Internal_link | You should use page alias]]
-		
-		http://domain/page
-		[http://domain/page label]
-		
-		Table:
-		{|
-		|Orange
-		|Apple
-		|-
-		|Bread
-		|Pie
-		|-
-		|Butter
-		|Ice cream 
-		|}
-		
-		For more help, take a look at <a href=http://www.mediawiki.org/wiki/Help:Formatting target=_blank>http://www.mediawiki.org/wiki/Help:Formatting</a>
-		]]></value>
-	</item>
-    <item name="xe_wiki_markup_help">
-        <value xml:lang="en"><![CDATA[
-        XE Wiki markup uses XE Editor to add content. This is the way documents were added in older versions of XE Wiki.
-        ]]></value>
-    </item>
-    <item name="diff_no_differences">
-        <value xml:lang="en"><![CDATA[There are no differences between the two versions.]]></value>
-    </item>
-    <item name="diff_old_version">
-        <value xml:lang="en"><![CDATA[Old version]]></value>
-    </item>
-    <item name="diff_new_version">
-        <value xml:lang="en"><![CDATA[New version]]></value>
-    </item>
-    <item name="compare">
-        <value xml:lang="en"><![CDATA[Compare]]></value>
-    </item>
-    <item name="about_use_status">
-        <value xml:lang="ko"><![CDATA[글 작성 시 선택할 수 있는 상태를 지정해주세요.]]></value>
-        <value xml:lang="en"><![CDATA[Please select status that can be selected when writing an article.]]></value>
-        <value xml:lang="jp"><![CDATA[記事作成時に選択することができる状態を指定してください。]]></value>
-    </item>
+		<value xml:lang="tr"><![CDATA[Bu sayfadaki linkler:]]></value>
+	</item>				 
 </lang>
