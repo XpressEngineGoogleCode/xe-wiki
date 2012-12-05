@@ -2,14 +2,14 @@
 /**
 * @class  wikiAdminView
 * @developer NHN (developers@xpressengine.com)
-* @brief  wiki admin view class
+*   wiki admin view class
 */
 class WikiAdminView extends Wiki
 {
 	var $wiki_markup_list = array("markdown", "mediawiki_markup", "googlecode_markup", "xe_wiki_markup" );
 
 	/**
-	 * @brief Admin view initialisation
+	 *  Admin view initialisation
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return 
@@ -59,7 +59,7 @@ class WikiAdminView extends Wiki
 	}
 	
 	/**
-	 * @brief List of Wiki module
+	 *  List of Wiki module
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -85,7 +85,7 @@ class WikiAdminView extends Wiki
 	}
 	
 	/**
-	 * @brief Wiki module input screen for additional information
+	 *  Wiki module input screen for additional information
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -129,7 +129,7 @@ class WikiAdminView extends Wiki
 	}
 
 	/**
-	 * @brief Help page for wiki markup type
+	 *  Help page for wiki markup type
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return
@@ -143,7 +143,7 @@ class WikiAdminView extends Wiki
 	}
 	
 	/**
-	 * @brief Confirmation screen for deleting wiki module
+	 *  Confirmation screen for deleting wiki module
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -167,7 +167,7 @@ class WikiAdminView extends Wiki
 	}
 	
 	/**
-	 * @brief Additional setup screen for Wiki module
+	 *  Additional setup screen for Wiki module
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -189,7 +189,7 @@ class WikiAdminView extends Wiki
 	}
 	
 	/**
-	 * @brief Set permissions for a wiki module screen
+	 *  Set permissions for a wiki module screen
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -204,7 +204,7 @@ class WikiAdminView extends Wiki
 	}
 	
 	/**
-	 * @brief Wiki module screen skins settings
+	 *  Wiki module screen skins settings
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -219,7 +219,7 @@ class WikiAdminView extends Wiki
 	}
 	
 	/**
-	 * @brief Wiki module list update screen
+	 *  Wiki module list update screen
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return

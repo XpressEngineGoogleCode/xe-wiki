@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @brief Interface for a wiki syntax parsers 
+ *  Interface for a wiki syntax parsers
  * @developer Corina Udrescu (xe_dev@arnia.ro)
  */
 interface SyntaxParser
 {
 	/**
-	 * @brief Converts a certain wiki syntax to HTML
+	 *  Converts a certain wiki syntax to HTML
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
@@ -16,7 +16,7 @@ interface SyntaxParser
 	function parse($text);
 	
 	/**
-	 * @brief Finds all internal links in a text and returns document aliases
+	 *  Finds all internal links in a text and returns document aliases
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string

@@ -1,7 +1,7 @@
 /**
  * @file   modules/wiki/js/wiki.js
  * @author zero (zero@nzeo.com)
- * @brief  wiki 모듈의 javascript
+ *   wiki 모듈의 javascript
  **/
 
 /* Delete wiki document */

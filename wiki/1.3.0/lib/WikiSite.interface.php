@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @brief Represents a site / app that uses a SyntaxParser
+ *  Represents a site / app that uses a SyntaxParser
  * @developer Corina Udrescu (xe_dev@arnia.ro)
  */
 interface WikiSite
 {
 	/**
-	 * @brief Checks if a document exists based on its title or alias
+	 *  Checks if a document exists based on its title or alias
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_name string
@@ -16,7 +16,7 @@ interface WikiSite
 	function documentExists($document_name);
 	
 	/**
-	 * @brief Checks if current user is logged in and has permission to add new pages to the wiki
+	 *  Checks if current user is logged in and has permission to add new pages to the wiki
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return bool
@@ -24,7 +24,7 @@ interface WikiSite
 	function currentUserCanCreateContent();
 	
 	/**
-	 * @brief Return full link - containg mid information
+	 *  Return full link - containg mid information
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_name string Represents document title or alias

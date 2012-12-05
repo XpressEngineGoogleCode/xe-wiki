@@ -69,7 +69,7 @@ class WTParser
     }
 
 	/**
-	 * @brief Returns all content corresponding to a section;
+	 *  Returns all content corresponding to a section;
 	 * If a section with h1 also has subheadings (h2, h3 etc), their sections are included too;
 	 * @param null $paragraph
 	 * @return bool|string

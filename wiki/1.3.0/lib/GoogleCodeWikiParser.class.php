@@ -4,13 +4,13 @@ require_once ('ParserBase.class.php');
 require_once ('WikiText.class.php');
 
 /**
- * @brief Converts Google Wiki Syntax to HTML
+ *  Converts Google Wiki Syntax to HTML
  * @developer Corina Udrescu (xe_dev@arnia.ro)
  */
 class GoogleCodeWikiParser extends ParserBase
 {
 	/**
-	 * @brief Constructor
+	 *  Constructor
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site  WikiSite
@@ -22,7 +22,7 @@ class GoogleCodeWikiParser extends ParserBase
 	}
 
 	/**
-	 * @brief Overrides parseText in base
+	 *  Overrides parseText in base
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @override
 	 * @access protected
@@ -36,7 +36,7 @@ class GoogleCodeWikiParser extends ParserBase
 	}
 
 	/**
-	 * @brief Parses headings
+	 *  Parses headings
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -66,7 +66,7 @@ class GoogleCodeWikiParser extends ParserBase
 	}
 
 	/**
-	 * @brief Escapes anything the syntax needs
+	 *  Escapes anything the syntax needs
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -120,7 +120,7 @@ class GoogleCodeWikiParser extends ParserBase
 	}
 
 	/**
-	 * @brief Callback function for escapes
+	 *  Callback function for escapes
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
@@ -135,7 +135,7 @@ class GoogleCodeWikiParser extends ParserBase
 	}
 
 	/**
-	 * @brief Callback function for CamelCase text inside square bracket links
+	 *  Callback function for CamelCase text inside square bracket links
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
@@ -150,7 +150,7 @@ class GoogleCodeWikiParser extends ParserBase
 	}
 
 	/**
-	 * @brief Callback function for CamelCase text inside square bracket links
+	 *  Callback function for CamelCase text inside square bracket links
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()

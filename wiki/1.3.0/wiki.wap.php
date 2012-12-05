@@ -2,13 +2,13 @@
     /**
      * @class  wikiWAP
      * @author NHN (developers@xpressengine.com)
-     * @brief  wiki 모듈의 WAP class
+     *   wiki 모듈의 WAP class
      **/
 
     class wikiWAP extends wiki {
 
         /**
-         * @brief wap procedure method
+         *  wap procedure method
          **/
         function procWAP(&$oMobile) {
             // Check permissions

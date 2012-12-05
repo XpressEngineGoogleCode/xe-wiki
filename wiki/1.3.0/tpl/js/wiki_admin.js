@@ -1,7 +1,7 @@
 /**
  * @file   modules/wiki/js/wiki_admin.js
  * @author zero (zero@nzeo.com)
- * @brief  wiki 모듈의 관리자용 javascript
+ *   wiki 모듈의 관리자용 javascript
  **/
 
 
