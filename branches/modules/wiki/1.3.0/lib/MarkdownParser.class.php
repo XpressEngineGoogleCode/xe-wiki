@@ -4,7 +4,7 @@ require_once ('markdown.php');
 require_once ('WikiText.class.php');
 
 /**
- * @brief Converts Markdown syntax into HTML using external Markdown library
+ *  Converts Markdown syntax into HTML using external Markdown library
  * @developer Corina Udrescu (xe_dev@arnia.ro)
  */
 class MarkdownParser /* implements SyntaxParser // Commented for backwards compatibility with PHP4 */
@@ -24,7 +24,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 										/ix"; 
 	
 	/**
-	 * @brief Constructor
+	 *  Constructor
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site WikiSite
@@ -36,7 +36,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	}
 	
 	/**
-	 * @brief Receives a string of text written in Markdown and returns HTML
+	 *  Receives a string of text written in Markdown and returns HTML
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
@@ -65,7 +65,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	}
 	
 	/**
-	 * @brief Returns a list of all internal links in a page, given as a list of aliases
+	 *  Returns a list of all internal links in a page, given as a list of aliases
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
@@ -98,7 +98,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	}
 	
 	/**
-	 * @brief Searches for links in document and replaces them fully qualified urls
+	 *  Searches for links in document and replaces them fully qualified urls
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $text string
@@ -111,7 +111,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	}
 	
 	/**
-	 * @brief Callback function for parseLinks 
+	 *  Callback function for parseLinks
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array

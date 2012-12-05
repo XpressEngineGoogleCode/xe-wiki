@@ -2,12 +2,12 @@
 /**
 * @class wikiController
 * @developer NHN (developers@xpressengine.com)
-* @brief  wiki controller class
+*   wiki controller class
 */
 class WikiController extends Wiki
 {
 	/**
-	 * @brief Inserts a wiki document
+	 *  Inserts a wiki document
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -180,7 +180,7 @@ class WikiController extends Wiki
 	}
 
 	/**
-     * @brief Preview for wikitext
+     *  Preview for wikitext
      * @developer Florin Ercus (xe_dev@arnia.ro)
      * @access public
      * @return
@@ -202,7 +202,7 @@ class WikiController extends Wiki
     }
 
 	/**
-	 * @brief Checks to see if document was edited by someone else, so that we won't override their changes on save
+	 *  Checks to see if document was edited by someone else, so that we won't override their changes on save
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return
@@ -243,7 +243,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Delete database references to links in current document
+	 *  Delete database references to links in current document
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl 
@@ -258,7 +258,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Save all internal links in current document to the database
+	 *  Save all internal links in current document to the database
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl
@@ -276,7 +276,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Updates info about links in current document
+	 *  Updates info about links in current document
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl
@@ -295,7 +295,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Register comments on the wiki if user is not logged
+	 *  Register comments on the wiki if user is not logged
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
 	 * @return
@@ -306,7 +306,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Register comments on the wiki
+	 *  Register comments on the wiki
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -405,7 +405,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Delete article from the wiki 
+	 *  Delete article from the wiki
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -457,7 +457,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Delete comment from the wiki
+	 *  Delete comment from the wiki
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -486,7 +486,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Change position of the document on hierarchy
+	 *  Change position of the document on hierarchy
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return 
@@ -582,7 +582,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief recreate Wiki the hierarchy
+	 *  recreate Wiki the hierarchy
 	 * @developer NHN (developers@xpressengine.com)	
 	 * @access public
 	 * @return
@@ -597,7 +597,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief recreate Wiki hierarchy
+	 *  recreate Wiki hierarchy
 	 * @developer NHN (developers@xpressengine.com)	
 	 * @access public
 	 * @param $module_srl
@@ -625,7 +625,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief Confirm password for modifying non-members Comments
+	 *  Confirm password for modifying non-members Comments
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -668,7 +668,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief function, used by Ajax call, that return curent version and one of history version of the document for making diff
+	 *  function, used by Ajax call, that return curent version and one of history version of the document for making diff
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
 	 * @return
@@ -687,7 +687,7 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 * @brief function, used by Ajax call, that return HTML Comment Editor
+	 *  function, used by Ajax call, that return HTML Comment Editor
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
 	 * @return

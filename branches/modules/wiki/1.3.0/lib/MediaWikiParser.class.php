@@ -4,7 +4,7 @@ require_once ('ParserBase.class.php');
 require_once ('WikiText.class.php');
 
 /**
- * @brief Converts a limited subset of MediaWiki syntax into HTML
+ *  Converts a limited subset of MediaWiki syntax into HTML
  * @developer Corina Udrescu (xe_dev@arnia.ro)
  */
 class MediaWikiParser extends ParserBase
@@ -29,7 +29,7 @@ class MediaWikiParser extends ParserBase
 								/x";
 	
 	/**
-	 * @brief Constructor
+	 *  Constructor
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site WikiSite
@@ -41,7 +41,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Overrides parseText in base
+	 *  Overrides parseText in base
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
      * @param bool $toc do not display toc and edit links if in preview mode (ajax)
      * @override
@@ -58,7 +58,7 @@ class MediaWikiParser extends ParserBase
     }
 
     /**
-	 * @brief Returns a list of all documents this page links to, given by alias
+	 *  Returns a list of all documents this page links to, given by alias
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
@@ -88,7 +88,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Removes all blocks that need to be escaped from original text
+	 *  Removes all blocks that need to be escaped from original text
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -112,7 +112,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Callback function for escapes
+	 *  Callback function for escapes
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
@@ -127,7 +127,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Handles list like content
+	 *  Handles list like content
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return 
@@ -164,7 +164,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Handles definition lists
+	 *  Handles definition lists
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -187,7 +187,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Skips indent parsing
+	 *  Skips indent parsing
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @override
@@ -198,7 +198,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Skip blockquote parsing; indenting means Preformatted text in MediaWiki
+	 *  Skip blockquote parsing; indenting means Preformatted text in MediaWiki
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @override
@@ -209,7 +209,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Handle <pre> text
+	 *  Handle <pre> text
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -225,7 +225,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Handle links
+	 *  Handle links
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -259,7 +259,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Callback function for parseLinks
+	 *  Callback function for parseLinks
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
@@ -278,7 +278,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Callback for call to preg_replace_callback that parses links
+	 *  Callback for call to preg_replace_callback that parses links
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
@@ -371,7 +371,7 @@ class MediaWikiParser extends ParserBase
 	}
 	
 	/**
-	 * @brief Handle tables
+	 *  Handle tables
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -410,7 +410,7 @@ class MediaWikiParser extends ParserBase
 	}
 
 	/**
-	 * @brief Callback for parseTables
+	 *  Callback for parseTables
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array

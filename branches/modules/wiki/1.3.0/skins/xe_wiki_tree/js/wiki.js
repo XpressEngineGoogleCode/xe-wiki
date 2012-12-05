@@ -6,7 +6,7 @@ function viewHistory(history_srl) {
 /**
  * @file   modules/document/tpl/js/document_category.js
  * @author sol (sol@ngleader.com)
- * @brief  document 모듈의 category tree javascript
+ *   document 모듈의 category tree javascript
  **/
 
 var simpleTreeCollection;

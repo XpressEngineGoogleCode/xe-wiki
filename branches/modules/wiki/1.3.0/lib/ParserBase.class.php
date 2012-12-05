@@ -2,7 +2,7 @@
 /* require_once ('SyntaxParser.interface.php'); // Commented for backwards compatibility with PHP4 
 
 /**
- * @brief Base class for syntax parsers
+ *  Base class for syntax parsers
  * @developer Corina Udrescu (xe_dev@arnia.ro)
  * 
  * Implements default functionality, that is very similar among
@@ -60,7 +60,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	var $wiki_site = NULL; 
 	
 	/**
-	 * @brief Constructor
+	 *  Constructor
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site WikiSite
@@ -76,7 +76,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Converts input text to HTML
+	 *  Converts input text to HTML
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
@@ -95,7 +95,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Handles parsing that needs to be done at the begging, like removing escaped sequences from text
+	 *  Handles parsing that needs to be done at the begging, like removing escaped sequences from text
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -124,7 +124,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
     }
 
 	/**
-	 * @brief Handles all common transformations
+	 *  Handles all common transformations
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -141,7 +141,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Handles parsing that needs to be done at the end - like inserting back into text the escaped sequences
+	 *  Handles parsing that needs to be done at the end - like inserting back into text the escaped sequences
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -153,7 +153,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Returns a list of all internal documents this page links to
+	 *  Returns a list of all internal documents this page links to
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
@@ -188,7 +188,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Escapes anything the syntax needs - defined for being overriden
+	 *  Escapes anything the syntax needs - defined for being overriden
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -198,7 +198,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Parses a block of code
+	 *  Parses a block of code
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -225,7 +225,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief preg_replace callback function for inline code blocks
+	 *  preg_replace callback function for inline code blocks
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
@@ -245,7 +245,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief preg_replace callback function for multiline code blocks
+	 *  preg_replace callback function for multiline code blocks
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
@@ -266,7 +266,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Injects code blocks back into initial string
+	 *  Injects code blocks back into initial string
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected 
 	 * @return 
@@ -280,7 +280,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief preg_replace callback function for injecting code blocks back in initial string
+	 *  preg_replace callback function for injecting code blocks back in initial string
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
@@ -292,7 +292,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 
 	/**
-	 * @brief Parse bold, italic, underline etc.
+	 *  Parse bold, italic, underline etc.
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access proected
 	 * @return
@@ -322,7 +322,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	
 	/**
-	 * @brief Parses pragma statements
+	 *  Parses pragma statements
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -340,7 +340,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	
 	/**
-	 * @brief Parses links
+	 *  Parses links
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return 
@@ -394,7 +394,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	
 	/**
-	 * @brief Callback for CamelCase and bracket links
+	 *  Callback for CamelCase and bracket links
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
@@ -430,7 +430,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	
 	/**
-	 * @brief Replaces Wiki Syntax lists with HTML lists
+	 *  Replaces Wiki Syntax lists with HTML lists
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected 
 	 * @return 
@@ -441,7 +441,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Handles lists
+	 *  Handles lists
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $text string
@@ -467,7 +467,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	
 	/**
-	 * @brief Replaces a block of text containing a Wiki syntax list with an HTML list
+	 *  Replaces a block of text containing a Wiki syntax list with an HTML list
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @param $list 
@@ -510,7 +510,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	
 	/**
-	 * @brief Searches for list blocks in a string
+	 *  Searches for list blocks in a string
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @param $text string
@@ -533,7 +533,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	
 	/**
-	 * @brief Handles tables: || 1 ||  2  ||  3 ||
+	 *  Handles tables: || 1 ||  2  ||  3 ||
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -565,7 +565,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	
 	/**
-	 * @brief Handles blockquotes
+	 *  Handles blockquotes
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -583,7 +583,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Handle horizontal rules
+	 *  Handle horizontal rules
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
@@ -596,7 +596,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	}
 	
 	/**
-	 * @brief Handles paragraphs
+	 *  Handles paragraphs
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return

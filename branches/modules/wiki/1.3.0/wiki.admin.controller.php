@@ -2,13 +2,13 @@
 /**
  * @class  wikiAdminController
  * @developer NHN (developers@xpressengine.com)
- * @brief  wiki admin controller class
+ *   wiki admin controller class
  */
 class WikiAdminController extends Wiki
 {
 	
 	/**
-	 * @brief Add a wiki module
+	 *  Add a wiki module
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $args
@@ -74,7 +74,7 @@ class WikiAdminController extends Wiki
 	}
 	
 	/**
-	 * @brief Deleting a wiki module
+	 *  Deleting a wiki module
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return 
@@ -98,7 +98,7 @@ class WikiAdminController extends Wiki
 	}
 	
 	/**
-	 * @brief Adds alias to documents which are missing it
+	 *  Adds alias to documents which are missing it
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return 

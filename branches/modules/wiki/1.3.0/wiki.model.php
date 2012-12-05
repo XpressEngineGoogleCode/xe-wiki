@@ -2,19 +2,19 @@
 	/**
 	* @class  wikiModel
 	* @author NHN (developers@xpressengine.com) 
-	* @brief  wiki 모듈의 Model class
+	*   wiki 모듈의 Model class
 	**/
 
-	class WikiModel extends module {
+	class WikiModel extends Wiki {
 		/**
-		* @brief Initialization
+		*  Initialization
 		**/
 		function init() {
 		    
 		}
 
 		/**
-		* @brief Retrieve the Tree hierarchy
+		*  Retrieve the Tree hierarchy
 		* document_category테이블을 이용해서 위키 문서의 계층 구조도를 그림
 		* document_category테이블에 등록되어 있지 않은 경우 depth = 0 으로 하여 신규 생성
 		**/
@@ -39,7 +39,7 @@
 
 
 		/**
-		* @brief Read hierarchy from the cache 
+		*  Read hierarchy from the cache
 		*/
 		function readWikiTreeCache($module_srl) {
 		    	
@@ -71,7 +71,7 @@
 
 
 		/**
-		* @brief Read hierarchy 
+		*  Read hierarchy
 		*/
 		function loadWikiTreeList($module_srl) {
 			// Select wanted List
@@ -173,7 +173,7 @@
 		}
 
 		/**
-		* @brief Load previous / next article
+		*  Load previous / next article
 		*/
 		function getPrevNextDocument($module_srl, $document_srl) {
 			$list = $this->readWikiTreeCache($module_srl);
@@ -277,7 +277,7 @@
 		}
 		
 		/**
-		* @brief Recursive function that create BreadCrumbs Menu Array
+		*  Recursive function that create BreadCrumbs Menu Array
 		* @access public
 		* 
 		* @param $document_srl
@@ -299,7 +299,7 @@
 		}
 		
 		/**
-		* @brief Function that return BreadCrumbs Menu
+		*  Function that return BreadCrumbs Menu
 		* @access public
 		* 
 		* @param $breadcrumbs_list
@@ -422,7 +422,7 @@
         }
 		
 		/**
-		* @brief Post id list, bringing the article.
+		*  Post id list, bringing the article.
 		*/
         function getDocuments($searchUrl, $params, $service_prefix = null) {
 			$output = new stdClass;
@@ -466,7 +466,7 @@
         }
 		
 		/**
-		* @brief Results extracted from an array of id
+		*  Results extracted from an array of id
 		*/
         function result2idArray($res) {
             $res = json_decode($res);
@@ -481,7 +481,7 @@
        }
 		
 		/**
-		* @brief To determine which fields to search
+		*  To determine which fields to search
 		* Check the Search for field
 		*/
         function isFieldCorrect($fieldname) {
@@ -499,7 +499,7 @@
         }
 		
 		/**
-		* @brief List and include / exclude based on whether the clause making
+		*  List and include / exclude based on whether the clause making
 		*/
         function getSubquery($target_mid, $target_mode, $exclude_module_srl=NULL) {
           if( isset($exclude_module_srl) ){
@@ -518,7 +518,7 @@
         }
 
         /**
-		* @brief Results for query syntax to apply the nLucene
+		*  Results for query syntax to apply the nLucene
         */
         function getQuery($query, $search_target, $exclude_module_srl='0') {
             $query_arr = explode(' ', $query);
@@ -576,7 +576,7 @@
 		}		
 
 		/** 
-		 * @brief return module name in sitemap
+		 *  return module name in sitemap
 		 **/
 		function triggerModuleListInSitemap(&$obj)
 		{

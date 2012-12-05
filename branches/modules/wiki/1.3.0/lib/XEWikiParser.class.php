@@ -5,7 +5,7 @@
 require_once ('WikiText.class.php');
 
 /**
- * @brief Syntax parser for XE Wiki
+ *  Syntax parser for XE Wiki
  * @developer Corina Udrescu (xe_dev@arnia.ro)
  * 
  * Contains the old parsing code of Wiki (before Markdown was made default)
@@ -17,7 +17,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	var $internal_links_regex = "!\[([^\]]+)\]!is"; 
 	
 	/**
-	 * @brief Constructor
+	 *  Constructor
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site WikiSite
@@ -29,7 +29,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	}
 	
 	/**
-	 * @brief Converts XE Markup (explicit links - http / https - and internal links - given as [doc_name | description] to HTML
+	 *  Converts XE Markup (explicit links - http / https - and internal links - given as [doc_name | description] to HTML
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $org_content string
@@ -48,7 +48,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	}
 	
 	/**
-	 * @brief Returns an array of aliases for documents that are being linked in text
+	 *  Returns an array of aliases for documents that are being linked in text
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
@@ -71,7 +71,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	}
 	
 	/**
-	 * @brief Generates the string to use as entry name
+	 *  Generates the string to use as entry name
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
@@ -109,7 +109,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	}
 	
 	/**
-	 * @brief The return link to be substituted according to wiki
+	 *  The return link to be substituted according to wiki
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array

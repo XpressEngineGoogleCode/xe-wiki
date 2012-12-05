@@ -4,7 +4,7 @@
 /**
 * @class wiki
 * @developer NHN (developers@xpressengine.com)
-* @brief  wiki module high class
+*   wiki module high class
 */
 class Wiki extends ModuleObject /* implements WikiSite // Commented for backwards compatibility with PHP4 */
 {
@@ -12,7 +12,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	var $replacing_characters = array('', '', '', '_');
 	
 	/**
-	 * @brief Returns current wiki instance syntax parser
+	 *  Returns current wiki instance syntax parser
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return interface SyntaxParser
@@ -45,7 +45,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Receives a document title and returns an URL firendly name
+	 *  Receives a document title and returns an URL firendly name
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $entry_name string
@@ -62,7 +62,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Checks if a certain document exists
+	 *  Checks if a certain document exists
 	 * Returns doc_alias if document exists or false otherwise
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
@@ -89,7 +89,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Checks if current user has permission to add new documents
+	 *  Checks if current user has permission to add new documents
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return boolean
@@ -100,7 +100,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Returns qualified internal link, given an alias or doc title
+	 *  Returns qualified internal link, given an alias or doc title
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_name string
@@ -112,7 +112,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 
 	/**
-     * @brief Returns qualified internal link, given an alias or doc title
+     *  Returns qualified internal link, given an alias or doc title
      * @developer Florin Ercus (xe_dev@arnia.ro)
      * @access public
      * @param $document_name string
@@ -126,7 +126,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
     }
 
 	/**
-	 * @brief Creates tables, indexes and adds any other logic needed for module upon installation
+	 *  Creates tables, indexes and adds any other logic needed for module upon installation
 	 * @access public
 	 * @developer NHN (developers@xpressengine.com)
 	 * @return Object 
@@ -137,7 +137,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Checks if module is up to date	 
+	 *  Checks if module is up to date
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return boolean
@@ -156,7 +156,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Updates module
+	 *  Updates module
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
@@ -188,7 +188,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Uninstalls module	 
+	 *  Uninstalls module
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
@@ -199,7 +199,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Deletes cache
+	 *  Deletes cache
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
@@ -215,7 +215,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Make sure that alias does not contain special characters / spaces, etc
+	 *  Make sure that alias does not contain special characters / spaces, etc
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access private
 	 * @return boolean
@@ -252,7 +252,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 * @brief Fixes alias in a batch - special characters / spaces that have not been removed
+	 *  Fixes alias in a batch - special characters / spaces that have not been removed
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access private
 	 * @return 
