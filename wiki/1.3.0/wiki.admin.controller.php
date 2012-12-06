@@ -1,9 +1,10 @@
 <?php
 /**
+ * Wiki admin controller class
+ *
  * @class  wikiAdminController
  * @developer NHN (developers@xpressengine.com)
- *
- * Wiki admin controller class
+ * @package wiki
  */
 class WikiAdminController extends Wiki
 {

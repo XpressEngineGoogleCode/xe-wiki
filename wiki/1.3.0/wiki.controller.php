@@ -1,9 +1,11 @@
 <?php
 /**
-* @class wikiController
-* @developer NHN (developers@xpressengine.com)
-* Wiki controller class
-*/
+ * Wiki controller class
+ *
+ * @class wikiController
+ * @developer NHN (developers@xpressengine.com)
+ * @package wiki
+ */
 class WikiController extends Wiki
 {
 	/**
