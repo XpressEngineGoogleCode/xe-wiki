@@ -3,10 +3,11 @@
 require_once(_XE_PATH_.'modules/wiki/wiki.view.php');
 
 /**
+ * Wiki mobile class
+ *
  * @class  wikiMobile
  * @developer NHN (developers@xpressengine.com)
- *
- * Wiki mobile class
+ * @package wiki
  */
 class wikiMobile extends wikiView {
 

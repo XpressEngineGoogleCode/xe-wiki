@@ -1,10 +1,11 @@
 <?php
 /**
-* @class  wikiAdminView
-* @developer NHN (developers@xpressengine.com)
+ * Wiki admin view class
  *
-* Wiki admin view class
-*/
+ * @class  wikiAdminView
+ * @developer NHN (developers@xpressengine.com)
+ * @package wiki
+ */
 class WikiAdminView extends Wiki
 {
 	var $wiki_markup_list = array("markdown", "mediawiki_markup", "googlecode_markup", "xe_wiki_markup" );

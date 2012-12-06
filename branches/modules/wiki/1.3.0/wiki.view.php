@@ -1,9 +1,10 @@
 <?php
 /**
+ * Wiki module View class
+ *
  * @class  wikiView
  * @developer NHN (developers@xpressengine.com)
- *
- * wiki module View class
+ * @package wiki
  */
 class WikiView extends Wiki
 {

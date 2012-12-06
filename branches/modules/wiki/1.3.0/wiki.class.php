@@ -2,10 +2,12 @@
 /* require_once ("lib/WikiSite.interface.php"); // Commented for backwards compatibility with PHP4 */
 
 /**
-* @class wiki
-* @developer NHN (developers@xpressengine.com)
-*   wiki module high class
-*/
+ * Wiki module high class
+ *
+ * @class wiki
+ * @developer NHN (developers@xpressengine.com)
+ * @package wiki
+ */
 class Wiki extends ModuleObject /* implements WikiSite // Commented for backwards compatibility with PHP4 */
 {
 	var $omitting_characters = array('/&/', '/\//', '/,/', '/ /'); 

@@ -1,9 +1,11 @@
 <?php
 /**
+ * Wiki WAP class
+ *
  * @class  wikiWAP
  * @author NHN (developers@xpressengine.com)
- * Wiki WAP class
- **/
+ * @package wiki
+ */
 
 class wikiWAP extends wiki {
 
