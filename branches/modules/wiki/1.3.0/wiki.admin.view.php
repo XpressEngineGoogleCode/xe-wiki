@@ -2,17 +2,19 @@
 /**
 * @class  wikiAdminView
 * @developer NHN (developers@xpressengine.com)
-*   wiki admin view class
+ *
+* Wiki admin view class
 */
 class WikiAdminView extends Wiki
 {
 	var $wiki_markup_list = array("markdown", "mediawiki_markup", "googlecode_markup", "xe_wiki_markup" );
 
 	/**
-	 *  Admin view initialisation
+	 * Admin view initialisation
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return 
+	 * @return void
 	 */
 	function init() 
 	{
@@ -57,15 +59,17 @@ class WikiAdminView extends Wiki
 		$template_path = sprintf("%stpl/", $this->module_path); 
 		$this->setTemplatePath($template_path);	
 	}
-	
+
 	/**
-	 *  List of Wiki module
+	 * List of Wiki modules
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
+	 * @return void
 	 */
 	function dispWikiAdminContent() 
 	{
+		$args = new stdClass();
 		$args->sort_index = "module_srl"; 
 		$args->page = Context::get('page'); 
 		$args->list_count = 20; 
@@ -85,7 +89,8 @@ class WikiAdminView extends Wiki
 	}
 	
 	/**
-	 *  Wiki module input screen for additional information
+	 * Displays page for creating a new wiki module
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -129,10 +134,14 @@ class WikiAdminView extends Wiki
 	}
 
 	/**
-	 *  Help page for wiki markup type
+	 * Help page for wiki markup types
+	 *
+	 * Shows examples and docs for each available
+	 * Wiki markup type
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
-	 * @return
+	 * @return void
 	 */
 	function dispWikiAdminMarkupExamples()
 	{
@@ -141,13 +150,14 @@ class WikiAdminView extends Wiki
 
 		$this->setTemplateFile('markup_examples');
 	}
-	
+
 	/**
-	 *  Confirmation screen for deleting wiki module
+	 * Confirmation screen for deleting wiki module
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
-	 */		
+	 * @return void
+	 */
 	function dispWikiAdminDeleteWiki() 
 	{
 		if(!Context::get('module_srl')) 
@@ -165,13 +175,14 @@ class WikiAdminView extends Wiki
 		Context::set('module_info', $module_info); 
 		$this->setTemplateFile('wiki_delete');
 	}
-	
+
 	/**
-	 *  Additional setup screen for Wiki module
+	 * Additional setup screen for Wiki module
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
-	 */			
+	 * @return void
+	 */
 	function dispWikiAdminWikiAdditionSetup() 
 	{
 		// content will be passsed by reference to all triggers
@@ -187,13 +198,14 @@ class WikiAdminView extends Wiki
 		// Specify the template file
 		$this->setTemplateFile('addition_setup');
 	}
-	
+
 	/**
-	 *  Set permissions for a wiki module screen
+	 * Displays page for setting wiki permissions
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
-	 */			
+	 * @return void
+	 */
 	function dispWikiAdminGrantInfo() 
 	{
 		// Call the common page for managing grants information
@@ -202,13 +214,14 @@ class WikiAdminView extends Wiki
 		Context::set('grant_content', $grant_content); 
 		$this->setTemplateFile('grant_list');
 	}
-	
+
 	/**
-	 *  Wiki module screen skins settings
+	 * Displays page for editing wiki skin info
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
-	 */		
+	 * @return void
+	 */
 	function dispWikiAdminSkinInfo() 
 	{
 		// Call the common page for managing skin information
@@ -217,13 +230,14 @@ class WikiAdminView extends Wiki
 		Context::set('skin_content', $skin_content); 
 		$this->setTemplateFile('skin_info');
 	}
-	
+
 	/**
-	 *  Wiki module list update screen
+	 * Displays page for updating wiki documents' aliases in batch
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
-	 */			
+	 * @return void
+	 */
 	function dispWikiAdminArrange() 
 	{
 		$this->setTemplateFile('arrange_list') ;

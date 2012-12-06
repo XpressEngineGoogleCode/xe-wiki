@@ -2,19 +2,21 @@
 /**
  * @class  wikiAdminController
  * @developer NHN (developers@xpressengine.com)
- *   wiki admin controller class
+ *
+ * Wiki admin controller class
  */
 class WikiAdminController extends Wiki
 {
 	
 	/**
-	 *  Add a wiki module
+	 * Add a wiki module
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $args
-	 * @return 
+	 * @return void
 	 */
-	function procWikiAdminInsertWiki($args = NULL) 
+	function procWikiAdminInsertWiki($args = NULL)
 	{
 		$oModuleController = &getController('module'); 
 		$oModuleModel = &getModel('module'); 
@@ -74,10 +76,11 @@ class WikiAdminController extends Wiki
 	}
 	
 	/**
-	 *  Deleting a wiki module
+	 * Deleting a wiki module
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return 
+	 * @return void
 	 */
 	function procWikiAdminDeleteWiki() 
 	{
@@ -96,13 +99,14 @@ class WikiAdminController extends Wiki
 		$returnUrl = Context::get('success_return_url'); 
 		$this->setRedirectUrl($returnUrl);
 	}
-	
+
 	/**
-	 *  Adds alias to documents which are missing it
+	 * Adds alias to documents which are missing it
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return 
-	 */	
+	 * @return Object
+	 */
 	function procWikiAdminArrangeList() 
 	{
 		$oModuleModel = &getModgetControllerel('module'); 
