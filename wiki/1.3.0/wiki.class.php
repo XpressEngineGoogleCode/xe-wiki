@@ -12,7 +12,11 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	var $replacing_characters = array('', '', '', '_');
 	
 	/**
-	 *  Returns current wiki instance syntax parser
+	 * Returns current wiki instance syntax parser
+	 *
+	 * Every wiki instance has an associated "syntax" (eg. Markdown, MediaWiki).
+	 * This method returns the appropriate text parser
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return interface SyntaxParser
@@ -45,7 +49,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 *  Receives a document title and returns an URL firendly name
+	 * Receives a document title and returns an URL friendly name
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $entry_name string
@@ -62,8 +67,9 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 *  Checks if a certain document exists
+	 * Checks if a certain document exists
 	 * Returns doc_alias if document exists or false otherwise
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_name string
@@ -89,7 +95,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 *  Checks if current user has permission to add new documents
+	 * Checks if current user has permission to add new documents
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return boolean
@@ -100,7 +107,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 *  Returns qualified internal link, given an alias or doc title
+	 * Returns qualified internal link, given an alias or doc title
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_name string
@@ -112,21 +120,24 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 
 	/**
-     *  Returns qualified internal link, given an alias or doc title
-     * @developer Florin Ercus (xe_dev@arnia.ro)
-     * @access public
-     * @param $document_name string
-     * @return string
-     * @TODO: check case when document is accessed just by document_srl
-     */
-	function getEditPageUrlForCurrentDocument($section=null)
+	 * Returns qualified internal link, given an alias or doc title
+	 *
+	 * @developer Florin Ercus (xe_dev@arnia.ro)
+	 * @access public
+	 * @param null $section
+	 * @internal param string $document_name
+	 * @return string
+	 * @TODO: check case when document is accessed just by document_srl
+	 */
+	function getEditPageUrlForCurrentDocument($section = NULL)
     {
         if (is_null($section)) return getUrl('', 'mid', $this->module_info->mid, 'entry', Context::get('entry'), 'act', 'dispWikiEditPage');
         return getUrl('', 'mid', $this->module_info->mid, 'entry', Context::get('entry'), 'act', 'dispWikiEditPage', 'section', $section);
     }
 
 	/**
-	 *  Creates tables, indexes and adds any other logic needed for module upon installation
+	 * Creates tables, indexes and adds any other logic needed for module upon installation
+	 *
 	 * @access public
 	 * @developer NHN (developers@xpressengine.com)
 	 * @return Object 
@@ -137,7 +148,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 *  Checks if module is up to date
+	 * Checks if module is up to date
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return boolean
@@ -148,15 +160,16 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 		$flag = FALSE; $flag = $this->_hasOldStyleAliases(); $oDB = DB::getInstance();
 		if(!$oDB->isIndexExists("wiki_links", "idx_link_doc_cur_doc"))
 		{
-			$flag = TRUE; 
+			$flag = TRUE;
 			return $flag;
 		}
 
-		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after')) return true;
+		if(!$oModuleModel->getTrigger('menu.getModuleListInSitemap', 'wiki', 'model', 'triggerModuleListInSitemap', 'after')) return TRUE;
 	}
 	
 	/**
-	 *  Updates module
+	 * Updates module
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
@@ -188,7 +201,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 *  Uninstalls module
+	 * Uninstalls module
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
@@ -199,7 +213,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 *  Deletes cache
+	 * Deletes cache
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
@@ -215,7 +230,8 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	}
 	
 	/**
-	 *  Make sure that alias does not contain special characters / spaces, etc
+	 * Make sure that alias does not contain special characters / spaces, etc
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access private
 	 * @return boolean
@@ -250,12 +266,13 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 		}
 		return FALSE;
 	}
-	
+
 	/**
-	 *  Fixes alias in a batch - special characters / spaces that have not been removed
+	 * Fixes alias in a batch - special characters / spaces that have not been removed
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access private
-	 * @return 
+	 * @return void
 	 */
 	function _updateOldStyleAliases() 
 	{
