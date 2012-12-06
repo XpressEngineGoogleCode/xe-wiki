@@ -2,15 +2,16 @@
 /**
 * @class wikiController
 * @developer NHN (developers@xpressengine.com)
-*   wiki controller class
+* Wiki controller class
 */
 class WikiController extends Wiki
 {
 	/**
-	 *  Inserts a wiki document
+	 * Inserts or updates a wiki document
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
+	 * @return Object
 	 */
 	function procWikiInsertDocument() 
 	{
@@ -180,13 +181,14 @@ class WikiController extends Wiki
 	}
 
 	/**
-     *  Preview for wikitext
-     * @developer Florin Ercus (xe_dev@arnia.ro)
-     * @access public
-     * @return
-     *
-     * Called through AJAX, returns JSON
-     */
+	 * Preview for wikitext
+	 * Called through AJAX, returns JSON
+	 *
+	 * @developer Florin Ercus (xe_dev@arnia.ro)
+	 * @access public
+	 *
+	 * @return void
+	 */
     function procWikiTextParse()
     {
         require_once "lib/WikiText.class.php";
@@ -194,7 +196,7 @@ class WikiController extends Wiki
         $lang = Context::get('markup');
         $this->module_info->markup_type = $lang;
         $parser = $this->getWikiTextParser();
-        $content = $parser->parse($content, false);
+        $content = $parser->parse($content, FALSE);
         $rez = array('content'=>$content);
         //@TODO: avoid this by using the default ajax mechanism
         echo json_encode($rez);
@@ -202,12 +204,12 @@ class WikiController extends Wiki
     }
 
 	/**
-	 *  Checks to see if document was edited by someone else, so that we won't override their changes on save
+	 * Checks to see if document was edited by someone else, so that we won't override their changes on save
+	 * Called through AJAX, returns JSON
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
-	 * @return
-	 * 
-	 * Called through AJAX, returns JSON
+	 * @return void
 	 */
 	function procWikiCheckIfDocumentWasUpdated()
 	{
@@ -217,7 +219,7 @@ class WikiController extends Wiki
 		$document_srl = Context::get('document_srl');
 		if(!$document_srl) 
 		{
-			$this->add('updated', false);
+			$this->add('updated', FALSE);
 			return;
 		}
 		
@@ -232,18 +234,19 @@ class WikiController extends Wiki
 			if((!$previous_doc_edit && $latest_doc_edit) 
 					|| ($previous_doc_edit < $latest_doc_edit))
 			{
-				$this->add('updated', true);
+				$this->add('updated', TRUE);
 				return;				
 			}
 
 		}		
 		
-		$this->add('updated', false);
+		$this->add('updated', FALSE);
 		return;		
 	}
 	
 	/**
-	 *  Delete database references to links in current document
+	 * Delete database references to links in current document
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl 
@@ -251,23 +254,25 @@ class WikiController extends Wiki
 	 */
 	function deleteLinkedDocuments($document_srl) 
 	{
-		
+		$args = new stdClass();
 		$args->document_srl = $document_srl; 
 		$output = executeQuery('wiki.deleteLinkedDocuments', $args); 
 		return $output;
 	}
-	
+
 	/**
-	 *  Save all internal links in current document to the database
+	 * Save all internal links in current document to the database
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl
 	 * @param $alias_list
 	 * @param $module_srl
-	 * @return $output 
+	 * @return object $output
 	 */
 	function insertLinkedDocuments($document_srl, $alias_list, $module_srl) 
 	{
+		$args = new stdClass();
 		$args->document_srl = $document_srl; 
 		$args->alias_list = implode(',', $alias_list); 
 		$args->module_srl = $module_srl; 
@@ -276,7 +281,8 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 *  Updates info about links in current document
+	 * Updates info about links in current document
+	 *
 	 * @developer Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl
@@ -293,23 +299,25 @@ class WikiController extends Wiki
 		}
 		return $output;
 	}
-	
+
 	/**
-	 *  Register comments on the wiki if user is not logged
+	 * Register comments on the wiki if user is not logged
+	 *
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
-	 * @return
+	 * @return Object
 	 */
 	function procWikiInsertCommentNotLogged() 
 	{
-		$this->procWikiInsertComment();
+		return $this->procWikiInsertComment();
 	}
-	
+
 	/**
-	 *  Register comments on the wiki
+	 * Register comments on the wiki
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
+	 * @return Object
 	 */
 	function procWikiInsertComment() 
 	{
@@ -403,12 +411,13 @@ class WikiController extends Wiki
 		$this->add('comment_srl', $obj->comment_srl); 
 		$this->setRedirectUrl(Context::get('success_return_url'));
 	}
-	
+
 	/**
-	 *  Delete article from the wiki
+	 * Delete article from the wiki
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
+	 * @return Object
 	 */
 	function procWikiDeleteDocument() 
 	{
@@ -457,7 +466,8 @@ class WikiController extends Wiki
 	}
 	
 	/**
-	 *  Delete comment from the wiki
+	 * Delete comment from the wiki
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
@@ -484,12 +494,13 @@ class WikiController extends Wiki
 		$this->setRedirectUrl(Context::get('success_return_url'));
 		//$this->setMessage('success_deleted');
 	}
-	
+
 	/**
-	 *  Change position of the document on hierarchy
+	 * Change position of the document on hierarchy
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return 
+	 * @return Object
 	 */
 	function procWikiMoveTree()
 	{
@@ -580,12 +591,13 @@ class WikiController extends Wiki
 		}
 		$this->recompileTree($this->module_srl);
 	}
-	
+
 	/**
-	 *  recreate Wiki the hierarchy
-	 * @developer NHN (developers@xpressengine.com)	
+	 * Recreate Wiki hierarchy
+	 *
+	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
+	 * @return Object
 	 */
 	function procWikiRecompileTree() 
 	{
@@ -595,14 +607,15 @@ class WikiController extends Wiki
 		}
 		return $this->recompileTree($this->module_srl);
 	}
-	
+
 	/**
-	 *  recreate Wiki hierarchy
-	 * @developer NHN (developers@xpressengine.com)	
+	 * Recreate Wiki hierarchy
+	 *
+	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $module_srl
-	 * @return
-	 */	
+	 * @return Object
+	 */
 	function recompileTree($module_srl) 
 	{
 		$oWikiModel = &getModel('wiki'); 
@@ -623,12 +636,13 @@ class WikiController extends Wiki
 		FileHandler::writeFile($xml_file, $xml_buff); 
 		return new Object();
 	}
-	
+
 	/**
-	 *  Confirm password for modifying non-members Comments
+	 * Confirm password for modifying non-members Comments
+	 *
 	 * @developer NHN (developers@xpressengine.com)
 	 * @access public
-	 * @return
+	 * @return Object
 	 */
 	function procWikiVerificationPassword() 
 	{
@@ -666,12 +680,15 @@ class WikiController extends Wiki
 
 		}
 	}
-	
+
 	/**
-	 *  function, used by Ajax call, that return curent version and one of history version of the document for making diff
+	 * Returns a document's current version
+	 * and one it's history version for making diff
+	 * Used by Ajax call
+	 *
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
-	 * @return
+	 * @return void
 	 */
 	function procWikiContentDiff() 
 	{
@@ -685,12 +702,14 @@ class WikiController extends Wiki
 		$this->add('old', $history_content); 
 		$this->add('current', $current_content);
 	}
-	
+
 	/**
-	 *  function, used by Ajax call, that return HTML Comment Editor
+	 * Returns HTML Comment Editor
+	 * Used by Ajax call
+	 *
 	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
-	 * @return
+	 * @return void
 	 */
 	function procDispCommentEditor() 
 	{
@@ -703,12 +722,12 @@ class WikiController extends Wiki
 		// get an editor
 		$option->primary_key_name = 'comment_srl'; 
 		$option->content_key_name = 'content'; 
-		$option->allow_fileupload = FALSE; 
-		$option->enable_autosave = FALSE; 
-		$option->disable_html = TRUE; 
-		$option->enable_default_component = FALSE; 
-		$option->enable_component = FALSE; 
-		$option->resizable = TRUE; 
+		$option->allow_fileupload = FALSE;
+		$option->enable_autosave = FALSE;
+		$option->disable_html = TRUE;
+		$option->enable_default_component = FALSE;
+		$option->enable_component = FALSE;
+		$option->resizable = TRUE;
 		$option->height = 150; 
 		$editor = $oEditorModel->getEditor(0, $option); 
 		
