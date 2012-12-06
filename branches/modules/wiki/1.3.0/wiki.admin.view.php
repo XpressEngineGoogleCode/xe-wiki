@@ -1,19 +1,22 @@
 <?php
 /**
+ * File containing the Wiki admin view class
+ */
+/**
  * Wiki admin view class
  *
- * @class  wikiAdminView
- * @developer NHN (developers@xpressengine.com)
+ * @author NHN (developers@xpressengine.com)
  * @package wiki
  */
 class WikiAdminView extends Wiki
 {
+	/** @var array Contains a list of all available markups for XE Wiki */
 	var $wiki_markup_list = array("markdown", "mediawiki_markup", "googlecode_markup", "xe_wiki_markup" );
 
 	/**
 	 * Admin view initialisation
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -64,7 +67,7 @@ class WikiAdminView extends Wiki
 	/**
 	 * List of Wiki modules
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -92,7 +95,7 @@ class WikiAdminView extends Wiki
 	/**
 	 * Displays page for creating a new wiki module
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
 	 */	
@@ -140,7 +143,7 @@ class WikiAdminView extends Wiki
 	 * Shows examples and docs for each available
 	 * Wiki markup type
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return void
 	 */
@@ -155,7 +158,7 @@ class WikiAdminView extends Wiki
 	/**
 	 * Confirmation screen for deleting wiki module
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -180,7 +183,7 @@ class WikiAdminView extends Wiki
 	/**
 	 * Additional setup screen for Wiki module
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -203,7 +206,7 @@ class WikiAdminView extends Wiki
 	/**
 	 * Displays page for setting wiki permissions
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -219,7 +222,7 @@ class WikiAdminView extends Wiki
 	/**
 	 * Displays page for editing wiki skin info
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -235,7 +238,7 @@ class WikiAdminView extends Wiki
 	/**
 	 * Displays page for updating wiki documents' aliases in batch
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */

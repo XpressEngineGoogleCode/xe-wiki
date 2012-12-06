@@ -2,13 +2,13 @@
 
 /**
  *  Interface for a wiki syntax parsers
- * @developer Corina Udrescu (xe_dev@arnia.ro)
+ * @author Corina Udrescu (xe_dev@arnia.ro)
  */
 interface SyntaxParser
 {
 	/**
 	 *  Converts a certain wiki syntax to HTML
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
 	 * @return string
@@ -17,7 +17,7 @@ interface SyntaxParser
 	
 	/**
 	 *  Finds all internal links in a text and returns document aliases
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
 	 * @return array Array of document aliases 

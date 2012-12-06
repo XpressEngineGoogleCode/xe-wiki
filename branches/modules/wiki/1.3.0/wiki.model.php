@@ -1,25 +1,25 @@
 <?php
 /**
- * Wiki Model class
+ * File containing the Wiki model class
+ */
+/**
+ * Wiki model class
  *
- * @class  wikiModel
  * @author NHN (developers@xpressengine.com)
  * @package wiki
  */
-
 class WikiModel extends Wiki {
+
 	/**
-	*  Initialization
-	**/
+	 *  Initialization
+	 */
 	function init() {
 
 	}
 
 	/**
-	*  Retrieve the Tree hierarchy
-	* document_category테이블을 이용해서 위키 문서의 계층 구조도를 그림
-	* document_category테이블에 등록되어 있지 않은 경우 depth = 0 으로 하여 신규 생성
-	**/
+	 * Retrieves the Tree hierarchy
+	 */
 	function getWikiTreeList() {
 		$oWikiController = &getController('wiki');
 
@@ -27,7 +27,7 @@ class WikiModel extends Wiki {
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 		header("Cache-Control: no-store, no-cache, must-revalidate");
-		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Cache-Control: post-check=0, pre-check=0", FALSE);
 		header("Pragma: no-cache");
 
 		if(!$this->module_srl) return new Object(-1,'msg_invalid_request');
@@ -41,8 +41,11 @@ class WikiModel extends Wiki {
 
 
 	/**
-	*  Read hierarchy from the cache
-	*/
+	 *  Reads hierarchy from cache
+	 *
+	 * @param int $module_srl
+	 * @return array|Object
+	 */
 	function readWikiTreeCache($module_srl) {
 
 		$oWikiController = &getController('wiki');
@@ -73,8 +76,11 @@ class WikiModel extends Wiki {
 
 
 	/**
-	*  Read hierarchy
-	*/
+	 * Read hierarchy
+	 *
+	 * @param int $module_srl
+	 * @return array
+	 */
 	function loadWikiTreeList($module_srl) {
 		// Select wanted List
 		$args->module_srl = $module_srl;
@@ -140,6 +146,12 @@ class WikiModel extends Wiki {
 		return $result;
 	}
 
+	/**
+	 * Retrieves the document used a the tree root
+	 *
+	 * @param int $module_srl
+	 * @return null
+	 */
 	function getRootDocument($module_srl)
 	{
 		$docs_list = $this->readWikiTreeCache($module_srl);
@@ -170,19 +182,23 @@ class WikiModel extends Wiki {
 		}
 		else
 		{
-			return null;
+			return NULL;
 		}
 	}
 
 	/**
-	*  Load previous / next article
-	*/
+	 *  Load previous / next article
+	 *
+	 * @param int $module_srl
+	 * @param int $document_srl
+	 * @return array
+	 */
 	function getPrevNextDocument($module_srl, $document_srl) {
 		$list = $this->readWikiTreeCache($module_srl);
 		if(!count($list)) return array(0,0);
 
 		$prev = $next_srl = $prev_srl = 0;
-		$checked = false;
+		$checked = FALSE;
 		foreach($list as $key => $val) {
 			if($checked) {
 				$next_srl = $val->document_srl;
@@ -190,14 +206,20 @@ class WikiModel extends Wiki {
 			}
 			if($val->document_srl == $document_srl) {
 				$prev_srl = $prev;
-				$checked = true;
+				$checked = TRUE;
 			}
 			$prev = $val->document_srl;
 		}
 		return array($prev_srl, $next_srl);
 	}
 
-
+	/**
+	 * Converts a tree hierarchy to a flat list
+	 *
+	 * @param array $childs
+	 * @param array $result
+	 * @param int $depth
+	 */
 	function getTreeToList($childs, &$result,$depth) {
 		if(!count($childs)) return;
 		foreach($childs as $key => $node) {
@@ -208,6 +230,12 @@ class WikiModel extends Wiki {
 		}
 	}
 
+	/**
+	 * Retrieves a list of all members that contributed to an article
+	 *
+	 * @param int $document_srl
+	 * @return array
+	 */
 	function getContributors($document_srl) {
 		$oDocumentModel = &getModel('document');
 		$oDocument = $oDocumentModel->getDocument($document_srl);
@@ -232,12 +260,17 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	* Prepares the documents tree for display
-	* by describing the relationship of each node
-	* with the page being viewed: parent, sibling, child etc.
-	*
-	* Used for displaying the sidebar tree menu of the wiki
-	*/
+	 * Prepares the documents tree for display
+	 * by describing the relationship of each node
+	 * with the page being viewed: parent, sibling, child etc.
+	 *
+	 * Used for displaying the sidebar tree menu of the wiki
+	 *
+	 * @param int $module_srl
+	 * @param int $document_srl
+	 * @param string $mid
+	 * @return array|Object
+	 */
 	function getMenuTree($module_srl, $document_srl, $mid)
 	{
 		/** Create menu tree */
@@ -279,15 +312,15 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	*  Recursive function that create BreadCrumbs Menu Array
-	* @access public
-	*
-	* @param $document_srl
-	* @param $list
-	* @param $list_breadcrumbs
-	*
-	* @return array
-	*/
+	 * Recursive function that create BreadCrumbs Menu Array
+	 * @access public
+	 *
+	 * @param int $document_srl
+	 * @param array $list
+	 * @param array $list_breadcrumbs
+	 *
+	 * @return array
+	 */
 	function createBreadcrumbsList($document_srl, $list, $list_breadcrumbs = array())
 	{
 		$oDocumentModel = &getModel("document");
@@ -301,13 +334,15 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	*  Function that return BreadCrumbs Menu
-	* @access public
-	*
-	* @param $breadcrumbs_list
-	*
-	* @return string
-	*/
+	 * Function that returns BreadCrumbs Menu
+	 * @access public
+	 *
+	 * @param int $document_srl
+	 * @param array $list
+	 * @internal param $breadcrumbs_list
+	 *
+	 * @return string
+	 */
 	function getBreadcrumbs($document_srl, $list)
 	{
 		$breadcrumbs = array_reverse($this->createBreadcrumbsList($document_srl, $list));
@@ -344,9 +379,11 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	* Retrieves a list of all XE Wikimodules
-	*/
-	function getModuleList($add_extravars = false)
+	 * Retrieves a list of all XE Wiki modules
+	 *
+	 * @param boolean $add_extravars
+	 */
+	function getModuleList($add_extravars = FALSE)
 	{
 		$args->sort_index = "module_srl";
 		$args->page = 1;
@@ -375,8 +412,15 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	* Searches through documents for the existence of a certain string
-	*/
+	 * Searches through documents for the existence of a certain string
+	 *
+	 * @param boolean $is_keyword
+	 * @param int     $target_module_srl
+	 * @param string  $search_target
+	 * @param int     $page
+	 * @param int     $items_per_page
+	 * @return
+	 */
 	function search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page= 10)
 	{
 		$oLuceneModule = &getModule('lucene');
@@ -390,10 +434,17 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	* Searches through documents for the existence of a certain string
-	*
-	* Used when nLucene module is installed.
-	*/
+	 * Searches through documents for the existence of a certain string
+	 *
+	 * Used when nLucene module is installed.
+	 *
+	 * @param boolean $is_keyword
+	 * @param int     $target_module_srl
+	 * @param string  $search_target
+	 * @param int     $page
+	 * @param int     $items_per_page
+	 * @return
+	 */
 	function _lucene_search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page= 10 )
 	{
 		$oLuceneModel = &getModel('wiki'); //temporary imported sources so we not interfere with nlucene
@@ -406,11 +457,11 @@ class WikiModel extends Wiki {
 		}
 
 		//Search queries applied to the target module
-		$query = $oLuceneModel->getSubquery($target_module_srl, "include", null);
+		$query = $oLuceneModel->getSubquery($target_module_srl, "include", NULL);
 
 		//Parameter setting
 		$json_obj = new stdClass();
-		$json_obj->query = $oLuceneModel->getQuery($is_keyword, $search_target, null);
+		$json_obj->query = $oLuceneModel->getQuery($is_keyword, $search_target, NULL);
 		$json_obj->curPage = $page;
 		$json_obj->numPerPage = $items_per_page;
 		$json_obj->indexType = "db";
@@ -424,9 +475,14 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	*  Post id list, bringing the article.
-	*/
-	function getDocuments($searchUrl, $params, $service_prefix = null) {
+	 *  Returns a list of documents
+	 *
+	 * @param string $searchUrl
+	 * @param stdClass $params
+	 * @param string $service_prefix
+	 * @return \stdClass
+	 */
+	function getDocuments($searchUrl, $params, $service_prefix = NULL) {
 		$output = new stdClass;
 		if( !isset($service_prefix) ){
 				$service_prefix = $this->getDefaultServicePrefix();
@@ -452,7 +508,7 @@ class WikiModel extends Wiki {
 		// Results must be at least one body has requested post.
 		$documents = array();
 		if (count($idList) > 0) {
-			$tmpDocuments = $oModelDocument->getDocuments($idList, false, false);
+			$tmpDocuments = $oModelDocument->getDocuments($idList, FALSE, FALSE);
 			// Russineseo received a list of documents returned by rearranging the order
 			foreach($idList as $id) {
 				$documents['doc'.$id] = $tmpDocuments[$id];
@@ -468,8 +524,11 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	*  Results extracted from an array of id
-	*/
+	 *  Results extracted from an array of id
+	 *
+	 * @param stdClass $res
+	 * @return array
+	 */
 	function result2idArray($res) {
 		$res = json_decode($res);
 		$results = $res->results;
@@ -483,26 +542,40 @@ class WikiModel extends Wiki {
    }
 
 	/**
-	*  To determine which fields to search
-	* Check the Search for field
-	*/
+	 * To determine which fields to search
+	 * Check the Search for field
+	 *
+	 * @param string $fieldname
+	 * @return bool
+	 */
 	function isFieldCorrect($fieldname) {
 		$fields = array('title', 'content', 'title_content', 'tags');
 		$answer = in_array($fieldname, $fields);
 		return $answer;
 	}
 
+	/**
+	 * Returns Lucene search URL
+	 *
+	 * @param string $searchAPI
+	 * @return string
+	 */
 	function getDefaultSearchUrl($searchAPI)
 	{
 		$oModuleModel = &getModel('module');
 		$config = $oModuleModel->getModuleConfig('lucene');
-		syslog(1, "lucene config: ".print_r($config, true)."\n");
+		syslog(1, "lucene config: ".print_r($config, TRUE)."\n");
 		return $searchUrl = $config->searchUrl.$searchAPI;
 	}
 
 	/**
-	*  List and include / exclude based on whether the clause making
-	*/
+	 *  List and include / exclude based on whether the clause making
+	 *
+	 * @param string $target_mid
+	 * @param string $target_mode
+	 * @param string $exclude_module_srl
+	 * @return string
+	 */
 	function getSubquery($target_mid, $target_mode, $exclude_module_srl=NULL) {
 	  if( isset($exclude_module_srl) ){
 		$no_secret = ' AND NOT is_secret:yes AND NOT module_srl:'.$exclude_module_srl."; ";
@@ -520,8 +593,13 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	*  Results for query syntax to apply the nLucene
-	*/
+	 *  Results for query syntax to apply the nLucene
+	 *
+	 * @param string  $query
+	 * @param string  $search_target
+	 * @param string  $exclude_module_srl
+	 * @return string
+	 */
 	function getQuery($query, $search_target, $exclude_module_srl='0') {
 		$query_arr = explode(' ', $query);
 		$answer = '';
@@ -537,15 +615,21 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	* Searches through documents for the existence of a certain string
-	*
-	* Used for XE Wiki search textbox when nLucene is not installed.
-	*/
+	 * Searches through documents for the existence of a certain string
+	 *
+	 * Used for XE Wiki search textbox when nLucene is not installed.
+	 *
+	 * @param boolean $is_keyword
+	 * @param int     $target_module_srl
+	 * @param string  $search_target
+	 * @param int     $page
+	 * @param int     $items_per_page
+	 */
 	function _is_search($is_keyword, $target_module_srl, $search_target, $page, $items_per_page= 10)
 	{
 		$oDocumentModel = &getModel('document');
 
-		$obj = null;
+		$obj = NULL;
 		$obj->module_srl = array($target_module_srl);
 		$obj->page = $page;
 		$obj->list_count = $items_per_page;
@@ -559,6 +643,9 @@ class WikiModel extends Wiki {
 
 	/**
 	 * Get pages that link to this document
+	 *
+	 * @param int $document_srl
+	 * @return array
 	 */
 	function getInboundLinks($document_srl){
 		$args->document_srl = $document_srl;
@@ -569,6 +656,9 @@ class WikiModel extends Wiki {
 
 	/**
 	 * Get pages this document links to
+	 *
+	 * @param int $document_srl
+	 * @return array
 	 */
 	function getOutboundLinks($document_srl){
 		$args->document_srl = $document_srl;
@@ -578,22 +668,34 @@ class WikiModel extends Wiki {
 	}
 
 	/**
-	 *  return module name in sitemap
+	 * Returns module name in sitemap
+	 *
+	 * @param Object $obj
 	 **/
 	function triggerModuleListInSitemap(&$obj)
 	{
 		array_push($obj, 'wiki');
 	}
 
+	/**
+	 * Returns the Lucene module service prefix
+	 *
+	 * @return mixed
+	 */
 	function getDefaultServicePrefix(){
 		$oModuleModel = &getModel('module');
 		$config = $oModuleModel->getModuleConfig('lucene');
 		return $config->service_name_prefix;
 	}
 
-	/* lucene search related */
-	var $json_service = null;
+	/**	@var string Lucene API endpoint */
+	var $json_service = NULL;
 
+	/**
+	 * Returns the Lucene service
+	 *
+	 * @return null|Services_JSON
+	 */
 	function getService(){
 		require_once(_XE_PATH_.'modules/lucene/lib/jsonphp.php');
 		if( !isset($this->json_service) ){

@@ -1,15 +1,18 @@
 <?php
+/**
+ * File containing the Wiki mobile class
+ */
 
+/** Load WikiView class since most of the behaviour is shared */
 require_once(_XE_PATH_.'modules/wiki/wiki.view.php');
 
 /**
  * Wiki mobile class
  *
- * @class  wikiMobile
- * @developer NHN (developers@xpressengine.com)
+ * @author NHN (developers@xpressengine.com)
  * @package wiki
  */
-class wikiMobile extends wikiView {
+class WikiMobile extends WikiView {
 
 	/**
 	 * Initialize mobile views

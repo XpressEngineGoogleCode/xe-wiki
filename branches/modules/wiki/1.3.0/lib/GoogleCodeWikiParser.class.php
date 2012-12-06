@@ -4,14 +4,14 @@ require_once ('ParserBase.class.php');
 require_once ('WikiText.class.php');
 
 /**
- *  Converts Google Wiki Syntax to HTML
- * @developer Corina Udrescu (xe_dev@arnia.ro)
+ * Converts Google Wiki Syntax to HTML
+ * @author Corina Udrescu (xe_dev@arnia.ro)
  */
 class GoogleCodeWikiParser extends ParserBase
 {
 	/**
 	 *  Constructor
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site  WikiSite
 	 * @return
@@ -23,7 +23,7 @@ class GoogleCodeWikiParser extends ParserBase
 
 	/**
 	 *  Overrides parseText in base
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @override
 	 * @access protected
 	 * @return
@@ -37,7 +37,7 @@ class GoogleCodeWikiParser extends ParserBase
 
 	/**
 	 *  Parses headings
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 *
@@ -67,7 +67,7 @@ class GoogleCodeWikiParser extends ParserBase
 
 	/**
 	 *  Escapes anything the syntax needs
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -121,7 +121,7 @@ class GoogleCodeWikiParser extends ParserBase
 
 	/**
 	 *  Callback function for escapes
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
 	 * @return string
@@ -136,7 +136,7 @@ class GoogleCodeWikiParser extends ParserBase
 
 	/**
 	 *  Callback function for CamelCase text inside square bracket links
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
 	 * @return string
@@ -151,7 +151,7 @@ class GoogleCodeWikiParser extends ParserBase
 
 	/**
 	 *  Callback function for CamelCase text inside square bracket links
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
 	 * @return string

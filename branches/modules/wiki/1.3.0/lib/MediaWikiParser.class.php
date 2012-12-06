@@ -5,7 +5,7 @@ require_once ('WikiText.class.php');
 
 /**
  *  Converts a limited subset of MediaWiki syntax into HTML
- * @developer Corina Udrescu (xe_dev@arnia.ro)
+ * @author Corina Udrescu (xe_dev@arnia.ro)
  */
 class MediaWikiParser extends ParserBase
 {
@@ -30,7 +30,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Constructor
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site WikiSite
 	 * @return
@@ -42,7 +42,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Overrides parseText in base
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
      * @param bool $toc do not display toc and edit links if in preview mode (ajax)
      * @override
 	 * @access protected
@@ -59,7 +59,7 @@ class MediaWikiParser extends ParserBase
 
     /**
 	 *  Returns a list of all documents this page links to, given by alias
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
 	 * @return array()
@@ -89,7 +89,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Removes all blocks that need to be escaped from original text
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 * 
@@ -113,7 +113,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Callback function for escapes
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
 	 * @return string
@@ -128,7 +128,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Handles list like content
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return 
 	 */
@@ -165,7 +165,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Handles definition lists
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 * 
@@ -188,7 +188,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Skips indent parsing
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @override
 	 * @return
@@ -199,7 +199,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Skip blockquote parsing; indenting means Preformatted text in MediaWiki
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @override
 	 * @return
@@ -210,7 +210,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Handle <pre> text
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -226,7 +226,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Handle links
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -260,7 +260,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Callback function for parseLinks
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
 	 * @return string
@@ -279,7 +279,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Callback for call to preg_replace_callback that parses links
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array()
 	 * @return string
@@ -372,7 +372,7 @@ class MediaWikiParser extends ParserBase
 	
 	/**
 	 *  Handle tables
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -411,7 +411,7 @@ class MediaWikiParser extends ParserBase
 
 	/**
 	 *  Callback for parseTables
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
 	 * @return string

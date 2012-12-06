@@ -5,7 +5,7 @@ require_once ('WikiText.class.php');
 
 /**
  *  Converts Markdown syntax into HTML using external Markdown library
- * @developer Corina Udrescu (xe_dev@arnia.ro)
+ * @author Corina Udrescu (xe_dev@arnia.ro)
  */
 class MarkdownParser /* implements SyntaxParser // Commented for backwards compatibility with PHP4 */
 {
@@ -25,7 +25,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	
 	/**
 	 *  Constructor
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site WikiSite
 	 * @return
@@ -37,7 +37,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	
 	/**
 	 *  Receives a string of text written in Markdown and returns HTML
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
 	 * @return string
@@ -66,7 +66,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	
 	/**
 	 *  Returns a list of all internal links in a page, given as a list of aliases
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
 	 * @return array 
@@ -99,7 +99,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	
 	/**
 	 *  Searches for links in document and replaces them fully qualified urls
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $text string
 	 * @return string
@@ -112,7 +112,7 @@ class MarkdownParser /* implements SyntaxParser // Commented for backwards compa
 	
 	/**
 	 *  Callback function for parseLinks
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
 	 * @return string 
