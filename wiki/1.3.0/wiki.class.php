@@ -1,16 +1,21 @@
 <?php
+/**
+ * File containing the Wiki base class
+ */
 /* require_once ("lib/WikiSite.interface.php"); // Commented for backwards compatibility with PHP4 */
 
 /**
  * Wiki module high class
  *
- * @class wiki
- * @developer NHN (developers@xpressengine.com)
+ * @author NHN (developers@xpressengine.com)
  * @package wiki
  */
 class Wiki extends ModuleObject /* implements WikiSite // Commented for backwards compatibility with PHP4 */
 {
-	var $omitting_characters = array('/&/', '/\//', '/,/', '/ /'); 
+	/** @var array Characters to replace when updating aliases */
+	var $omitting_characters = array('/&/', '/\//', '/,/', '/ /');
+
+	/** @var array Characters with which to replace omitting chars when updating aliases */
 	var $replacing_characters = array('', '', '', '_');
 	
 	/**
@@ -19,7 +24,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	 * Every wiki instance has an associated "syntax" (eg. Markdown, MediaWiki).
 	 * This method returns the appropriate text parser
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return interface SyntaxParser
 	 */
@@ -53,7 +58,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Receives a document title and returns an URL friendly name
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $entry_name string
 	 * @return string 
@@ -72,7 +77,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	 * Checks if a certain document exists
 	 * Returns doc_alias if document exists or false otherwise
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_name string
 	 * @return string
@@ -99,7 +104,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Checks if current user has permission to add new documents
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return boolean
 	 */
@@ -111,7 +116,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Returns qualified internal link, given an alias or doc title
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_name string
 	 * @return string
@@ -124,7 +129,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Returns qualified internal link, given an alias or doc title
 	 *
-	 * @developer Florin Ercus (xe_dev@arnia.ro)
+	 * @author Florin Ercus (xe_dev@arnia.ro)
 	 * @access public
 	 * @param null $section
 	 * @internal param string $document_name
@@ -141,7 +146,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	 * Creates tables, indexes and adds any other logic needed for module upon installation
 	 *
 	 * @access public
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @return Object 
 	 */
 	function moduleInstall() 
@@ -152,7 +157,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Checks if module is up to date
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return boolean
 	 */
@@ -172,7 +177,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Updates module
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -205,7 +210,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Uninstalls module
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -217,7 +222,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Deletes cache
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -234,7 +239,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Make sure that alias does not contain special characters / spaces, etc
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access private
 	 * @return boolean
 	 */
@@ -272,7 +277,7 @@ class Wiki extends ModuleObject /* implements WikiSite // Commented for backward
 	/**
 	 * Fixes alias in a batch - special characters / spaces that have not been removed
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access private
 	 * @return void
 	 */

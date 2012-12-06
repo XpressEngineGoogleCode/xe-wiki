@@ -3,7 +3,7 @@
 
 /**
  *  Base class for syntax parsers
- * @developer Corina Udrescu (xe_dev@arnia.ro)
+ * @author Corina Udrescu (xe_dev@arnia.ro)
  * 
  * Implements default functionality, that is very similar among
  * GoogleCode and MediaWiki
@@ -61,7 +61,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Constructor
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site WikiSite
 	 * @return
@@ -77,7 +77,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Converts input text to HTML
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
 	 * @return string
@@ -96,7 +96,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Handles parsing that needs to be done at the begging, like removing escaped sequences from text
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -125,7 +125,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 
 	/**
 	 *  Handles all common transformations
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -142,7 +142,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Handles parsing that needs to be done at the end - like inserting back into text the escaped sequences
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -154,7 +154,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Returns a list of all internal documents this page links to
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
 	 * @return array
@@ -189,7 +189,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Escapes anything the syntax needs - defined for being overriden
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -199,7 +199,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Parses a block of code
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -226,7 +226,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  preg_replace callback function for inline code blocks
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
 	 * @return string
@@ -246,7 +246,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  preg_replace callback function for multiline code blocks
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
 	 * @return string
@@ -267,7 +267,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Injects code blocks back into initial string
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected 
 	 * @return 
 	 */
@@ -281,7 +281,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  preg_replace callback function for injecting code blocks back in initial string
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
 	 * @return string;
@@ -293,7 +293,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 
 	/**
 	 *  Parse bold, italic, underline etc.
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access proected
 	 * @return
 	 */
@@ -323,7 +323,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Parses pragma statements
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 * 
@@ -341,7 +341,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Parses links
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return 
 	 * 
@@ -395,7 +395,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Callback for CamelCase and bracket links
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
 	 * @return string
@@ -431,7 +431,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Replaces Wiki Syntax lists with HTML lists
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected 
 	 * @return 
 	 */
@@ -442,7 +442,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Handles lists
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $text string
 	 * @return string 
@@ -468,7 +468,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Replaces a block of text containing a Wiki syntax list with an HTML list
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @param $list 
 	 * @return string
@@ -511,7 +511,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Searches for list blocks in a string
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @param $text string
 	 * @return string
@@ -534,7 +534,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Handles tables: || 1 ||  2  ||  3 ||
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -566,7 +566,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Handles blockquotes
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -584,7 +584,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Handle horizontal rules
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */
@@ -597,7 +597,7 @@ class ParserBase /* implements SyntaxParser // Commented for backwards compatibi
 	
 	/**
 	 *  Handles paragraphs
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access protected
 	 * @return
 	 */

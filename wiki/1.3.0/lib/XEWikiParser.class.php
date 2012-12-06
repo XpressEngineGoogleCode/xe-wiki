@@ -6,7 +6,7 @@ require_once ('WikiText.class.php');
 
 /**
  *  Syntax parser for XE Wiki
- * @developer Corina Udrescu (xe_dev@arnia.ro)
+ * @author Corina Udrescu (xe_dev@arnia.ro)
  * 
  * Contains the old parsing code of Wiki (before Markdown was made default)
  * Can only be ran in the context of an XE request (requires wiki class, ModuleObject class and Context)
@@ -18,7 +18,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	
 	/**
 	 *  Constructor
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $wiki_site WikiSite
 	 * @return
@@ -30,7 +30,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	
 	/**
 	 *  Converts XE Markup (explicit links - http / https - and internal links - given as [doc_name | description] to HTML
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $org_content string
 	 * @return string
@@ -49,7 +49,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	
 	/**
 	 *  Returns an array of aliases for documents that are being linked in text
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $text string
 	 * @return string
@@ -72,7 +72,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	
 	/**
 	 *  Generates the string to use as entry name
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
 	 * @return stdClass
@@ -110,7 +110,7 @@ class XEWikiParser /* implements SyntaxParser // Commented for backwards compati
 	
 	/**
 	 *  The return link to be substituted according to wiki
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $matches array
 	 * @return string

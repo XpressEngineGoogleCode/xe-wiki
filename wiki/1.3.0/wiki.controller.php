@@ -1,9 +1,11 @@
 <?php
 /**
+ * File containing the Wiki controller class
+ */
+/**
  * Wiki controller class
  *
- * @class wikiController
- * @developer NHN (developers@xpressengine.com)
+ * @author NHN (developers@xpressengine.com)
  * @package wiki
  */
 class WikiController extends Wiki
@@ -11,7 +13,7 @@ class WikiController extends Wiki
 	/**
 	 * Inserts or updates a wiki document
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -186,7 +188,7 @@ class WikiController extends Wiki
 	 * Preview for wikitext
 	 * Called through AJAX, returns JSON
 	 *
-	 * @developer Florin Ercus (xe_dev@arnia.ro)
+	 * @author Florin Ercus (xe_dev@arnia.ro)
 	 * @access public
 	 *
 	 * @return void
@@ -209,7 +211,7 @@ class WikiController extends Wiki
 	 * Checks to see if document was edited by someone else, so that we won't override their changes on save
 	 * Called through AJAX, returns JSON
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @return void
 	 */
@@ -249,7 +251,7 @@ class WikiController extends Wiki
 	/**
 	 * Delete database references to links in current document
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl 
 	 * @return type 
@@ -265,7 +267,7 @@ class WikiController extends Wiki
 	/**
 	 * Save all internal links in current document to the database
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl
 	 * @param $alias_list
@@ -285,7 +287,7 @@ class WikiController extends Wiki
 	/**
 	 * Updates info about links in current document
 	 *
-	 * @developer Corina Udrescu (xe_dev@arnia.ro)
+	 * @author Corina Udrescu (xe_dev@arnia.ro)
 	 * @access public
 	 * @param $document_srl
 	 * @param $alias_list
@@ -305,7 +307,7 @@ class WikiController extends Wiki
 	/**
 	 * Register comments on the wiki if user is not logged
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
 	 * @return Object
 	 */
@@ -317,7 +319,7 @@ class WikiController extends Wiki
 	/**
 	 * Register comments on the wiki
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -417,7 +419,7 @@ class WikiController extends Wiki
 	/**
 	 * Delete article from the wiki
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -470,7 +472,7 @@ class WikiController extends Wiki
 	/**
 	 * Delete comment from the wiki
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return
 	 */
@@ -500,7 +502,7 @@ class WikiController extends Wiki
 	/**
 	 * Change position of the document on hierarchy
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -597,7 +599,7 @@ class WikiController extends Wiki
 	/**
 	 * Recreate Wiki hierarchy
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -613,7 +615,7 @@ class WikiController extends Wiki
 	/**
 	 * Recreate Wiki hierarchy
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $module_srl
 	 * @return Object
@@ -642,7 +644,7 @@ class WikiController extends Wiki
 	/**
 	 * Confirm password for modifying non-members Comments
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -688,7 +690,7 @@ class WikiController extends Wiki
 	 * and one it's history version for making diff
 	 * Used by Ajax call
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
 	 * @return void
 	 */
@@ -709,7 +711,7 @@ class WikiController extends Wiki
 	 * Returns HTML Comment Editor
 	 * Used by Ajax call
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
 	 * @return void
 	 */

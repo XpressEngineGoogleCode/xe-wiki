@@ -1,20 +1,25 @@
 <?php
 /**
- * Wiki module View class
+ * File containing Wiki view class
+ */
+/**
+ * Wiki module view class
  *
- * @class  wikiView
- * @developer NHN (developers@xpressengine.com)
+ * @author NHN (developers@xpressengine.com)
  * @package wiki
  */
 class WikiView extends Wiki
 {
+	/** @var Holds sidebar tree menu */
 	var $list;
+
+	/** @var array Fields available for search */
 	var $search_option = array('title', 'content', 'title_content', 'comment', 'user_name', 'nick_name', 'user_id', 'tag');
 
 	/**
 	 * Class initialization
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -73,7 +78,7 @@ class WikiView extends Wiki
 	/**
 	 * Displays wiki document view
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -89,7 +94,7 @@ class WikiView extends Wiki
 	/**
 	 * Displays the history of the particular wiki page
 	 *
-	 * @developer NHN (developers@xpressengine.com) 
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -227,7 +232,7 @@ class WikiView extends Wiki
 	/**
 	 * Document editing screen
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	*/
@@ -314,7 +319,7 @@ class WikiView extends Wiki
 	/**
 	 * Displaying custom error / succes message
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $msg_code string
 	 * @return Object
@@ -336,7 +341,7 @@ class WikiView extends Wiki
 	/**
 	 * View a list of wiki's articles
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -380,7 +385,7 @@ class WikiView extends Wiki
 	/**
 	 * Hierarchical view of the appropriate wiki
 	 *
-	 * @developer NHN (developers@xpressengine.com) 
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -396,7 +401,7 @@ class WikiView extends Wiki
 	/**
 	 * Display screen for changing the hierarchy
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	*/
@@ -416,7 +421,7 @@ class WikiView extends Wiki
 	/**
 	 * View update history
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access private
 	 * @param $entry Document alias
 	 * @return void
@@ -452,7 +457,7 @@ class WikiView extends Wiki
 	/**
 	 * Wiki document view
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	*/
@@ -637,7 +642,7 @@ class WikiView extends Wiki
 	/**
 	 * Display screen for posting a comment
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public	 
 	 * @return Object
 	 */
@@ -686,7 +691,7 @@ class WikiView extends Wiki
 	/**
 	 * Modify comment page
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -733,7 +738,7 @@ class WikiView extends Wiki
 	/**
 	 * Delete comment form
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */
@@ -776,7 +781,7 @@ class WikiView extends Wiki
 	/**
 	 * Add comment view - used for loading comment form via ajax
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
 	 * @return Object
 	 */
@@ -819,7 +824,7 @@ class WikiView extends Wiki
 	/**
 	 * Prepares document for display and loads any extra data needed
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access private
 	 * @param $oDocument
 	 * @return void
@@ -885,7 +890,7 @@ class WikiView extends Wiki
 	/**
 	 * Parse wiki document syntax
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access private
 	 * @param $document_srl 
 	 * @param $org_content original content
@@ -916,7 +921,7 @@ class WikiView extends Wiki
 	/**
 	 * Set list for Tree menu on left side of pages
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $module_srl
 	 * @param $document_srl
@@ -935,7 +940,7 @@ class WikiView extends Wiki
 	/**
 	 * Generate Left menu according with settings from admin panel
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access private
 	 * @return void
 	 */
@@ -990,7 +995,7 @@ class WikiView extends Wiki
 	/**
 	 * Generate breadcrumbs
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $document_srl
 	 * @return void
@@ -1006,7 +1011,7 @@ class WikiView extends Wiki
 	/**
 	 * View for displaying search results
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access public
 	 * @return Object
 	*/
@@ -1031,7 +1036,7 @@ class WikiView extends Wiki
 	/**
 	 * Sorts array descending by key
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $object_array
 	 * @param $key
@@ -1063,7 +1068,7 @@ class WikiView extends Wiki
 	 * for pretty displaying in search results
 	 *
 	 * @access private
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @param $oModuleModel 
 	 * @param $oDocumentModel 
 	 * @param $doc
@@ -1091,7 +1096,7 @@ class WikiView extends Wiki
 	/**
 	 * Helper method for search
 	 *
-	 * @developer Bogdan Bajanica (xe_dev@arnia.ro)
+	 * @author Bogdan Bajanica (xe_dev@arnia.ro)
 	 * @access private
 	 * @param $target_mid 
 	 * @param $is_keyword 
@@ -1138,7 +1143,7 @@ class WikiView extends Wiki
 	 /**
 	  * Returns a list of document statuses
 	  *
-	  * @developer NHN (developers@xpressengine.com)
+	  * @author NHN (developers@xpressengine.com)
 	  * @access private
 	  * @return array
 	  */

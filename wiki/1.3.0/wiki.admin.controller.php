@@ -1,9 +1,12 @@
 <?php
 /**
+ * File containing the Wiki admin controller class
+ */
+
+/**
  * Wiki admin controller class
  *
- * @class  wikiAdminController
- * @developer NHN (developers@xpressengine.com)
+ * @author NHN (developers@xpressengine.com)
  * @package wiki
  */
 class WikiAdminController extends Wiki
@@ -12,7 +15,7 @@ class WikiAdminController extends Wiki
 	/**
 	 * Add a wiki module
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @param $args
 	 * @return void
@@ -79,7 +82,7 @@ class WikiAdminController extends Wiki
 	/**
 	 * Deleting a wiki module
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return void
 	 */
@@ -104,7 +107,7 @@ class WikiAdminController extends Wiki
 	/**
 	 * Adds alias to documents which are missing it
 	 *
-	 * @developer NHN (developers@xpressengine.com)
+	 * @author NHN (developers@xpressengine.com)
 	 * @access public
 	 * @return Object
 	 */

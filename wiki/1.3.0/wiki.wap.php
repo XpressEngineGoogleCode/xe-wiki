@@ -1,16 +1,20 @@
 <?php
 /**
+ * File containing the Wiki WAP class
+ */
+/**
  * Wiki WAP class
  *
- * @class  wikiWAP
  * @author NHN (developers@xpressengine.com)
  * @package wiki
  */
 
-class wikiWAP extends wiki {
+class WikiWAP extends Wiki {
 
 	/**
 	 *  WAP procedure method
+	 *
+	 * @param Object $oMobile
 	 **/
 	function procWAP(&$oMobile) {
 		// Check permissions
@@ -34,7 +38,7 @@ class wikiWAP extends wiki {
 				if($this->act=='dispWikiContentView')
 				{
 					$oCommentModel = &getModel('comment');
-					$output = $oCommentModel->getCommentList($oDocument->document_srl, 0, false, $oDocument->getCommentCount());
+					$output = $oCommentModel->getCommentList($oDocument->document_srl, 0, FALSE, $oDocument->getCommentCount());
 
 					$content = '';
 					if(count($output->data)) {
@@ -42,7 +46,7 @@ class wikiWAP extends wiki {
 							$oComment = new commentItem();
 							$oComment->setAttribute($val);
 							if(!$oComment->isAccessible()) continue;
-							$content .= "<b>".$oComment->getNickName()."</b> (".$oComment->getRegdate("Y-m-d").")<br>\r\n".$oComment->getContent(false,false)."<br>\r\n";
+							$content .= "<b>".$oComment->getNickName()."</b> (".$oComment->getRegdate("Y-m-d").")<br>\r\n".$oComment->getContent(FALSE,FALSE)."<br>\r\n";
 						}
 					}
 
@@ -57,7 +61,7 @@ class wikiWAP extends wiki {
 				else
 				{
 					// Prepare the content (removes all tags from content)
-					$content = strip_tags(str_replace('<p>','<br>&nbsp;&nbsp;&nbsp;',$oDocument->getContent(false,false,false)),'<br><b><i><u><em><small><strong><big>');
+					$content = strip_tags(str_replace('<p>','<br>&nbsp;&nbsp;&nbsp;',$oDocument->getContent(FALSE,FALSE,FALSE)),'<br><b><i><u><em><small><strong><big>');
 
 
 					// For information on the top of the output (including the comments link)
@@ -90,7 +94,7 @@ class wikiWAP extends wiki {
 		if($document_list && count($document_list)) {
 			foreach($document_list as $key => $val) {
 				$href = getUrl('mid',$_GET['mid'],'document_srl',$val->document_srl);
-				$obj = null;
+				$obj = NULL;
 				$obj['href'] = $val->getPermanentUrl();
 
 				$title = htmlspecialchars($val->getTitleText());
