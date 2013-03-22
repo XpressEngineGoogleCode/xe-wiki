@@ -1,0 +1,68 @@
+<include target="header.html" />
+
+<!--@if($module_info->markup_type == 'markdown')-->
+<script type="text/javascript" src="../../lib/pagedown/Markdown.Converter.js"></script> 
+<script type="text/javascript">
+	jQuery(function($) {
+		var $textarea = $('#wikiContentContainer textarea');
+		var $preview = $('#wikiDocumentPreview');
+		converter = new Markdown.Converter().makeHtml;
+
+		$textarea.keyup(function() {
+			$preview.html(converter($textarea.val()));
+		}).trigger('keyup');
+	});		
+</script>
+<!--@end-->
+
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$("#title").change(function(){			
+			if($("#alias").val() == "") {
+				var alias = $("#title").val().replace(/[ ]/g, "_").toLowerCase();
+				$("#alias").val(alias);
+			}
+		});
+	});
+</script>
+
+
+<form action="./" method="post" ruleset="insert" id="fo_write">
+	<input type="hidden" name="mid" value="{$mid}" />
+	<input type="hidden" name="act" value="procWikiInsertDocument" />
+	<input type="hidden" name="module" value="wiki" />
+    <input type="hidden" name="success_return_url" value="{getUrl('act','dispWikiContent', 'module_srl', $module_info->module_srl)}" />
+	
+<!--@if($history)-->
+<input type="hidden" name="content" value="{htmlspecialchars($history->content)}" />
+<!--@else-->
+<input type="hidden" name="content" value="{$oDocument->getContentText()}" />
+<!--@end-->
+<input type="hidden" name="document_srl" value="{$document_srl}" />
+
+<div class="wkWrite" id="wikiContentContainer">
+	<div class="title">
+		<label for="title">{$lang->write_form_title}</label>
+		<input type="text" name="title"  id="title" value="{$oDocument->get('title')}" class="iText" />
+	</div>
+	<div class="alias" >
+		<label for="alias">{$lang->write_form_alias}</label>
+		{getFullUrl()}
+		<input type="text" name="alias" id="alias" value="{$oDocument->get('alias')}" class="iText" />
+	</div>
+	
+    <div class="editor">
+		{$oDocument->getEditor()}
+	</div>
+	
+	<!--@if($module_info->markup_type == 'markdown')-->
+	<div id="wikiDocumentPreview"></div>
+	<!--@end-->
+	
+	<div class="wkNav">
+        <span class="btn"><input type="submit" value="{$lang->cmd_registration}" /></span>
+    </div>
+</div>
+
+</form>
+<include target="footer.html" />
